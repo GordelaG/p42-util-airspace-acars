@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    name: Test & Build MSFS 2024 Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run unit & integration tests
+        run: npm test
+
+      - name: Build MSFS 2024 Community package
+        run: npm run build
+
+      - name: Upload built Community package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: p42-util-airspace-acars
+          path: dist/p42-util-airspace-acars
+          if-no-files-found: error
+

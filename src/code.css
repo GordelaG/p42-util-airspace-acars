@@ -1,0 +1,1101 @@
+/* Airspace ACARS - Parallel 42 Flow Widget Styles (MSFS 2024 Coherent GT Compatible) */
+
+.as-acars-root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #f4f4f5;
+  font-size: 13px;
+  line-height: 1.45;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.as-acars-root *,
+.as-acars-root *::before,
+.as-acars-root *::after {
+  box-sizing: border-box;
+}
+
+.as-acars-hidden {
+  display: none !important;
+}
+
+/* Main Floating Window */
+.as-acars-window {
+  position: absolute;
+  width: 840px;
+  height: 560px;
+  background-color: rgba(12, 14, 18, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9990;
+}
+
+/* Floating vOCC Toast Notification */
+.as-acars-toast {
+  position: absolute;
+  width: 340px;
+  background-color: rgba(15, 18, 24, 0.97);
+  border: 1px solid rgba(252, 26, 2, 0.55);
+  border-left: 4px solid #fc1a02;
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+  padding: 10px 12px;
+  z-index: 9999;
+}
+
+.as-acars-toast-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: move;
+  margin-bottom: 6px;
+}
+
+.as-acars-toast-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ff612e;
+}
+
+.as-acars-toast-body {
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 12px;
+  color: #f4f4f5;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+  max-height: 96px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.as-acars-toast-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* Top Bar */
+.as-acars-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(24, 27, 34, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: move;
+  flex-shrink: 0;
+}
+
+.as-acars-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.as-acars-logo {
+  width: 24px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.as-acars-brand-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.as-acars-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.as-acars-va-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(252, 26, 2, 0.16);
+  border: 1px solid rgba(252, 26, 2, 0.4);
+  color: #ff7a59;
+}
+
+.as-acars-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.as-acars-route-pill {
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+}
+
+/* Views */
+.as-acars-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Auth & Tenant Selector */
+.as-acars-auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.as-acars-auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: rgba(24, 27, 34, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.as-acars-center {
+  text-align: center;
+  align-items: center;
+}
+
+.as-acars-h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.as-acars-sub {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #a1a1aa;
+}
+
+.as-acars-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a1a1aa;
+  margin-bottom: 4px;
+}
+
+.as-acars-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+.as-acars-tenant-list {
+  max-height: 190px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 4px;
+}
+
+.as-acars-saved-list {
+  max-height: 105px;
+}
+
+.as-acars-tenant-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #f4f4f5;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.as-acars-tenant-item:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.as-acars-tenant-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.as-acars-tenant-fallback {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(252, 26, 2, 0.2);
+  color: #ff612e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.as-acars-tenant-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.as-acars-tenant-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.as-acars-tenant-domain {
+  font-size: 11px;
+  color: #a1a1aa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.as-acars-tenant-check {
+  font-size: 11px;
+  font-weight: 700;
+  color: #22c55e;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.14);
+}
+
+/* Device Code Box */
+.as-acars-code-box {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 14px 24px;
+  margin: 4px 0;
+  width: 100%;
+}
+
+.as-acars-code-label {
+  display: block;
+  font-size: 11px;
+  color: #a1a1aa;
+  margin-bottom: 6px;
+}
+
+.as-acars-code-value {
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: #ffffff;
+  padding-left: 0.28em;
+}
+
+.as-acars-auth-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.as-acars-auth-status {
+  font-size: 12px;
+  color: #a1a1aa;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.as-acars-auth-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Navigation Tabs */
+.as-acars-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px 0 14px;
+  background: rgba(18, 20, 26, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.as-acars-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #a1a1aa;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.as-acars-tab:hover {
+  color: #ffffff;
+}
+
+.as-acars-tab-active {
+  color: #ffffff;
+  border-bottom-color: #fc1a02;
+}
+
+.as-acars-badge-count {
+  background: #fc1a02;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+/* Tab Panels */
+.as-acars-tab-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 12px 14px;
+  overflow: hidden;
+}
+
+/* vOCC Chat Tab */
+.as-acars-vocc-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.as-acars-vocc-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e4e4e7;
+}
+
+.as-acars-status-dot,
+.as-acars-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: inline-block;
+}
+
+.as-acars-pulse-dot {
+  background: #fc1a02;
+}
+
+.as-acars-chat-feed {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 6px;
+}
+
+.as-acars-msg-row {
+  display: flex;
+  width: 100%;
+}
+
+.as-acars-msg-row-user {
+  justify-content: flex-end;
+}
+
+.as-acars-msg-row-other,
+.as-acars-msg-row-acars {
+  justify-content: flex-start;
+}
+
+.as-acars-msg-bubble {
+  max-width: 78%;
+  padding: 8px 11px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.as-acars-msg-bubble-user {
+  background: #fc1a02;
+  color: #ffffff;
+  border-bottom-right-radius: 3px;
+}
+
+.as-acars-msg-bubble-other {
+  background: rgba(39, 39, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f4f4f5;
+  border-bottom-left-radius: 3px;
+}
+
+.as-acars-msg-bubble-acars {
+  background: rgba(252, 26, 2, 0.09);
+  border: 1px solid rgba(252, 26, 2, 0.35);
+  color: #f4f4f5;
+  font-family: "Consolas", "Courier New", monospace;
+  border-bottom-left-radius: 3px;
+}
+
+.as-acars-msg-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.as-acars-msg-sender {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ff7a59;
+}
+
+.as-acars-msg-role {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #d4d4d8;
+}
+
+.as-acars-msg-text {
+  white-space: pre-wrap;
+  user-select: text;
+}
+
+.as-acars-msg-time {
+  display: block;
+  font-size: 10px;
+  opacity: 0.7;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.as-acars-quick-replies {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px 0 6px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.as-acars-quick-label {
+  font-size: 11px;
+  color: #a1a1aa;
+  margin-right: 2px;
+}
+
+.as-acars-chat-compose {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Documents & Airport Briefings Tab */
+.as-acars-briefing-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(252, 26, 2, 0.08);
+  border: 1px solid rgba(252, 26, 2, 0.25);
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.as-acars-briefing-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.as-acars-briefing-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.as-acars-briefing-route {
+  font-size: 11px;
+  color: #d4d4d8;
+  font-family: "Consolas", "Courier New", monospace;
+}
+
+.as-acars-briefing-shortcuts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.as-acars-docs-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.as-acars-doc-search-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.as-acars-search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.as-acars-cat-pills {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.as-acars-cat-pill {
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #a1a1aa;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.as-acars-cat-pill:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.as-acars-cat-active {
+  background: rgba(252, 26, 2, 0.2);
+  border-color: rgba(252, 26, 2, 0.5);
+  color: #ffffff;
+}
+
+.as-acars-docs-split {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.as-acars-docs-sidebar {
+  width: 255px;
+  flex-shrink: 0;
+  background: rgba(20, 23, 29, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.as-acars-docs-sidebar-header {
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #a1a1aa;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.as-acars-docs-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.as-acars-doc-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  padding: 7px 9px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #e4e4e7;
+  text-align: left;
+  cursor: pointer;
+}
+
+.as-acars-doc-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.as-acars-doc-item-active {
+  background: rgba(252, 26, 2, 0.15);
+  border-color: rgba(252, 26, 2, 0.4);
+  color: #ffffff;
+}
+
+.as-acars-doc-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.as-acars-doc-item-title {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.as-acars-doc-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.as-acars-doc-badge-auto {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.as-acars-doc-badge-pdf {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.as-acars-doc-badge-folder {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+.as-acars-doc-badge-html {
+  background: rgba(161, 161, 170, 0.15);
+  border: 1px solid rgba(161, 161, 170, 0.3);
+  color: #d4d4d8;
+}
+
+.as-acars-doc-item-sub {
+  font-size: 10px;
+  color: #a1a1aa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.as-acars-docs-reader {
+  flex: 1;
+  min-width: 0;
+  background: rgba(20, 23, 29, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.as-acars-docs-reader-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.as-acars-doc-view-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.as-acars-doc-meta {
+  font-size: 11px;
+  color: #a1a1aa;
+  margin-top: 2px;
+}
+
+.as-acars-docs-reader-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 16px;
+  user-select: text;
+}
+
+/* Rich HTML Content inside Document Reader */
+.as-acars-doc-html {
+  color: #e4e4e7;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.as-acars-doc-html h1,
+.as-acars-doc-html h2,
+.as-acars-doc-html h3,
+.as-acars-doc-html h4 {
+  color: #ffffff;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.as-acars-doc-html h1 { font-size: 17px; }
+.as-acars-doc-html h2 { font-size: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px; }
+.as-acars-doc-html h3 { font-size: 14px; }
+
+.as-acars-doc-html p {
+  margin: 0 0 10px 0;
+}
+
+.as-acars-doc-html ul,
+.as-acars-doc-html ol {
+  margin: 0 0 10px 0;
+  padding-left: 20px;
+}
+
+.as-acars-doc-html table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 12px;
+}
+
+.as-acars-doc-html th,
+.as-acars-doc-html td {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.as-acars-doc-html th {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.as-acars-doc-html a {
+  color: #38bdf8;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.as-acars-doc-html code,
+.as-acars-doc-html pre {
+  font-family: "Consolas", "Courier New", monospace;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+/* Folder Grid inside Document Reader */
+.as-acars-folder-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.as-acars-folder-card {
+  width: calc(50% - 4px);
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.as-acars-folder-card:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+/* Flight & NOTAMs Tab */
+.as-acars-flight-grid {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.as-acars-card {
+  flex: 1;
+  background: rgba(20, 23, 29, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.as-acars-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a1a1aa;
+  margin-bottom: 8px;
+}
+
+.as-acars-kv-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.as-acars-kv {
+  display: flex;
+  flex-direction: column;
+}
+
+.as-acars-kv-label {
+  font-size: 10px;
+  color: #a1a1aa;
+}
+
+.as-acars-kv-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.as-acars-notams-section {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.as-acars-notams-split {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.as-acars-notams-list {
+  width: 250px;
+  flex-shrink: 0;
+  background: rgba(20, 23, 29, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  overflow-y: auto;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.as-acars-notam-reader {
+  flex: 1;
+  background: rgba(20, 23, 29, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  overflow-y: auto;
+  padding: 12px 14px;
+  white-space: pre-wrap;
+  user-select: text;
+}
+
+/* Shared Controls (Inputs, Buttons, Chips) */
+.as-acars-input {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 12px;
+  outline: none;
+}
+
+.as-acars-input:focus {
+  border-color: #fc1a02;
+}
+
+.as-acars-btn {
+  padding: 7px 13px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.as-acars-btn-primary {
+  background: #fc1a02;
+  color: #ffffff;
+}
+
+.as-acars-btn-primary:hover {
+  background: #e01600;
+}
+
+.as-acars-btn-outline {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #f4f4f5;
+}
+
+.as-acars-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.as-acars-btn-ghost {
+  background: transparent;
+  color: #a1a1aa;
+}
+
+.as-acars-btn-ghost:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.as-acars-btn-sm {
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+.as-acars-btn-xs {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+.as-acars-icon-btn {
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.as-acars-icon-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.as-acars-chip {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e4e4e7;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.as-acars-chip:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.as-acars-chip-accent {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+.as-acars-empty-state {
+  padding: 24px 12px;
+  text-align: center;
+  color: #a1a1aa;
+  font-size: 12px;
+}
+
+.as-acars-muted {
+  color: #a1a1aa;
+  font-size: 11px;
+}
+

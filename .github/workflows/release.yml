@@ -1,0 +1,81 @@
+name: Release MSFS 2024 Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag da release (ex: v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Publish GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Determine release version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RAW_TAG="${{ github.event.inputs.tag_name }}"
+          else
+            RAW_TAG="${GITHUB_REF_NAME}"
+          fi
+          CLEAN_VERSION="${RAW_TAG#v}"
+          echo "tag=${RAW_TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${CLEAN_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Run unit & integration tests
+        run: npm test
+
+      - name: Build MSFS 2024 Community package
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: npm run build
+
+      - name: Create Release ZIP archives
+        run: |
+          cd dist
+          zip -r "../p42-util-airspace-acars.zip" "p42-util-airspace-acars"
+          cp "../p42-util-airspace-acars.zip" "../p42-util-airspace-acars-v${{ steps.version.outputs.version }}.zip"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "Airspace ACARS for Flow Pro (MSFS 2024) ${{ steps.version.outputs.tag }}"
+          generate_release_notes: true
+          files: |
+            p42-util-airspace-acars.zip
+            p42-util-airspace-acars-v${{ steps.version.outputs.version }}.zip
+          body: |
+            ## Airspace ACARS — Parallel 42 Flow Pro (MSFS 2024)
+
+            Integração oficial do **Airspace ACARS** para o **Parallel 42 Flow Pro** no **Microsoft Flight Simulator 2024**.
+
+            ### Recursos Incluídos
+            - **vOCC & Mensagens**: Recebimento em tempo real, alertas flutuantes no simulador, confirmação de leitura (`WILCO` / `Confirmar`) e envio de mensagens diretas para o despacho / vOCC.
+            - **Aeroportos & Documentos**: Pesquisa rápida por código ICAO ou título, atalhos automáticos para os aeroportos do voo ativo (`DEP`, `ARR`, `ALT`) e aeroporto mais próximo no MSFS 2024, filtros de categoria e leitor seguro integrado.
+            - **Conexão Multi-VA (Device Code OAuth)**: Seletor de Virtual Airlines da rede Airspace com login via código de dispositivo sem sair do simulador e troca rápida entre VAs salvas.
+            - **Integração com a Barra Otto**: Pesquise `doc SBGR`, `briefing SBRJ`, `vocc WILCO`, `notam` ou `acars` diretamente na barra Otto do Flow.
+
+            ### Instalação (MSFS 2024)
+            1. Baixe o arquivo **`p42-util-airspace-acars.zip`** abaixo.
+            2. Extraia a pasta `p42-util-airspace-acars` diretamente dentro da sua pasta **`Community`** do Microsoft Flight Simulator 2024.
+            3. No MSFS 2024, abra a roda do **Flow Pro**, entre no modo de edição e adicione o widget **Airspace ACARS**.
+
