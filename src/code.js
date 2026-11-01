@@ -105,10 +105,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC & Mensagens",
         docs: "Aeroportos & Documentos",
         flight: "Voo Ativo & NOTAMs",
-        settings: "Configura\u00e7\u00f5es",
+        settings: "Configuracoes",
       },
       settings: {
-        title: "Configura\u00e7\u00f5es do Aplicativo",
+        title: "Configuracoes do Aplicativo",
         subtitle: "Personalize o idioma, alertas e visual do Airspace ACARS",
         language_title: "Idioma da Interface",
         language_sub: "Selecione o idioma preferido (salvo automaticamente)",
@@ -593,11 +593,20 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
   function applyTheme() {
     const root = rootEl || q("#as-acars-root");
-    if (!root) return;
-    if (store.white_mode) {
-      root.classList.add("as-acars-white-mode");
-    } else {
-      root.classList.remove("as-acars-white-mode");
+    const toast = q("#as-acars-toast");
+    const win = q("#as-acars-window");
+    const isWhite = Boolean(store.white_mode);
+    if (root) {
+      if (isWhite) root.classList.add("as-acars-white-mode");
+      else root.classList.remove("as-acars-white-mode");
+    }
+    if (toast) {
+      if (isWhite) toast.classList.add("as-acars-white-mode");
+      else toast.classList.remove("as-acars-white-mode");
+    }
+    if (win) {
+      if (isWhite) win.classList.add("as-acars-white-mode");
+      else win.classList.remove("as-acars-white-mode");
     }
   }
 
@@ -2514,7 +2523,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         store.white_mode = theme === "white";
         saveStore();
         applyTheme();
-        renderSettingsTab();
+        renderAll();
         return;
       }
 

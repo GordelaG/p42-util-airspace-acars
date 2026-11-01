@@ -1452,9 +1452,14 @@
   margin-top: 4px;
 }
 
-/* White Mode / Light Theme */
-.as-acars-white-mode .as-acars-window {
-  background-color: #f4f5f8 !important;
+/* ==========================================================================
+   White Mode / Light Theme (Daylight Cockpit & Paper EFB Mode)
+   ========================================================================== */
+
+/* 1. Main Window Container & Header */
+.as-acars-white-mode .as-acars-window,
+.as-acars-window.as-acars-white-mode {
+  background-color: #f8fafc !important;
   border: 1px solid #cbd5e1 !important;
   color: #0f172a !important;
 }
@@ -1472,8 +1477,17 @@
   color: #0f172a !important;
 }
 
+.as-acars-white-mode .as-acars-sub,
+.as-acars-white-mode .as-acars-muted,
+.as-acars-white-mode .as-acars-card-hint,
+.as-acars-white-mode .as-acars-checkbox-label,
+.as-acars-white-mode .as-acars-settings-duration-wrap {
+  color: #475569 !important;
+}
+
+/* 2. Navigation Tabs Bar */
 .as-acars-white-mode .as-acars-tabs {
-  background-color: #e2e8f0 !important;
+  background-color: #f1f5f9 !important;
   border-bottom: 1px solid #cbd5e1 !important;
 }
 
@@ -1481,11 +1495,18 @@
   color: #64748b !important;
 }
 
+.as-acars-white-mode .as-acars-tab:hover {
+  color: #0f172a !important;
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
 .as-acars-white-mode .as-acars-tab-active {
   color: #0f172a !important;
   border-bottom-color: #ef4444 !important;
+  background-color: #ffffff !important;
 }
 
+/* 3. Cards & Containers */
 .as-acars-white-mode .as-acars-card,
 .as-acars-white-mode .as-acars-auth-card {
   background-color: #ffffff !important;
@@ -1493,8 +1514,17 @@
   color: #0f172a !important;
 }
 
-.as-acars-white-mode .as-acars-chat-feed,
-.as-acars-white-mode .as-acars-docs-viewer {
+/* 4. Tab 1: vOCC & Messages Chat */
+.as-acars-white-mode .as-acars-vocc-toolbar {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-vocc-info {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-chat-feed {
   background-color: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
 }
@@ -1505,31 +1535,377 @@
   color: #0f172a !important;
 }
 
+.as-acars-white-mode .as-acars-chat-bubble-received .as-acars-chat-bubble-sender {
+  color: #dc2626 !important;
+}
+
 .as-acars-white-mode .as-acars-chat-bubble-sent {
   background-color: #fee2e2 !important;
   border: 1px solid #fca5a5 !important;
   color: #991b1b !important;
 }
 
+.as-acars-white-mode .as-acars-chat-bubble-sent .as-acars-chat-bubble-sender {
+  color: #b91c1c !important;
+}
+
+.as-acars-white-mode .as-acars-chat-bubble-time {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-quick-replies {
+  background: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-quick-label {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-chip {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #1e293b !important;
+}
+
+.as-acars-white-mode .as-acars-chip:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-chat-compose {
+  background: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+/* 5. Tab 2: Airport Briefings & Documents */
+.as-acars-white-mode .as-acars-briefing-bar {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-briefing-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-briefing-route {
+  color: #475569 !important;
+}
+
+.as-acars-white-mode .as-acars-cat-pill {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+.as-acars-white-mode .as-acars-cat-pill:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-cat-active {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #b91c1c !important;
+}
+
+.as-acars-white-mode .as-acars-docs-sidebar {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-docs-sidebar-header {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+.as-acars-white-mode .as-acars-doc-item {
+  color: #1e293b !important;
+  border: 1px solid transparent !important;
+}
+
+.as-acars-white-mode .as-acars-doc-item:hover {
+  background: #f1f5f9 !important;
+}
+
+.as-acars-white-mode .as-acars-doc-item-active {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #991b1b !important;
+}
+
+.as-acars-white-mode .as-acars-doc-item-title {
+  color: inherit !important;
+}
+
+.as-acars-white-mode .as-acars-doc-item-sub {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-docs-reader {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-docs-reader-header {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-doc-view-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-doc-meta {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-docs-reader-body,
+.as-acars-white-mode .as-acars-doc-html {
+  color: #0f172a !important;
+  background: #ffffff !important;
+}
+
+.as-acars-white-mode .as-acars-doc-html h1,
+.as-acars-white-mode .as-acars-doc-html h2,
+.as-acars-white-mode .as-acars-doc-html h3,
+.as-acars-white-mode .as-acars-doc-html h4,
+.as-acars-white-mode .as-acars-doc-html h5,
+.as-acars-white-mode .as-acars-doc-html h6,
+.as-acars-white-mode .as-acars-doc-html strong,
+.as-acars-white-mode .as-acars-doc-html b {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-doc-html p,
+.as-acars-white-mode .as-acars-doc-html li {
+  color: #1e293b !important;
+}
+
+.as-acars-white-mode .as-acars-doc-html pre,
+.as-acars-white-mode .as-acars-doc-html code {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-doc-html table {
+  border-color: #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-doc-html th {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-doc-html td {
+  color: #1e293b !important;
+  border-color: #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-doc-html tr:nth-child(even) {
+  background: #f8fafc !important;
+}
+
+/* 6. Tab 3: Active Flight & NOTAMs */
+.as-acars-white-mode .as-acars-kv-label {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-kv-val {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-notams-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-notams-list {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-notam-item {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+.as-acars-white-mode .as-acars-notam-item:hover {
+  background: #f1f5f9 !important;
+}
+
+.as-acars-white-mode .as-acars-notam-item-active {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #991b1b !important;
+}
+
+.as-acars-white-mode .as-acars-notam-item-title {
+  color: inherit !important;
+}
+
+.as-acars-white-mode .as-acars-notam-date {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-notam-detail {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* 7. View 1 & View 2: Tenants & Auth */
+.as-acars-white-mode .as-acars-tenant-item {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-tenant-item:hover {
+  background: #f1f5f9 !important;
+}
+
+.as-acars-white-mode .as-acars-tenant-name {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-tenant-domain {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-code-box {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-code-value {
+  color: #0f172a !important;
+}
+
+/* 8. Controls & Inputs */
 .as-acars-white-mode .as-acars-input {
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   color: #0f172a !important;
 }
 
-.as-acars-white-mode .as-acars-sub,
-.as-acars-white-mode .as-acars-muted,
-.as-acars-white-mode .as-acars-card-hint,
-.as-acars-white-mode .as-acars-checkbox-label,
-.as-acars-white-mode .as-acars-settings-duration-wrap {
-  color: #475569 !important;
+.as-acars-white-mode .as-acars-input:focus {
+  border-color: #ef4444 !important;
 }
 
 .as-acars-white-mode .as-acars-btn-outline {
+  background: #ffffff !important;
   border-color: #cbd5e1 !important;
   color: #1e293b !important;
 }
 
 .as-acars-white-mode .as-acars-btn-outline:hover {
   background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-btn-ghost {
+  color: #475569 !important;
+}
+
+.as-acars-white-mode .as-acars-btn-ghost:hover {
+  color: #0f172a !important;
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+.as-acars-white-mode .as-acars-icon-btn {
+  color: #475569 !important;
+}
+
+.as-acars-white-mode .as-acars-icon-btn:hover {
+  color: #000000 !important;
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 9. Floating Toast in White Mode */
+.as-acars-white-mode .as-acars-toast,
+.as-acars-toast.as-acars-white-mode {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-toast-header,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-header {
+  background-color: #f1f5f9 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-toast-title,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-toast-close,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-close {
+  color: #475569 !important;
+}
+
+.as-acars-white-mode .as-acars-toast-close:hover,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-close:hover {
+  color: #000000 !important;
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.as-acars-white-mode .as-acars-toast-body,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-body {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.as-acars-white-mode .as-acars-toast-actions,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-actions {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.as-acars-white-mode .as-acars-toast-btn,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-btn {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-toast-btn:hover,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-btn:hover {
+  background-color: #e2e8f0 !important;
+  border-color: #94a3b8 !important;
+}
+
+.as-acars-white-mode .as-acars-toast-dismiss,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-dismiss {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-toast-dismiss:hover,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-dismiss:hover {
+  color: #0f172a !important;
+}
+
+/* 10. Scrollbars in White Mode */
+.as-acars-white-mode *::-webkit-scrollbar-track,
+.as-acars-toast.as-acars-white-mode *::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+}
+
+.as-acars-white-mode *::-webkit-scrollbar-thumb,
+.as-acars-toast.as-acars-white-mode *::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+}
+
+.as-acars-white-mode *::-webkit-scrollbar-thumb:hover,
+.as-acars-toast.as-acars-white-mode *::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
 }

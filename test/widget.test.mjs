@@ -866,6 +866,8 @@ test('Language removed from Flow wheel settings, defaults to English, and can be
   mockRoot.dispatchEvent({ type: 'click', target: whiteThemeBtn, preventDefault() {}, stopPropagation() {} });
   assert.equal(instance.store.white_mode, true, 'Clicking White Mode choice must update store.white_mode to true');
   assert.ok(mockRoot.classList.contains('as-acars-white-mode'), 'Root element must have .as-acars-white-mode class');
+  const toastEl = mockRoot.querySelector('#as-acars-toast');
+  assert.ok(toastEl.classList.contains('as-acars-white-mode'), 'Toast element must have .as-acars-white-mode class in White Mode');
 });
 
 test('Toast auto-dismiss timer closes floating vOCC alert after configured duration', async () => {
