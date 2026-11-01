@@ -924,7 +924,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       if (isNaN(d.getTime())) return String(iso);
       const hh = String(d.getUTCHours()).padStart(2, "0");
       const mm = String(d.getUTCMinutes()).padStart(2, "0");
-      return hh + ":" + mm + "Z";
+      return hh + ":" + mm;
     } catch (_e) {
       return String(iso);
     }
@@ -1960,20 +1960,19 @@ const __flowContext = typeof this !== "undefined" ? this : null;
             "</div>" +
             '<span class="as-acars-msg-time">' +
             escapeHtml(timeStr) +
-            (msg.read ? " [Lida]" : "") +
             "</span>" +
             "</div>" +
             "</div>"
           );
         }
         if (kind === "acars") {
-          const roleLabel = msg.senderRole ? msg.senderRole.toUpperCase() : "vOCC / ACARS";
+          const roleLabel = msg.senderRole ? msg.senderRole.toLowerCase() : "occ";
           return (
             '<div class="as-acars-msg-row as-acars-msg-row-acars">' +
             '<div class="as-acars-msg-bubble as-acars-msg-bubble-acars">' +
             '<div class="as-acars-msg-header">' +
             '<span class="as-acars-msg-sender">' +
-            escapeHtml(msg.senderName || "vOCC Dispatch") +
+            escapeHtml(msg.senderName || "vOCC") +
             "</span>" +
             '<span class="as-acars-msg-role">' +
             escapeHtml(roleLabel) +
@@ -1994,9 +1993,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           '<div class="as-acars-msg-bubble as-acars-msg-bubble-other">' +
           '<div class="as-acars-msg-header">' +
           '<span class="as-acars-msg-sender">' +
-          escapeHtml(msg.senderName) +
+          escapeHtml(msg.senderName || "vOCC") +
           "</span>" +
-          (msg.senderRole ? '<span class="as-acars-msg-role">' + escapeHtml(msg.senderRole) + "</span>" : "") +
+          (msg.senderRole ? '<span class="as-acars-msg-role">' + escapeHtml(msg.senderRole.toLowerCase()) + "</span>" : "") +
           "</div>" +
           '<div class="as-acars-msg-text">' +
           escapeHtml(msg.text) +

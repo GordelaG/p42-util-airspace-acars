@@ -1,6 +1,6 @@
 {
   "name": "p42-util-airspace-acars",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Airspace ACARS plugin/widget for Parallel 42 Flow Pro in Microsoft Flight Simulator 2024",
   "private": true,
   "type": "module",

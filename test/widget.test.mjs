@@ -636,6 +636,17 @@ test('vOCC message sending, confirming read, and background toast alert work pro
   // Verify chat list automatically scrolled to the bottom message
   const chatList = mockRoot.querySelector('#as-acars-chat-list');
   assert.equal(chatList.scrollTop, chatList.scrollHeight, 'Chat must auto-scroll to bottom after message send/receive');
+
+  // Verify chat bubble styling and classes match official Airspace ACARS
+  assert.ok(chatList.innerHTML.includes('as-acars-msg-bubble-acars'), 'Must render acars message bubble');
+  assert.ok(chatList.innerHTML.includes('as-acars-msg-bubble-user'), 'Must render user message bubble');
+  assert.ok(!chatList.innerHTML.includes('[Lida]'), 'User bubble must not have [Lida] suffix');
+
+  const css = fs.readFileSync(path.join(ROOT_DIR, 'src', 'code.css'), 'utf8');
+  assert.ok(!css.includes('.as-acars-msg-bubble-user {\n  background: #fc1a02;'), 'Must not have red background on user bubbles');
+  assert.ok(!css.includes('.as-acars-msg-bubble-acars {\n  background: rgba(252, 26, 2'), 'Must not have red background on acars bubbles');
+  assert.ok(css.includes('.as-acars-white-mode .as-acars-msg-bubble-user'), 'Must support user bubbles in White Mode');
+  assert.ok(css.includes('.as-acars-white-mode .as-acars-msg-bubble-acars'), 'Must support acars bubbles in White Mode');
 });
 
 test('Airport & Documents search, HTML sanitizer, nearest MSFS airport, and Otto search bar work accurately', async () => {
