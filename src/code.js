@@ -19,6 +19,30 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     (typeof globalThis !== "undefined" && globalThis.$api) ||
     null;
 
+  // --- Version & Releases ---
+  const APP_VERSION = "1.0.12";
+  const GITHUB_REPO_OWNER = "GordelaG";
+  const GITHUB_REPO_NAME = "p42-util-airspace-acars";
+  const REPO_RELEASES_URL = "https://github.com/" + GITHUB_REPO_OWNER + "/" + GITHUB_REPO_NAME + "/releases/latest";
+  const GITHUB_API_LATEST_RELEASE = "https://api.github.com/repos/" + GITHUB_REPO_OWNER + "/" + GITHUB_REPO_NAME + "/releases/latest";
+
+  function isNewerVersion(remoteTag, localVersion) {
+    if (!remoteTag || !localVersion) return false;
+    const parse = function (v) {
+      const clean = String(v).replace(/^v/i, "").trim();
+      const parts = clean.split(".").map(function (n) { return parseInt(n, 10) || 0; });
+      while (parts.length < 3) parts.push(0);
+      return parts;
+    };
+    const r = parse(remoteTag);
+    const l = parse(localVersion);
+    for (let i = 0; i < 3; i++) {
+      if (r[i] > l[i]) return true;
+      if (r[i] < l[i]) return false;
+    }
+    return false;
+  }
+
   // --- Persistent Store ---
   const defaultStore = {
     activeTenant: null, // { id, name, domain, logo_url }
@@ -120,6 +144,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         toast_sub: "Exibir popup na cabine ao receber mensagens do vOCC",
         toast_duration: "Tempo de Exibicao dos Alertas",
         toast_duration_desc: "Duracao em segundos ate o popup fechar automaticamente (0 = fixo)",
+        update_title: "Versao & Atualizacoes",
+        update_status_current: "Voce esta utilizando a versao mais recente.",
+        btn_check_updates: "Verificar Atualizacoes",
+        btn_download_installer: "Baixar Instalador",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Ativo",
@@ -165,6 +193,17 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         open: "Abrir no vOCC / Responder",
         dismiss: "Marcar Lida",
         close_title: "Dispensar",
+      },
+      update: {
+        badge_new: "NOVO",
+        banner_title: "Nova versao disponivel:",
+        banner_hint: "Feche o simulador antes de executar o instalador.",
+        btn_download: "Baixar Atualizador",
+        btn_dismiss: "Fechar aviso",
+        status_current: "Voce esta utilizando a versao mais recente.",
+        status_available: "Nova versao {version} disponivel! Feche o simulador para atualizar.",
+        status_checking: "Verificando atualizacoes...",
+        status_error: "Nao foi possivel verificar atualizacoes.",
       },
     },
     en: {
@@ -230,6 +269,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         toast_sub: "Show in-cockpit popup alerts when receiving vOCC messages",
         toast_duration: "Alert Display Duration",
         toast_duration_desc: "Duration in seconds before popup auto-closes (0 = fixed)",
+        update_title: "Version & Updates",
+        update_status_current: "You are running the latest version.",
+        btn_check_updates: "Check for Updates",
+        btn_download_installer: "Download Installer",
       },
       vocc: {
         channel_active: "ACARS / vOCC Dispatch Channel Active",
@@ -275,6 +318,17 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         open: "Open in vOCC / Reply",
         dismiss: "Mark Read",
         close_title: "Dismiss",
+      },
+      update: {
+        badge_new: "NEW",
+        banner_title: "New version available:",
+        banner_hint: "Close the simulator before running the installer.",
+        btn_download: "Download Installer",
+        btn_dismiss: "Dismiss notification",
+        status_current: "You are running the latest version.",
+        status_available: "New version {version} available! Close simulator to update.",
+        status_checking: "Checking for updates...",
+        status_error: "Unable to check for updates.",
       },
     },
     es: {
@@ -340,6 +394,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         toast_sub: "Mostrar avisos en cabina al recibir mensajes de vOCC",
         toast_duration: "Tiempo de Visualizacion",
         toast_duration_desc: "Duracion en segundos hasta cerrar automaticamente (0 = fijo)",
+        update_title: "Version & Actualizaciones",
+        update_status_current: "Esta utilizando la version mas reciente.",
+        btn_check_updates: "Buscar Actualizaciones",
+        btn_download_installer: "Descargar Instalador",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Activo",
@@ -385,6 +443,17 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         open: "Abrir en vOCC / Responder",
         dismiss: "Marcar Leido",
         close_title: "Descartar",
+      },
+      update: {
+        badge_new: "NUEVO",
+        banner_title: "Nueva version disponible:",
+        banner_hint: "Cierre el simulador antes de ejecutar el instalador.",
+        btn_download: "Descargar Instalador",
+        btn_dismiss: "Cerrar aviso",
+        status_current: "Esta utilizando la version mas reciente.",
+        status_available: "Nueva version {version} disponible! Cierre el simulador para actualizar.",
+        status_checking: "Buscando actualizaciones...",
+        status_error: "No se pudieron buscar actualizaciones.",
       },
     },
     fr: {
@@ -450,6 +519,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         toast_sub: "Afficher des popups dans le cockpit lors de messages vOCC",
         toast_duration: "Duree d'Affichage des Alertes",
         toast_duration_desc: "Duree en secondes avant fermeture automatique (0 = fixe)",
+        update_title: "Version & Mises a jour",
+        update_status_current: "Vous utilisez la version la plus recente.",
+        btn_check_updates: "Verifier les Mises a jour",
+        btn_download_installer: "Telecharger l'Installeur",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Actif",
@@ -495,6 +568,17 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         open: "Ouvrir dans vOCC / Repondre",
         dismiss: "Marquer comme Lu",
         close_title: "Ignorer",
+      },
+      update: {
+        badge_new: "NOUVEAU",
+        banner_title: "Nouvelle version disponible :",
+        banner_hint: "Fermez le simulateur avant de lancer l'installeur.",
+        btn_download: "Telecharger l'Installeur",
+        btn_dismiss: "Fermer l'avis",
+        status_current: "Vous utilisez la version la plus recente.",
+        status_available: "Nouvelle version {version} disponible ! Fermez le simulateur pour mettre a jour.",
+        status_checking: "Verification des mises a jour...",
+        status_error: "Impossible de verifier les mises a jour.",
       },
     },
   };
@@ -649,6 +733,12 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     notams: [],
     selectedNotamId: null,
     detailNotam: null,
+
+    // Update Checker
+    updateInfo: null,
+    updateBannerDismissed: false,
+    updateStatusMsg: "",
+    isCheckingUpdate: false,
 
     // Loop counters
     tickCount: 0,
@@ -1581,6 +1671,64 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
   }
 
+  function renderUpdateBanner() {
+    if (!rootEl) return;
+    const banner = q("#as-acars-update-banner");
+    if (!banner) return;
+    const shouldShow = !!(stateData.updateInfo && stateData.updateInfo.isNewer && !stateData.updateBannerDismissed);
+    setVisible(banner, shouldShow);
+    if (shouldShow) {
+      const versionEl = q("#as-acars-update-new-version");
+      if (versionEl) versionEl.textContent = stateData.updateInfo.version;
+    }
+  }
+
+  async function checkForUpdates(manual) {
+    if (stateData.isCheckingUpdate) return;
+    stateData.isCheckingUpdate = true;
+    if (manual) {
+      stateData.updateStatusMsg = t("update.status_checking", "Verificando atualizacoes...");
+      renderSettingsTab();
+    }
+    try {
+      const resp = await fetch(GITHUB_API_LATEST_RELEASE, {
+        method: "GET",
+        headers: { Accept: "application/vnd.github.v3+json" }
+      });
+      if (resp && resp.ok) {
+        const data = await resp.json();
+        if (data && data.tag_name) {
+          const remoteTag = String(data.tag_name).trim();
+          const newer = isNewerVersion(remoteTag, APP_VERSION);
+          stateData.updateInfo = {
+            version: remoteTag,
+            html_url: data.html_url || REPO_RELEASES_URL,
+            isNewer: newer,
+            name: data.name || remoteTag,
+            body: data.body || ""
+          };
+          if (newer) {
+            stateData.updateBannerDismissed = false;
+            stateData.updateStatusMsg = t("update.status_available", "Nova versao {version} disponivel! Feche o simulador para atualizar.")
+              .replace("{version}", remoteTag);
+          } else {
+            stateData.updateStatusMsg = t("update.status_current", "Voce esta utilizando a versao mais recente.");
+          }
+        } else {
+          if (manual) stateData.updateStatusMsg = t("update.status_current", "Voce esta utilizando a versao mais recente.");
+        }
+      } else {
+        if (manual) stateData.updateStatusMsg = t("update.status_error", "Nao foi possivel verificar atualizacoes.");
+      }
+    } catch (_err) {
+      if (manual) stateData.updateStatusMsg = t("update.status_error", "Nao foi possivel verificar atualizacoes.");
+    } finally {
+      stateData.isCheckingUpdate = false;
+      renderUpdateBanner();
+      renderSettingsTab();
+    }
+  }
+
   function renderAll() {
     if (!rootEl) return;
     cleanParentContainers(rootEl);
@@ -1597,6 +1745,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
     renderToast();
     renderHeader();
+    renderUpdateBanner();
 
     const isAuthed = Boolean(getActiveToken() && store.activeTenant);
     if (isAuthed && stateData.activeView !== "tenants" && stateData.activeView !== "auth") {
@@ -1920,6 +2069,34 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       } else {
         p.classList.remove("as-acars-choice-active");
       }
+    }
+
+    // Version & Updates
+    const curBadge = q("#as-acars-current-version-badge");
+    if (curBadge) {
+      curBadge.textContent = "v" + APP_VERSION;
+    }
+    const statusEl = q("#as-acars-update-status-text");
+    const downloadBtn = q("#as-acars-btn-download-installer");
+    const checkBtn = q("#as-acars-btn-check-updates");
+
+    if (stateData.updateInfo && stateData.updateInfo.isNewer) {
+      if (statusEl) {
+        statusEl.textContent = t("update.status_available", "Nova versao {version} disponivel! Feche o simulador para atualizar.")
+          .replace("{version}", stateData.updateInfo.version);
+      }
+      setVisible(downloadBtn, true);
+    } else {
+      if (statusEl) {
+        statusEl.textContent = stateData.updateStatusMsg || t("settings.update_status_current", "Voce esta utilizando a versao mais recente.");
+      }
+      setVisible(downloadBtn, false);
+    }
+
+    if (checkBtn) {
+      checkBtn.textContent = stateData.isCheckingUpdate
+        ? t("update.status_checking", "Verificando...")
+        : t("settings.btn_check_updates", "Verificar Atualizacoes");
     }
   }
 
@@ -2585,6 +2762,24 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
+      // Update Actions
+      if (findClosest(target, "#as-acars-btn-update-download") || findClosest(target, "#as-acars-btn-download-installer")) {
+        const url = (stateData.updateInfo && stateData.updateInfo.html_url) || REPO_RELEASES_URL;
+        openExternalUrl(url);
+        return;
+      }
+
+      if (findClosest(target, "#as-acars-btn-update-dismiss")) {
+        stateData.updateBannerDismissed = true;
+        renderUpdateBanner();
+        return;
+      }
+
+      if (findClosest(target, "#as-acars-btn-check-updates")) {
+        checkForUpdates(true);
+        return;
+      }
+
       // Open Settings button in Header
       if (findClosest(target, "#as-acars-btn-open-settings")) {
         stateData.activeView = "main";
@@ -2997,6 +3192,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       } else {
         renderAll();
       }
+      setTimeout(function () {
+        checkForUpdates(false);
+      }, 2000);
     });
   }
 

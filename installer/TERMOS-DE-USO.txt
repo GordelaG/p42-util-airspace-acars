@@ -1,0 +1,63 @@
+================================================================================
+TERMOS DE USO E LICENCA - AIRSPACE ACARS
+================================================================================
+Versao: 1.0 (Novembro de 2026)
+Aplicacao: Airspace ACARS - Widget para Parallel 42 Flow Pro (MSFS 2024 / MSFS 2020)
+Desenvolvedor: Airspace Team (FerrLab)
+================================================================================
+
+Por favor, leia atentamente estes Termos de Uso antes de instalar ou utilizar o
+Airspace ACARS. Ao marcar a caixa de selecao "Li e concordo com os Termos de Uso"
+e prosseguir com a instalacao, voce concorda com todos os termos aqui descritos.
+
+1. FINALIDADE EXCLUSIVA PARA SIMULACAO DE VOO
+----------------------------------------------
+O Airspace ACARS e um software desenvolvido exclusivamente para entretenimento e
+simulacao de voo virtual dentro do Microsoft Flight Simulator (MSFS 2024 e MSFS 2020)
+atraves do add-on Parallel 42 Flow Pro.
+
+E ESTRITAMENTE PROIBIDO o uso deste software, de suas informacoes meteorologicas,
+NOTAMs, briefings de aeroportos, planos de voo ou mensagens de despacho (vOCC) para:
+- Planejamento de voo na aviacao real;
+- Navegacao ou orientacao em aeronaves reais;
+- Qualquer operacao que envolva seguranca operacional ou aviacao do mundo real.
+
+2. ISENCAO DE RESPONSABILIDADE E GARANTIA
+----------------------------------------
+O software e fornecido "COMO ESTA" ("AS IS"), sem quaisquer garantias expressas ou
+implicitas de funcionamento ininterrupto, exatidao de dados meteorologicos ou
+adequacao a um proposito especifico. Os desenvolvedores nao se responsabilizam por
+quaisquer perdas de dados, incompatibilidades ou falhas no simulador de voo.
+
+3. REQUISITOS DE INSTALACAO E COMPATIBILIDADE
+--------------------------------------------
+- O Airspace ACARS DEVE ser instalado exclusivamente dentro da pasta oficial "Community"
+  do seu Microsoft Flight Simulator (por exemplo: ...\Packages\Community).
+- A instalacao em diretorios incorretos impedira o reconhecimento do pacote pelo simulador.
+- O software requer a utilizacao do Parallel 42 Flow Pro (ou versao compativel) instalado
+  no simulador para carregar a roda de ferramentas e a barra de busca Otto.
+
+4. ATUALIZACOES E SIMULADOR EM EXECUCAO
+---------------------------------------
+Para atualizar os arquivos do Airspace ACARS com seguranca, o Microsoft Flight Simulator
+DEVE ESTAR FECHADO. Se o simulador estiver em execucao, os arquivos de script e templates
+do Flow estarao bloqueados pelo sistema operacional Windows, podendo causar corrupcao
+ou falha na gravacao dos arquivos.
+
+5. CONEXAO COM COMPANHIAS AEREAS VIRTUAIS (VAs)
+-----------------------------------------------
+O software conecta-se de forma segura aos servidores da rede Airspace via protocolo
+Device Code OAuth. Seus tokens de acesso sao armazenados localmente no seu computador
+atraves do datastore do Flow. Nunca compartilhe seus tokens de acesso ou codigos de
+autorizacao com terceiros.
+
+6. PROPRIEDADE INTELECTUAL E MODIFICACOES
+-----------------------------------------
+O codigo-fonte do Airspace ACARS esta sob licenca de uso open-source / MIT conforme
+especificado no repositorio oficial:
+https://github.com/GordelaG/p42-util-airspace-acars
+
+================================================================================
+Ao clicar em "Instalar" ou "Atualizar", voce confirma que leu, compreendeu e
+concorda com estes Termos de Uso.
+================================================================================

@@ -1,0 +1,50 @@
+================================================================================
+TERMS OF USE AND LICENSE - AIRSPACE ACARS
+================================================================================
+Version: 1.0 (November 2026)
+Application: Airspace ACARS - Widget for Parallel 42 Flow Pro (MSFS 2024 / MSFS 2020)
+Developer: Airspace Team (FerrLab)
+================================================================================
+
+Please read these Terms of Use carefully before installing or using Airspace ACARS.
+By checking "I have read and agree to the Terms of Use" and continuing with the
+installation, you agree to all terms described herein.
+
+1. EXCLUSIVE PURPOSE: FLIGHT SIMULATION
+---------------------------------------
+Airspace ACARS is developed exclusively for virtual flight simulation and
+entertainment within Microsoft Flight Simulator (MSFS 2024 and MSFS 2020) via
+the Parallel 42 Flow Pro add-on.
+
+It is STRICTLY PROHIBITED to use this software, its weather information, NOTAMs,
+airport briefings, flight plans, or dispatch messages (vOCC) for:
+- Real-world flight planning;
+- Real aircraft navigation or guidance;
+- Any operation involving real-world aviation or life safety.
+
+2. DISCLAIMER AND WARRANTY
+--------------------------
+The software is provided "AS IS", without warranties of any kind, either express
+or implied. The developers shall not be liable for any data loss, system conflicts,
+or simulator issues arising from its use.
+
+3. INSTALLATION REQUIREMENTS
+----------------------------
+- Airspace ACARS MUST be installed exclusively into your official Microsoft Flight
+  Simulator "Community" directory (e.g.: ...\Packages\Community).
+- Installing into an incorrect folder will prevent MSFS from loading the widget.
+- Requires Parallel 42 Flow Pro installed in your simulator.
+
+4. UPDATES AND SIMULATOR PROCESS LOCK
+-------------------------------------
+Before installing updates, Microsoft Flight Simulator MUST BE CLOSED. If the
+simulator is running, Flow script files will be locked by Windows, leading to
+failed updates or file corruption.
+
+5. VIRTUAL AIRLINE (VA) CONNECTIVITY
+------------------------------------
+Airspace ACARS connects to the Airspace network using Device Code OAuth. Access
+tokens are stored locally in your Flow datastore. Do not share your authorization
+credentials or device codes with third parties.
+
+================================================================================

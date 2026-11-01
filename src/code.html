@@ -100,6 +100,26 @@
       </div>
     </div>
 
+    <!-- Top Update Notification Banner -->
+    <div class="as-acars-update-banner as-acars-hidden" id="as-acars-update-banner">
+      <div class="as-acars-update-banner-content">
+        <span class="as-acars-update-badge" data-i18n="update.badge_new">NOVO</span>
+        <div class="as-acars-update-text">
+          <span class="as-acars-update-title" data-i18n="update.banner_title">Nova versao disponivel:</span>
+          <strong id="as-acars-update-new-version">v1.0.12</strong>
+          <span class="as-acars-update-desc" data-i18n="update.banner_hint">Feche o simulador antes de executar o instalador.</span>
+        </div>
+      </div>
+      <div class="as-acars-update-banner-actions">
+        <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-btn-primary" id="as-acars-btn-update-download" data-i18n="update.btn_download">
+          Baixar Atualizador
+        </button>
+        <button type="button" class="as-acars-update-dismiss" id="as-acars-btn-update-dismiss" title="Fechar aviso" data-i18n-title="update.btn_dismiss">
+          X
+        </button>
+      </div>
+    </div>
+
     <!-- VIEW 1: VA / Tenant Selector -->
     <div class="as-acars-view" id="as-acars-view-tenants">
       <div class="as-acars-auth-container">
@@ -449,6 +469,27 @@
                   <input type="number" min="0" max="300" step="5" id="as-acars-settings-toast-time" class="as-acars-input as-acars-input-sm as-acars-duration-input" />
                   <span class="as-acars-duration-unit">s</span>
                 </div>
+              </div>
+            </div>
+
+            <div class="as-acars-setting-divider"></div>
+
+            <!-- Version & Updates Row -->
+            <div class="as-acars-setting-row">
+              <div class="as-acars-setting-info">
+                <div class="as-acars-setting-label">
+                  <span data-i18n="settings.update_title">Versao &amp; Atualizacoes</span>
+                  <span class="as-acars-version-badge" id="as-acars-current-version-badge">v1.0.11</span>
+                </div>
+                <div class="as-acars-setting-desc" id="as-acars-update-status-text" data-i18n="settings.update_status_current">Voce esta utilizando a versao mais recente.</div>
+              </div>
+              <div class="as-acars-setting-control as-acars-update-control">
+                <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-btn-outline" id="as-acars-btn-check-updates" data-i18n="settings.btn_check_updates">
+                  Verificar Atualizacoes
+                </button>
+                <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-btn-primary as-acars-hidden" id="as-acars-btn-download-installer" data-i18n="settings.btn_download_installer">
+                  Baixar Instalador
+                </button>
               </div>
             </div>
           </div>

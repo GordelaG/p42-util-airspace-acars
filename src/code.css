@@ -1608,6 +1608,105 @@
   color: #a1a1aa;
 }
 
+/* Update Notification Banner */
+.as-acars-update-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 14px;
+  background: rgba(24, 24, 27, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.as-acars-update-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.as-acars-update-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 3px;
+  background: #ffffff;
+  color: #09090b;
+  flex-shrink: 0;
+}
+
+.as-acars-update-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+  color: #e4e4e7;
+  min-width: 0;
+}
+
+.as-acars-update-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.as-acars-update-text strong {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.as-acars-update-desc {
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+.as-acars-update-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.as-acars-update-dismiss {
+  background: transparent;
+  border: none;
+  color: #71717a;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+.as-acars-update-dismiss:hover {
+  color: #ffffff;
+}
+
+/* Version badge in Settings */
+.as-acars-version-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  color: #e4e4e7;
+  margin-left: 6px;
+}
+
+.as-acars-update-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* ==========================================================================
    White Mode / Light Theme (Daylight Cockpit & Paper EFB Mode)
    ========================================================================== */
@@ -2070,6 +2169,46 @@
   background: #18181b !important;
   color: #ffffff !important;
   border-color: #18181b !important;
+}
+
+.as-acars-white-mode .as-acars-update-banner {
+  background: #f1f5f9 !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-update-badge {
+  background: #0f172a !important;
+  color: #ffffff !important;
+}
+
+.as-acars-white-mode .as-acars-update-text {
+  color: #334155 !important;
+}
+
+.as-acars-white-mode .as-acars-update-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-update-text strong {
+  color: #16a34a !important;
+}
+
+.as-acars-white-mode .as-acars-update-desc {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-update-dismiss {
+  color: #94a3b8 !important;
+}
+
+.as-acars-white-mode .as-acars-update-dismiss:hover {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-version-badge {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #334155 !important;
 }
 
 .as-acars-white-mode .as-acars-btn-outline {

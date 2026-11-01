@@ -58,6 +58,10 @@ jobs:
           cd dist
           zip -r "../p42-util-airspace-acars.zip" "p42-util-airspace-acars"
           cp "../p42-util-airspace-acars.zip" "../p42-util-airspace-acars-v${{ steps.version.outputs.version }}.zip"
+          if [ -d "Airspace-ACARS-Installer" ]; then
+            zip -r "../Airspace-ACARS-Installer.zip" "Airspace-ACARS-Installer"
+            cp "../Airspace-ACARS-Installer.zip" "../Airspace-ACARS-Installer-v${{ steps.version.outputs.version }}.zip"
+          fi
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
@@ -69,6 +73,8 @@ jobs:
           files: |
             p42-util-airspace-acars.zip
             p42-util-airspace-acars-v${{ steps.version.outputs.version }}.zip
+            Airspace-ACARS-Installer.zip
+            Airspace-ACARS-Installer-v${{ steps.version.outputs.version }}.zip
           body: |
             ## Airspace ACARS — Parallel 42 Flow Pro (MSFS 2024)
 
@@ -79,8 +85,17 @@ jobs:
             - **Aeroportos & Documentos**: Pesquisa rápida por código ICAO ou título, atalhos automáticos para os aeroportos do voo ativo (`DEP`, `ARR`, `ALT`) e aeroporto mais próximo no MSFS 2024, filtros de categoria e leitor seguro integrado.
             - **Conexão Multi-VA (Device Code OAuth)**: Seletor de Virtual Airlines da rede Airspace com login via código de dispositivo sem sair do simulador e troca rápida entre VAs salvas.
             - **Integração com a Barra Otto**: Pesquise `doc SBGR`, `briefing SBRJ`, `vocc WILCO`, `notam` ou `acars` diretamente na barra Otto do Flow.
+            - **Sistema de Atualizações Inteligente**: Notificação no cockpit quando houver nova versão com verificação de simulador em execução.
 
-            ### Instalação (MSFS 2024)
+            ### Opções de Instalação (MSFS 2024 / MSFS 2020)
+
+            #### Opção 1: Instalador Gráfico Oficial (Recomendado)
+            1. Baixe o arquivo **`Airspace-ACARS-Installer.zip`** abaixo e extraia em qualquer pasta.
+            2. Certifique-se de que o Microsoft Flight Simulator esteja fechado.
+            3. Dê um duplo-clique em **`Instalar-Airspace-ACARS.bat`**.
+            4. Aceite os Termos de Uso, confirme sua pasta **Community** e clique em **Instalar / Atualizar**.
+
+            #### Opção 2: Instalação Manual
             1. Baixe o arquivo **`p42-util-airspace-acars.zip`** abaixo.
-            2. Extraia a pasta `p42-util-airspace-acars` diretamente dentro da sua pasta **`Community`** do Microsoft Flight Simulator 2024.
-            3. No MSFS 2024, abra a roda do **Flow Pro**, entre no modo de edição e adicione o widget **Airspace ACARS**.
+            2. Extraia a pasta `p42-util-airspace-acars` diretamente dentro da sua pasta **`Community`** do Microsoft Flight Simulator.
+            3. No MSFS, abra a roda do **Flow Pro**, entre no modo de edição e adicione o widget **Airspace ACARS**.
