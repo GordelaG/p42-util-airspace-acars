@@ -4,7 +4,7 @@
 ; ==============================================================================
 
 #define MyAppName "Airspace ACARS"
-#define MyAppVersion "1.0.12"
+#define MyAppVersion "1.0.13"
 #define MyAppPublisher "Airspace Team (FerrLab)"
 #define MyAppURL "https://airspace.ferrlab.com"
 #define MyPackageName "p42-util-airspace-acars"

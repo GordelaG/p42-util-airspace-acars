@@ -1004,10 +1004,10 @@ test('GitHub release update checker detects newer releases, renders banner, and 
   const mockFetch = async (url) => {
     if (url.includes('api.github.com/repos') && url.includes('releases/latest')) {
       return makeJsonResponse(200, {
-        tag_name: 'v1.0.13',
-        name: 'Release v1.0.13',
-        html_url: 'https://github.com/GordelaG/p42-util-airspace-acars/releases/tag/v1.0.13',
-        body: 'Release notes v1.0.13'
+        tag_name: 'v1.0.14',
+        name: 'Release v1.0.14',
+        html_url: 'https://github.com/GordelaG/p42-util-airspace-acars/releases/tag/v1.0.14',
+        body: 'Release notes v1.0.14'
       });
     }
     return makeJsonResponse(200, { data: [] });
@@ -1024,7 +1024,7 @@ test('GitHub release update checker detects newer releases, renders banner, and 
   await new Promise((r) => setTimeout(r, 60));
 
   assert.ok(instance.state.updateInfo, 'updateInfo must be populated');
-  assert.equal(instance.state.updateInfo.version, 'v1.0.13');
+  assert.equal(instance.state.updateInfo.version, 'v1.0.14');
   assert.equal(instance.state.updateInfo.isNewer, true);
 
   const banner = mockRoot.querySelector('#as-acars-update-banner');
@@ -1032,14 +1032,14 @@ test('GitHub release update checker detects newer releases, renders banner, and 
   assert.equal(banner.classList.contains('as-acars-hidden'), false, 'Update banner must be visible');
 
   const newVerEl = mockRoot.querySelector('#as-acars-update-new-version');
-  assert.equal(newVerEl.textContent, 'v1.0.13');
+  assert.equal(newVerEl.textContent, 'v1.0.14');
 
   // Test Download button in banner
   const downloadBtn = mockRoot.querySelector('#as-acars-btn-update-download');
   assert.ok(downloadBtn, 'Download button must exist in banner');
   mockRoot.dispatchEvent({ type: 'click', target: downloadBtn, preventDefault() {}, stopPropagation() {} });
   assert.equal(openedUrls.length, 1);
-  assert.equal(openedUrls[0], 'https://github.com/GordelaG/p42-util-airspace-acars/releases/tag/v1.0.13');
+  assert.equal(openedUrls[0], 'https://github.com/GordelaG/p42-util-airspace-acars/releases/tag/v1.0.14');
 
   // Test Dismiss button in banner
   const dismissBtn = mockRoot.querySelector('#as-acars-btn-update-dismiss');

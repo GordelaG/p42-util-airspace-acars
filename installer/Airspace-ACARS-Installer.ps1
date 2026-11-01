@@ -29,7 +29,7 @@ Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, Sys
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RepoRootDir = Split-Path -Parent $ScriptDir
 $PackageName = "p42-util-airspace-acars"
-$AppVersion = "1.0.12"
+$AppVersion = "1.0.13"
 $GitHubRepo = "GordelaG/p42-util-airspace-acars"
 $DownloadZipUrl = "https://github.com/$GitHubRepo/releases/latest/download/p42-util-airspace-acars.zip"
 

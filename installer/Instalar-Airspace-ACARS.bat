@@ -10,3 +10,4 @@ if %errorlevel% neq 0 (
     echo Ocorreu um erro ao iniciar o instalador grafico.
     pause
 )
+
