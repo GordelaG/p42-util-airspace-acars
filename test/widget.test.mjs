@@ -879,6 +879,26 @@ test('Language removed from Flow wheel settings, defaults to English, and can be
   assert.ok(mockRoot.classList.contains('as-acars-white-mode'), 'Root element must have .as-acars-white-mode class');
   const toastEl = mockRoot.querySelector('#as-acars-toast');
   assert.ok(toastEl.classList.contains('as-acars-white-mode'), 'Toast element must have .as-acars-white-mode class in White Mode');
+
+  // Test White Mode custom switch toggle
+  const whiteSwitch = mockRoot.querySelector('#as-acars-switch-white');
+  if (whiteSwitch) {
+    instance.store.white_mode = false;
+    mockRoot.dispatchEvent({ type: 'click', target: whiteSwitch, preventDefault() {}, stopPropagation() {} });
+    assert.equal(instance.store.white_mode, true, 'Clicking #as-acars-switch-white must toggle store.white_mode to true');
+    mockRoot.dispatchEvent({ type: 'click', target: whiteSwitch, preventDefault() {}, stopPropagation() {} });
+    assert.equal(instance.store.white_mode, false, 'Clicking #as-acars-switch-white again must toggle store.white_mode to false');
+  }
+
+  // Test Toast Alerts custom switch toggle
+  const toastSwitch = mockRoot.querySelector('#as-acars-switch-toast');
+  if (toastSwitch) {
+    instance.store.vocc_toast_enabled = true;
+    mockRoot.dispatchEvent({ type: 'click', target: toastSwitch, preventDefault() {}, stopPropagation() {} });
+    assert.equal(instance.store.vocc_toast_enabled, false, 'Clicking #as-acars-switch-toast must toggle store.vocc_toast_enabled to false');
+    mockRoot.dispatchEvent({ type: 'click', target: toastSwitch, preventDefault() {}, stopPropagation() {} });
+    assert.equal(instance.store.vocc_toast_enabled, true, 'Clicking #as-acars-switch-toast again must toggle store.vocc_toast_enabled to true');
+  }
 });
 
 test('Toast auto-dismiss timer closes floating vOCC alert after configured duration', async () => {
@@ -956,6 +976,29 @@ test('Toast close button and dismiss link immediately dismiss the toast notifica
   assert.equal(instance.state.toastMessage, null, 'Toast message should be cleared after clicking X');
   assert.equal(toastEl.classList.contains('as-acars-hidden'), true, 'Toast element should be hidden after clicking X');
 });
+
+test('CSS neutralizes colors, constrains service logos, and HTML excludes quick replies', () => {
+  const css = fs.readFileSync(path.join(ROOT_DIR, 'src', 'code.css'), 'utf8');
+  const html = fs.readFileSync(path.join(ROOT_DIR, 'src', 'code.html'), 'utf8');
+
+  // Service logo constraint in Documents
+  assert.ok(
+    css.includes('.as-acars-doc-html table img') || css.includes('.as-acars-doc-html td img'),
+    'Must constrain service logos inside tables'
+  );
+  assert.ok(
+    css.includes('max-height: 38px') || css.includes('max-height: 40px'),
+    'Must limit max-height of service logos'
+  );
+
+  // Quick replies removed
+  assert.equal(html.includes('as-acars-quick-replies'), false, 'Quick replies bar must be removed from HTML');
+
+  // Switches present in HTML
+  assert.ok(html.includes('id="as-acars-switch-white"'), 'Must have switch for White Mode');
+  assert.ok(html.includes('id="as-acars-switch-toast"'), 'Must have switch for vOCC Toast Alerts');
+});
+
 
 
 

@@ -108,19 +108,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         settings: "Configuracoes",
       },
       settings: {
-        title: "Configuracoes do Aplicativo",
-        subtitle: "Personalize o idioma, alertas e visual do Airspace ACARS",
+        title: "Configuracoes",
+        subtitle: "Personalize idioma, aparencia e alertas do Airspace ACARS",
         language_title: "Idioma da Interface",
-        language_sub: "Selecione o idioma preferido (salvo automaticamente)",
-        theme_title: "Tema Visual / White Mode",
-        theme_sub: "Alterne entre o tema escuro padrao e o modo claro (White Mode)",
-        theme_dark: "Tema Escuro (Padrao)",
-        theme_white: "White Mode (Modo Claro)",
+        language_sub: "Selecione o idioma de exibicao",
+        theme_title: "Modo Claro (White Mode)",
+        theme_sub: "Alterne entre o tema escuro padrao e o modo claro",
+        switch_enabled: "Ativado",
+        switch_disabled: "Desativado",
         toast_title: "Alertas Flutuantes do vOCC",
-        toast_sub: "Configure as notificacoes em tempo real no cockpit",
-        toast_enabled: "Ativar popups na cabine",
-        toast_duration: "Tempo de exibicao (segundos):",
-        toast_duration_hint: "(Use 0 para manter visivel ate ser fechado)",
+        toast_sub: "Exibir popup na cabine ao receber mensagens do vOCC",
+        toast_duration: "Tempo de Exibicao dos Alertas",
+        toast_duration_desc: "Duracao em segundos ate o popup fechar automaticamente (0 = fixo)",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Ativo",
@@ -219,19 +218,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         settings: "Settings",
       },
       settings: {
-        title: "Application Settings",
-        subtitle: "Customize language, alerts, and visuals for Airspace ACARS",
+        title: "Settings",
+        subtitle: "Customize language, appearance, and alerts for Airspace ACARS",
         language_title: "Interface Language",
-        language_sub: "Select your preferred language (saved automatically)",
-        theme_title: "Visual Theme / White Mode",
-        theme_sub: "Switch between standard dark mode and light mode (White Mode)",
-        theme_dark: "Dark Theme (Default)",
-        theme_white: "White Mode (Light)",
+        language_sub: "Select your preferred display language",
+        theme_title: "Light Theme (White Mode)",
+        theme_sub: "Toggle between standard dark mode and light theme",
+        switch_enabled: "Enabled",
+        switch_disabled: "Disabled",
         toast_title: "vOCC Floating Alerts",
-        toast_sub: "Configure real-time in-cockpit popup notifications",
-        toast_enabled: "Enable cockpit popups",
-        toast_duration: "Display duration (seconds):",
-        toast_duration_hint: "(Use 0 to keep visible until closed)",
+        toast_sub: "Show in-cockpit popup alerts when receiving vOCC messages",
+        toast_duration: "Alert Display Duration",
+        toast_duration_desc: "Duration in seconds before popup auto-closes (0 = fixed)",
       },
       vocc: {
         channel_active: "ACARS / vOCC Dispatch Channel Active",
@@ -327,22 +325,21 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC & Mensajes",
         docs: "Aeropuertos & Documentos",
         flight: "Vuelo Activo & NOTAMs",
-        settings: "Configuraci\u00f3n",
+        settings: "Configuracion",
       },
       settings: {
-        title: "Configuraci\u00f3n de la Aplicaci\u00f3n",
-        subtitle: "Personalice idioma, alertas y tema visual de Airspace ACARS",
+        title: "Configuracion",
+        subtitle: "Personalice idioma, apariencia y alertas de Airspace ACARS",
         language_title: "Idioma de la Interfaz",
-        language_sub: "Seleccione el idioma preferido (guardado autom\u00e1ticamente)",
-        theme_title: "Tema Visual / White Mode",
-        theme_sub: "Alternar entre modo oscuro est\u00e1ndar y modo claro (White Mode)",
-        theme_dark: "Tema Oscuro (Predeterminado)",
-        theme_white: "White Mode (Modo Claro)",
+        language_sub: "Seleccione el idioma de visualizacion",
+        theme_title: "Modo Claro (White Mode)",
+        theme_sub: "Alternar entre tema oscuro estandar y modo claro",
+        switch_enabled: "Activado",
+        switch_disabled: "Desactivado",
         toast_title: "Alertas Flotantes del vOCC",
-        toast_sub: "Configure las notificaciones emergentes en cabina",
-        toast_enabled: "Activar popups en cabina",
-        toast_duration: "Tiempo de visualizaci\u00f3n (segundos):",
-        toast_duration_hint: "(Use 0 para mantener visible hasta cerrar)",
+        toast_sub: "Mostrar avisos en cabina al recibir mensajes de vOCC",
+        toast_duration: "Tiempo de Visualizacion",
+        toast_duration_desc: "Duracion en segundos hasta cerrar automaticamente (0 = fijo)",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Activo",
@@ -438,22 +435,21 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC & Messages",
         docs: "Aeroports & Documents",
         flight: "Vol Actif & NOTAMs",
-        settings: "Param\u00e8tres",
+        settings: "Parametres",
       },
       settings: {
-        title: "Param\u00e8tres de l'Application",
-        subtitle: "Personnalisez la langue, les alertes et le visuel d'Airspace ACARS",
+        title: "Parametres",
+        subtitle: "Personnalisez la langue, l'apparence et les alertes d'Airspace ACARS",
         language_title: "Langue de l'Interface",
-        language_sub: "S\u00e9lectionnez votre langue pr\u00e9f\u00e9r\u00e9e (sauvegard\u00e9e automatiquement)",
-        theme_title: "Th\u00e8me Visuel / White Mode",
-        theme_sub: "Basculez entre le mode sombre standard et le mode clair (White Mode)",
-        theme_dark: "Th\u00e8me Sombre (Par d\u00e9faut)",
-        theme_white: "White Mode (Mode Clair)",
-        toast_title: "Alertes Flottantes du vOCC",
-        toast_sub: "Configurez les alertes popup en temps r\u00e9el dans le cockpit",
-        toast_enabled: "Activer les popups cockpit",
-        toast_duration: "Dur\u00e9e d'affichage (secondes):",
-        toast_duration_hint: "(Utilisez 0 pour laisser visible jusqu'\u00e0 fermeture)",
+        language_sub: "Selectionnez la langue d'affichage",
+        theme_title: "Mode Clair (White Mode)",
+        theme_sub: "Basculer entre le theme sombre standard et le mode clair",
+        switch_enabled: "Active",
+        switch_disabled: "Desactive",
+        toast_title: "Alertas Flottantes du vOCC",
+        toast_sub: "Afficher des popups dans le cockpit lors de messages vOCC",
+        toast_duration: "Duree d'Affichage des Alertes",
+        toast_duration_desc: "Duree en secondes avant fermeture automatique (0 = fixe)",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Actif",
@@ -1882,14 +1878,48 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       else whiteBtn.classList.remove("as-acars-choice-active");
     }
 
-    const toastCheck = q("#as-acars-settings-toast-enable");
-    if (toastCheck) {
-      toastCheck.checked = store.vocc_toast_enabled !== undefined ? !!store.vocc_toast_enabled : true;
+    // White Mode Switch
+    const whiteSwitch = q("#as-acars-switch-white");
+    const whiteStatus = q("#as-acars-switch-white-status");
+    const isWhite = !!store.white_mode;
+    if (whiteSwitch) {
+      whiteSwitch.setAttribute("aria-checked", isWhite ? "true" : "false");
+    }
+    if (whiteStatus) {
+      whiteStatus.textContent = isWhite ? t("settings.switch_enabled", "Ativado") : t("settings.switch_disabled", "Desativado");
     }
 
+    // Toast Switch
+    const toastSwitch = q("#as-acars-switch-toast");
+    const toastStatus = q("#as-acars-switch-toast-status");
+    const isToastEnabled = store.vocc_toast_enabled !== undefined ? !!store.vocc_toast_enabled : true;
+    if (toastSwitch) {
+      toastSwitch.setAttribute("aria-checked", isToastEnabled ? "true" : "false");
+    }
+    if (toastStatus) {
+      toastStatus.textContent = isToastEnabled ? t("settings.switch_enabled", "Ativado") : t("settings.switch_disabled", "Desativado");
+    }
+
+    const toastCheck = q("#as-acars-settings-toast-enable");
+    if (toastCheck) {
+      toastCheck.checked = isToastEnabled;
+    }
+
+    // Toast Duration Presets & Input
+    const duration = store.toast_duration !== undefined ? store.toast_duration : 15;
     const toastTime = q("#as-acars-settings-toast-time");
-    if (toastTime) {
-      toastTime.value = String(store.toast_duration !== undefined ? store.toast_duration : 15);
+    if (toastTime && document.activeElement !== toastTime) {
+      toastTime.value = String(duration);
+    }
+    const presets = rootEl.querySelectorAll(".as-acars-duration-preset");
+    for (let i = 0; i < presets.length; i++) {
+      const p = presets[i];
+      const sec = parseInt(p.getAttribute("data-sec"), 10);
+      if (sec === duration) {
+        p.classList.add("as-acars-choice-active");
+      } else {
+        p.classList.remove("as-acars-choice-active");
+      }
     }
   }
 
@@ -2515,7 +2545,16 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
-      // Theme choice inside Settings tab (White Mode toggle)
+      // Switch White Mode Toggle
+      if (findClosest(target, "#as-acars-switch-white")) {
+        store.white_mode = !store.white_mode;
+        saveStore();
+        applyTheme();
+        renderSettingsTab();
+        return;
+      }
+
+      // Theme choice inside Settings tab (White Mode toggle for backwards compatibility)
       const themeChoiceBtn = findClosest(target, ".as-acars-theme-choice");
       if (themeChoiceBtn) {
         const theme = themeChoiceBtn.getAttribute("data-theme");
@@ -2523,6 +2562,26 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         saveStore();
         applyTheme();
         renderAll();
+        return;
+      }
+
+      // Switch Toast Alerts Toggle
+      if (findClosest(target, "#as-acars-switch-toast")) {
+        const currentEnabled = store.vocc_toast_enabled !== undefined ? !!store.vocc_toast_enabled : true;
+        store.vocc_toast_enabled = !currentEnabled;
+        saveStore();
+        renderSettingsTab();
+        renderToast();
+        return;
+      }
+
+      // Toast Duration Preset Buttons
+      const presetBtn = findClosest(target, ".as-acars-duration-preset");
+      if (presetBtn) {
+        const sec = parseInt(presetBtn.getAttribute("data-sec"), 10);
+        store.toast_duration = isNaN(sec) ? 15 : sec;
+        saveStore();
+        renderSettingsTab();
         return;
       }
 
@@ -2901,11 +2960,25 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
     const toastTime = q("#as-acars-settings-toast-time");
     if (toastTime) {
-      toastTime.addEventListener("change", function () {
+      const onTimeChange = function () {
         const val = parseInt(toastTime.value, 10);
         store.toast_duration = isNaN(val) || val < 0 ? 15 : val;
         saveStore();
-      });
+        if (rootEl) {
+          const presets = rootEl.querySelectorAll(".as-acars-duration-preset");
+          for (let i = 0; i < presets.length; i++) {
+            const p = presets[i];
+            const sec = parseInt(p.getAttribute("data-sec"), 10);
+            if (sec === store.toast_duration) {
+              p.classList.add("as-acars-choice-active");
+            } else {
+              p.classList.remove("as-acars-choice-active");
+            }
+          }
+        }
+      };
+      toastTime.addEventListener("change", onTimeChange);
+      toastTime.addEventListener("input", onTimeChange);
     }
   }
 
