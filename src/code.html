@@ -7,19 +7,19 @@
     data-defaultx="65"
     data-defaulty="8"
   >
-    <div class="as-acars-toast-header">
-      <div class="as-acars-toast-title" data-dragarea="airspace_acars_toast">
+    <div class="as-acars-toast-header" data-dragarea="airspace_acars_toast">
+      <div class="as-acars-toast-title">
         <span class="as-acars-pulse-dot"></span>
         <span id="as-acars-toast-sender">vOCC DISPATCH</span>
       </div>
-      <button type="button" class="as-acars-icon-btn" id="as-acars-toast-close" title="Dispensar">X</button>
+      <button type="button" class="as-acars-toast-close" id="as-acars-toast-close" title="Dispensar" data-i18n-title="toast.close_title">X</button>
     </div>
     <div class="as-acars-toast-body" id="as-acars-toast-text"></div>
     <div class="as-acars-toast-actions">
-      <button type="button" class="as-acars-btn as-acars-btn-primary as-acars-btn-xs" id="as-acars-toast-open">
-        Responder no vOCC
+      <button type="button" class="as-acars-toast-btn" id="as-acars-toast-open" data-i18n="toast.open">
+        Abrir no vOCC / Responder
       </button>
-      <button type="button" class="as-acars-btn as-acars-btn-ghost as-acars-btn-xs" id="as-acars-toast-dismiss">
+      <button type="button" class="as-acars-toast-dismiss" id="as-acars-toast-dismiss" data-i18n="toast.dismiss">
         Marcar Lida
       </button>
     </div>
@@ -52,11 +52,19 @@
 
       <div class="as-acars-header-actions">
         <span class="as-acars-route-pill as-acars-hidden" id="as-acars-route-pill"></span>
+        <div class="as-acars-lang-picker" id="as-acars-lang-picker" title="Idioma / Language" data-i18n-title="header.lang_title">
+          <button type="button" class="as-acars-lang-btn as-acars-lang-active" data-lang="pt-br">PT</button>
+          <button type="button" class="as-acars-lang-btn" data-lang="en">EN</button>
+          <button type="button" class="as-acars-lang-btn" data-lang="es">ES</button>
+          <button type="button" class="as-acars-lang-btn" data-lang="fr">FR</button>
+        </div>
         <button
           type="button"
           class="as-acars-btn as-acars-btn-ghost as-acars-btn-xs as-acars-hidden"
           id="as-acars-btn-refresh"
           title="Atualizar dados"
+          data-i18n="common.refresh"
+          data-i18n-title="header.refresh_title"
         >
           Atualizar
         </button>
@@ -65,6 +73,8 @@
           class="as-acars-btn as-acars-btn-ghost as-acars-btn-xs as-acars-hidden"
           id="as-acars-btn-switch-va"
           title="Trocar Companhia Aerea (VA)"
+          data-i18n="common.switch_va"
+          data-i18n-title="header.switch_va_title"
         >
           Trocar VA
         </button>
@@ -73,6 +83,7 @@
           class="as-acars-icon-btn"
           id="as-acars-btn-close"
           title="Fechar janela"
+          data-i18n-title="header.close_title"
         >
           X
         </button>
@@ -84,33 +95,34 @@
       <div class="as-acars-auth-container">
         <div class="as-acars-auth-card">
           <div class="as-acars-auth-header">
-            <h2 class="as-acars-h2">Selecione sua Companhia Aerea</h2>
-            <p class="as-acars-sub">Conecte o Flow (MSFS 2024) diretamente a sua VA no Airspace</p>
+            <h2 class="as-acars-h2" data-i18n="tenants.title">Selecione sua Companhia Aerea</h2>
+            <p class="as-acars-sub" data-i18n="tenants.subtitle">Conecte o Flow (MSFS 2024) diretamente a sua VA no Airspace</p>
           </div>
 
           <div class="as-acars-hidden" id="as-acars-saved-tenants-wrap">
-            <div class="as-acars-section-label">Sessoes Salvas (1-Clique)</div>
+            <div class="as-acars-section-label" data-i18n="tenants.saved_sessions">Sessoes Salvas (1-Clique)</div>
             <div class="as-acars-tenant-list as-acars-saved-list" id="as-acars-saved-tenants-list"></div>
             <div class="as-acars-divider"></div>
           </div>
 
-          <div class="as-acars-section-label">Organizacoes Disponiveis</div>
+          <div class="as-acars-section-label" data-i18n="tenants.available_orgs">Organizacoes Disponiveis</div>
           <div class="as-acars-search-box">
             <input
               type="text"
               class="as-acars-input"
               id="as-acars-tenant-search"
               placeholder="Buscar companhia aerea por nome ou dominio..."
+              data-i18n-placeholder="tenants.search_placeholder"
               autocomplete="off"
             />
           </div>
 
           <div class="as-acars-tenant-list" id="as-acars-tenants-list">
-            <div class="as-acars-empty-state">Carregando companhias aereas...</div>
+            <div class="as-acars-empty-state" data-i18n="tenants.loading">Carregando companhias aereas...</div>
           </div>
 
           <div class="as-acars-auth-footer">
-            <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-btn-sm" id="as-acars-btn-reload-tenants">
+            <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-btn-sm" id="as-acars-btn-reload-tenants" data-i18n="tenants.btn_reload">
               Recarregar Lista de VAs
             </button>
           </div>
@@ -123,12 +135,12 @@
       <div class="as-acars-auth-container">
         <div class="as-acars-auth-card as-acars-center">
           <div class="as-acars-auth-header">
-            <h2 class="as-acars-h2">Autorizar Dispositivo</h2>
+            <h2 class="as-acars-h2" data-i18n="auth.title">Autorizar Dispositivo</h2>
             <p class="as-acars-sub" id="as-acars-auth-va-name">Conectando a VA</p>
           </div>
 
           <div class="as-acars-code-box">
-            <span class="as-acars-code-label">Digite este codigo em /acars/authorize</span>
+            <span class="as-acars-code-label" data-i18n="auth.code_label">Digite este codigo em /acars/authorize</span>
             <div class="as-acars-code-value" id="as-acars-device-code">------</div>
             <a
               class="as-acars-auth-url"
@@ -144,25 +156,26 @@
               href="https://samba.airspace.ferrlab.com/acars/authorize"
               class="as-acars-btn as-acars-btn-primary"
               id="as-acars-btn-open-auth"
+              data-i18n="auth.btn_open"
               target="_blank"
               onclick="if(typeof OpenBrowser==='function'){OpenBrowser(this.href);return false;}"
             >
               Abrir Pagina de Autorizacao
             </a>
-            <button type="button" class="as-acars-btn as-acars-btn-outline" id="as-acars-btn-copy-code">
+            <button type="button" class="as-acars-btn as-acars-btn-outline" id="as-acars-btn-copy-code" data-i18n="auth.btn_copy">
               Copiar Codigo
             </button>
           </div>
 
-          <div class="as-acars-auth-status" id="as-acars-auth-status">
+          <div class="as-acars-auth-status" id="as-acars-auth-status" data-i18n="auth.status_waiting">
             Aguardando aprovacao no navegador...
           </div>
 
           <div class="as-acars-auth-footer">
-            <button type="button" class="as-acars-btn as-acars-btn-ghost as-acars-btn-sm" id="as-acars-btn-retry-auth">
+            <button type="button" class="as-acars-btn as-acars-btn-ghost as-acars-btn-sm" id="as-acars-btn-retry-auth" data-i18n="auth.btn_retry">
               Gerar Novo Codigo
             </button>
-            <button type="button" class="as-acars-btn as-acars-btn-ghost as-acars-btn-sm" id="as-acars-btn-back-tenants">
+            <button type="button" class="as-acars-btn as-acars-btn-ghost as-acars-btn-sm" id="as-acars-btn-back-tenants" data-i18n="auth.btn_back">
               Voltar para Lista de VAs
             </button>
           </div>
@@ -175,14 +188,14 @@
       <!-- Navigation Tabs -->
       <div class="as-acars-tabs">
         <button type="button" class="as-acars-tab as-acars-tab-active" data-tab="vocc" id="as-acars-tab-btn-vocc">
-          <span>vOCC &amp; Mensagens</span>
+          <span data-i18n="tabs.vocc">vOCC &amp; Mensagens</span>
           <span class="as-acars-badge-count as-acars-hidden" id="as-acars-unread-badge">0</span>
         </button>
         <button type="button" class="as-acars-tab" data-tab="docs" id="as-acars-tab-btn-docs">
-          <span>Aeroportos &amp; Documentos</span>
+          <span data-i18n="tabs.docs">Aeroportos &amp; Documentos</span>
         </button>
         <button type="button" class="as-acars-tab" data-tab="flight" id="as-acars-tab-btn-flight">
-          <span>Voo Ativo &amp; NOTAMs</span>
+          <span data-i18n="tabs.flight">Voo Ativo &amp; NOTAMs</span>
         </button>
       </div>
 
@@ -191,17 +204,17 @@
         <div class="as-acars-vocc-toolbar">
           <div class="as-acars-vocc-info">
             <span class="as-acars-status-dot"></span>
-            <span>Canal ACARS / vOCC Dispatch Ativo</span>
+            <span data-i18n="vocc.channel_active">Canal ACARS / vOCC Dispatch Ativo</span>
           </div>
           <span class="as-acars-muted" id="as-acars-msg-count">0 mensagens</span>
         </div>
 
         <div class="as-acars-chat-feed" id="as-acars-chat-list">
-          <div class="as-acars-empty-state">Nenhuma mensagem recebida ainda.</div>
+          <div class="as-acars-empty-state" data-i18n="vocc.no_messages">Nenhuma mensagem recebida ainda.</div>
         </div>
 
         <div class="as-acars-quick-replies">
-          <span class="as-acars-quick-label">Respostas Rapidas:</span>
+          <span class="as-acars-quick-label" data-i18n="vocc.quick_replies">Respostas Rapidas:</span>
           <button type="button" class="as-acars-chip" data-reply="WILCO">WILCO</button>
           <button type="button" class="as-acars-chip" data-reply="ROGER">ROGER</button>
           <button type="button" class="as-acars-chip" data-reply="YES">YES</button>
@@ -216,9 +229,10 @@
             class="as-acars-input"
             id="as-acars-chat-input"
             placeholder="Enviar mensagem para o vOCC / Dispatch (ex: REQUESTING PUSHBACK)..."
+            data-i18n-placeholder="vocc.input_placeholder"
             autocomplete="off"
           />
-          <button type="button" class="as-acars-btn as-acars-btn-primary" id="as-acars-chat-send">
+          <button type="button" class="as-acars-btn as-acars-btn-primary" id="as-acars-chat-send" data-i18n="vocc.btn_send">
             Enviar
           </button>
         </div>
@@ -229,14 +243,14 @@
         <!-- Quick Flight Briefing Shortcuts -->
         <div class="as-acars-briefing-bar" id="as-acars-briefing-bar">
           <div class="as-acars-briefing-bar-left">
-            <span class="as-acars-briefing-title">Atalhos de Aeroporto:</span>
-            <span class="as-acars-briefing-route" id="as-acars-briefing-route-label">Pesquisa rapida ICAO</span>
+            <span class="as-acars-briefing-title" data-i18n="docs.shortcuts_label">Atalhos de Aeroporto:</span>
+            <span class="as-acars-briefing-route" id="as-acars-briefing-route-label" data-i18n="docs.quick_icao">Pesquisa rapida ICAO</span>
           </div>
           <div class="as-acars-briefing-shortcuts" id="as-acars-briefing-shortcuts">
             <button type="button" class="as-acars-chip as-acars-chip-accent as-acars-hidden" id="as-acars-btn-dep-icao"></button>
             <button type="button" class="as-acars-chip as-acars-chip-accent as-acars-hidden" id="as-acars-btn-arr-icao"></button>
             <button type="button" class="as-acars-chip as-acars-chip-accent as-acars-hidden" id="as-acars-btn-alt-icao"></button>
-            <button type="button" class="as-acars-chip" id="as-acars-btn-near-icao" title="Buscar aeroporto mais proximo da aeronave no MSFS">
+            <button type="button" class="as-acars-chip" id="as-acars-btn-near-icao" title="Buscar aeroporto mais proximo da aeronave no MSFS" data-i18n="docs.btn_nearest">
               Aeroporto Proximo (Sim)
             </button>
           </div>
@@ -250,6 +264,7 @@
               class="as-acars-input"
               id="as-acars-doc-search"
               placeholder="Pesquisar ICAO (ex: SBGR, SBRJ), briefing de aeroporto, SOP ou manual..."
+              data-i18n-placeholder="docs.search_placeholder"
               autocomplete="off"
             />
             <button
@@ -257,16 +272,17 @@
               class="as-acars-search-clear as-acars-hidden"
               id="as-acars-doc-search-clear"
               title="Limpar pesquisa"
+              data-i18n-title="docs.clear_search"
             >
               X
             </button>
           </div>
           <div class="as-acars-cat-pills" id="as-acars-doc-categories">
-            <button type="button" class="as-acars-cat-pill as-acars-cat-active" data-cat="all">Todos</button>
-            <button type="button" class="as-acars-cat-pill" data-cat="briefing">Aeroportos</button>
-            <button type="button" class="as-acars-cat-pill" data-cat="manuals">Manuais &amp; SOPs</button>
-            <button type="button" class="as-acars-cat-pill" data-cat="fdm">FDM</button>
-            <button type="button" class="as-acars-cat-pill" data-cat="load">Carga</button>
+            <button type="button" class="as-acars-cat-pill as-acars-cat-active" data-cat="all" data-i18n="docs.cat_all">Todos</button>
+            <button type="button" class="as-acars-cat-pill" data-cat="briefing" data-i18n="docs.cat_airports">Aeroportos</button>
+            <button type="button" class="as-acars-cat-pill" data-cat="manuals" data-i18n="docs.cat_manuals">Manuais &amp; SOPs</button>
+            <button type="button" class="as-acars-cat-pill" data-cat="fdm" data-i18n="docs.cat_fdm">FDM</button>
+            <button type="button" class="as-acars-cat-pill" data-cat="load" data-i18n="docs.cat_load">Carga</button>
           </div>
         </div>
 
@@ -275,14 +291,14 @@
           <div class="as-acars-docs-sidebar">
             <div class="as-acars-docs-sidebar-header" id="as-acars-docs-count">Documentos (0)</div>
             <div class="as-acars-docs-list" id="as-acars-doc-list">
-              <div class="as-acars-empty-state">Carregando biblioteca...</div>
+              <div class="as-acars-empty-state" data-i18n="docs.loading">Carregando biblioteca...</div>
             </div>
           </div>
 
           <div class="as-acars-docs-reader">
             <div class="as-acars-docs-reader-header" id="as-acars-doc-reader-header">
               <div class="as-acars-doc-header-info">
-                <h3 class="as-acars-doc-view-title" id="as-acars-doc-title">Selecione um documento</h3>
+                <h3 class="as-acars-doc-view-title" id="as-acars-doc-title" data-i18n="docs.select_prompt">Selecione um documento</h3>
                 <div class="as-acars-doc-meta" id="as-acars-doc-meta"></div>
               </div>
               <div class="as-acars-doc-header-actions">
@@ -290,6 +306,7 @@
                   type="button"
                   class="as-acars-btn as-acars-btn-outline as-acars-btn-xs as-acars-hidden"
                   id="as-acars-btn-parent-folder"
+                  data-i18n="docs.btn_parent_folder"
                 >
                   Pasta Acima
                 </button>
@@ -297,13 +314,14 @@
                   type="button"
                   class="as-acars-btn as-acars-btn-primary as-acars-btn-xs as-acars-hidden"
                   id="as-acars-btn-open-pdf"
+                  data-i18n="docs.btn_open_pdf"
                 >
                   Abrir PDF / Externo
                 </button>
               </div>
             </div>
             <div class="as-acars-docs-reader-body" id="as-acars-doc-body">
-              <div class="as-acars-empty-state">
+              <div class="as-acars-empty-state" data-i18n="docs.empty_body">
                 Selecione um briefing de aeroporto ou manual na lista ao lado, ou digite o codigo ICAO na barra Otto do Flow (ex: <code>doc SBGR</code>).
               </div>
             </div>
@@ -315,28 +333,28 @@
       <div class="as-acars-tab-panel as-acars-hidden" id="as-acars-tab-flight">
         <div class="as-acars-flight-grid">
           <div class="as-acars-card">
-            <div class="as-acars-card-title">Reserva Ativa (Booking)</div>
+            <div class="as-acars-card-title" data-i18n="flight.booking_title">Reserva Ativa (Booking)</div>
             <div id="as-acars-booking-content" class="as-acars-card-body">
-              <div class="as-acars-empty-state">Nenhuma reserva ativa encontrada.</div>
+              <div class="as-acars-empty-state" data-i18n="flight.no_booking">Nenhuma reserva ativa encontrada.</div>
             </div>
           </div>
 
           <div class="as-acars-card">
-            <div class="as-acars-card-title">Tripulante Conectado</div>
+            <div class="as-acars-card-title" data-i18n="flight.pilot_title">Tripulante Conectado</div>
             <div id="as-acars-pilot-content" class="as-acars-card-body">
-              <div class="as-acars-empty-state">Carregando dados do piloto...</div>
+              <div class="as-acars-empty-state" data-i18n="flight.loading_pilot">Carregando dados do piloto...</div>
             </div>
           </div>
         </div>
 
         <div class="as-acars-card as-acars-notams-card">
-          <div class="as-acars-card-title" id="as-acars-notams-title">NOTAMs Ativos da Companhia</div>
+          <div class="as-acars-card-title" id="as-acars-notams-title" data-i18n="flight.notams_title">NOTAMs Ativos da Companhia</div>
           <div class="as-acars-notams-split">
             <div class="as-acars-notams-list" id="as-acars-notams-list">
-              <div class="as-acars-empty-state">Nenhum NOTAM ativo.</div>
+              <div class="as-acars-empty-state" data-i18n="flight.no_notams">Nenhum NOTAM ativo.</div>
             </div>
             <div class="as-acars-notam-detail" id="as-acars-notam-detail">
-              <div class="as-acars-empty-state">Selecione um NOTAM para ler.</div>
+              <div class="as-acars-empty-state" data-i18n="flight.select_notam">Selecione um NOTAM para ler.</div>
             </div>
           </div>
         </div>

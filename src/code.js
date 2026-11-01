@@ -28,6 +28,8 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     vocc_toast_enabled: true,
     auto_confirm_read: true,
     api_base_url: "https://airspace.ferrlab.com",
+    language: "pt-br",  // "pt-br" | "en" | "es" | "fr"
+    toast_duration: 15, // seconds (0 to keep visible until clicked)
   };
 
   let store = Object.assign({}, defaultStore);
@@ -49,6 +51,468 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       }
     } catch (_e) {
       // Ignore datastore export errors
+    }
+  }
+
+  // --- Multi-Language i18n Dictionary ---
+  const I18N = {
+    "pt-br": {
+      common: {
+        refresh: "Atualizar",
+        switch_va: "Trocar VA",
+        close: "Fechar",
+        reload: "Recarregar",
+        send: "Enviar",
+        copy: "Copiar",
+        copied: "Copiado!",
+      },
+      header: {
+        refresh_title: "Atualizar dados",
+        switch_va_title: "Trocar Companhia Aerea (VA)",
+        close_title: "Fechar janela",
+        lang_title: "Idioma da interface",
+      },
+      tenants: {
+        title: "Selecione sua Companhia Aerea",
+        subtitle: "Conecte o Flow (MSFS 2024) diretamente a sua VA no Airspace",
+        saved_sessions: "Sessoes Salvas (1-Clique)",
+        available_orgs: "Organizacoes Disponiveis",
+        search_placeholder: "Buscar companhia aerea por nome ou dominio...",
+        loading: "Carregando companhias aereas...",
+        empty: "Nenhuma companhia aerea encontrada.",
+        btn_reload: "Recarregar Lista de VAs",
+        connected_badge: "Conectado",
+        saved_badge: "Salva",
+      },
+      auth: {
+        title: "Autorizar Dispositivo",
+        connecting_to: "Conectando a {va}",
+        connecting_default: "Conectando a VA",
+        code_label: "Digite este codigo em /acars/authorize",
+        btn_open: "Abrir Pagina de Autorizacao",
+        btn_copy: "Copiar Codigo",
+        btn_copied: "Codigo Copiado!",
+        status_idle: "Gerando codigo de autorizacao...",
+        status_waiting: "Aguardando aprovacao no navegador...",
+        status_success: "Dispositivo autorizado com sucesso!",
+        status_expired: "Codigo expirado. Clique em 'Gerar Novo Codigo'.",
+        status_error: "Falha ao solicitar codigo. Tente novamente.",
+        btn_retry: "Gerar Novo Codigo",
+        btn_back: "Voltar para Lista de VAs",
+      },
+      tabs: {
+        vocc: "vOCC & Mensagens",
+        docs: "Aeroportos & Documentos",
+        flight: "Voo Ativo & NOTAMs",
+      },
+      vocc: {
+        channel_active: "Canal ACARS / vOCC Dispatch Ativo",
+        messages_count: "{count} mensagens",
+        single_message: "1 mensagem",
+        no_messages: "Nenhuma mensagem do vOCC ou Dispatch recebida ainda.",
+        quick_replies: "Respostas Rapidas:",
+        input_placeholder: "Enviar mensagem para o vOCC / Dispatch (ex: REQUESTING PUSHBACK)...",
+        btn_send: "Enviar",
+      },
+      docs: {
+        shortcuts_label: "Atalhos de Aeroporto:",
+        quick_icao: "Pesquisa rapida ICAO",
+        btn_nearest: "Aeroporto Proximo (Sim)",
+        search_placeholder: "Pesquisar ICAO (ex: SBGR, SBRJ), briefing de aeroporto, SOP ou manual...",
+        clear_search: "Limpar pesquisa",
+        cat_all: "Todos",
+        cat_airports: "Aeroportos",
+        cat_manuals: "Manuais & SOPs",
+        cat_fdm: "FDM",
+        cat_load: "Carga",
+        count_label: "Documentos ({count})",
+        loading: "Carregando documentos...",
+        empty_list: "Nenhum documento encontrado para esta busca.",
+        select_prompt: "Selecione um documento",
+        btn_parent_folder: "Pasta Acima",
+        btn_open_pdf: "Abrir PDF / Externo",
+        empty_body: "Selecione um briefing de aeroporto ou manual na lista ao lado, ou digite o codigo ICAO na barra Otto do Flow (ex: doc SBGR).",
+        empty_folder: "Esta pasta esta vazia.",
+        no_content: "Nenhum conteudo disponivel para este documento.",
+      },
+      flight: {
+        booking_title: "Reserva Ativa (Booking)",
+        no_booking: "Nenhuma reserva ativa no momento.",
+        pilot_title: "Tripulante Conectado",
+        loading_pilot: "Carregando dados do piloto...",
+        notams_title: "NOTAMs Ativos da Companhia",
+        no_notams: "Nenhum NOTAM ativo.",
+        select_notam: "Selecione um NOTAM para ler.",
+      },
+      toast: {
+        header: "vOCC DISPATCH",
+        open: "Abrir no vOCC / Responder",
+        dismiss: "Marcar Lida",
+        close_title: "Dispensar",
+      },
+    },
+    en: {
+      common: {
+        refresh: "Refresh",
+        switch_va: "Switch VA",
+        close: "Close",
+        reload: "Reload",
+        send: "Send",
+        copy: "Copy",
+        copied: "Copied!",
+      },
+      header: {
+        refresh_title: "Refresh data",
+        switch_va_title: "Switch Virtual Airline (VA)",
+        close_title: "Close window",
+        lang_title: "Interface language",
+      },
+      tenants: {
+        title: "Select your Virtual Airline",
+        subtitle: "Connect Flow (MSFS 2024) directly to your VA on Airspace",
+        saved_sessions: "Saved Sessions (1-Click)",
+        available_orgs: "Available Organizations",
+        search_placeholder: "Search virtual airline by name or domain...",
+        loading: "Loading virtual airlines...",
+        empty: "No virtual airlines found.",
+        btn_reload: "Reload VA List",
+        connected_badge: "Connected",
+        saved_badge: "Saved",
+      },
+      auth: {
+        title: "Authorize Device",
+        connecting_to: "Connecting to {va}",
+        connecting_default: "Connecting to VA",
+        code_label: "Enter this code at /acars/authorize",
+        btn_open: "Open Authorization Page",
+        btn_copy: "Copy Code",
+        btn_copied: "Code Copied!",
+        status_idle: "Generating authorization code...",
+        status_waiting: "Waiting for browser approval...",
+        status_success: "Device authorized successfully!",
+        status_expired: "Code expired. Click 'Generate New Code'.",
+        status_error: "Failed to request code. Please retry.",
+        btn_retry: "Generate New Code",
+        btn_back: "Back to VA List",
+      },
+      tabs: {
+        vocc: "vOCC & Messages",
+        docs: "Airports & Documents",
+        flight: "Active Flight & NOTAMs",
+      },
+      vocc: {
+        channel_active: "ACARS / vOCC Dispatch Channel Active",
+        messages_count: "{count} messages",
+        single_message: "1 message",
+        no_messages: "No vOCC or Dispatch messages received yet.",
+        quick_replies: "Quick Replies:",
+        input_placeholder: "Send message to vOCC / Dispatch (e.g.: REQUESTING PUSHBACK)...",
+        btn_send: "Send",
+      },
+      docs: {
+        shortcuts_label: "Airport Shortcuts:",
+        quick_icao: "Quick ICAO search",
+        btn_nearest: "Nearest Airport (Sim)",
+        search_placeholder: "Search ICAO (e.g.: SBGR, KJFK), airport briefing, SOP or manual...",
+        clear_search: "Clear search",
+        cat_all: "All",
+        cat_airports: "Airports",
+        cat_manuals: "Manuals & SOPs",
+        cat_fdm: "FDM",
+        cat_load: "Cargo",
+        count_label: "Documents ({count})",
+        loading: "Loading documents...",
+        empty_list: "No documents found for this search.",
+        select_prompt: "Select a document",
+        btn_parent_folder: "Parent Folder",
+        btn_open_pdf: "Open PDF / External",
+        empty_body: "Select an airport briefing or manual from the list on the left, or type the ICAO code into Flow Otto (e.g.: doc KJFK).",
+        empty_folder: "This folder is empty.",
+        no_content: "No content available for this document.",
+      },
+      flight: {
+        booking_title: "Active Booking",
+        no_booking: "No active booking found at the moment.",
+        pilot_title: "Connected Crew Member",
+        loading_pilot: "Loading pilot data...",
+        notams_title: "Active Company NOTAMs",
+        no_notams: "No active NOTAMs.",
+        select_notam: "Select a NOTAM to read.",
+      },
+      toast: {
+        header: "vOCC DISPATCH",
+        open: "Open in vOCC / Reply",
+        dismiss: "Mark Read",
+        close_title: "Dismiss",
+      },
+    },
+    es: {
+      common: {
+        refresh: "Actualizar",
+        switch_va: "Cambiar VA",
+        close: "Cerrar",
+        reload: "Recargar",
+        send: "Enviar",
+        copy: "Copiar",
+        copied: "Copiado!",
+      },
+      header: {
+        refresh_title: "Actualizar datos",
+        switch_va_title: "Cambiar Aerolinea Virtual (VA)",
+        close_title: "Cerrar ventana",
+        lang_title: "Idioma de la interfaz",
+      },
+      tenants: {
+        title: "Seleccione su Aerolinea Virtual",
+        subtitle: "Conecte Flow (MSFS 2024) directamente a su VA en Airspace",
+        saved_sessions: "Sesiones Guardadas (1-Clic)",
+        available_orgs: "Organizaciones Disponibles",
+        search_placeholder: "Buscar aerolinea por nombre o dominio...",
+        loading: "Cargando aerolineas virtuales...",
+        empty: "No se encontraron aerolineas virtuales.",
+        btn_reload: "Recargar Lista de VAs",
+        connected_badge: "Conectado",
+        saved_badge: "Guardada",
+      },
+      auth: {
+        title: "Autorizar Dispositivo",
+        connecting_to: "Conectando a {va}",
+        connecting_default: "Conectando a la VA",
+        code_label: "Ingrese este codigo en /acars/authorize",
+        btn_open: "Abrir Pagina de Autorizacion",
+        btn_copy: "Copiar Codigo",
+        btn_copied: "Codigo Copiado!",
+        status_idle: "Generando codigo de autorizacion...",
+        status_waiting: "Esperando aprobacion en el navegador...",
+        status_success: "Dispositivo autorizado con exito!",
+        status_expired: "Codigo expirado. Haga clic en 'Generar Nuevo Codigo'.",
+        status_error: "Fallo al solicitar codigo. Intente nuevamente.",
+        btn_retry: "Generar Nuevo Codigo",
+        btn_back: "Volver a la Lista de VAs",
+      },
+      tabs: {
+        vocc: "vOCC & Mensajes",
+        docs: "Aeropuertos & Documentos",
+        flight: "Vuelo Activo & NOTAMs",
+      },
+      vocc: {
+        channel_active: "Canal ACARS / vOCC Dispatch Activo",
+        messages_count: "{count} mensajes",
+        single_message: "1 mensaje",
+        no_messages: "Aun no hay mensajes de vOCC o Despacho recibidos.",
+        quick_replies: "Respuestas Rapidas:",
+        input_placeholder: "Enviar mensaje al vOCC / Despacho (ej: REQUESTING PUSHBACK)...",
+        btn_send: "Enviar",
+      },
+      docs: {
+        shortcuts_label: "Accesos de Aeropuerto:",
+        quick_icao: "Busqueda rapida ICAO",
+        btn_nearest: "Aeropuerto Cercano (Sim)",
+        search_placeholder: "Buscar ICAO (ej: SBGR, LEMD), briefing de aeropuerto, SOP o manual...",
+        clear_search: "Limpiar busqueda",
+        cat_all: "Todos",
+        cat_airports: "Aeropuertos",
+        cat_manuals: "Manuales & SOPs",
+        cat_fdm: "FDM",
+        cat_load: "Carga",
+        count_label: "Documentos ({count})",
+        loading: "Cargando documentos...",
+        empty_list: "No se encontraron documentos para esta busqueda.",
+        select_prompt: "Seleccione un documento",
+        btn_parent_folder: "Carpeta Superior",
+        btn_open_pdf: "Abrir PDF / Externo",
+        empty_body: "Seleccione un briefing de aeropuerto o manual en la lista de la izquierda, o escriba el codigo ICAO en la barra Otto de Flow (ej: doc LEMD).",
+        empty_folder: "Esta carpeta esta vacia.",
+        no_content: "No hay contenido disponible para este documento.",
+      },
+      flight: {
+        booking_title: "Reserva Activa (Booking)",
+        no_booking: "No se encontro ninguna reserva activa.",
+        pilot_title: "Tripulante Conectado",
+        loading_pilot: "Cargando datos del piloto...",
+        notams_title: "NOTAMs Activos de la Compania",
+        no_notams: "Ningun NOTAM activo.",
+        select_notam: "Seleccione un NOTAM para leer.",
+      },
+      toast: {
+        header: "vOCC DESPACHO",
+        open: "Abrir en vOCC / Responder",
+        dismiss: "Marcar Leido",
+        close_title: "Descartar",
+      },
+    },
+    fr: {
+      common: {
+        refresh: "Actualiser",
+        switch_va: "Changer de VA",
+        close: "Fermer",
+        reload: "Recharger",
+        send: "Envoyer",
+        copy: "Copier",
+        copied: "Copie !",
+      },
+      header: {
+        refresh_title: "Actualiser les donnees",
+        switch_va_title: "Changer de Compagnie Aerienne (VA)",
+        close_title: "Fermer la fenetre",
+        lang_title: "Langue de l'interface",
+      },
+      tenants: {
+        title: "Selectionnez votre Compagnie Aerienne",
+        subtitle: "Connectez Flow (MSFS 2024) directement a votre VA sur Airspace",
+        saved_sessions: "Sessions Enregistrees (1-Clic)",
+        available_orgs: "Organisations Disponibles",
+        search_placeholder: "Rechercher une compagnie par nom ou domaine...",
+        loading: "Chargement des compagnies aeriennes...",
+        empty: "Aucune compagnie aerienne trouvee.",
+        btn_reload: "Recharger la liste des VAs",
+        connected_badge: "Connecte",
+        saved_badge: "Enregistree",
+      },
+      auth: {
+        title: "Autoriser l'appareil",
+        connecting_to: "Connexion a {va}",
+        connecting_default: "Connexion a la VA",
+        code_label: "Entrez ce code sur /acars/authorize",
+        btn_open: "Ouvrir la page d'autorisation",
+        btn_copy: "Copier le code",
+        btn_copied: "Code Copie !",
+        status_idle: "Generation du code d'autorisation...",
+        status_waiting: "En attente d'approbation dans le navigateur...",
+        status_success: "Appareil autorise avec succes !",
+        status_expired: "Code expire. Cliquez sur 'Generer un nouveau code'.",
+        status_error: "Echec de la demande de code. Veuillez reessayer.",
+        btn_retry: "Generer un nouveau code",
+        btn_back: "Retour a la liste des VAs",
+      },
+      tabs: {
+        vocc: "vOCC & Messages",
+        docs: "Aeroports & Documents",
+        flight: "Vol Actif & NOTAMs",
+      },
+      vocc: {
+        channel_active: "Canal ACARS / vOCC Dispatch Actif",
+        messages_count: "{count} messages",
+        single_message: "1 message",
+        no_messages: "Aucun message du vOCC ou Dispatch recu pour le moment.",
+        quick_replies: "Reponses Rapides :",
+        input_placeholder: "Envoyer un message au vOCC / Dispatch (ex : REQUESTING PUSHBACK)...",
+        btn_send: "Envoyer",
+      },
+      docs: {
+        shortcuts_label: "Raccourcis Aeroport :",
+        quick_icao: "Recherche rapide ICAO",
+        btn_nearest: "Aeroport le plus proche (Sim)",
+        search_placeholder: "Rechercher ICAO (ex : SBGR, LFPG), briefing d'aeroport, SOP ou manuel...",
+        clear_search: "Effacer la recherche",
+        cat_all: "Tous",
+        cat_airports: "Aeroports",
+        cat_manuals: "Manuels & SOPs",
+        cat_fdm: "FDM",
+        cat_load: "Cargo",
+        count_label: "Documents ({count})",
+        loading: "Chargement des documents...",
+        empty_list: "Aucun document trouve pour cette recherche.",
+        select_prompt: "Selectionnez un document",
+        btn_parent_folder: "Dossier Parent",
+        btn_open_pdf: "Ouvrir PDF / Externe",
+        empty_body: "Selectionnez un briefing d'aeroport ou un manuel dans la liste de gauche, ou tapez le code ICAO dans la barre Otto de Flow (ex : doc LFPG).",
+        empty_folder: "Ce dossier est vide.",
+        no_content: "Aucun contenu disponible pour ce document.",
+      },
+      flight: {
+        booking_title: "Reservation Active (Booking)",
+        no_booking: "Aucune reservation active trouvee pour le moment.",
+        pilot_title: "Membre d'Equipage Connecte",
+        loading_pilot: "Chargement des donnees du pilote...",
+        notams_title: "NOTAMs Actifs de la Compagnie",
+        no_notams: "Aucun NOTAM actif.",
+        select_notam: "Selectionnez un NOTAM pour lire.",
+      },
+      toast: {
+        header: "vOCC DISPATCH",
+        open: "Ouvrir dans vOCC / Repondre",
+        dismiss: "Marquer comme Lu",
+        close_title: "Ignorer",
+      },
+    },
+  };
+
+  function getLanguage() {
+    const l = String(store.language || "pt-br").toLowerCase().trim();
+    if (I18N[l]) return l;
+    if (l.startsWith("pt")) return "pt-br";
+    if (l.startsWith("es")) return "es";
+    if (l.startsWith("fr")) return "fr";
+    if (l.startsWith("en")) return "en";
+    return "pt-br";
+  }
+
+  function t(key, params) {
+    const lang = getLanguage();
+    const dict = I18N[lang] || I18N["pt-br"];
+    const fallback = I18N["pt-br"];
+
+    const parts = key.split(".");
+    let val = dict;
+    for (let i = 0; i < parts.length; i++) {
+      if (val && typeof val === "object" && parts[i] in val) {
+        val = val[parts[i]];
+      } else {
+        val = null;
+        break;
+      }
+    }
+    if (typeof val !== "string") {
+      let fb = fallback;
+      for (let i = 0; i < parts.length; i++) {
+        if (fb && typeof fb === "object" && parts[i] in fb) {
+          fb = fb[parts[i]];
+        } else {
+          fb = null;
+          break;
+        }
+      }
+      val = typeof fb === "string" ? fb : key;
+    }
+
+    if (params && typeof params === "object") {
+      for (const k of Object.keys(params)) {
+        val = val.replace(new RegExp("\\{" + k + "\\}", "g"), String(params[k]));
+      }
+    }
+    return val;
+  }
+
+  function applyTranslations() {
+    if (!rootEl) return;
+    const currentLang = getLanguage();
+
+    const elList = rootEl.querySelectorAll("[data-i18n]");
+    for (let i = 0; i < elList.length; i++) {
+      const el = elList[i];
+      const k = el.getAttribute("data-i18n");
+      if (k) el.textContent = t(k);
+    }
+
+    const plList = rootEl.querySelectorAll("[data-i18n-placeholder]");
+    for (let i = 0; i < plList.length; i++) {
+      const el = plList[i];
+      const k = el.getAttribute("data-i18n-placeholder");
+      if (k) el.setAttribute("placeholder", t(k));
+    }
+
+    const titleList = rootEl.querySelectorAll("[data-i18n-title]");
+    for (let i = 0; i < titleList.length; i++) {
+      const el = titleList[i];
+      const k = el.getAttribute("data-i18n-title");
+      if (k) el.setAttribute("title", t(k));
+    }
+
+    const langBtns = rootEl.querySelectorAll(".as-acars-lang-btn");
+    for (let i = 0; i < langBtns.length; i++) {
+      const btn = langBtns[i];
+      btn.classList.toggle("as-acars-lang-active", btn.getAttribute("data-lang") === currentLang);
     }
   }
 
@@ -103,25 +567,80 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   const seenSet = new Set(Array.isArray(store.seenMessageIds) ? store.seenMessageIds : []);
   let rootEl = null;
   let activeInputEl = null;
+  let toastTimerId = null;
+
+  function clearToastTimer() {
+    if (toastTimerId) {
+      clearTimeout(toastTimerId);
+      toastTimerId = null;
+    }
+  }
+
+  function startToastTimer() {
+    clearToastTimer();
+    const rawSec = typeof store.toast_duration === "number" ? store.toast_duration : parseInt(store.toast_duration, 10);
+    const durSec = isNaN(rawSec) || rawSec < 0 ? 15 : rawSec;
+    if (durSec > 0) {
+      toastTimerId = setTimeout(function () {
+        dismissToast();
+      }, durSec * 1000);
+    }
+  }
+
+  function dismissToast() {
+    clearToastTimer();
+    stateData.toastMessage = null;
+    renderToast();
+  }
 
   // --- Flow Settings Definition ---
   if (typeof settings_define === "function") {
     settings_define({
+      language: {
+        type: "select",
+        label: "Idioma / Language",
+        description: "Selecione o idioma da interface (pt-br, en, es, fr)",
+        value: getLanguage(),
+        choices: {
+          "pt-br": { title: "Portugu\\u00eas (Brasil)" },
+          "en": { title: "English" },
+          "es": { title: "Espa\\u00f1ol" },
+          "fr": { title: "Fran\\u00e7ais" },
+        },
+        changed: (val) => {
+          store.language = val;
+          saveStore();
+          applyTranslations();
+          renderAll();
+        },
+      },
+      toast_duration: {
+        type: "text",
+        label: "Tempo Alerta vOCC (segundos)",
+        description: "Tempo em segundos para o alerta do vOCC sumir automaticamente (ex: 15). Use 0 para nao sumir.",
+        value: String(store.toast_duration !== undefined ? store.toast_duration : 15),
+        changed: (val) => {
+          const num = parseInt(val, 10);
+          store.toast_duration = isNaN(num) || num < 0 ? 15 : num;
+          saveStore();
+        },
+      },
       vocc_toast_enabled: {
         type: "checkbox",
         label: "Alerta Flutuante do vOCC",
         description: "Exibe uma notificacao no simulador quando uma nova mensagem do vOCC chegar com o painel fechado.",
-        value: !!store.vocc_toast_enabled,
+        value: store.vocc_toast_enabled !== undefined ? !!store.vocc_toast_enabled : true,
         changed: (val) => {
           store.vocc_toast_enabled = !!val;
           saveStore();
+          renderToast();
         },
       },
       auto_confirm_read: {
         type: "checkbox",
         label: "Confirmar Leitura Automaticamente",
         description: "Marca mensagens do vOCC como lidas automaticamente ao abrir a aba de mensagens.",
-        value: !!store.auto_confirm_read,
+        value: store.auto_confirm_read !== undefined ? !!store.auto_confirm_read : true,
         changed: (val) => {
           store.auto_confirm_read = !!val;
           saveStore();
@@ -993,6 +1512,8 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   function renderAll() {
     if (!rootEl) return;
     cleanParentContainers(rootEl);
+    applyTranslations();
+
     const win = q("#as-acars-window");
     setVisible(win, stateData.panelOpen);
     if (stateData.panelOpen && win) {
@@ -1034,14 +1555,27 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const shouldShow = Boolean(msg && !stateData.panelOpen && store.vocc_toast_enabled);
     setVisible(toastEl, shouldShow);
     if (shouldShow && msg) {
+      cleanParentContainers(toastEl);
       const senderEl = q("#as-acars-toast-sender");
       const textEl = q("#as-acars-toast-text");
+      const openBtn = q("#as-acars-toast-open");
+      const dismissBtn = q("#as-acars-toast-dismiss");
+
       if (senderEl) {
-        senderEl.textContent = (msg.senderName || "vOCC DISPATCH") + (msg.senderRole ? " - " + msg.senderRole.toUpperCase() : "");
+        senderEl.textContent = (msg.senderName || t("toast.header")) + (msg.senderRole ? " (" + msg.senderRole.toUpperCase() + ")" : "");
       }
       if (textEl) {
-        textEl.textContent = msg.text;
+        textEl.textContent = msg.text || "";
       }
+      if (openBtn) {
+        openBtn.textContent = t("toast.open");
+      }
+      if (dismissBtn) {
+        dismissBtn.textContent = t("toast.dismiss");
+      }
+      startToastTimer();
+    } else {
+      clearToastTimer();
     }
   }
 
@@ -1107,21 +1641,23 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     setVisible(savedWrap, savedTenants.length > 0);
     if (savedListEl && savedTenants.length > 0) {
       savedListEl.innerHTML = savedTenants
-        .map(function (t) {
+        .map(function (tObj) {
           return (
             '<button type="button" class="as-acars-tenant-item" data-saved-tenant-id="' +
-            escapeHtml(t.id) +
+            escapeHtml(tObj.id) +
             '">' +
-            buildTenantLogoHtml(t) +
+            buildTenantLogoHtml(tObj) +
             '<div class="as-acars-tenant-info">' +
             '<div class="as-acars-tenant-name">' +
-            escapeHtml(t.name) +
+            escapeHtml(tObj.name) +
             "</div>" +
             '<div class="as-acars-tenant-domain">' +
-            escapeHtml(t.domain) +
+            escapeHtml(tObj.domain) +
             "</div>" +
             "</div>" +
-            '<span class="as-acars-tenant-check">Conectado</span>' +
+            '<span class="as-acars-tenant-check">' +
+            escapeHtml(t("tenants.connected_badge")) +
+            "</span>" +
             "</button>"
           );
         })
@@ -1129,7 +1665,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
 
     if (stateData.tenantsLoading) {
-      listEl.innerHTML = '<div class="as-acars-empty-state">Carregando companhias aereas...</div>';
+      listEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("tenants.loading")) + '</div>';
       return;
     }
     if (stateData.tenantsError) {
@@ -1138,36 +1674,36 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
 
     const searchLower = stateData.tenantSearch.toLowerCase().trim();
-    const filtered = stateData.tenants.filter(function (t) {
+    const filtered = stateData.tenants.filter(function (tObj) {
       if (!searchLower) return true;
       return (
-        t.name.toLowerCase().indexOf(searchLower) !== -1 ||
-        t.domain.toLowerCase().indexOf(searchLower) !== -1
+        tObj.name.toLowerCase().indexOf(searchLower) !== -1 ||
+        tObj.domain.toLowerCase().indexOf(searchLower) !== -1
       );
     });
 
     if (filtered.length === 0) {
-      listEl.innerHTML = '<div class="as-acars-empty-state">Nenhuma companhia aerea encontrada.</div>';
+      listEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("tenants.empty")) + '</div>';
       return;
     }
 
     listEl.innerHTML = filtered
-      .map(function (t) {
-        const hasSaved = Boolean(storedMap[t.id] && storedMap[t.id].token);
+      .map(function (tObj) {
+        const hasSaved = Boolean(storedMap[tObj.id] && storedMap[tObj.id].token);
         return (
           '<button type="button" class="as-acars-tenant-item" data-tenant-id="' +
-          escapeHtml(t.id) +
+          escapeHtml(tObj.id) +
           '">' +
-          buildTenantLogoHtml(t) +
+          buildTenantLogoHtml(tObj) +
           '<div class="as-acars-tenant-info">' +
           '<div class="as-acars-tenant-name">' +
-          escapeHtml(t.name) +
+          escapeHtml(tObj.name) +
           "</div>" +
           '<div class="as-acars-tenant-domain">' +
-          escapeHtml(t.domain) +
+          escapeHtml(tObj.domain) +
           "</div>" +
           "</div>" +
-          (hasSaved ? '<span class="as-acars-tenant-check">Salva</span>' : "") +
+          (hasSaved ? '<span class="as-acars-tenant-check">' + escapeHtml(t("tenants.saved_badge")) + "</span>" : "") +
           "</button>"
         );
       })
@@ -1187,7 +1723,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       baseUrl + "/acars/authorize?code=" + (stateData.deviceCode ? encodeURIComponent(stateData.deviceCode) : "");
 
     if (vaNameEl) {
-      vaNameEl.textContent = pending ? "Conectando a " + pending.name + " (" + pending.domain + ")" : "Conectando a VA";
+      vaNameEl.textContent = pending
+        ? t("auth.connecting_to", { va: pending.name + " (" + pending.domain + ")" })
+        : t("auth.connecting_default");
     }
     if (codeEl) {
       codeEl.textContent = stateData.deviceCode || "------";
@@ -1203,15 +1741,15 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
     if (statusEl) {
       if (stateData.authStatus === "idle") {
-        statusEl.textContent = "Gerando codigo de autorizacao...";
+        statusEl.textContent = t("auth.status_idle");
       } else if (stateData.authStatus === "polling") {
-        statusEl.textContent = "Aguardando aprovacao no navegador...";
+        statusEl.textContent = t("auth.status_waiting");
       } else if (stateData.authStatus === "success") {
-        statusEl.textContent = "Dispositivo autorizado com sucesso!";
+        statusEl.textContent = t("auth.status_success");
       } else if (stateData.authStatus === "expired") {
-        statusEl.textContent = "Codigo expirado. Clique em 'Gerar Novo Codigo'.";
+        statusEl.textContent = t("auth.status_expired");
       } else {
-        statusEl.textContent = "Falha ao solicitar codigo. Tente novamente.";
+        statusEl.textContent = t("auth.status_error");
       }
     }
   }
@@ -1277,17 +1815,20 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const sendBtn = q("#as-acars-chat-send");
 
     if (countEl) {
-      countEl.textContent = stateData.messages.length + " mensagen(s)";
+      countEl.textContent =
+        stateData.messages.length === 1
+          ? t("vocc.single_message")
+          : t("vocc.messages_count", { count: stateData.messages.length });
     }
     if (sendBtn) {
       sendBtn.disabled = stateData.sendingMessage;
-      sendBtn.textContent = stateData.sendingMessage ? "..." : "Enviar";
+      sendBtn.textContent = stateData.sendingMessage ? "..." : t("vocc.btn_send");
     }
     if (!feedEl) return;
 
     if (stateData.messages.length === 0) {
       feedEl.innerHTML =
-        '<div class="as-acars-empty-state">Nenhuma mensagem do vOCC ou Dispatch recebida ainda.</div>';
+        '<div class="as-acars-empty-state">' + escapeHtml(t("vocc.no_messages")) + '</div>';
       return;
     }
 
@@ -1372,7 +1913,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const alt = b && b.alternate_airport && b.alternate_airport.icao ? String(b.alternate_airport.icao) : "";
 
     if (routeLabel) {
-      routeLabel.textContent = dep || arr ? (dep || "----") + " -> " + (arr || "----") : "Pesquisa rapida por ICAO";
+      routeLabel.textContent = dep || arr ? (dep || "----") + " -> " + (arr || "----") : t("docs.quick_icao");
     }
 
     setVisible(depBtn, Boolean(dep));
@@ -1429,17 +1970,17 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const filtered = getFilteredDocuments();
     const countEl = q("#as-acars-docs-count");
     if (countEl) {
-      countEl.textContent = "Documentos (" + filtered.length + ")";
+      countEl.textContent = t("docs.count_label", { count: filtered.length });
     }
 
     const listEl = q("#as-acars-doc-list");
     if (listEl) {
       if (stateData.docsLoading) {
-        listEl.innerHTML = '<div class="as-acars-empty-state">Carregando documentos...</div>';
+        listEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("docs.loading")) + '</div>';
       } else if (stateData.docsError) {
         listEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(stateData.docsError) + "</div>";
       } else if (filtered.length === 0) {
-        listEl.innerHTML = '<div class="as-acars-empty-state">Nenhum documento encontrado para esta busca.</div>';
+        listEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("docs.empty_list")) + '</div>';
       } else {
         listEl.innerHTML = filtered
           .map(function (doc) {
@@ -1484,13 +2025,13 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const parentBtn = q("#as-acars-btn-parent-folder");
 
     if (!activeDoc) {
-      if (titleEl) titleEl.textContent = "Selecione um documento";
+      if (titleEl) titleEl.textContent = t("docs.select_prompt");
       if (metaEl) metaEl.textContent = "";
       setVisible(openPdfBtn, false);
       setVisible(parentBtn, false);
       if (bodyEl) {
         bodyEl.innerHTML =
-          '<div class="as-acars-empty-state">Selecione um briefing de aeroporto ou manual na lista ao lado.</div>';
+          '<div class="as-acars-empty-state">' + escapeHtml(t("docs.empty_body")) + '</div>';
       }
       return;
     }
@@ -1513,7 +2054,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (!bodyEl) return;
 
     if (stateData.detailDocLoading && !activeDoc.content && activeDoc.type !== "folder") {
-      bodyEl.innerHTML = '<div class="as-acars-empty-state">Carregando conteudo do documento...</div>';
+      bodyEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("docs.loading")) + '</div>';
       return;
     }
 
@@ -1522,7 +2063,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return d.parent_id === activeDoc.id;
       });
       if (children.length === 0) {
-        bodyEl.innerHTML = '<div class="as-acars-empty-state">Esta pasta esta vazia.</div>';
+        bodyEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("docs.empty_folder")) + '</div>';
       } else {
         bodyEl.innerHTML =
           '<div class="as-acars-folder-grid">' +
@@ -1558,12 +2099,12 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         ").</p>" +
         '<button type="button" class="as-acars-btn as-acars-btn-primary" data-open-url="' +
         escapeHtml(pdfTargetUrl) +
-        '">Abrir PDF no Navegador</button>' +
+        '">' + escapeHtml(t("docs.btn_open_pdf")) + '</button>' +
         "</div>";
       return;
     }
 
-    bodyEl.innerHTML = '<div class="as-acars-empty-state">Nenhum conteudo disponivel para este documento.</div>';
+    bodyEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("docs.no_content")) + '</div>';
   }
 
   function renderFlightTab() {
@@ -1576,7 +2117,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (bookingEl) {
       const b = stateData.booking;
       if (!b) {
-        bookingEl.innerHTML = '<div class="as-acars-empty-state">Nenhuma reserva ativa no momento.</div>';
+        bookingEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("flight.no_booking")) + '</div>';
       } else {
         const depIcao = (b.departure_airport && b.departure_airport.icao) || "----";
         const arrIcao = (b.arrival_airport && b.arrival_airport.icao) || "----";
@@ -1603,7 +2144,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (pilotEl) {
       const p = stateData.pilot;
       if (!p) {
-        pilotEl.innerHTML = '<div class="as-acars-empty-state">Dados do piloto indisponiveis.</div>';
+        pilotEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("flight.loading_pilot")) + '</div>';
       } else {
         const pName = p.name || (p.profile && p.profile.name) || "Piloto";
         const pCallsign = p.callsign || (p.profile && p.profile.callsign) || "-";
@@ -1634,12 +2175,12 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
     const notamTitleEl = q("#as-acars-notams-title");
     if (notamTitleEl) {
-      notamTitleEl.textContent = "NOTAMs Ativos da Companhia (" + stateData.notams.length + ")";
+      notamTitleEl.textContent = "NOTAMs (" + stateData.notams.length + ")";
     }
 
     if (notamsListEl) {
       if (stateData.notams.length === 0) {
-        notamsListEl.innerHTML = '<div class="as-acars-empty-state">Nenhum NOTAM ativo.</div>';
+        notamsListEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("flight.no_notams")) + '</div>';
       } else {
         notamsListEl.innerHTML = stateData.notams
           .map(function (n) {
@@ -1670,7 +2211,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           return item.id === stateData.selectedNotamId;
         });
       if (!n) {
-        notamDetailEl.innerHTML = '<div class="as-acars-empty-state">Selecione um NOTAM para ler.</div>';
+        notamDetailEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("flight.select_notam")) + '</div>';
       } else {
         notamDetailEl.innerHTML =
           '<h4 style="margin:0 0 6px 0;color:#fff;">' +
@@ -1847,29 +2388,37 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
-      // Toast actions
-      if (findClosest(target, "#as-acars-toast-close")) {
-        stateData.toastMessage = null;
-        renderToast();
+      // Language picker buttons
+      const langBtn = findClosest(target, ".as-acars-lang-btn");
+      if (langBtn) {
+        const chosen = langBtn.getAttribute("data-lang");
+        if (chosen && I18N[chosen]) {
+          store.language = chosen;
+          saveStore();
+          applyTranslations();
+          renderAll();
+        }
         return;
       }
-      if (findClosest(target, "#as-acars-toast-dismiss")) {
-        if (stateData.toastMessage) {
+
+      // Toast actions
+      if (findClosest(target, "#as-acars-toast-close") || findClosest(target, "#as-acars-toast-dismiss")) {
+        if (findClosest(target, "#as-acars-toast-dismiss") && stateData.toastMessage) {
           confirmMessageById(stateData.toastMessage.id);
         }
-        stateData.toastMessage = null;
-        renderToast();
+        dismissToast();
         return;
       }
       if (findClosest(target, "#as-acars-toast-open")) {
         if (stateData.toastMessage) {
           confirmMessageById(stateData.toastMessage.id);
         }
-        stateData.toastMessage = null;
+        dismissToast();
         stateData.panelOpen = true;
         stateData.activeView = "main";
         stateData.activeTab = "vocc";
         renderAll();
+        scrollChatToBottom();
         return;
       }
 
@@ -2148,6 +2697,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         }
       });
     }
+
+    const toastEl = q("#as-acars-toast");
+    if (toastEl) {
+      toastEl.addEventListener("mouseenter", function () {
+        clearToastTimer();
+      });
+      toastEl.addEventListener("mouseleave", function () {
+        if (stateData.toastMessage && !stateData.panelOpen && store.vocc_toast_enabled) {
+          startToastTimer();
+        }
+      });
+    }
   }
 
   // --- Flow Lifecycle Hooks ---
@@ -2158,6 +2719,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       rootEl = el;
       cleanParentContainers(el);
       bindDomEvents(el);
+      applyTranslations();
       fetchTenants();
       if (getActiveToken() && store.activeTenant) {
         enterAuthenticatedWorkspace();
@@ -2172,7 +2734,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     run(function () {
       stateData.panelOpen = !stateData.panelOpen;
       if (stateData.panelOpen) {
-        stateData.toastMessage = null;
+        dismissToast();
         if (getUnreadMessages().length > 0) {
           stateData.activeTab = "vocc";
           if (store.auto_confirm_read) {

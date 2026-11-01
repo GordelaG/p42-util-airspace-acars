@@ -832,4 +832,65 @@ test('Coherent GT compatibility: ASCII-escaped coui:// template JSON, findCloses
   assert.equal(found, parentItem, 'findClosest must traverse from text/child nodes without native .closest');
 });
 
+test('Flow Pro settings_define exposes language select, toast_duration, and persists changes', () => {
+  const { hooks, instance } = createFlowTestHarness();
+  assert.equal(typeof hooks.settings_define, 'object');
+  assert.ok(hooks.settings_define.language);
+  assert.equal(hooks.settings_define.language.type, 'select');
+  assert.ok(hooks.settings_define.language.choices['pt-br']);
+  assert.ok(hooks.settings_define.language.choices['en']);
+  assert.ok(hooks.settings_define.language.choices['es']);
+  assert.ok(hooks.settings_define.language.choices['fr']);
+
+  assert.ok(hooks.settings_define.toast_duration);
+  assert.equal(hooks.settings_define.toast_duration.type, 'text');
+  assert.equal(hooks.settings_define.toast_duration.value, '15');
+
+  // Test changing language through settings
+  hooks.settings_define.language.changed('en');
+  assert.equal(instance.store.language, 'en');
+
+  // Test changing toast_duration through settings
+  hooks.settings_define.toast_duration.changed('30');
+  assert.equal(instance.store.toast_duration, 30);
+});
+
+test('Toast auto-dismiss timer closes floating vOCC alert after configured duration', async () => {
+  const mockFetch = async (url) => {
+    if (url.includes('/api/v2/acars/messages')) {
+      return makeJsonResponse(200, {
+        data: [
+          {
+            id: 999,
+            sender: { id: 99, name: 'vOCC Dispatch', role: 'dispatch' },
+            message: 'HELLO vOCC DISPATCH',
+            read_at: null,
+            sent_at: new Date().toISOString()
+          }
+        ]
+      });
+    }
+    return makeJsonResponse(200, { data: [] });
+  };
+
+  const { hooks, instance, mockRoot } = createFlowTestHarness(mockFetch);
+  instance.store.activeTenant = { id: 'samba', name: 'Samba Virtual', domain: 'samba.airspace.ferrlab.com' };
+  instance.store.storedTokens = { samba: { token: 'tok-123', tenant: instance.store.activeTenant } };
+  instance.store.toast_duration = 1; // 1 second timeout
+  instance.state.panelOpen = false;
+
+  hooks.html_created(mockRoot);
+  await new Promise((r) => setTimeout(r, 40));
+
+  assert.ok(instance.state.toastMessage, 'Toast message should be populated');
+  const toastEl = mockRoot.querySelector('#as-acars-toast');
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), false);
+
+  // Wait for 1.1s for auto-dismiss timer to fire
+  await new Promise((r) => setTimeout(r, 1100));
+  assert.equal(instance.state.toastMessage, null);
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), true);
+});
+
+
 
