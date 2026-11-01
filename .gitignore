@@ -1,6 +1,7 @@
 node_modules/
 dist/
+installer_output/
 *.zip
+*.exe
 .DS_Store
 Thumbs.db
-

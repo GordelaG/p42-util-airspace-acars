@@ -231,27 +231,6 @@ export function buildPackage(options = {}) {
   const manifestFilePath = path.join(packageRoot, 'manifest.json');
   fs.writeFileSync(manifestFilePath, JSON.stringify(manifestPayload, null, 2) + '\n', 'utf8');
 
-  // 6. Prepare Standalone Installer distribution with embedded package
-  const installerSrcDir = path.join(ROOT_DIR, 'installer');
-  if (fs.existsSync(installerSrcDir)) {
-    const installerDistDir = path.join(distBaseDir, 'Airspace-ACARS-Installer');
-    fs.mkdirSync(installerDistDir, { recursive: true });
-    for (const file of [
-      'Instalar-Airspace-ACARS.bat',
-      'Airspace-ACARS-Installer.ps1',
-      'TERMOS-DE-USO.txt',
-      'TERMS-OF-USE.txt'
-    ]) {
-      const srcFile = path.join(installerSrcDir, file);
-      if (fs.existsSync(srcFile)) {
-        fs.copyFileSync(srcFile, path.join(installerDistDir, file));
-      }
-    }
-    const embeddedPkgDir = path.join(installerDistDir, PACKAGE_NAME);
-    fs.mkdirSync(embeddedPkgDir, { recursive: true });
-    fs.cpSync(packageRoot, embeddedPkgDir, { recursive: true });
-  }
-
   return {
     packageName: PACKAGE_NAME,
     version,

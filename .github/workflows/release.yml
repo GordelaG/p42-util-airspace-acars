@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Tag da release (ex: v1.0.0)'
+        description: 'Tag da release (ex: v1.0.14)'
         required: false
         default: ''
 
@@ -54,20 +54,27 @@ jobs:
           RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: npm run build
 
-      - name: Compile Standalone Windows Installer (EXE)
+      - name: Compile Inno Setup Installer (AirspaceACARS-Setup.exe)
         shell: pwsh
         run: |
-          powershell -ExecutionPolicy Bypass -File scripts/build-installer-exe.ps1 -Version ${{ steps.version.outputs.version }}
-
-      - name: Create Release ZIP archives
-        shell: pwsh
-        run: |
-          Compress-Archive -Path "dist/p42-util-airspace-acars" -DestinationPath "p42-util-airspace-acars.zip" -Force
-          Copy-Item "p42-util-airspace-acars.zip" "p42-util-airspace-acars-v${{ steps.version.outputs.version }}.zip" -Force
-          if (Test-Path "dist/Airspace-ACARS-Installer") {
-            Compress-Archive -Path "dist/Airspace-ACARS-Installer" -DestinationPath "Airspace-ACARS-Installer.zip" -Force
-            Copy-Item "Airspace-ACARS-Installer.zip" "Airspace-ACARS-Installer-v${{ steps.version.outputs.version }}.zip" -Force
+          $isccPath = "C:\Program Files (x86)\Inno Setup 6\iscc.exe"
+          if (-not (Test-Path $isccPath)) {
+            Write-Host "Installing Inno Setup via Chocolatey..."
+            choco install innosetup --no-progress -y
           }
+          if (-not (Test-Path $isccPath)) {
+            $isccPath = (Get-Command iscc -ErrorAction SilentlyContinue)?.Source
+          }
+          if (-not $isccPath) {
+            throw "iscc.exe was not found after installing innosetup!"
+          }
+          Write-Host "Compiling Inno Setup Installer with $isccPath..."
+          & $isccPath /DMyAppVersion="${{ steps.version.outputs.version }}" installer.iss
+
+          if (-not (Test-Path "installer_output/AirspaceACARS-Setup.exe")) {
+            throw "AirspaceACARS-Setup.exe was not created in installer_output!"
+          }
+          Write-Host "Installer created successfully: installer_output/AirspaceACARS-Setup.exe"
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
@@ -77,33 +84,18 @@ jobs:
           name: "Airspace ACARS for Flow Pro (MSFS 2024) ${{ steps.version.outputs.tag }}"
           generate_release_notes: true
           files: |
-            dist/Airspace-ACARS-Setup.exe
-            dist/Airspace-ACARS-Setup-v${{ steps.version.outputs.version }}.exe
-            p42-util-airspace-acars.zip
-            p42-util-airspace-acars-v${{ steps.version.outputs.version }}.zip
-            Airspace-ACARS-Installer.zip
-            Airspace-ACARS-Installer-v${{ steps.version.outputs.version }}.zip
+            installer_output/AirspaceACARS-Setup.exe
           body: |
             ## Airspace ACARS — Parallel 42 Flow Pro (MSFS 2024 / MSFS 2020)
 
-            Integração oficial do **Airspace ACARS** para o **Parallel 42 Flow Pro** no **Microsoft Flight Simulator 2024**.
+            Instalador oficial do **Airspace ACARS** para o **Parallel 42 Flow Pro** no **Microsoft Flight Simulator**.
 
             ### Recursos Incluídos
             - **vOCC & Mensagens**: Recebimento em tempo real, alertas flutuantes no cockpit, confirmação de leitura (`WILCO` / `Confirmar`) e envio de mensagens diretas para o despacho / vOCC.
             - **Aeroportos & Documentos**: Pesquisa rápida por código ICAO ou título, atalhos automáticos para os aeroportos do voo ativo (`DEP`, `ARR`, `ALT`) e aeroporto mais próximo no MSFS 2024, filtros de categoria e leitor seguro integrado.
             - **Conexão Multi-VA (Device Code OAuth)**: Seletor de Virtual Airlines da rede Airspace com login via código de dispositivo sem sair do simulador e troca rápida entre VAs salvas.
-            - **Integração com a Barra Otto**: Pesquise `doc SBGR`, `briefing SBRJ`, `vocc WILCO`, `notam` ou `acars` diretamente na barra Otto do Flow.
-            - **Sistema de Atualizações Inteligente**: Notificação no cockpit quando houver nova versão com verificação de simulador em execução.
+            - **Suporte Multilíngue e Tema White/Dark**: Suporte nativo a Português (pt-BR), Inglês (en), Espanhol (es) e Francês (fr) com alternância de tema visual claro/escuro.
+            - **Sistema de Atualizações Inteligente**: Notificação no cockpit quando houver nova versão com verificação de simulador em execução e instalador automatizado.
 
-            ### Opções de Instalação (MSFS 2024 / MSFS 2020)
-
-            #### Opção 1: Instalador Executável Direto (Recomendado)
-            1. Baixe o arquivo **`Airspace-ACARS-Setup.exe`** abaixo.
-            2. Certifique-se de que o Microsoft Flight Simulator esteja fechado.
-            3. Dê um duplo-clique no executável, aceite os Termos de Uso e clique em **Instalar / Atualizar**.
-            4. Abra o simulador, abra a roda do Flow Pro no cockpit e ative o **Airspace ACARS**.
-
-            #### Opção 2: Instalação Manual via ZIP
-            1. Baixe o arquivo **`p42-util-airspace-acars.zip`** abaixo.
-            2. Extraia a pasta `p42-util-airspace-acars` diretamente dentro da sua pasta **`Community`** do Microsoft Flight Simulator.
-            3. No MSFS, abra a roda do **Flow Pro**, entre no modo de edição e adicione o widget **Airspace ACARS**.
+            ### 📥 Download Único:
+            - **`AirspaceACARS-Setup.exe`**: Baixe e execute o instalador padrão do Windows.

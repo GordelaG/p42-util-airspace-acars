@@ -1,10 +1,11 @@
 ; ==============================================================================
-; Airspace ACARS - Inno Setup Script
-; Gera o executavel instalador nativo Airspace-ACARS-Setup.exe
+; Inno Setup Script for Airspace ACARS (Parallel 42 Flow Pro for MSFS 2024 / 2020)
 ; ==============================================================================
 
 #define MyAppName "Airspace ACARS"
-#define MyAppVersion "1.0.13"
+#ifndef MyAppVersion
+#define MyAppVersion "1.0.14"
+#endif
 #define MyAppPublisher "Airspace Team (FerrLab)"
 #define MyAppURL "https://airspace.ferrlab.com"
 #define MyPackageName "p42-util-airspace-acars"
@@ -19,16 +20,17 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL=https://github.com/GordelaG/p42-util-airspace-acars/releases
 DefaultDirName={code:GetDefaultCommunityDir}
 DisableProgramGroupPage=yes
-LicenseFile=TERMOS-DE-USO.txt
-OutputDir=..\dist
-OutputBaseFilename=Airspace-ACARS-Setup-v{#MyAppVersion}
+LicenseFile=installer\TERMOS-DE-USO.txt
+OutputDir=installer_output
+OutputBaseFilename=AirspaceACARS-Setup
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=lowest
 DirExistsWarning=no
 EnableDirDoesntExistWarning=yes
-SetupIconFile=..\assets\Thumbnail.jpg
+CloseApplications=yes
+UninstallFilesDir={app}\{#MyPackageName}
 
 [Languages]
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
@@ -37,12 +39,12 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 
 [Messages]
-brazilianportuguese.SelectDirLabel3=ATENCAO: Selecione a pasta 'Community' do seu Microsoft Flight Simulator (MSFS). O pacote 'p42-util-airspace-acars' sera instalado dentro dela.
-english.SelectDirLabel3=IMPORTANT: Select your Microsoft Flight Simulator (MSFS) 'Community' directory. The 'p42-util-airspace-acars' folder will be placed inside it.
+brazilianportuguese.SelectDirLabel3=ATENCAO: Selecione a pasta 'Community' do seu Microsoft Flight Simulator (MSFS). O pacote '{#MyPackageName}' sera instalado dentro dela.
+english.SelectDirLabel3=IMPORTANT: Select your Microsoft Flight Simulator (MSFS) 'Community' directory. The '{#MyPackageName}' package will be installed inside it.
 
 [Files]
-Source: "..\dist\p42-util-airspace-acars\*"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "TERMOS-DE-USO.txt"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion
+Source: "dist\p42-util-airspace-acars\*"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "installer\TERMOS-DE-USO.txt"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion
 
 [Code]
 // Funcao para verificar se processo do simulador esta rodando
@@ -155,6 +157,14 @@ begin
   Candidate := AppDataDir + '\Microsoft Flight Simulator\Packages\Community';
   if DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
+  // 5. MSFS 2020 UserCfg.opt (Store)
+  Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\UserCfg.opt');
+  if (Candidate <> '') and DirExists(Candidate) then begin Result := Candidate; Exit; end;
+
+  // 6. MSFS 2020 UserCfg.opt (Steam)
+  Candidate := ParseUserCfgOpt(AppDataDir + '\Microsoft Flight Simulator\UserCfg.opt');
+  if (Candidate <> '') and DirExists(Candidate) then begin Result := Candidate; Exit; end;
+
   // Fallback padrao
   Result := AppDataDir + '\Microsoft Flight Simulator 2024\Packages\Community';
 end;
@@ -168,6 +178,12 @@ begin
   if CurPageID = wpSelectDir then
   begin
     SelectedPath := WizardDirValue();
+    if (ExtractFileName(SelectedPath) = '{#MyPackageName}') then
+    begin
+      WizardForm.DirEdit.Text := ExtractFilePath(SelectedPath);
+      SelectedPath := WizardDirValue();
+    end;
+
     if Pos('Community', SelectedPath) = 0 then
     begin
       if MsgBox(
