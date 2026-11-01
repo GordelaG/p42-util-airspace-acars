@@ -771,10 +771,22 @@ test('Coherent GT compatibility: ASCII-escaped coui:// template JSON, findCloses
     assert.equal(/[\u0080-\uffff]/.test(content), false, `${rel} must be 100% 7-bit ASCII on disk`);
   }
 
-  // Ensure HTML entities are present in code_html
+  // Ensure HTML entities are present in code_html and deserialized strings remain 100% ASCII for FlowShare.exe
   const parsed = JSON.parse(rawTemplateContent);
+  assert.equal(/[\u0080-\uffff]/.test(parsed.scripts[0].params.code_js), false, 'Deserialized code_js must be 100% ASCII for FlowShare');
+  assert.equal(/[\u0080-\uffff]/.test(parsed.scripts[0].params.code_html), false, 'Deserialized code_html must be 100% ASCII for FlowShare');
+  assert.equal(/[\u0080-\uffff]/.test(parsed.scripts[0].params.code_css), false, 'Deserialized code_css must be 100% ASCII for FlowShare');
   assert.ok(parsed.scripts[0].params.code_html.includes('Selecione sua Companhia A&eacute;rea'));
   assert.ok(parsed.scripts[0].params.code_html.includes('Abrir P&aacute;gina de Autoriza&ccedil;&atilde;o'));
+  assert.ok(
+    parsed.scripts[0].params.code_html.includes('<div class="as-acars-brand" data-dragarea="airspace_acars_panel">'),
+    'data-dragarea must be on .as-acars-brand so header action buttons stay clickable outside [data-dragarea]'
+  );
+  assert.equal(
+    /^\s*box-shadow\s*:/m.test(parsed.scripts[0].params.code_css),
+    false,
+    'code_css must not use box-shadow to avoid Coherent GT 9-slice shadow blur artifacts'
+  );
 
   // Test findClosest fallback when native .closest is absent (Chrome 49 / Coherent GT)
   const { instance, mockRoot, hooks, openedUrls, copiedTexts } = createFlowTestHarness(async () =>

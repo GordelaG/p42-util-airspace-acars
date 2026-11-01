@@ -7,8 +7,8 @@
     data-defaultx="65"
     data-defaulty="8"
   >
-    <div class="as-acars-toast-header" data-dragarea="airspace_acars_toast">
-      <div class="as-acars-toast-title">
+    <div class="as-acars-toast-header">
+      <div class="as-acars-toast-title" data-dragarea="airspace_acars_toast">
         <span class="as-acars-pulse-dot"></span>
         <span id="as-acars-toast-sender">vOCC DISPATCH</span>
       </div>
@@ -33,9 +33,9 @@
     data-defaultx="18"
     data-defaulty="12"
   >
-    <!-- Top Header / Drag Area -->
-    <div class="as-acars-header" id="as-acars-header" data-dragarea="airspace_acars_panel">
-      <div class="as-acars-brand">
+    <!-- Top Header / Drag Area (brand is drag handle so action buttons stay clickable outside [data-dragarea]) -->
+    <div class="as-acars-header" id="as-acars-header">
+      <div class="as-acars-brand" data-dragarea="airspace_acars_panel">
         <svg class="as-acars-logo" viewBox="0 0 377 303" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M300.95 154.574V215.038H183.849V198.265L227.643 154.574H300.95Z" fill="#FC1A02"/>
           <path d="M98.8591 283.051L160.586 221.46V303H98.8591V283.051Z" fill="#FC1A02"/>
@@ -130,6 +130,7 @@
           <div class="as-acars-code-box">
             <span class="as-acars-code-label">Digite este c&oacute;digo em /acars/authorize</span>
             <div class="as-acars-code-value" id="as-acars-device-code">------</div>
+            <div class="as-acars-auth-url" id="as-acars-auth-url">https://samba.airspace.ferrlab.com/acars/authorize?code=------</div>
           </div>
 
           <div class="as-acars-auth-buttons">

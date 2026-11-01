@@ -194,20 +194,29 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
     let opened = false;
     try {
-      if (api && api.command && typeof api.command.open_browser === "function") {
-        api.command.open_browser(target);
-        opened = true;
-      } else if (typeof OpenBrowser === "function") {
+      if (typeof OpenBrowser === "function") {
         OpenBrowser(target);
         opened = true;
       } else if (typeof window !== "undefined" && typeof window.OpenBrowser === "function") {
         window.OpenBrowser(target);
         opened = true;
-      } else if (typeof window !== "undefined" && typeof window.open === "function") {
-        window.open(target, "_blank");
-        opened = true;
       }
     } catch (_e) {}
+
+    if (!opened) {
+      try {
+        if (api && api.command && typeof api.command.open_browser === "function") {
+          api.command.open_browser(target);
+          opened = true;
+        } else if (typeof Coherent !== "undefined" && Coherent && typeof Coherent.trigger === "function") {
+          Coherent.trigger("OPEN_BROWSER", target);
+          opened = true;
+        } else if (typeof window !== "undefined" && typeof window.open === "function") {
+          window.open(target, "_blank");
+          opened = true;
+        }
+      } catch (_e) {}
+    }
 
     return opened;
   }
@@ -1161,14 +1170,20 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (!rootEl) return;
     const vaNameEl = q("#as-acars-auth-va-name");
     const codeEl = q("#as-acars-device-code");
+    const urlEl = q("#as-acars-auth-url");
     const statusEl = q("#as-acars-auth-status");
     const pending = stateData.pendingTenant;
+    const baseUrl = getTenantBaseUrl(pending) || "https://samba.airspace.ferrlab.com";
 
     if (vaNameEl) {
       vaNameEl.textContent = pending ? "Conectando a " + pending.name + " (" + pending.domain + ")" : "Conectando \u00e0 VA";
     }
     if (codeEl) {
       codeEl.textContent = stateData.deviceCode || "------";
+    }
+    if (urlEl) {
+      urlEl.textContent =
+        baseUrl + "/acars/authorize?code=" + (stateData.deviceCode ? encodeURIComponent(stateData.deviceCode) : "------");
     }
     if (statusEl) {
       if (stateData.authStatus === "idle") {
@@ -1847,15 +1862,19 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       }
 
       // Device Code Auth buttons
-      if (findClosest(target, "#as-acars-btn-open-auth")) {
-        if (stateData.pendingTenant && stateData.deviceCode) {
-          const url = getTenantBaseUrl(stateData.pendingTenant) + "/acars/authorize?code=" + encodeURIComponent(stateData.deviceCode);
+      if (findClosest(target, "#as-acars-btn-open-auth") || findClosest(target, "#as-acars-auth-url")) {
+        const base = getTenantBaseUrl(stateData.pendingTenant) || "https://samba.airspace.ferrlab.com";
+        const codeParam = stateData.deviceCode ? "?code=" + encodeURIComponent(stateData.deviceCode) : "";
+        const url = base + "/acars/authorize" + codeParam;
+        if (stateData.deviceCode) {
           copyToClipboard(stateData.deviceCode);
-          openExternalUrl(url);
-          const statusEl = q("#as-acars-auth-status");
-          if (statusEl) {
-            statusEl.textContent = "Navegador aberto em " + url + " (c\u00f3digo " + stateData.deviceCode + " copiado!)";
-          }
+        }
+        openExternalUrl(url);
+        const statusEl = q("#as-acars-auth-status");
+        if (statusEl) {
+          statusEl.textContent = stateData.deviceCode
+            ? "Navegador aberto em " + url + " (c\u00f3digo " + stateData.deviceCode + " copiado!)"
+            : "Navegador aberto em " + url;
         }
         return;
       }

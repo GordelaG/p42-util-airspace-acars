@@ -100,13 +100,27 @@ export function buildPackage(options = {}) {
     }
   }
 
-  const codeJs = fs.readFileSync(codeJsPath, 'utf8');
-  const codeHtml = fs.readFileSync(codeHtmlPath, 'utf8');
-  const codeCss = fs.readFileSync(codeCssPath, 'utf8');
+  const rawCodeJs = fs.readFileSync(codeJsPath, 'utf8');
+  const rawCodeHtml = fs.readFileSync(codeHtmlPath, 'utf8');
+  const rawCodeCss = fs.readFileSync(codeCssPath, 'utf8');
 
-  if (!codeJs.trim() || !codeHtml.trim() || !codeCss.trim()) {
+  if (!rawCodeJs.trim() || !rawCodeHtml.trim() || !rawCodeCss.trim()) {
     throw new Error('Os arquivos src/code.js, src/code.html e src/code.css nao podem estar vazios.');
   }
+
+  // Ensure inner strings remain 100% 7-bit ASCII even after FlowShare.exe deserializes the JSON
+  const codeJs = rawCodeJs.replace(
+    /[\u007f-\uffff]/g,
+    (ch) => '\\u' + ('0000' + ch.charCodeAt(0).toString(16)).slice(-4)
+  );
+  const codeHtml = rawCodeHtml.replace(
+    /[\u007f-\uffff]/g,
+    (ch) => '&#' + ch.charCodeAt(0) + ';'
+  );
+  const codeCss = rawCodeCss.replace(
+    /[\u007f-\uffff]/g,
+    (ch) => '\\' + ch.charCodeAt(0).toString(16) + ' '
+  );
 
   const distBaseDir = options.outDir || path.join(ROOT_DIR, 'dist');
   const packageRoot = path.join(distBaseDir, PACKAGE_NAME);
