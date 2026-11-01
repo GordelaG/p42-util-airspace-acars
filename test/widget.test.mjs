@@ -314,7 +314,7 @@ function createFlowTestHarness(customFetch) {
     setTimeout,
     clearTimeout,
     fetch: customFetch,
-    $api: flowContext.$api,
+    __flowThisContext: flowContext,
     navigator: {
       clipboard: {
         writeText: async (txt) => copiedTexts.push(txt)
@@ -343,7 +343,8 @@ function createFlowTestHarness(customFetch) {
 
   const codeJs = fs.readFileSync(path.join(ROOT_DIR, 'src', 'code.js'), 'utf8');
   vm.createContext(sandbox);
-  vm.runInContext(codeJs, sandbox, { filename: 'src/code.js' });
+  // Execute with `this` bound to flowContext (where this.$api lives, matching P42Flow.js)
+  vm.runInContext(`(function () {\n${codeJs}\n}).call(__flowThisContext);`, sandbox, { filename: 'src/code.js' });
 
   const instance = sandbox.__AIRSPACE_ACARS_FLOW__;
 
@@ -759,20 +760,46 @@ test('Automatic 401 Unauthorized response clears expired VA token and returns to
   assert.equal(datastoreMemory.get('activeTenant'), null);
 });
 
-test('Coherent GT compatibility: ASCII-escaped coui:// template JSON, findClosest fallback, and Coherent input focus bridge', () => {
+test('Coherent GT compatibility: ASCII-escaped coui:// template JSON, findClosest fallback, and Coherent input focus bridge', async () => {
   const result = buildPackage();
   const rawTemplateContent = fs.readFileSync(result.templateFilePath, 'utf8');
 
-  // Ensure no raw non-ASCII bytes exist in the template file so coui:// never corrupts accents
+  // Ensure no raw non-ASCII bytes exist in the template file or source files so coui://, FlowShare, and MSFS clipboard never corrupt accents
   assert.equal(/[\u0080-\uffff]/.test(rawTemplateContent), false, 'Template JSON must be 100% ASCII-safe on disk');
+  for (const rel of ['src/code.js', 'src/code.html', 'src/code.css']) {
+    const content = fs.readFileSync(path.join(ROOT_DIR, rel), 'utf8');
+    assert.equal(/[\u0080-\uffff]/.test(content), false, `${rel} must be 100% 7-bit ASCII on disk`);
+  }
 
-  // Ensure JSON.parse restores accented Portuguese strings properly
+  // Ensure HTML entities are present in code_html
   const parsed = JSON.parse(rawTemplateContent);
-  assert.ok(parsed.scripts[0].params.code_html.includes('Selecione sua Companhia Aérea'));
+  assert.ok(parsed.scripts[0].params.code_html.includes('Selecione sua Companhia A&eacute;rea'));
+  assert.ok(parsed.scripts[0].params.code_html.includes('Abrir P&aacute;gina de Autoriza&ccedil;&atilde;o'));
 
   // Test findClosest fallback when native .closest is absent (Chrome 49 / Coherent GT)
-  const { instance, mockRoot, hooks } = createFlowTestHarness(async () => makeJsonResponse(200, { data: [] }));
+  const { instance, mockRoot, hooks, openedUrls, copiedTexts } = createFlowTestHarness(async () =>
+    makeJsonResponse(200, {
+      user_code: '385658',
+      authorization_token: 'tok-abc',
+      poll_interval: 5
+    })
+  );
   hooks.html_created(mockRoot);
+
+  // Verify clicking #as-acars-btn-open-auth opens external browser with /acars/authorize?code=385658 and copies code
+  await instance.startDeviceCodeAuth({
+    id: 'voe-samba',
+    name: 'Voe Samba',
+    domain: 'samba.airspace.ferrlab.com'
+  });
+  instance.stopAuthPolling();
+
+  const openAuthBtn = mockRoot.querySelector('#as-acars-btn-open-auth');
+  mockRoot.dispatchEvent({ type: 'click', target: openAuthBtn, preventDefault() {}, stopPropagation() {} });
+
+  assert.equal(openedUrls.length, 1, 'Clicking red authorize button must call this.$api.command.open_browser');
+  assert.equal(openedUrls[0], 'https://samba.airspace.ferrlab.com/acars/authorize?code=385658');
+  assert.ok(copiedTexts.includes('385658'), 'Device code should also be copied to clipboard');
 
   const parentItem = new MockElement('div', mockRoot);
   parentItem.setAttribute('class', 'as-acars-tenant-item');

@@ -9,8 +9,15 @@
  * - Flow Wheel dynamic state/style/info & Otto Search Bar integration
  */
 
+const __flowContext = typeof this !== "undefined" ? this : null;
+
 (function () {
-  const api = (typeof this !== "undefined" && this && this.$api) ? this.$api : (globalThis.$api || null);
+  const api =
+    (__flowContext && __flowContext.$api) ||
+    (typeof this !== "undefined" && this && this.$api) ||
+    (typeof $api !== "undefined" && $api) ||
+    (typeof globalThis !== "undefined" && globalThis.$api) ||
+    null;
 
   // --- Persistent Store ---
   const defaultStore = {
@@ -169,31 +176,82 @@
   }
 
   function getTenantBaseUrl(tenantObj) {
-    const t = tenantObj || store.activeTenant;
+    const t = tenantObj || stateData.pendingTenant || store.activeTenant;
     if (!t || !t.domain) return "";
     const dom = String(t.domain).trim().replace(/^https?:\/\//i, "").replace(/\/+$/, "");
     return dom ? "https://" + dom : "";
   }
 
   function openExternalUrl(rawUrl) {
-    if (!rawUrl) return;
+    if (!rawUrl) return false;
     let target = String(rawUrl).trim();
     if (!/^https?:\/\//i.test(target)) {
       const base = getTenantBaseUrl();
-      if (!base) return;
+      if (!base) return false;
       target = base + (target.startsWith("/") ? "" : "/") + target;
     }
-    if (!/^https?:\/\//i.test(target)) return;
-    if (api && api.command && typeof api.command.open_browser === "function") {
-      api.command.open_browser(target);
-    }
+    if (!/^https?:\/\//i.test(target)) return false;
+
+    let opened = false;
+    try {
+      if (api && api.command && typeof api.command.open_browser === "function") {
+        api.command.open_browser(target);
+        opened = true;
+      } else if (typeof OpenBrowser === "function") {
+        OpenBrowser(target);
+        opened = true;
+      } else if (typeof window !== "undefined" && typeof window.OpenBrowser === "function") {
+        window.OpenBrowser(target);
+        opened = true;
+      } else if (typeof window !== "undefined" && typeof window.open === "function") {
+        window.open(target, "_blank");
+        opened = true;
+      }
+    } catch (_e) {}
+
+    return opened;
   }
 
   function copyToClipboard(text) {
-    if (!text) return;
-    if (api && api.command && typeof api.command.copy_text === "function") {
-      api.command.copy_text(String(text));
+    if (!text) return false;
+    const str = String(text);
+    let copied = false;
+    try {
+      if (api && api.command && typeof api.command.copy_text === "function") {
+        api.command.copy_text(str);
+        copied = true;
+      }
+    } catch (_e) {}
+
+    if (!copied) {
+      try {
+        if (typeof document !== "undefined" && typeof document.createElement === "function" && document.body) {
+          const ta = document.createElement("textarea");
+          ta.value = str;
+          document.body.appendChild(ta);
+          if (typeof ta.select === "function") ta.select();
+          if (typeof document.execCommand === "function") {
+            copied = Boolean(document.execCommand("copy"));
+          }
+          if (typeof document.body.removeChild === "function") {
+            document.body.removeChild(ta);
+          } else if (typeof ta.remove === "function") {
+            ta.remove();
+          }
+        }
+      } catch (_e) {}
     }
+
+    if (!copied) {
+      try {
+        if (typeof navigator !== "undefined" && navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          navigator.clipboard.writeText(str);
+          copied = true;
+        }
+      } catch (_e) {}
+    }
+
+    return copied;
   }
 
   function escapeHtml(str) {
@@ -366,7 +424,7 @@
           return t.id && t.domain;
         });
     } catch (_err) {
-      stateData.tenantsError = "Não foi possível carregar a lista de companhias aéreas.";
+      stateData.tenantsError = "N\u00e3o foi poss\u00edvel carregar a lista de companhias a\u00e9reas.";
     } finally {
       stateData.tenantsLoading = false;
       renderTenantsView();
@@ -690,7 +748,7 @@
 
     return {
       id: id,
-      title: String(d.title || "Sem título"),
+      title: String(d.title || "Sem t\u00edtulo"),
       type: docType,
       parent_id: parentId,
       visibility: String(d.visibility || "public"),
@@ -738,7 +796,7 @@
         selectDocument(firstReadable.id);
       }
     } catch (_e) {
-      stateData.docsError = "Não foi possível carregar os documentos da companhia.";
+      stateData.docsError = "N\u00e3o foi poss\u00edvel carregar os documentos da companhia.";
     } finally {
       stateData.docsLoading = false;
       renderDocsTab();
@@ -1054,7 +1112,7 @@
     }
 
     if (stateData.tenantsLoading) {
-      listEl.innerHTML = '<div class="as-acars-empty-state">Carregando companhias aéreas...</div>';
+      listEl.innerHTML = '<div class="as-acars-empty-state">Carregando companhias a\u00e9reas...</div>';
       return;
     }
     if (stateData.tenantsError) {
@@ -1072,7 +1130,7 @@
     });
 
     if (filtered.length === 0) {
-      listEl.innerHTML = '<div class="as-acars-empty-state">Nenhuma companhia aérea encontrada.</div>';
+      listEl.innerHTML = '<div class="as-acars-empty-state">Nenhuma companhia a\u00e9rea encontrada.</div>';
       return;
     }
 
@@ -1107,22 +1165,22 @@
     const pending = stateData.pendingTenant;
 
     if (vaNameEl) {
-      vaNameEl.textContent = pending ? "Conectando a " + pending.name + " (" + pending.domain + ")" : "Conectando à VA";
+      vaNameEl.textContent = pending ? "Conectando a " + pending.name + " (" + pending.domain + ")" : "Conectando \u00e0 VA";
     }
     if (codeEl) {
       codeEl.textContent = stateData.deviceCode || "------";
     }
     if (statusEl) {
       if (stateData.authStatus === "idle") {
-        statusEl.textContent = "Gerando código de autorização...";
+        statusEl.textContent = "Gerando c\u00f3digo de autoriza\u00e7\u00e3o...";
       } else if (stateData.authStatus === "polling") {
-        statusEl.textContent = "Aguardando aprovação no navegador...";
+        statusEl.textContent = "Aguardando aprova\u00e7\u00e3o no navegador...";
       } else if (stateData.authStatus === "success") {
         statusEl.textContent = "Dispositivo autorizado com sucesso!";
       } else if (stateData.authStatus === "expired") {
-        statusEl.textContent = "Código expirado. Clique em 'Gerar Novo Código'.";
+        statusEl.textContent = "C\u00f3digo expirado. Clique em 'Gerar Novo C\u00f3digo'.";
       } else {
-        statusEl.textContent = "Falha ao solicitar código. Tente novamente.";
+        statusEl.textContent = "Falha ao solicitar c\u00f3digo. Tente novamente.";
       }
     }
   }
@@ -1263,7 +1321,7 @@
     const alt = b && b.alternate_airport && b.alternate_airport.icao ? String(b.alternate_airport.icao) : "";
 
     if (routeLabel) {
-      routeLabel.textContent = dep || arr ? (dep || "----") + " -> " + (arr || "----") : "Pesquisa rápida por ICAO";
+      routeLabel.textContent = dep || arr ? (dep || "----") + " -> " + (arr || "----") : "Pesquisa r\u00e1pida por ICAO";
     }
 
     setVisible(depBtn, Boolean(dep));
@@ -1404,7 +1462,7 @@
     if (!bodyEl) return;
 
     if (stateData.detailDocLoading && !activeDoc.content && activeDoc.type !== "folder") {
-      bodyEl.innerHTML = '<div class="as-acars-empty-state">Carregando conteúdo do documento...</div>';
+      bodyEl.innerHTML = '<div class="as-acars-empty-state">Carregando conte\u00fado do documento...</div>';
       return;
     }
 
@@ -1413,7 +1471,7 @@
         return d.parent_id === activeDoc.id;
       });
       if (children.length === 0) {
-        bodyEl.innerHTML = '<div class="as-acars-empty-state">Esta pasta está vazia.</div>';
+        bodyEl.innerHTML = '<div class="as-acars-empty-state">Esta pasta est\u00e1 vazia.</div>';
       } else {
         bodyEl.innerHTML =
           '<div class="as-acars-folder-grid">' +
@@ -1444,7 +1502,7 @@
     if (activeDoc.type === "pdf" || activeDoc.file_url) {
       bodyEl.innerHTML =
         '<div class="as-acars-empty-state">' +
-        "<p>Este documento está em formato <strong>PDF</strong> (" +
+        "<p>Este documento est\u00e1 em formato <strong>PDF</strong> (" +
         escapeHtml(activeDoc.title) +
         ").</p>" +
         '<button type="button" class="as-acars-btn as-acars-btn-primary" data-open-url="' +
@@ -1454,7 +1512,7 @@
       return;
     }
 
-    bodyEl.innerHTML = '<div class="as-acars-empty-state">Nenhum conteúdo disponível para este documento.</div>';
+    bodyEl.innerHTML = '<div class="as-acars-empty-state">Nenhum conte\u00fado dispon\u00edvel para este documento.</div>';
   }
 
   function renderFlightTab() {
@@ -1494,7 +1552,7 @@
     if (pilotEl) {
       const p = stateData.pilot;
       if (!p) {
-        pilotEl.innerHTML = '<div class="as-acars-empty-state">Dados do piloto indisponíveis.</div>';
+        pilotEl.innerHTML = '<div class="as-acars-empty-state">Dados do piloto indispon\u00edveis.</div>';
       } else {
         const pName = p.name || (p.profile && p.profile.name) || "Piloto";
         const pCallsign = p.callsign || (p.profile && p.profile.callsign) || "-";
@@ -1792,13 +1850,22 @@
       if (findClosest(target, "#as-acars-btn-open-auth")) {
         if (stateData.pendingTenant && stateData.deviceCode) {
           const url = getTenantBaseUrl(stateData.pendingTenant) + "/acars/authorize?code=" + encodeURIComponent(stateData.deviceCode);
+          copyToClipboard(stateData.deviceCode);
           openExternalUrl(url);
+          const statusEl = q("#as-acars-auth-status");
+          if (statusEl) {
+            statusEl.textContent = "Navegador aberto em " + url + " (c\u00f3digo " + stateData.deviceCode + " copiado!)";
+          }
         }
         return;
       }
       if (findClosest(target, "#as-acars-btn-copy-code")) {
         if (stateData.deviceCode) {
           copyToClipboard(stateData.deviceCode);
+          const statusEl = q("#as-acars-auth-status");
+          if (statusEl) {
+            statusEl.textContent = "C\u00f3digo " + stateData.deviceCode + " copiado! Acesse " + getTenantBaseUrl(stateData.pendingTenant) + "/acars/authorize";
+          }
         }
         return;
       }
@@ -2066,7 +2133,7 @@
   if (typeof info === "function") {
     info(function () {
       if (!getActiveToken() || !store.activeTenant) {
-        return "Airspace ACARS - Clique para conectar à sua VA";
+        return "Airspace ACARS - Clique para conectar \u00e0 sua VA";
       }
       const unread = getUnreadMessages();
       if (unread.length > 0) {
@@ -2114,7 +2181,7 @@
           {
             uid: "airspace_acars_connect",
             label: "Conectar ao Airspace ACARS",
-            subtext: "Clique para selecionar sua companhia aérea (VA) e autenticar via código",
+            subtext: "Clique para selecionar sua companhia a\u00e9rea (VA) e autenticar via c\u00f3digo",
             execute: function () {
               stateData.panelOpen = true;
               stateData.activeView = "tenants";
@@ -2303,6 +2370,8 @@
       fetchNotams: fetchNotams,
       renderAll: renderAll,
       findClosest: findClosest,
+      openExternalUrl: openExternalUrl,
+      copyToClipboard: copyToClipboard,
     };
   }
-})();
+}).call(typeof this !== "undefined" ? this : null);
