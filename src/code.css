@@ -1,12 +1,14 @@
-/* Airspace ACARS - Parallel 42 Flow Widget Styles (MSFS 2024 Coherent GT Compatible) */
+/* Airspace ACARS - Parallel 42 Flow Widget Styles (MSFS 2024 Coherent GT / Chrome 49 Compatible) */
 
 .as-acars-root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: #f4f4f5;
   font-size: 13px;
   line-height: 1.45;
   box-sizing: border-box;
+  -webkit-user-select: none;
   user-select: none;
+  pointer-events: none;
 }
 
 .as-acars-root *,
@@ -19,32 +21,38 @@
   display: none !important;
 }
 
-/* Main Floating Window */
+/* Main Floating Window - MUST have pointer-events: all because P42Flow html has pointer-events: none */
 .as-acars-window {
   position: absolute;
-  width: 840px;
-  height: 560px;
-  background-color: rgba(12, 14, 18, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 12px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+  top: 120px;
+  left: 240px;
+  width: 820px;
+  height: 550px;
+  background-color: rgba(12, 14, 18, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   z-index: 9990;
+  pointer-events: all;
 }
 
 /* Floating vOCC Toast Notification */
 .as-acars-toast {
   position: absolute;
+  top: 70px;
+  left: 60%;
   width: 340px;
-  background-color: rgba(15, 18, 24, 0.97);
-  border: 1px solid rgba(252, 26, 2, 0.55);
+  background-color: rgba(15, 18, 24, 0.98);
+  border: 1px solid rgba(252, 26, 2, 0.6);
   border-left: 4px solid #fc1a02;
   border-radius: 10px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
   padding: 10px 12px;
   z-index: 9999;
+  pointer-events: all;
 }
 
 .as-acars-toast-header {
@@ -53,17 +61,22 @@
   justify-content: space-between;
   cursor: move;
   margin-bottom: 6px;
+  pointer-events: all;
 }
 
 .as-acars-toast-title {
   display: flex;
   align-items: center;
-  gap: 6px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #ff612e;
+  pointer-events: none;
+}
+
+.as-acars-toast-title > * + * {
+  margin-left: 6px;
 }
 
 .as-acars-toast-body {
@@ -85,7 +98,10 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 6px;
+}
+
+.as-acars-toast-actions > * + * {
+  margin-left: 6px;
 }
 
 /* Top Bar */
@@ -94,35 +110,36 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: rgba(24, 27, 34, 0.95);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(24, 27, 34, 0.98);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   cursor: move;
   flex-shrink: 0;
+  pointer-events: all;
 }
 
 .as-acars-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  pointer-events: none;
 }
 
 .as-acars-logo {
   width: 24px;
   height: 20px;
   flex-shrink: 0;
+  margin-right: 10px;
 }
 
 .as-acars-brand-text {
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
 .as-acars-title {
   font-size: 14px;
   font-weight: 700;
   color: #ffffff;
-  letter-spacing: -0.01em;
+  margin-right: 8px;
 }
 
 .as-acars-va-badge {
@@ -130,15 +147,19 @@
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(252, 26, 2, 0.16);
-  border: 1px solid rgba(252, 26, 2, 0.4);
+  background: rgba(252, 26, 2, 0.18);
+  border: 1px solid rgba(252, 26, 2, 0.45);
   color: #ff7a59;
 }
 
 .as-acars-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  pointer-events: all;
+}
+
+.as-acars-header-actions > * + * {
+  margin-left: 8px;
 }
 
 .as-acars-route-pill {
@@ -147,8 +168,8 @@
   font-weight: 600;
   padding: 3px 8px;
   border-radius: 6px;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.35);
   color: #38bdf8;
 }
 
@@ -159,6 +180,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  pointer-events: all;
 }
 
 /* Auth & Tenant Selector */
@@ -167,25 +189,27 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  padding: 20px;
+  min-height: 0;
+  padding: 16px 20px;
   overflow-y: auto;
 }
 
 .as-acars-auth-card {
   width: 100%;
-  max-width: 460px;
-  background: rgba(24, 27, 34, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 500px;
+  background: rgba(22, 25, 32, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
-  padding: 18px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  padding: 16px 20px;
+  display: block;
+}
+
+.as-acars-auth-header {
+  margin-bottom: 12px;
 }
 
 .as-acars-center {
   text-align: center;
-  align-items: center;
 }
 
 .as-acars-h2 {
@@ -207,74 +231,89 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #a1a1aa;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.as-acars-search-box {
+  margin-bottom: 10px;
 }
 
 .as-acars-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
-  margin: 8px 0;
+  margin: 10px 0;
 }
 
+/* Scrollable vertical lists MUST use display: block in Coherent GT so items are never squished */
 .as-acars-tenant-list {
-  max-height: 190px;
+  height: 220px;
+  max-height: 220px;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: block;
   padding-right: 4px;
+  margin-bottom: 12px;
 }
 
 .as-acars-saved-list {
-  max-height: 105px;
+  height: auto;
+  max-height: 100px;
+  margin-bottom: 6px;
 }
 
 .as-acars-tenant-item {
   display: flex;
   align-items: center;
-  gap: 10px;
   width: 100%;
-  padding: 8px 10px;
+  min-height: 46px;
+  padding: 7px 10px;
+  margin-bottom: 6px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   color: #f4f4f5;
   text-align: left;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+  pointer-events: all;
 }
 
 .as-acars-tenant-item:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(252, 26, 2, 0.14);
+  border-color: rgba(252, 26, 2, 0.45);
 }
 
 .as-acars-tenant-logo {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 32px;
   border-radius: 6px;
-  object-fit: contain;
-  background: rgba(255, 255, 255, 0.06);
+  background-color: rgba(255, 255, 255, 0.07);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
   flex-shrink: 0;
+  margin-right: 10px;
 }
 
 .as-acars-tenant-fallback {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 32px;
   border-radius: 6px;
-  background: rgba(252, 26, 2, 0.2);
-  color: #ff612e;
+  background: rgba(252, 26, 2, 0.22);
+  border: 1px solid rgba(252, 26, 2, 0.4);
+  color: #ff7a59;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 13px;
   flex-shrink: 0;
+  margin-right: 10px;
 }
 
 .as-acars-tenant-info {
   flex: 1;
   min-width: 0;
+  pointer-events: none;
 }
 
 .as-acars-tenant-name {
@@ -298,18 +337,21 @@
   font-size: 11px;
   font-weight: 700;
   color: #22c55e;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 999px;
   background: rgba(34, 197, 94, 0.14);
+  margin-left: 8px;
+  flex-shrink: 0;
+  pointer-events: none;
 }
 
 /* Device Code Box */
 .as-acars-code-box {
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 10px;
-  padding: 14px 24px;
-  margin: 4px 0;
+  padding: 14px 20px;
+  margin: 10px 0 12px 0;
   width: 100%;
 }
 
@@ -324,25 +366,30 @@
   font-family: "Consolas", "Courier New", monospace;
   font-size: 28px;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.25em;
   color: #ffffff;
-  padding-left: 0.28em;
+  padding-left: 0.25em;
 }
 
 .as-acars-auth-buttons {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   width: 100%;
+  margin-bottom: 12px;
+}
+
+.as-acars-auth-buttons > * + * {
+  margin-left: 8px;
 }
 
 .as-acars-auth-status {
   font-size: 12px;
   color: #a1a1aa;
-  padding: 4px 10px;
+  padding: 6px 10px;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 12px;
 }
 
 .as-acars-auth-footer {
@@ -350,7 +397,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding-top: 6px;
+  padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -358,9 +405,8 @@
 .as-acars-tabs {
   display: flex;
   align-items: center;
-  gap: 4px;
   padding: 6px 14px 0 14px;
-  background: rgba(18, 20, 26, 0.9);
+  background: rgba(18, 20, 26, 0.95);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
 }
@@ -368,8 +414,8 @@
 .as-acars-tab {
   display: flex;
   align-items: center;
-  gap: 6px;
   padding: 8px 14px;
+  margin-right: 6px;
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
@@ -377,7 +423,7 @@
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  pointer-events: all;
 }
 
 .as-acars-tab:hover {
@@ -396,6 +442,7 @@
   font-weight: 700;
   padding: 1px 6px;
   border-radius: 999px;
+  margin-left: 6px;
 }
 
 /* Tab Panels */
@@ -422,7 +469,6 @@
 .as-acars-vocc-info {
   display: flex;
   align-items: center;
-  gap: 6px;
   font-size: 12px;
   font-weight: 600;
   color: #e4e4e7;
@@ -435,6 +481,7 @@
   border-radius: 50%;
   background: #22c55e;
   display: inline-block;
+  margin-right: 6px;
 }
 
 .as-acars-pulse-dot {
@@ -445,15 +492,14 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: block;
   padding: 4px 6px;
 }
 
 .as-acars-msg-row {
   display: flex;
   width: 100%;
+  margin-bottom: 8px;
 }
 
 .as-acars-msg-row-user {
@@ -488,8 +534,8 @@
 }
 
 .as-acars-msg-bubble-acars {
-  background: rgba(252, 26, 2, 0.09);
-  border: 1px solid rgba(252, 26, 2, 0.35);
+  background: rgba(252, 26, 2, 0.12);
+  border: 1px solid rgba(252, 26, 2, 0.4);
   color: #f4f4f5;
   font-family: "Consolas", "Courier New", monospace;
   border-bottom-left-radius: 3px;
@@ -498,7 +544,6 @@
 .as-acars-msg-header {
   display: flex;
   align-items: center;
-  gap: 6px;
   margin-bottom: 4px;
 }
 
@@ -506,6 +551,7 @@
   font-size: 11px;
   font-weight: 700;
   color: #ff7a59;
+  margin-right: 6px;
 }
 
 .as-acars-msg-role {
@@ -520,6 +566,7 @@
 
 .as-acars-msg-text {
   white-space: pre-wrap;
+  -webkit-user-select: text;
   user-select: text;
 }
 
@@ -535,23 +582,30 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 5px;
-  padding: 8px 0 6px 0;
+  padding: 8px 0 4px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
+}
+
+.as-acars-quick-replies > * {
+  margin-right: 5px;
+  margin-bottom: 4px;
 }
 
 .as-acars-quick-label {
   font-size: 11px;
   color: #a1a1aa;
-  margin-right: 2px;
+  margin-right: 6px;
 }
 
 .as-acars-chat-compose {
   display: flex;
   align-items: center;
-  gap: 8px;
   flex-shrink: 0;
+}
+
+.as-acars-chat-compose .as-acars-input {
+  margin-right: 8px;
 }
 
 /* Documents & Airport Briefings Tab */
@@ -560,11 +614,10 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px 12px;
+  padding: 7px 12px;
   border-radius: 8px;
-  background: rgba(252, 26, 2, 0.08);
-  border: 1px solid rgba(252, 26, 2, 0.25);
+  background: rgba(252, 26, 2, 0.09);
+  border: 1px solid rgba(252, 26, 2, 0.28);
   margin-bottom: 8px;
   flex-shrink: 0;
 }
@@ -572,13 +625,13 @@
 .as-acars-briefing-bar-left {
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
 .as-acars-briefing-title {
   font-size: 11px;
   font-weight: 700;
   color: #ffffff;
+  margin-right: 8px;
 }
 
 .as-acars-briefing-route {
@@ -590,14 +643,16 @@
 .as-acars-briefing-shortcuts {
   display: flex;
   align-items: center;
-  gap: 6px;
+}
+
+.as-acars-briefing-shortcuts > * + * {
+  margin-left: 6px;
 }
 
 .as-acars-docs-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
   margin-bottom: 8px;
   flex-shrink: 0;
 }
@@ -605,29 +660,30 @@
 .as-acars-doc-search-wrap {
   position: relative;
   flex: 1;
+  margin-right: 10px;
 }
 
 .as-acars-search-clear {
   position: absolute;
   right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 5px;
   background: transparent;
   border: none;
   color: #a1a1aa;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   padding: 2px 6px;
 }
 
 .as-acars-cat-pills {
   display: flex;
   align-items: center;
-  gap: 4px;
+  flex-shrink: 0;
 }
 
 .as-acars-cat-pill {
   padding: 5px 9px;
+  margin-left: 4px;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -643,14 +699,13 @@
 }
 
 .as-acars-cat-active {
-  background: rgba(252, 26, 2, 0.2);
-  border-color: rgba(252, 26, 2, 0.5);
+  background: rgba(252, 26, 2, 0.22);
+  border-color: rgba(252, 26, 2, 0.55);
   color: #ffffff;
 }
 
 .as-acars-docs-split {
   display: flex;
-  gap: 10px;
   flex: 1;
   min-height: 0;
 }
@@ -658,7 +713,8 @@
 .as-acars-docs-sidebar {
   width: 255px;
   flex-shrink: 0;
-  background: rgba(20, 23, 29, 0.85);
+  margin-right: 10px;
+  background: rgba(20, 23, 29, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 8px;
   display: flex;
@@ -680,17 +736,14 @@
   min-height: 0;
   overflow-y: auto;
   padding: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: block;
 }
 
 .as-acars-doc-item {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  display: block;
   width: 100%;
   padding: 7px 9px;
+  margin-bottom: 4px;
   border-radius: 6px;
   background: transparent;
   border: 1px solid transparent;
@@ -700,12 +753,12 @@
 }
 
 .as-acars-doc-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .as-acars-doc-item-active {
-  background: rgba(252, 26, 2, 0.15);
-  border-color: rgba(252, 26, 2, 0.4);
+  background: rgba(252, 26, 2, 0.16);
+  border-color: rgba(252, 26, 2, 0.45);
   color: #ffffff;
 }
 
@@ -713,7 +766,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  margin-bottom: 2px;
+  pointer-events: none;
 }
 
 .as-acars-doc-item-title {
@@ -722,6 +776,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-right: 6px;
 }
 
 .as-acars-doc-badge {
@@ -763,12 +818,13 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: none;
 }
 
 .as-acars-docs-reader {
   flex: 1;
   min-width: 0;
-  background: rgba(20, 23, 29, 0.85);
+  background: rgba(20, 23, 29, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 8px;
   display: flex;
@@ -780,10 +836,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
   padding: 9px 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
+}
+
+.as-acars-doc-header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.as-acars-doc-header-actions > * + * {
+  margin-left: 6px;
 }
 
 .as-acars-doc-view-title {
@@ -804,6 +868,7 @@
   min-height: 0;
   overflow-y: auto;
   padding: 14px 16px;
+  -webkit-user-select: text;
   user-select: text;
 }
 
@@ -876,11 +941,11 @@
 .as-acars-folder-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
 }
 
 .as-acars-folder-card {
-  width: calc(50% - 4px);
+  width: 48%;
+  margin: 0 1% 8px 1%;
   padding: 10px 12px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.04);
@@ -900,17 +965,28 @@
 /* Flight & NOTAMs Tab */
 .as-acars-flight-grid {
   display: flex;
-  gap: 10px;
   margin-bottom: 10px;
   flex-shrink: 0;
 }
 
+.as-acars-flight-grid > .as-acars-card + .as-acars-card {
+  margin-left: 10px;
+}
+
 .as-acars-card {
   flex: 1;
-  background: rgba(20, 23, 29, 0.85);
+  background: rgba(20, 23, 29, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 8px;
   padding: 10px 12px;
+}
+
+.as-acars-notams-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .as-acars-card-title {
@@ -920,17 +996,19 @@
   letter-spacing: 0.05em;
   color: #a1a1aa;
   margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .as-acars-kv-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 14px;
 }
 
 .as-acars-kv {
   display: flex;
   flex-direction: column;
+  margin-right: 16px;
+  margin-bottom: 8px;
 }
 
 .as-acars-kv-label {
@@ -944,16 +1022,8 @@
   color: #ffffff;
 }
 
-.as-acars-notams-section {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
 .as-acars-notams-split {
   display: flex;
-  gap: 10px;
   flex: 1;
   min-height: 0;
 }
@@ -961,41 +1031,46 @@
 .as-acars-notams-list {
   width: 250px;
   flex-shrink: 0;
-  background: rgba(20, 23, 29, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 8px;
+  margin-right: 10px;
+  background: rgba(14, 16, 21, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
   overflow-y: auto;
   padding: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: block;
 }
 
-.as-acars-notam-reader {
+.as-acars-notam-detail {
   flex: 1;
-  background: rgba(20, 23, 29, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 8px;
+  background: rgba(14, 16, 21, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
   overflow-y: auto;
   padding: 12px 14px;
   white-space: pre-wrap;
+  -webkit-user-select: text;
   user-select: text;
 }
 
 /* Shared Controls (Inputs, Buttons, Chips) */
 .as-acars-input {
   width: 100%;
-  padding: 7px 10px;
+  padding: 8px 10px;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   font-size: 12px;
   outline: none;
+  cursor: text;
+  -webkit-user-select: text;
+  user-select: text;
+  pointer-events: all;
 }
 
 .as-acars-input:focus {
   border-color: #fc1a02;
+  background: rgba(0, 0, 0, 0.75);
 }
 
 .as-acars-btn {
@@ -1008,7 +1083,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  pointer-events: all;
 }
 
 .as-acars-btn-primary {
@@ -1021,13 +1096,13 @@
 }
 
 .as-acars-btn-outline {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
   color: #f4f4f5;
 }
 
 .as-acars-btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .as-acars-btn-ghost {
@@ -1037,7 +1112,7 @@
 
 .as-acars-btn-ghost:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .as-acars-btn-sm {
@@ -1054,30 +1129,34 @@
   background: transparent;
   border: none;
   color: #a1a1aa;
-  font-size: 14px;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 700;
   cursor: pointer;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
+  pointer-events: all;
 }
 
 .as-acars-icon-btn:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .as-acars-chip {
   padding: 3px 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #e4e4e7;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  pointer-events: all;
 }
 
 .as-acars-chip:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
 }
 
@@ -1098,4 +1177,3 @@
   color: #a1a1aa;
   font-size: 11px;
 }
-

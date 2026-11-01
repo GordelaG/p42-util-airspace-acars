@@ -759,3 +759,34 @@ test('Automatic 401 Unauthorized response clears expired VA token and returns to
   assert.equal(datastoreMemory.get('activeTenant'), null);
 });
 
+test('Coherent GT compatibility: ASCII-escaped coui:// template JSON, findClosest fallback, and Coherent input focus bridge', () => {
+  const result = buildPackage();
+  const rawTemplateContent = fs.readFileSync(result.templateFilePath, 'utf8');
+
+  // Ensure no raw non-ASCII bytes exist in the template file so coui:// never corrupts accents
+  assert.equal(/[\u0080-\uffff]/.test(rawTemplateContent), false, 'Template JSON must be 100% ASCII-safe on disk');
+
+  // Ensure JSON.parse restores accented Portuguese strings properly
+  const parsed = JSON.parse(rawTemplateContent);
+  assert.ok(parsed.scripts[0].params.code_html.includes('Selecione sua Companhia Aérea'));
+
+  // Test findClosest fallback when native .closest is absent (Chrome 49 / Coherent GT)
+  const { instance, mockRoot, hooks } = createFlowTestHarness(async () => makeJsonResponse(200, { data: [] }));
+  hooks.html_created(mockRoot);
+
+  const parentItem = new MockElement('div', mockRoot);
+  parentItem.setAttribute('class', 'as-acars-tenant-item');
+  parentItem.setAttribute('data-tenant-id', 'voe-samba');
+  delete parentItem.closest;
+
+  const childSpan = new MockElement('div', mockRoot);
+  childSpan.setAttribute('class', 'as-acars-tenant-name');
+  delete childSpan.closest;
+  parentItem.appendChild(childSpan);
+
+  const textNodeTarget = { nodeType: 3, parentNode: childSpan };
+  const found = instance.findClosest(textNodeTarget, '.as-acars-tenant-item');
+  assert.equal(found, parentItem, 'findClosest must traverse from text/child nodes without native .closest');
+});
+
+

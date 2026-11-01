@@ -149,7 +149,11 @@ export function buildPackage(options = {}) {
   };
 
   const templateFilePath = path.join(templatesDir, `${PACKAGE_NAME}.json`);
-  fs.writeFileSync(templateFilePath, JSON.stringify(templatePayload, null, 2), 'utf8');
+  const jsonAsciiSafe = JSON.stringify(templatePayload, null, 2).replace(
+    /[\u007f-\uffff]/g,
+    (ch) => '\\u' + ('0000' + ch.charCodeAt(0).toString(16)).slice(-4)
+  );
+  fs.writeFileSync(templateFilePath, jsonAsciiSafe, 'utf8');
 
   // 2. Write ContentInfo/p42-util-airspace-acars/Thumbnail.jpg
   const assetThumbPath = path.join(ROOT_DIR, 'assets', 'Thumbnail.jpg');

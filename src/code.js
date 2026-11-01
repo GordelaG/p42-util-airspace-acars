@@ -95,6 +95,7 @@
 
   const seenSet = new Set(Array.isArray(store.seenMessageIds) ? store.seenMessageIds : []);
   let rootEl = null;
+  let activeInputEl = null;
 
   // --- Flow Settings Definition ---
   if (typeof settings_define === "function") {
@@ -102,7 +103,7 @@
       vocc_toast_enabled: {
         type: "checkbox",
         label: "Alerta Flutuante do vOCC",
-        description: "Exibe uma notificação no simulador quando uma nova mensagem do vOCC chegar com o painel fechado.",
+        description: "Exibe uma notificacao no simulador quando uma nova mensagem do vOCC chegar com o painel fechado.",
         value: !!store.vocc_toast_enabled,
         changed: (val) => {
           store.vocc_toast_enabled = !!val;
@@ -122,7 +123,7 @@
       api_base_url: {
         type: "text",
         label: "URL Base Airspace",
-        description: "Servidor central para listagem de VAs (padrão: https://airspace.ferrlab.com)",
+        description: "Servidor central para listagem de VAs (padrao: https://airspace.ferrlab.com)",
         value: store.api_base_url || "https://airspace.ferrlab.com",
         changed: (val) => {
           store.api_base_url = (val || "https://airspace.ferrlab.com").trim().replace(/\/+$/, "");
@@ -131,6 +132,33 @@
         },
       },
     });
+  }
+
+  // --- Coherent GT Input Focus Bridge ---
+  function focusCoherentInput(inputEl) {
+    if (!inputEl) return;
+    activeInputEl = inputEl;
+    try {
+      if (typeof Coherent !== "undefined" && Coherent && typeof Coherent.trigger === "function") {
+        Coherent.trigger(
+          "FOCUS_INPUT_FIELD",
+          inputEl.id || "as_acars_input",
+          "",
+          inputEl.getAttribute("placeholder") || "",
+          inputEl.value || "",
+          false
+        );
+      }
+    } catch (_e) {}
+  }
+
+  function unfocusCoherentInput() {
+    activeInputEl = null;
+    try {
+      if (typeof Coherent !== "undefined" && Coherent && typeof Coherent.trigger === "function") {
+        Coherent.trigger("UNFOCUS_INPUT_FIELD");
+      }
+    } catch (_e) {}
   }
 
   // --- Helper Utilities ---
@@ -185,7 +213,6 @@
   function sanitizeDocumentHtml(dirty) {
     if (!dirty) return "";
     let html = String(dirty);
-    // Strip forbidden tags and their contents
     const contentTags = ["script", "style", "iframe", "frame", "frameset", "object", "embed", "applet", "form", "svg", "math", "noscript"];
     for (let i = 0; i < contentTags.length; i++) {
       const tag = contentTags[i];
@@ -194,14 +221,10 @@
       const selfRe = new RegExp("<" + tag + "\\b[^>]*\\/?>", "gi");
       html = html.replace(selfRe, "");
     }
-    // Strip void/input tags
     html = html.replace(/<(?:input|button|textarea|select|option|base|link|meta|param)\b[^>]*\/?>/gi, "");
-    // Strip on* event attributes and id/data-* attributes
     html = html.replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "");
     html = html.replace(/\s+id\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "");
-    // Neutralize javascript: or vbscript: in href/src
     html = html.replace(/(href|src)\s*=\s*(["'])\s*(?:javascript|vbscript|data:text):[^"']*\2/gi, '$1=$2#$2');
-    // Filter overlay positioning classes from class="..."
     html = html.replace(/class\s*=\s*(["'])([^"']*)\1/gi, function (_m, q, cls) {
       const kept = cls
         .split(/\s+/)
@@ -211,7 +234,7 @@
           return !/^(?:fixed|absolute|sticky|z-.+|inset-.+|top-.+|right-.+|bottom-.+|left-.+)$/.test(util);
         })
         .join(" ");
-      return 'class=' + q + kept + q;
+      return "class=" + q + kept + q;
     });
     return html;
   }
@@ -250,7 +273,10 @@
     try {
       const d = new Date(iso);
       if (isNaN(d.getTime())) return "";
-      return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
+      const dd = String(d.getUTCDate()).padStart(2, "0");
+      const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+      const yyyy = d.getUTCFullYear();
+      return dd + "/" + mm + "/" + yyyy;
     } catch (_e) {
       return "";
     }
@@ -551,7 +577,6 @@
         return m.id > 0;
       });
 
-      // Merge and sort ascending by id
       const byId = new Map();
       for (let i = 0; i < stateData.messages.length; i++) {
         byId.set(stateData.messages[i].id, stateData.messages[i]);
@@ -570,7 +595,6 @@
         }
       }
 
-      // Persist up to 200 recent seen message IDs
       store.seenMessageIds = Array.from(seenSet).slice(-200);
       saveStore();
 
@@ -578,7 +602,6 @@
         return a.id - b.id;
       });
 
-      // If panel is open on vOCC tab and auto_confirm_read is on, confirm unread messages
       if (stateData.panelOpen && stateData.activeView === "main" && stateData.activeTab === "vocc" && store.auto_confirm_read) {
         confirmAllUnreadMessages();
       } else if (newestUnseenVocc && store.vocc_toast_enabled) {
@@ -874,10 +897,37 @@
     }
   }
 
+  function ensureWindowOnScreen(win) {
+    if (!win || typeof window === "undefined") return;
+    const vw = Number(window.innerWidth) || 1920;
+    const vh = Number(window.innerHeight) || 1080;
+    const w = Number(win.offsetWidth) || 820;
+    const h = Number(win.offsetHeight) || 550;
+
+    let left = parseFloat(win.style.left);
+    let top = parseFloat(win.style.top);
+
+    if (isNaN(left) || isNaN(top) || left + w > vw - 10 || top + h > vh - 10 || left < 10 || top < 10) {
+      if (isNaN(left) || left + w > vw - 10 || left < 10) {
+        left = Math.max(20, Math.round((vw - w) / 2));
+      }
+      if (isNaN(top) || top + h > vh - 10 || top < 10) {
+        top = Math.max(20, Math.round((vh - h) / 2));
+      }
+      win.style.left = left + "px";
+      win.style.top = top + "px";
+    }
+  }
+
   function renderAll() {
     if (!rootEl) return;
     const win = q("#as-acars-window");
     setVisible(win, stateData.panelOpen);
+    if (stateData.panelOpen && win) {
+      ensureWindowOnScreen(win);
+    } else if (!stateData.panelOpen) {
+      unfocusCoherentInput();
+    }
 
     renderToast();
     renderHeader();
@@ -912,7 +962,7 @@
       const senderEl = q("#as-acars-toast-sender");
       const textEl = q("#as-acars-toast-text");
       if (senderEl) {
-        senderEl.textContent = (msg.senderName || "vOCC DISPATCH") + (msg.senderRole ? " • " + msg.senderRole.toUpperCase() : "");
+        senderEl.textContent = (msg.senderName || "vOCC DISPATCH") + (msg.senderRole ? " - " + msg.senderRole.toUpperCase() : "");
       }
       if (textEl) {
         textEl.textContent = msg.text;
@@ -948,8 +998,20 @@
 
     setVisible(routePill, Boolean(isAuthed && (cs || dep || arr)));
     if (routePill && (cs || dep || arr)) {
-      routePill.textContent = (cs ? cs + " • " : "") + (dep || "----") + " ➔ " + (arr || "----");
+      routePill.textContent = (cs ? cs + " | " : "") + (dep || "----") + " -> " + (arr || "----");
     }
+  }
+
+  function buildTenantLogoHtml(t) {
+    const initial = escapeHtml((t.name || "V").charAt(0).toUpperCase());
+    const safeUrl =
+      t.logo_url && /^https?:\/\//i.test(String(t.logo_url))
+        ? String(t.logo_url).replace(/["'()\\]/g, "")
+        : "";
+    if (safeUrl) {
+      return '<div class="as-acars-tenant-logo" style="background-image:url(\'' + escapeHtml(safeUrl) + '\')"></div>';
+    }
+    return '<div class="as-acars-tenant-fallback">' + initial + "</div>";
   }
 
   function renderTenantsView() {
@@ -971,15 +1033,11 @@
     if (savedListEl && savedTenants.length > 0) {
       savedListEl.innerHTML = savedTenants
         .map(function (t) {
-          const initial = escapeHtml((t.name || "V").charAt(0).toUpperCase());
-          const logoHtml = t.logo_url
-            ? '<img class="as-acars-tenant-logo" src="' + escapeHtml(t.logo_url) + '" alt="" />'
-            : '<div class="as-acars-tenant-fallback">' + initial + "</div>";
           return (
             '<button type="button" class="as-acars-tenant-item" data-saved-tenant-id="' +
             escapeHtml(t.id) +
             '">' +
-            logoHtml +
+            buildTenantLogoHtml(t) +
             '<div class="as-acars-tenant-info">' +
             '<div class="as-acars-tenant-name">' +
             escapeHtml(t.name) +
@@ -988,7 +1046,7 @@
             escapeHtml(t.domain) +
             "</div>" +
             "</div>" +
-            '<span class="as-acars-tenant-check">✓ Conectado</span>' +
+            '<span class="as-acars-tenant-check">Conectado</span>' +
             "</button>"
           );
         })
@@ -1020,16 +1078,12 @@
 
     listEl.innerHTML = filtered
       .map(function (t) {
-        const initial = escapeHtml((t.name || "V").charAt(0).toUpperCase());
-        const logoHtml = t.logo_url
-          ? '<img class="as-acars-tenant-logo" src="' + escapeHtml(t.logo_url) + '" alt="" />'
-          : '<div class="as-acars-tenant-fallback">' + initial + "</div>";
         const hasSaved = Boolean(storedMap[t.id] && storedMap[t.id].token);
         return (
           '<button type="button" class="as-acars-tenant-item" data-tenant-id="' +
           escapeHtml(t.id) +
           '">' +
-          logoHtml +
+          buildTenantLogoHtml(t) +
           '<div class="as-acars-tenant-info">' +
           '<div class="as-acars-tenant-name">' +
           escapeHtml(t.name) +
@@ -1038,7 +1092,7 @@
           escapeHtml(t.domain) +
           "</div>" +
           "</div>" +
-          (hasSaved ? '<span class="as-acars-tenant-check">✓ Salva</span>' : "") +
+          (hasSaved ? '<span class="as-acars-tenant-check">Salva</span>' : "") +
           "</button>"
         );
       })
@@ -1064,11 +1118,11 @@
       } else if (stateData.authStatus === "polling") {
         statusEl.textContent = "Aguardando aprovação no navegador...";
       } else if (stateData.authStatus === "success") {
-        statusEl.textContent = "✓ Dispositivo autorizado com sucesso!";
+        statusEl.textContent = "Dispositivo autorizado com sucesso!";
       } else if (stateData.authStatus === "expired") {
-        statusEl.textContent = "⚠ Código expirado. Clique em 'Gerar Novo Código'.";
+        statusEl.textContent = "Código expirado. Clique em 'Gerar Novo Código'.";
       } else {
-        statusEl.textContent = "⚠ Falha ao solicitar código. Tente novamente.";
+        statusEl.textContent = "Falha ao solicitar código. Tente novamente.";
       }
     }
   }
@@ -1141,7 +1195,7 @@
             "</div>" +
             '<span class="as-acars-msg-time">' +
             escapeHtml(timeStr) +
-            (msg.read ? " ✓✓" : "") +
+            (msg.read ? " [Lida]" : "") +
             "</span>" +
             "</div>" +
             "</div>"
@@ -1153,7 +1207,7 @@
             '<div class="as-acars-msg-row as-acars-msg-row-acars">' +
             '<div class="as-acars-msg-bubble as-acars-msg-bubble-acars">' +
             '<div class="as-acars-msg-header">' +
-            '<span class="as-acars-msg-sender">✈ ' +
+            '<span class="as-acars-msg-sender">' +
             escapeHtml(msg.senderName || "vOCC Dispatch") +
             "</span>" +
             '<span class="as-acars-msg-role">' +
@@ -1209,24 +1263,24 @@
     const alt = b && b.alternate_airport && b.alternate_airport.icao ? String(b.alternate_airport.icao) : "";
 
     if (routeLabel) {
-      routeLabel.textContent = dep || arr ? (dep || "----") + " ➔ " + (arr || "----") : "Pesquisa rápida por ICAO";
+      routeLabel.textContent = dep || arr ? (dep || "----") + " -> " + (arr || "----") : "Pesquisa rápida por ICAO";
     }
 
     setVisible(depBtn, Boolean(dep));
     if (depBtn && dep) {
-      depBtn.textContent = "🛫 DEP " + dep;
+      depBtn.textContent = "DEP: " + dep;
       depBtn.setAttribute("data-icao", dep);
     }
 
     setVisible(arrBtn, Boolean(arr));
     if (arrBtn && arr) {
-      arrBtn.textContent = "🛬 ARR " + arr;
+      arrBtn.textContent = "ARR: " + arr;
       arrBtn.setAttribute("data-icao", arr);
     }
 
     setVisible(altBtn, Boolean(alt));
     if (altBtn && alt) {
-      altBtn.textContent = "🔀 ALT " + alt;
+      altBtn.textContent = "ALT: " + alt;
       altBtn.setAttribute("data-icao", alt);
     }
   }
@@ -1253,7 +1307,6 @@
     }
     setVisible(clearBtn, Boolean(stateData.docSearch));
 
-    // Category buttons active state
     const catBtns = rootEl.querySelectorAll("#as-acars-doc-categories [data-cat]");
     for (let i = 0; i < catBtns.length; i++) {
       const btn = catBtns[i];
@@ -1299,7 +1352,7 @@
               getDocBadgeHtml(doc) +
               "</div>" +
               (subParts.length > 0
-                ? '<div class="as-acars-doc-item-sub">' + escapeHtml(subParts.join(" • ")) + "</div>"
+                ? '<div class="as-acars-doc-item-sub">' + escapeHtml(subParts.join(" | ")) + "</div>"
                 : "") +
               "</button>"
             );
@@ -1308,7 +1361,6 @@
       }
     }
 
-    // Reader Pane
     const activeDoc =
       stateData.detailDoc ||
       stateData.documents.find(function (d) {
@@ -1340,7 +1392,7 @@
       if (activeDoc.source) mParts.push(activeDoc.source);
       const dt = formatDate(activeDoc.updated_at || activeDoc.created_at);
       if (dt) mParts.push("Atualizado em " + dt);
-      metaEl.textContent = mParts.join(" • ");
+      metaEl.textContent = mParts.join(" | ");
     }
 
     const pdfTargetUrl =
@@ -1419,34 +1471,22 @@
       } else {
         const depIcao = (b.departure_airport && b.departure_airport.icao) || "----";
         const arrIcao = (b.arrival_airport && b.arrival_airport.icao) || "----";
-        const acReg = (b.aircraft && b.aircraft.registration) || "—";
-        const acType = (b.aircraft && (b.aircraft.type || b.aircraft.name)) || "—";
+        const acReg = (b.aircraft && b.aircraft.registration) || "-";
+        const acType = (b.aircraft && (b.aircraft.type || b.aircraft.name)) || "-";
         bookingEl.innerHTML =
           '<div class="as-acars-kv-grid">' +
           '<div class="as-acars-kv"><span class="as-acars-kv-label">Callsign</span><span class="as-acars-kv-val">' +
-          escapeHtml(b.callsign || b.flight_number || "—") +
+          escapeHtml(b.callsign || b.flight_number || "-") +
           "</span></div>" +
           '<div class="as-acars-kv"><span class="as-acars-kv-label">Voo</span><span class="as-acars-kv-val">' +
-          escapeHtml(b.flight_number || "—") +
+          escapeHtml(b.flight_number || "-") +
+          "</span></div>" +
+          '<div class="as-acars-kv"><span class="as-acars-kv-label">Rota</span><span class="as-acars-kv-val">' +
+          escapeHtml(depIcao + " -> " + arrIcao) +
           "</span></div>" +
           '<div class="as-acars-kv"><span class="as-acars-kv-label">Aeronave</span><span class="as-acars-kv-val">' +
           escapeHtml(acReg + " (" + acType + ")") +
           "</span></div>" +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Rota</span><span class="as-acars-kv-val">' +
-          escapeHtml(depIcao + " ➔ " + arrIcao) +
-          "</span></div>" +
-          "</div>" +
-          '<div style="margin-top:8px;display:flex;gap:6px;">' +
-          '<button type="button" class="as-acars-chip as-acars-chip-accent" data-icao="' +
-          escapeHtml(depIcao) +
-          '">Briefing ' +
-          escapeHtml(depIcao) +
-          "</button>" +
-          '<button type="button" class="as-acars-chip as-acars-chip-accent" data-icao="' +
-          escapeHtml(arrIcao) +
-          '">Briefing ' +
-          escapeHtml(arrIcao) +
-          "</button>" +
           "</div>";
       }
     }
@@ -1456,42 +1496,36 @@
       if (!p) {
         pilotEl.innerHTML = '<div class="as-acars-empty-state">Dados do piloto indisponíveis.</div>';
       } else {
-        const name = p.name || (p.profile && p.profile.name) || "Piloto";
-        const rank =
-          (typeof p.rank === "string" && p.rank) ||
-          (p.profile && p.profile.rank && p.profile.rank.name) ||
-          "—";
-        const hours =
+        const pName = p.name || (p.profile && p.profile.name) || "Piloto";
+        const pCallsign = p.callsign || (p.profile && p.profile.callsign) || "-";
+        const pRank = (p.rank && p.rank.name) || (p.profile && p.profile.rank && p.profile.rank.name) || "-";
+        const pHours =
           p.flight_hours !== undefined
             ? p.flight_hours
-            : p.profile && p.profile.totals
-              ? p.profile.totals.flight_hours
-              : 0;
-        const flights =
-          p.flights_count !== undefined
-            ? p.flights_count
-            : p.profile && p.profile.totals
-              ? p.profile.totals.flights
-              : 0;
-        const pts =
-          p.points !== undefined ? p.points : p.profile && p.profile.totals ? p.profile.totals.points : 0;
-
+            : p.profile && p.profile.flight_hours !== undefined
+              ? p.profile.flight_hours
+              : "-";
         pilotEl.innerHTML =
           '<div class="as-acars-kv-grid">' +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Piloto</span><span class="as-acars-kv-val">' +
-          escapeHtml(name) +
+          '<div class="as-acars-kv"><span class="as-acars-kv-label">Nome</span><span class="as-acars-kv-val">' +
+          escapeHtml(pName) +
+          "</span></div>" +
+          '<div class="as-acars-kv"><span class="as-acars-kv-label">Callsign</span><span class="as-acars-kv-val">' +
+          escapeHtml(pCallsign) +
           "</span></div>" +
           '<div class="as-acars-kv"><span class="as-acars-kv-label">Patente</span><span class="as-acars-kv-val">' +
-          escapeHtml(rank) +
+          escapeHtml(pRank) +
           "</span></div>" +
           '<div class="as-acars-kv"><span class="as-acars-kv-label">Horas</span><span class="as-acars-kv-val">' +
-          escapeHtml(Number(hours || 0).toFixed(1) + "h") +
-          "</span></div>" +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Voos / Pontos</span><span class="as-acars-kv-val">' +
-          escapeHtml(flights + " • " + pts + " pts") +
+          escapeHtml(String(pHours)) +
           "</span></div>" +
           "</div>";
       }
+    }
+
+    const notamTitleEl = q("#as-acars-notams-title");
+    if (notamTitleEl) {
+      notamTitleEl.textContent = "NOTAMs Ativos da Companhia (" + stateData.notams.length + ")";
     }
 
     if (notamsListEl) {
@@ -1507,9 +1541,9 @@
               '" data-notam-id="' +
               escapeHtml(n.id) +
               '">' +
-              '<div class="as-acars-doc-item-top"><span class="as-acars-doc-item-title">' +
+              '<div class="as-acars-doc-item-title">' +
               escapeHtml(n.title) +
-              "</span></div>" +
+              "</div>" +
               '<div class="as-acars-doc-item-sub">' +
               escapeHtml(formatDate(n.created_at)) +
               "</div>" +
@@ -1540,11 +1574,107 @@
     }
   }
 
+  // --- Coherent GT Safe DOM Selector Matching (Chrome 49 / WebKit 604) ---
+  function matchesSelectorSafe(node, selector) {
+    if (!node || (node.nodeType && node.nodeType !== 1)) return false;
+    if (typeof node.matches === "function") {
+      try {
+        return node.matches(selector);
+      } catch (_e) {}
+    }
+    if (typeof node.webkitMatchesSelector === "function") {
+      try {
+        return node.webkitMatchesSelector(selector);
+      } catch (_e) {}
+    }
+    if (typeof node.matchesSelector === "function") {
+      try {
+        return node.matchesSelector(selector);
+      } catch (_e) {}
+    }
+
+    const s = String(selector || "").trim();
+    if (!s) return false;
+    if (s.charAt(0) === "#") {
+      return node.id === s.slice(1);
+    }
+    if (s.charAt(0) === "[" && s.charAt(s.length - 1) === "]") {
+      const attrName = s.slice(1, -1).split("=")[0].trim();
+      return Boolean(node.getAttribute && node.getAttribute(attrName) !== null);
+    }
+    if (s.charAt(0) === ".") {
+      const bracketIdx = s.indexOf("[");
+      const clsName = bracketIdx !== -1 ? s.slice(1, bracketIdx) : s.slice(1);
+      if (!node.classList || !node.classList.contains(clsName)) return false;
+      if (bracketIdx !== -1) {
+        const attrName = s.slice(bracketIdx + 1, -1).split("=")[0].trim();
+        return Boolean(node.getAttribute && node.getAttribute(attrName) !== null);
+      }
+      return true;
+    }
+    return String(node.tagName || "").toLowerCase() === s.toLowerCase();
+  }
+
+  function findClosest(startNode, selector) {
+    if (!startNode) return null;
+    if (typeof startNode.closest === "function") {
+      try {
+        const res = startNode.closest(selector);
+        if (res) return res;
+      } catch (_e) {}
+    }
+    let curr = startNode;
+    if (curr.nodeType === 3) {
+      curr = curr.parentNode;
+    }
+    while (curr && curr !== rootEl) {
+      if (matchesSelectorSafe(curr, selector)) {
+        return curr;
+      }
+      curr = curr.parentNode;
+    }
+    return null;
+  }
+
+  function handleInputValueChange(inputEl) {
+    if (!inputEl) return;
+    if (inputEl.id === "as-acars-tenant-search") {
+      stateData.tenantSearch = inputEl.value || "";
+      renderTenantsView();
+    } else if (inputEl.id === "as-acars-doc-search") {
+      stateData.docSearch = inputEl.value || "";
+      const filtered = getFilteredDocuments();
+      if (
+        filtered.length > 0 &&
+        !filtered.some(function (d) {
+          return d.id === stateData.selectedDocId;
+        })
+      ) {
+        selectDocument(filtered[0].id);
+      } else {
+        renderDocsTab();
+      }
+    }
+  }
+
   // --- Event Binding inside Coherent GT ---
   function bindDomEvents(el) {
+    // Listen for OS input bridge text updates in MSFS Coherent GT
+    try {
+      if (typeof Coherent !== "undefined" && Coherent && typeof Coherent.on === "function") {
+        Coherent.on("SetInputTextFromOS", function (textFromOs) {
+          if (activeInputEl) {
+            activeInputEl.value = String(textFromOs || "");
+            handleInputValueChange(activeInputEl);
+          }
+        });
+      }
+    } catch (_e) {}
+
     // Stop keyboard events inside inputs from triggering MSFS simulator shortcuts
     const stopSimKeys = function (e) {
-      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) {
+      const t = e.target;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) {
         e.stopPropagation();
       }
     };
@@ -1552,25 +1682,41 @@
     el.addEventListener("keyup", stopSimKeys, false);
     el.addEventListener("keypress", stopSimKeys, false);
 
-    // Delegate click events cleanly
+    // Ensure mousedown on inputs or buttons focuses properly without triggering parent drag
+    el.addEventListener("mousedown", function (e) {
+      const inputTarget = findClosest(e.target, "input");
+      if (inputTarget) {
+        e.stopPropagation();
+        if (typeof inputTarget.focus === "function") {
+          inputTarget.focus();
+        }
+        focusCoherentInput(inputTarget);
+        return;
+      }
+      if (activeInputEl && e.target !== activeInputEl) {
+        unfocusCoherentInput();
+      }
+    });
+
+    // Delegate click events cleanly across Coherent GT
     el.addEventListener("click", function (e) {
       const target = e.target;
-      if (!target || typeof target.closest !== "function") return;
+      if (!target) return;
 
       // Close main window
-      if (target.closest("#as-acars-btn-close")) {
+      if (findClosest(target, "#as-acars-btn-close")) {
         stateData.panelOpen = false;
         renderAll();
         return;
       }
 
       // Toast actions
-      if (target.closest("#as-acars-toast-close")) {
+      if (findClosest(target, "#as-acars-toast-close")) {
         stateData.toastMessage = null;
         renderToast();
         return;
       }
-      if (target.closest("#as-acars-toast-dismiss")) {
+      if (findClosest(target, "#as-acars-toast-dismiss")) {
         if (stateData.toastMessage) {
           confirmMessageById(stateData.toastMessage.id);
         }
@@ -1578,7 +1724,7 @@
         renderToast();
         return;
       }
-      if (target.closest("#as-acars-toast-open")) {
+      if (findClosest(target, "#as-acars-toast-open")) {
         if (stateData.toastMessage) {
           confirmMessageById(stateData.toastMessage.id);
         }
@@ -1591,13 +1737,13 @@
       }
 
       // Refresh data
-      if (target.closest("#as-acars-btn-refresh")) {
+      if (findClosest(target, "#as-acars-btn-refresh")) {
         refreshAllAuthenticatedData();
         return;
       }
 
       // Switch VA
-      if (target.closest("#as-acars-btn-switch-va") || target.closest("#as-acars-btn-back-tenants")) {
+      if (findClosest(target, "#as-acars-btn-switch-va") || findClosest(target, "#as-acars-btn-back-tenants")) {
         stopAuthPolling();
         stateData.activeView = "tenants";
         if (stateData.tenants.length === 0) {
@@ -1608,13 +1754,13 @@
       }
 
       // Reload tenants
-      if (target.closest("#as-acars-btn-reload-tenants")) {
+      if (findClosest(target, "#as-acars-btn-reload-tenants")) {
         fetchTenants();
         return;
       }
 
       // Select saved tenant
-      const savedBtn = target.closest("[data-saved-tenant-id]");
+      const savedBtn = findClosest(target, "[data-saved-tenant-id]");
       if (savedBtn) {
         const tid = savedBtn.getAttribute("data-saved-tenant-id");
         const entry = store.storedTokens && store.storedTokens[tid];
@@ -1625,7 +1771,7 @@
       }
 
       // Select tenant from list
-      const tenantBtn = target.closest("[data-tenant-id]");
+      const tenantBtn = findClosest(target, "[data-tenant-id]");
       if (tenantBtn) {
         const tid = tenantBtn.getAttribute("data-tenant-id");
         const found = stateData.tenants.find(function (t) {
@@ -1643,20 +1789,20 @@
       }
 
       // Device Code Auth buttons
-      if (target.closest("#as-acars-btn-open-auth")) {
+      if (findClosest(target, "#as-acars-btn-open-auth")) {
         if (stateData.pendingTenant && stateData.deviceCode) {
           const url = getTenantBaseUrl(stateData.pendingTenant) + "/acars/authorize?code=" + encodeURIComponent(stateData.deviceCode);
           openExternalUrl(url);
         }
         return;
       }
-      if (target.closest("#as-acars-btn-copy-code")) {
+      if (findClosest(target, "#as-acars-btn-copy-code")) {
         if (stateData.deviceCode) {
           copyToClipboard(stateData.deviceCode);
         }
         return;
       }
-      if (target.closest("#as-acars-btn-retry-auth")) {
+      if (findClosest(target, "#as-acars-btn-retry-auth")) {
         if (stateData.pendingTenant) {
           startDeviceCodeAuth(stateData.pendingTenant);
         }
@@ -1664,7 +1810,7 @@
       }
 
       // Main Navigation Tabs
-      const tabBtn = target.closest(".as-acars-tab[data-tab]");
+      const tabBtn = findClosest(target, ".as-acars-tab[data-tab]");
       if (tabBtn) {
         const tabName = tabBtn.getAttribute("data-tab");
         if (tabName) {
@@ -1678,7 +1824,7 @@
       }
 
       // Quick Reply Chips in vOCC Chat
-      const replyChip = target.closest("[data-reply]");
+      const replyChip = findClosest(target, "[data-reply]");
       if (replyChip) {
         const replyText = replyChip.getAttribute("data-reply");
         if (replyText) {
@@ -1688,7 +1834,7 @@
       }
 
       // Send Chat Message Button
-      if (target.closest("#as-acars-chat-send")) {
+      if (findClosest(target, "#as-acars-chat-send")) {
         const input = q("#as-acars-chat-input");
         if (input && input.value.trim()) {
           const val = input.value;
@@ -1699,7 +1845,7 @@
       }
 
       // Briefing ICAO Shortcut Chips
-      const icaoBtn = target.closest("[data-icao]");
+      const icaoBtn = findClosest(target, "[data-icao]");
       if (icaoBtn) {
         const code = icaoBtn.getAttribute("data-icao");
         if (code && code !== "----") {
@@ -1709,20 +1855,20 @@
       }
 
       // Nearest Airport in Sim Button
-      if (target.closest("#as-acars-btn-near-icao")) {
+      if (findClosest(target, "#as-acars-btn-near-icao")) {
         findNearestSimAirportAndSearch();
         return;
       }
 
       // Clear Document Search
-      if (target.closest("#as-acars-doc-search-clear")) {
+      if (findClosest(target, "#as-acars-doc-search-clear")) {
         stateData.docSearch = "";
         renderDocsTab();
         return;
       }
 
       // Document Category Pills
-      const catBtn = target.closest("[data-cat]");
+      const catBtn = findClosest(target, "[data-cat]");
       if (catBtn) {
         const cat = catBtn.getAttribute("data-cat");
         if (cat) {
@@ -1743,7 +1889,7 @@
       }
 
       // Select Document Item or Folder Child
-      const docBtn = target.closest("[data-doc-id]");
+      const docBtn = findClosest(target, "[data-doc-id]");
       if (docBtn) {
         const docId = docBtn.getAttribute("data-doc-id");
         if (docId) {
@@ -1753,7 +1899,7 @@
       }
 
       // Parent Folder Button
-      if (target.closest("#as-acars-btn-parent-folder")) {
+      if (findClosest(target, "#as-acars-btn-parent-folder")) {
         const activeDoc =
           stateData.detailDoc ||
           stateData.documents.find(function (d) {
@@ -1766,7 +1912,7 @@
       }
 
       // Open PDF / External URL Button
-      if (target.closest("#as-acars-btn-open-pdf")) {
+      if (findClosest(target, "#as-acars-btn-open-pdf")) {
         const activeDoc =
           stateData.detailDoc ||
           stateData.documents.find(function (d) {
@@ -1778,14 +1924,14 @@
         return;
       }
 
-      const extUrlBtn = target.closest("[data-open-url]");
+      const extUrlBtn = findClosest(target, "[data-open-url]");
       if (extUrlBtn) {
         openExternalUrl(extUrlBtn.getAttribute("data-open-url"));
         return;
       }
 
       // Select NOTAM
-      const notamBtn = target.closest("[data-notam-id]");
+      const notamBtn = findClosest(target, "[data-notam-id]");
       if (notamBtn) {
         const nid = notamBtn.getAttribute("data-notam-id");
         stateData.selectedNotamId = nid;
@@ -1798,8 +1944,8 @@
       }
 
       // Intercept any <a href> inside document HTML body
-      const anchor = target.closest(".as-acars-doc-html a[href]");
-      if (anchor) {
+      const anchor = findClosest(target, "a");
+      if (anchor && anchor.getAttribute("href")) {
         const href = anchor.getAttribute("href");
         if (href && href.indexOf("#") !== 0) {
           e.preventDefault();
@@ -1808,30 +1954,28 @@
       }
     });
 
-    // Input change handlers
-    const tenantSearchInput = q("#as-acars-tenant-search");
-    if (tenantSearchInput) {
-      tenantSearchInput.addEventListener("input", function (e) {
-        stateData.tenantSearch = e.target.value || "";
-        renderTenantsView();
-      });
-    }
+    // Bind focus, blur, and input handlers on all text inputs
+    const inputs = ["#as-acars-tenant-search", "#as-acars-doc-search", "#as-acars-chat-input"];
+    for (let i = 0; i < inputs.length; i++) {
+      const inp = q(inputs[i]);
+      if (!inp) continue;
 
-    const docSearchInput = q("#as-acars-doc-search");
-    if (docSearchInput) {
-      docSearchInput.addEventListener("input", function (e) {
-        stateData.docSearch = e.target.value || "";
-        const filtered = getFilteredDocuments();
-        if (
-          filtered.length > 0 &&
-          !filtered.some(function (d) {
-            return d.id === stateData.selectedDocId;
-          })
-        ) {
-          selectDocument(filtered[0].id);
-        } else {
-          renderDocsTab();
+      inp.addEventListener("focus", function () {
+        focusCoherentInput(inp);
+      });
+
+      inp.addEventListener("blur", function () {
+        if (activeInputEl === inp) {
+          unfocusCoherentInput();
         }
+      });
+
+      inp.addEventListener("input", function () {
+        handleInputValueChange(inp);
+      });
+
+      inp.addEventListener("keyup", function () {
+        handleInputValueChange(inp);
       });
     }
 
@@ -1839,7 +1983,7 @@
     if (chatInput) {
       chatInput.addEventListener("keydown", function (e) {
         e.stopPropagation();
-        if (e.key === "Enter" && !e.shiftKey) {
+        if (e.key === "Enter" || e.keyCode === 13) {
           e.preventDefault();
           const val = chatInput.value.trim();
           if (val) {
@@ -1922,7 +2066,7 @@
   if (typeof info === "function") {
     info(function () {
       if (!getActiveToken() || !store.activeTenant) {
-        return "Airspace ACARS • Clique para conectar à sua VA";
+        return "Airspace ACARS - Clique para conectar à sua VA";
       }
       const unread = getUnreadMessages();
       if (unread.length > 0) {
@@ -1934,9 +2078,9 @@
         const cs = stateData.booking.callsign || stateData.booking.flight_number || "";
         const dep = (stateData.booking.departure_airport && stateData.booking.departure_airport.icao) || "";
         const arr = (stateData.booking.arrival_airport && stateData.booking.arrival_airport.icao) || "";
-        return store.activeTenant.name + " • " + cs + (dep || arr ? " (" + dep + " ➔ " + arr + ")" : "");
+        return store.activeTenant.name + " | " + cs + (dep || arr ? " (" + dep + " -> " + arr + ")" : "");
       }
-      return store.activeTenant.name + " • Airspace ACARS";
+      return store.activeTenant.name + " | Airspace ACARS";
     });
   }
 
@@ -2023,7 +2167,7 @@
           results.push({
             uid: "airspace_vocc_open",
             label: "Abrir Chat vOCC (" + store.activeTenant.name + ")",
-            subtext: "Nenhuma mensagem recente • Digite 'vocc <mensagem>' para enviar",
+            subtext: "Nenhuma mensagem recente - Digite 'vocc <mensagem>' para enviar",
             execute: function () {
               stateData.panelOpen = true;
               stateData.activeView = "main";
@@ -2089,7 +2233,7 @@
         results.push({
           uid: "airspace_doc_" + doc.id,
           label: doc.title,
-          subtext: (doc.source || doc.type.toUpperCase()) + " • Clique para ler no painel Airspace ACARS",
+          subtext: (doc.source || doc.type.toUpperCase()) + " | Clique para ler no painel Airspace ACARS",
           execute: function () {
             stateData.panelOpen = true;
             stateData.activeView = "main";
@@ -2107,7 +2251,7 @@
         results.push({
           uid: "airspace_open_docs",
           label: "Pesquisar '" + (term || "Documentos") + "' no Airspace ACARS",
-          subtext: store.activeTenant.name + " • Abrir biblioteca de aeroportos e manuais",
+          subtext: store.activeTenant.name + " | Abrir biblioteca de aeroportos e manuais",
           execute: function () {
             stateData.panelOpen = true;
             stateData.activeView = "main";
@@ -2127,6 +2271,7 @@
   if (typeof exit === "function") {
     exit(function () {
       stopAuthPolling();
+      unfocusCoherentInput();
     });
   }
 
@@ -2157,6 +2302,7 @@
       findNearestSimAirportAndSearch: findNearestSimAirportAndSearch,
       fetchNotams: fetchNotams,
       renderAll: renderAll,
+      findClosest: findClosest,
     };
   }
 })();
