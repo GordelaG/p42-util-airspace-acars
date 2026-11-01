@@ -632,6 +632,10 @@ test('vOCC message sending, confirming read, and background toast alert work pro
   assert.deepEqual(sentBodies[0], {
     message: 'WILCO GATE B14'
   });
+
+  // Verify chat list automatically scrolled to the bottom message
+  const chatList = mockRoot.querySelector('#as-acars-chat-list');
+  assert.equal(chatList.scrollTop, chatList.scrollHeight, 'Chat must auto-scroll to bottom after message send/receive');
 });
 
 test('Airport & Documents search, HTML sanitizer, nearest MSFS airport, and Otto search bar work accurately', async () => {
@@ -783,9 +787,9 @@ test('Coherent GT compatibility: ASCII-escaped coui:// template JSON, findCloses
     'data-dragarea must be on .as-acars-brand so header action buttons stay clickable outside [data-dragarea]'
   );
   assert.equal(
-    /^\s*box-shadow\s*:/m.test(parsed.scripts[0].params.code_css),
+    /^\s*box-shadow\s*:\s*(?!none\b)\S+/m.test(parsed.scripts[0].params.code_css),
     false,
-    'code_css must not use box-shadow to avoid Coherent GT 9-slice shadow blur artifacts'
+    'code_css must not use active box-shadow to avoid Coherent GT 9-slice shadow blur artifacts'
   );
 
   // Test findClosest fallback when native .closest is absent (Chrome 49 / Coherent GT)

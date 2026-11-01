@@ -677,7 +677,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       }
 
       renderTabsBadge();
-      renderChatTab();
+      const isChatOpen = stateData.panelOpen && stateData.activeView === "main" && stateData.activeTab === "vocc";
+      renderChatTab(isChatOpen);
+      if (isChatOpen) {
+        scrollChatToBottom();
+      }
     } catch (_e) {
       // Ignore transient polling error
     }
@@ -988,6 +992,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
   function renderAll() {
     if (!rootEl) return;
+    cleanParentContainers(rootEl);
     const win = q("#as-acars-window");
     setVisible(win, stateData.panelOpen);
     if (stateData.panelOpen && win) {
@@ -1016,6 +1021,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       renderAuthView();
     } else {
       renderMainView();
+      if (stateData.panelOpen && stateData.activeTab === "vocc") {
+        scrollChatToBottom();
+      }
     }
   }
 
@@ -1242,7 +1250,27 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
   }
 
+  function scrollChatToBottom() {
+    if (!rootEl) return;
+    const feedEl = q("#as-acars-chat-list");
+    if (!feedEl) return;
+
+    feedEl.scrollTop = feedEl.scrollHeight;
+    setTimeout(function () {
+      if (feedEl) feedEl.scrollTop = feedEl.scrollHeight;
+    }, 20);
+    setTimeout(function () {
+      if (feedEl) feedEl.scrollTop = feedEl.scrollHeight;
+    }, 100);
+    setTimeout(function () {
+      if (feedEl) feedEl.scrollTop = feedEl.scrollHeight;
+    }, 300);
+  }
+
   function renderChatTab(scrollToEnd) {
+    if (scrollToEnd === undefined) {
+      scrollToEnd = true;
+    }
     if (!rootEl) return;
     const countEl = q("#as-acars-msg-count");
     const feedEl = q("#as-acars-chat-list");
@@ -1327,7 +1355,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       .join("");
 
     if (scrollToEnd) {
-      feedEl.scrollTop = feedEl.scrollHeight;
+      scrollChatToBottom();
     }
   }
 
@@ -1738,6 +1766,34 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
   }
 
+  // --- Container Cleanup (Strip Flow Pro component frame & blur artifacts) ---
+  function cleanParentContainers(el) {
+    if (!el) return;
+    try {
+      let curr = el;
+      while (curr && curr !== document.body) {
+        if (curr.classList) {
+          curr.classList.add("as-acars-clean-parent");
+        }
+        if (curr.style) {
+          curr.style.setProperty("background", "transparent", "important");
+          curr.style.setProperty("background-color", "transparent", "important");
+          curr.style.setProperty("border-color", "transparent", "important");
+          curr.style.setProperty("border-width", "0", "important");
+          curr.style.setProperty("box-shadow", "none", "important");
+          curr.style.setProperty("-webkit-box-shadow", "none", "important");
+          curr.style.setProperty("filter", "none", "important");
+          curr.style.setProperty("-webkit-filter", "none", "important");
+          curr.style.setProperty("backdrop-filter", "none", "important");
+          curr.style.setProperty("-webkit-backdrop-filter", "none", "important");
+        }
+        curr = curr.parentElement;
+      }
+    } catch (_err) {
+      // Ignore in mock/non-DOM environments
+    }
+  }
+
   // --- Event Binding inside Coherent GT ---
   function bindDomEvents(el) {
     // Listen for OS input bridge text updates in MSFS Coherent GT
@@ -1913,6 +1969,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
             confirmAllUnreadMessages();
           }
           renderMainView();
+          if (tabName === "vocc") {
+            scrollChatToBottom();
+          }
         }
         return;
       }
@@ -1923,6 +1982,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         const replyText = replyChip.getAttribute("data-reply");
         if (replyText) {
           sendChatMessage(replyText);
+          scrollChatToBottom();
         }
         return;
       }
@@ -1934,6 +1994,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           const val = input.value;
           input.value = "";
           sendChatMessage(val);
+          scrollChatToBottom();
         }
         return;
       }
@@ -2095,6 +2156,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   if (typeof html_created === "function") {
     html_created(function (el) {
       rootEl = el;
+      cleanParentContainers(el);
       bindDomEvents(el);
       fetchTenants();
       if (getActiveToken() && store.activeTenant) {
@@ -2119,6 +2181,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         }
         if (stateData.activeView === "tenants" && stateData.tenants.length === 0) {
           fetchTenants();
+        }
+        cleanParentContainers(rootEl);
+        if (stateData.activeTab === "vocc") {
+          scrollChatToBottom();
         }
       }
       renderAll();

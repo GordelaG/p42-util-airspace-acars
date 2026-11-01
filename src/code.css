@@ -21,8 +21,22 @@
   display: none !important;
 }
 
+/* Force strip any shadow, blur, or filter from Flow Pro wrapper containers */
+.as-acars-clean-parent {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* Main Floating Window - MUST have pointer-events: all because P42Flow html has pointer-events: none.
-   No box-shadow is used because Coherent GT 9-slice shadow rendering overflows on large 820x550 panels. */
+   No box-shadow, filter, or backdrop-filter is used to ensure 100% crisp render in MSFS 2024 Coherent GT. */
 .as-acars-window {
   position: absolute;
   top: 120px;
@@ -32,6 +46,12 @@
   background-color: rgba(12, 14, 18, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 10px;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -49,6 +69,12 @@
   border: 1px solid rgba(252, 26, 2, 0.65);
   border-left: 4px solid #fc1a02;
   border-radius: 10px;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   padding: 10px 12px;
   z-index: 9999;
   pointer-events: all;
