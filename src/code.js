@@ -28,7 +28,8 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     vocc_toast_enabled: true,
     auto_confirm_read: true,
     api_base_url: "https://airspace.ferrlab.com",
-    language: "pt-br",  // "pt-br" | "en" | "es" | "fr"
+    language: "en",     // "en" | "pt-br" | "es" | "fr" (Default: English)
+    white_mode: false,  // false = Dark Mode (default), true = White Mode / Light Theme
     toast_duration: 15, // seconds (0 to keep visible until clicked)
   };
 
@@ -104,6 +105,22 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC & Mensagens",
         docs: "Aeroportos & Documentos",
         flight: "Voo Ativo & NOTAMs",
+        settings: "Configura\u00e7\u00f5es",
+      },
+      settings: {
+        title: "Configura\u00e7\u00f5es do Aplicativo",
+        subtitle: "Personalize o idioma, alertas e visual do Airspace ACARS",
+        language_title: "Idioma da Interface",
+        language_sub: "Selecione o idioma preferido (salvo automaticamente)",
+        theme_title: "Tema Visual / White Mode",
+        theme_sub: "Alterne entre o tema escuro padrao e o modo claro (White Mode)",
+        theme_dark: "Tema Escuro (Padrao)",
+        theme_white: "White Mode (Modo Claro)",
+        toast_title: "Alertas Flutuantes do vOCC",
+        toast_sub: "Configure as notificacoes em tempo real no cockpit",
+        toast_enabled: "Ativar popups na cabine",
+        toast_duration: "Tempo de exibicao (segundos):",
+        toast_duration_hint: "(Use 0 para manter visivel ate ser fechado)",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Ativo",
@@ -199,6 +216,22 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC & Messages",
         docs: "Airports & Documents",
         flight: "Active Flight & NOTAMs",
+        settings: "Settings",
+      },
+      settings: {
+        title: "Application Settings",
+        subtitle: "Customize language, alerts, and visuals for Airspace ACARS",
+        language_title: "Interface Language",
+        language_sub: "Select your preferred language (saved automatically)",
+        theme_title: "Visual Theme / White Mode",
+        theme_sub: "Switch between standard dark mode and light mode (White Mode)",
+        theme_dark: "Dark Theme (Default)",
+        theme_white: "White Mode (Light)",
+        toast_title: "vOCC Floating Alerts",
+        toast_sub: "Configure real-time in-cockpit popup notifications",
+        toast_enabled: "Enable cockpit popups",
+        toast_duration: "Display duration (seconds):",
+        toast_duration_hint: "(Use 0 to keep visible until closed)",
       },
       vocc: {
         channel_active: "ACARS / vOCC Dispatch Channel Active",
@@ -294,6 +327,22 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC & Mensajes",
         docs: "Aeropuertos & Documentos",
         flight: "Vuelo Activo & NOTAMs",
+        settings: "Configuraci\u00f3n",
+      },
+      settings: {
+        title: "Configuraci\u00f3n de la Aplicaci\u00f3n",
+        subtitle: "Personalice idioma, alertas y tema visual de Airspace ACARS",
+        language_title: "Idioma de la Interfaz",
+        language_sub: "Seleccione el idioma preferido (guardado autom\u00e1ticamente)",
+        theme_title: "Tema Visual / White Mode",
+        theme_sub: "Alternar entre modo oscuro est\u00e1ndar y modo claro (White Mode)",
+        theme_dark: "Tema Oscuro (Predeterminado)",
+        theme_white: "White Mode (Modo Claro)",
+        toast_title: "Alertas Flotantes del vOCC",
+        toast_sub: "Configure las notificaciones emergentes en cabina",
+        toast_enabled: "Activar popups en cabina",
+        toast_duration: "Tiempo de visualizaci\u00f3n (segundos):",
+        toast_duration_hint: "(Use 0 para mantener visible hasta cerrar)",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Activo",
@@ -389,6 +438,22 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC & Messages",
         docs: "Aeroports & Documents",
         flight: "Vol Actif & NOTAMs",
+        settings: "Param\u00e8tres",
+      },
+      settings: {
+        title: "Param\u00e8tres de l'Application",
+        subtitle: "Personnalisez la langue, les alertes et le visuel d'Airspace ACARS",
+        language_title: "Langue de l'Interface",
+        language_sub: "S\u00e9lectionnez votre langue pr\u00e9f\u00e9r\u00e9e (sauvegard\u00e9e automatiquement)",
+        theme_title: "Th\u00e8me Visuel / White Mode",
+        theme_sub: "Basculez entre le mode sombre standard et le mode clair (White Mode)",
+        theme_dark: "Th\u00e8me Sombre (Par d\u00e9faut)",
+        theme_white: "White Mode (Mode Clair)",
+        toast_title: "Alertes Flottantes du vOCC",
+        toast_sub: "Configurez les alertes popup en temps r\u00e9el dans le cockpit",
+        toast_enabled: "Activer les popups cockpit",
+        toast_duration: "Dur\u00e9e d'affichage (secondes):",
+        toast_duration_hint: "(Utilisez 0 pour laisser visible jusqu'\u00e0 fermeture)",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Actif",
@@ -514,6 +579,26 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       const btn = langBtns[i];
       btn.classList.toggle("as-acars-lang-active", btn.getAttribute("data-lang") === currentLang);
     }
+
+    const langChoices = rootEl.querySelectorAll(".as-acars-lang-choice");
+    for (let i = 0; i < langChoices.length; i++) {
+      const choice = langChoices[i];
+      if (choice.getAttribute("data-lang") === currentLang) {
+        choice.classList.add("as-acars-choice-active");
+      } else {
+        choice.classList.remove("as-acars-choice-active");
+      }
+    }
+  }
+
+  function applyTheme() {
+    const root = rootEl || q("#as-acars-root");
+    if (!root) return;
+    if (store.white_mode) {
+      root.classList.add("as-acars-white-mode");
+    } else {
+      root.classList.remove("as-acars-white-mode");
+    }
   }
 
   // --- Runtime State ---
@@ -596,24 +681,6 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   // --- Flow Settings Definition ---
   if (typeof settings_define === "function") {
     settings_define({
-      language: {
-        type: "select",
-        label: "Idioma / Language",
-        description: "Selecione o idioma da interface (pt-br, en, es, fr)",
-        value: getLanguage(),
-        choices: {
-          "pt-br": { title: "Portugu\\u00eas (Brasil)" },
-          "en": { title: "English" },
-          "es": { title: "Espa\\u00f1ol" },
-          "fr": { title: "Fran\\u00e7ais" },
-        },
-        changed: (val) => {
-          store.language = val;
-          saveStore();
-          applyTranslations();
-          renderAll();
-        },
-      },
       toast_duration: {
         type: "text",
         label: "Tempo Alerta vOCC (segundos)",
@@ -1512,6 +1579,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   function renderAll() {
     if (!rootEl) return;
     cleanParentContainers(rootEl);
+    applyTheme();
     applyTranslations();
 
     const win = q("#as-acars-window");
@@ -1529,7 +1597,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (isAuthed && stateData.activeView !== "tenants" && stateData.activeView !== "auth") {
       stateData.activeView = "main";
     } else if (!isAuthed && stateData.activeView === "main") {
-      stateData.activeView = "tenants";
+      if (stateData.activeTab !== "settings") {
+        stateData.activeView = "tenants";
+      }
     }
 
     setVisible(q("#as-acars-view-tenants"), stateData.activeView === "tenants");
@@ -1756,7 +1826,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
   function renderMainView() {
     if (!rootEl) return;
-    const tabs = ["vocc", "docs", "flight"];
+    const tabs = ["vocc", "docs", "flight", "settings"];
     for (let i = 0; i < tabs.length; i++) {
       const t = tabs[i];
       const btn = q("#as-acars-tab-btn-" + t);
@@ -1776,6 +1846,42 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     renderBriefingShortcuts();
     renderDocsTab();
     renderFlightTab();
+    renderSettingsTab();
+  }
+
+  function renderSettingsTab() {
+    if (!rootEl) return;
+    const currentLang = getLanguage();
+    const langChoices = rootEl.querySelectorAll(".as-acars-lang-choice");
+    for (let i = 0; i < langChoices.length; i++) {
+      const btn = langChoices[i];
+      if (btn.getAttribute("data-lang") === currentLang) {
+        btn.classList.add("as-acars-choice-active");
+      } else {
+        btn.classList.remove("as-acars-choice-active");
+      }
+    }
+
+    const darkBtn = q("#as-acars-theme-dark");
+    const whiteBtn = q("#as-acars-theme-white");
+    if (darkBtn) {
+      if (!store.white_mode) darkBtn.classList.add("as-acars-choice-active");
+      else darkBtn.classList.remove("as-acars-choice-active");
+    }
+    if (whiteBtn) {
+      if (store.white_mode) whiteBtn.classList.add("as-acars-choice-active");
+      else whiteBtn.classList.remove("as-acars-choice-active");
+    }
+
+    const toastCheck = q("#as-acars-settings-toast-enable");
+    if (toastCheck) {
+      toastCheck.checked = store.vocc_toast_enabled !== undefined ? !!store.vocc_toast_enabled : true;
+    }
+
+    const toastTime = q("#as-acars-settings-toast-time");
+    if (toastTime) {
+      toastTime.value = String(store.toast_duration !== undefined ? store.toast_duration : 15);
+    }
   }
 
   function renderTabsBadge() {
@@ -2388,16 +2494,35 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
-      // Language picker buttons
-      const langBtn = findClosest(target, ".as-acars-lang-btn");
-      if (langBtn) {
-        const chosen = langBtn.getAttribute("data-lang");
+      // Language choices inside Settings tab
+      const langChoiceBtn = findClosest(target, ".as-acars-lang-choice");
+      if (langChoiceBtn) {
+        const chosen = langChoiceBtn.getAttribute("data-lang");
         if (chosen && I18N[chosen]) {
           store.language = chosen;
           saveStore();
           applyTranslations();
           renderAll();
         }
+        return;
+      }
+
+      // Theme choice inside Settings tab (White Mode toggle)
+      const themeChoiceBtn = findClosest(target, ".as-acars-theme-choice");
+      if (themeChoiceBtn) {
+        const theme = themeChoiceBtn.getAttribute("data-theme");
+        store.white_mode = theme === "white";
+        saveStore();
+        applyTheme();
+        renderSettingsTab();
+        return;
+      }
+
+      // Open Settings button in Header
+      if (findClosest(target, "#as-acars-btn-open-settings")) {
+        stateData.activeView = "main";
+        stateData.activeTab = "settings";
+        renderAll();
         return;
       }
 
@@ -2754,6 +2879,24 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         stateData.activeTab = "vocc";
         renderAll();
         scrollChatToBottom();
+      });
+    }
+
+    const toastCheck = q("#as-acars-settings-toast-enable");
+    if (toastCheck) {
+      toastCheck.addEventListener("change", function () {
+        store.vocc_toast_enabled = !!toastCheck.checked;
+        saveStore();
+        renderToast();
+      });
+    }
+
+    const toastTime = q("#as-acars-settings-toast-time");
+    if (toastTime) {
+      toastTime.addEventListener("change", function () {
+        const val = parseInt(toastTime.value, 10);
+        store.toast_duration = isNaN(val) || val < 0 ? 15 : val;
+        saveStore();
       });
     }
   }

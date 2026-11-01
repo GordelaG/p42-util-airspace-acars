@@ -1348,3 +1348,188 @@
   color: #a1a1aa;
   font-size: 11px;
 }
+
+/* Settings Tab Styles */
+.as-acars-settings-container {
+  padding: 12px 14px;
+  overflow-y: auto;
+  max-height: calc(550px - 95px);
+}
+
+.as-acars-settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.as-acars-card-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin: 2px 0 10px 0;
+}
+
+.as-acars-settings-lang-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.as-acars-lang-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 6px;
+  border-radius: 6px;
+  gap: 2px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.as-acars-lang-choice.as-acars-choice-active {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.as-acars-lang-name {
+  font-size: 12px;
+}
+
+.as-acars-lang-code {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.as-acars-settings-theme-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.as-acars-theme-choice {
+  flex: 1;
+  padding: 10px 14px;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.as-acars-theme-choice.as-acars-choice-active {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.as-acars-settings-toast-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.as-acars-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #f4f4f5;
+}
+
+.as-acars-checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.as-acars-settings-duration-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #d4d4d8;
+  margin-top: 4px;
+}
+
+/* White Mode / Light Theme */
+.as-acars-white-mode .as-acars-window {
+  background-color: #f4f5f8 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-header {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-app-title,
+.as-acars-white-mode .as-acars-title,
+.as-acars-white-mode .as-acars-h2,
+.as-acars-white-mode .as-acars-h3,
+.as-acars-white-mode .as-acars-card-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-tabs {
+  background-color: #e2e8f0 !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-tab {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-tab-active {
+  color: #0f172a !important;
+  border-bottom-color: #ef4444 !important;
+}
+
+.as-acars-white-mode .as-acars-card,
+.as-acars-white-mode .as-acars-auth-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-chat-feed,
+.as-acars-white-mode .as-acars-docs-viewer {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-chat-bubble-received {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-chat-bubble-sent {
+  background-color: #fee2e2 !important;
+  border: 1px solid #fca5a5 !important;
+  color: #991b1b !important;
+}
+
+.as-acars-white-mode .as-acars-input {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-sub,
+.as-acars-white-mode .as-acars-muted,
+.as-acars-white-mode .as-acars-card-hint,
+.as-acars-white-mode .as-acars-checkbox-label,
+.as-acars-white-mode .as-acars-settings-duration-wrap {
+  color: #475569 !important;
+}
+
+.as-acars-white-mode .as-acars-btn-outline {
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+
+.as-acars-white-mode .as-acars-btn-outline:hover {
+  background-color: #f1f5f9 !important;
+}

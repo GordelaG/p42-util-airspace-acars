@@ -214,7 +214,7 @@ function createMockDomFromCodeHtml() {
     root.appendChild(el);
   }
 
-  for (const tabName of ['vocc', 'docs', 'flight']) {
+  for (const tabName of ['vocc', 'docs', 'flight', 'settings']) {
     const btn = new MockElement('button', root);
     btn.setAttribute('class', 'as-acars-tab');
     btn.setAttribute('data-tab', tabName);
@@ -832,27 +832,40 @@ test('Coherent GT compatibility: ASCII-escaped coui:// template JSON, findCloses
   assert.equal(found, parentItem, 'findClosest must traverse from text/child nodes without native .closest');
 });
 
-test('Flow Pro settings_define exposes language select, toast_duration, and persists changes', () => {
-  const { hooks, instance } = createFlowTestHarness();
+test('Language removed from Flow wheel settings, defaults to English, and can be switched inside Settings tab with White Mode', () => {
+  const { hooks, instance, mockRoot } = createFlowTestHarness();
   assert.equal(typeof hooks.settings_define, 'object');
-  assert.ok(hooks.settings_define.language);
-  assert.equal(hooks.settings_define.language.type, 'select');
-  assert.ok(hooks.settings_define.language.choices['pt-br']);
-  assert.ok(hooks.settings_define.language.choices['en']);
-  assert.ok(hooks.settings_define.language.choices['es']);
-  assert.ok(hooks.settings_define.language.choices['fr']);
+  assert.equal(hooks.settings_define.language, undefined, 'Language must be removed from Flow wheel settings');
+  assert.equal(instance.store.language, 'en', 'Default language must be English');
 
   assert.ok(hooks.settings_define.toast_duration);
   assert.equal(hooks.settings_define.toast_duration.type, 'text');
   assert.equal(hooks.settings_define.toast_duration.value, '15');
 
-  // Test changing language through settings
-  hooks.settings_define.language.changed('en');
-  assert.equal(instance.store.language, 'en');
-
   // Test changing toast_duration through settings
   hooks.settings_define.toast_duration.changed('30');
   assert.equal(instance.store.toast_duration, 30);
+
+  // Mount DOM and test Settings tab language change
+  hooks.html_created(mockRoot);
+
+  const ptChoiceBtn = new MockElement('button', mockRoot);
+  ptChoiceBtn.setAttribute('class', 'as-acars-btn as-acars-lang-choice');
+  ptChoiceBtn.setAttribute('data-lang', 'pt-br');
+  mockRoot.appendChild(ptChoiceBtn);
+
+  mockRoot.dispatchEvent({ type: 'click', target: ptChoiceBtn, preventDefault() {}, stopPropagation() {} });
+  assert.equal(instance.store.language, 'pt-br', 'Clicking language choice inside settings tab must update store.language');
+
+  // Test White Mode toggle
+  const whiteThemeBtn = new MockElement('button', mockRoot);
+  whiteThemeBtn.setAttribute('class', 'as-acars-btn as-acars-theme-choice');
+  whiteThemeBtn.setAttribute('data-theme', 'white');
+  mockRoot.appendChild(whiteThemeBtn);
+
+  mockRoot.dispatchEvent({ type: 'click', target: whiteThemeBtn, preventDefault() {}, stopPropagation() {} });
+  assert.equal(instance.store.white_mode, true, 'Clicking White Mode choice must update store.white_mode to true');
+  assert.ok(mockRoot.classList.contains('as-acars-white-mode'), 'Root element must have .as-acars-white-mode class');
 });
 
 test('Toast auto-dismiss timer closes floating vOCC alert after configured duration', async () => {

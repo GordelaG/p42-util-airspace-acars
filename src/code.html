@@ -56,12 +56,18 @@
 
       <div class="as-acars-header-actions">
         <span class="as-acars-route-pill as-acars-hidden" id="as-acars-route-pill"></span>
-        <div class="as-acars-lang-picker" id="as-acars-lang-picker" title="Idioma / Language" data-i18n-title="header.lang_title">
-          <button type="button" class="as-acars-lang-btn as-acars-lang-active" data-lang="pt-br">PT</button>
-          <button type="button" class="as-acars-lang-btn" data-lang="en">EN</button>
-          <button type="button" class="as-acars-lang-btn" data-lang="es">ES</button>
-          <button type="button" class="as-acars-lang-btn" data-lang="fr">FR</button>
-        </div>
+        <button
+          type="button"
+          class="as-acars-btn as-acars-btn-ghost as-acars-btn-xs"
+          id="as-acars-btn-open-settings"
+          title="Configuracoes"
+          data-i18n-title="tabs.settings"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
         <button
           type="button"
           class="as-acars-btn as-acars-btn-ghost as-acars-btn-xs as-acars-hidden"
@@ -200,6 +206,9 @@
         </button>
         <button type="button" class="as-acars-tab" data-tab="flight" id="as-acars-tab-btn-flight">
           <span data-i18n="tabs.flight">Voo Ativo &amp; NOTAMs</span>
+        </button>
+        <button type="button" class="as-acars-tab" data-tab="settings" id="as-acars-tab-btn-settings">
+          <span data-i18n="tabs.settings">Configuracoes</span>
         </button>
       </div>
 
@@ -359,6 +368,68 @@
             </div>
             <div class="as-acars-notam-detail" id="as-acars-notam-detail">
               <div class="as-acars-empty-state" data-i18n="flight.select_notam">Selecione um NOTAM para ler.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: Application Settings -->
+      <div class="as-acars-tab-panel as-acars-hidden" id="as-acars-tab-settings">
+        <div class="as-acars-settings-container">
+          <div class="as-acars-settings-grid">
+            <!-- Language Card -->
+            <div class="as-acars-card">
+              <div class="as-acars-card-title" data-i18n="settings.language_title">Idioma da Interface</div>
+              <p class="as-acars-card-hint" data-i18n="settings.language_sub">Selecione o idioma preferido (salvo automaticamente)</p>
+              <div class="as-acars-settings-lang-grid" id="as-acars-settings-lang-grid">
+                <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-lang-choice" data-lang="en">
+                  <span class="as-acars-lang-name">English</span>
+                  <span class="as-acars-lang-code">EN</span>
+                </button>
+                <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-lang-choice" data-lang="pt-br">
+                  <span class="as-acars-lang-name">Portugues</span>
+                  <span class="as-acars-lang-code">PT-BR</span>
+                </button>
+                <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-lang-choice" data-lang="es">
+                  <span class="as-acars-lang-name">Espanol</span>
+                  <span class="as-acars-lang-code">ES</span>
+                </button>
+                <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-lang-choice" data-lang="fr">
+                  <span class="as-acars-lang-name">Francais</span>
+                  <span class="as-acars-lang-code">FR</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Theme / White Mode Card -->
+            <div class="as-acars-card">
+              <div class="as-acars-card-title" data-i18n="settings.theme_title">Tema Visual / White Mode</div>
+              <p class="as-acars-card-hint" data-i18n="settings.theme_sub">Alterne entre o tema escuro padrao e o modo claro (White Mode)</p>
+              <div class="as-acars-settings-theme-toggle">
+                <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-theme-choice" id="as-acars-theme-dark" data-theme="dark" data-i18n="settings.theme_dark">
+                  Tema Escuro (Padrao)
+                </button>
+                <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-theme-choice" id="as-acars-theme-white" data-theme="white" data-i18n="settings.theme_white">
+                  White Mode (Modo Claro)
+                </button>
+              </div>
+            </div>
+
+            <!-- Toast / Popup Card -->
+            <div class="as-acars-card">
+              <div class="as-acars-card-title" data-i18n="settings.toast_title">Alertas Flutuantes do vOCC</div>
+              <p class="as-acars-card-hint" data-i18n="settings.toast_sub">Configure as notificacoes em tempo real no cockpit</p>
+              <div class="as-acars-settings-toast-options">
+                <label class="as-acars-checkbox-label">
+                  <input type="checkbox" id="as-acars-settings-toast-enable" checked />
+                  <span data-i18n="settings.toast_enabled">Ativar popups na cabine</span>
+                </label>
+                <div class="as-acars-settings-duration-wrap">
+                  <span data-i18n="settings.toast_duration">Tempo de exibicao (segundos):</span>
+                  <input type="number" min="0" max="300" step="5" id="as-acars-settings-toast-time" class="as-acars-input as-acars-input-sm" style="width: 70px; text-align: center;" />
+                  <span class="as-acars-muted as-acars-xs" data-i18n="settings.toast_duration_hint">(Use 0 para manter visivel ate ser fechado)</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
