@@ -892,5 +892,44 @@ test('Toast auto-dismiss timer closes floating vOCC alert after configured durat
   assert.equal(toastEl.classList.contains('as-acars-hidden'), true);
 });
 
+test('Toast close button and dismiss link immediately dismiss the toast notification', async () => {
+  const mockFetch = async (url) => {
+    if (url.includes('/api/v2/acars/messages')) {
+      return makeJsonResponse(200, {
+        data: [
+          {
+            id: 888,
+            sender: { id: 88, name: 'vOCC OCC', role: 'occ' },
+            message: 'TEST DISMISS BUTTON',
+            read_at: null,
+            sent_at: new Date().toISOString()
+          }
+        ]
+      });
+    }
+    return makeJsonResponse(200, { data: [] });
+  };
+
+  const { hooks, instance, mockRoot } = createFlowTestHarness(mockFetch);
+  instance.store.activeTenant = { id: 'samba', name: 'Samba Virtual', domain: 'samba.airspace.ferrlab.com' };
+  instance.store.storedTokens = { samba: { token: 'tok-123', tenant: instance.store.activeTenant } };
+  instance.store.toast_duration = 30; // 30s timeout so it does not auto-close
+  instance.state.panelOpen = false;
+
+  hooks.html_created(mockRoot);
+  await new Promise((r) => setTimeout(r, 40));
+
+  assert.ok(instance.state.toastMessage, 'Toast message should be shown');
+  const toastEl = mockRoot.querySelector('#as-acars-toast');
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), false);
+
+  const closeBtn = mockRoot.querySelector('#as-acars-toast-close');
+  assert.ok(closeBtn, '#as-acars-toast-close must exist');
+  closeBtn.dispatchEvent({ type: 'click', target: closeBtn, preventDefault() {}, stopPropagation() {} });
+
+  assert.equal(instance.state.toastMessage, null, 'Toast message should be cleared after clicking X');
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), true, 'Toast element should be hidden after clicking X');
+});
+
 
 

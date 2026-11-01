@@ -1,5 +1,15 @@
 /* Airspace ACARS - Parallel 42 Flow Widget Styles (MSFS 2024 Coherent GT / Chrome 49 Compatible) */
 
+@font-face {
+  font-family: "Roboto Mono Regular";
+  src: url("/Fonts/RobotoMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto Mono Bold";
+  src: url("/Fonts/RobotoMono-Bold.ttf") format("truetype");
+}
+
 .as-acars-root {
   font-family: Roboto-Regular, Roboto, Arial, sans-serif;
   color: #f4f4f5;
@@ -59,15 +69,16 @@
   pointer-events: all;
 }
 
-/* Floating vOCC Toast Notification - Clean HUD Card Style */
+/* Floating vOCC Toast Notification - Clean Solid Card Style (matching Simbrief HUD) */
 .as-acars-toast {
   position: absolute;
   top: 70px;
   left: 60%;
-  width: 380px;
-  max-width: 90vw;
-  background-color: rgba(28, 30, 34, 0.96);
-  border: 1px solid rgba(80, 80, 80, 0.55);
+  width: 440px;
+  max-width: 92vw;
+  background: #1c1e22 !important;
+  background-color: #1c1e22 !important;
+  border: 1px solid rgba(100, 105, 115, 0.6) !important;
   border-radius: 6px;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
@@ -79,7 +90,7 @@
   z-index: 9999;
   pointer-events: all;
   box-sizing: border-box;
-  font-family: "Roboto Mono", "Consolas", "Courier New", monospace;
+  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", "Courier New", monospace;
   overflow: hidden;
 }
 
@@ -87,60 +98,69 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgba(60, 64, 72, 0.65);
-  border-bottom: 1px solid rgba(80, 80, 80, 0.45);
-  padding: 6px 10px;
+  background-color: #2c3038 !important;
+  border-bottom: 1px solid rgba(100, 105, 115, 0.45) !important;
+  padding: 6px 12px;
   pointer-events: all;
-  cursor: move;
+  box-sizing: border-box;
 }
 
 .as-acars-toast-title {
   display: flex;
   align-items: center;
   flex: 1;
-  font-family: "Roboto Mono", "Consolas", monospace;
-  font-size: 11px;
-  font-weight: 600;
+  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", monospace;
+  font-size: 12.5px;
+  font-weight: 700;
   letter-spacing: 0.02em;
-  color: #d4d4d8;
-  pointer-events: none;
+  color: #e4e4e7;
+  cursor: move;
+  user-select: none;
 }
 
 .as-acars-toast-title > * + * {
-  margin-left: 6px;
+  margin-left: 8px;
+}
+
+.as-acars-toast-actions-header {
+  display: flex;
+  align-items: center;
 }
 
 .as-acars-toast-close {
   background: transparent;
   border: none;
   color: #9ca3af;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  padding: 2px 6px;
+  padding: 3px 8px;
   line-height: 1;
-  border-radius: 3px;
+  border-radius: 4px;
   pointer-events: all;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .as-acars-toast-close:hover {
   color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .as-acars-toast-body {
-  font-family: "Roboto Mono", "Consolas", monospace;
-  font-size: 12px;
-  line-height: 1.55;
-  color: #f4f4f5;
-  padding: 10px 12px;
+  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", "Courier New", monospace;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: #ffffff !important;
+  font-weight: 500;
+  padding: 14px 16px;
   margin: 0;
   max-height: none !important;
   overflow: visible !important;
   overflow-y: visible !important;
   white-space: pre-wrap;
   word-break: break-word;
-  background: transparent;
+  background: #1c1e22 !important;
+  background-color: #1c1e22 !important;
   border: none;
   border-radius: 0;
 }
@@ -149,21 +169,23 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 0 10px 10px 10px;
-  gap: 6px;
+  padding: 0 14px 14px 14px;
+  gap: 8px;
+  background: #1c1e22 !important;
+  background-color: #1c1e22 !important;
 }
 
 .as-acars-toast-btn {
   display: block;
   width: 100%;
-  background-color: rgba(75, 80, 90, 0.55);
-  border: 1px solid rgba(130, 135, 145, 0.45);
-  border-radius: 4px;
-  padding: 6px 12px;
+  background-color: rgba(75, 80, 92, 0.75);
+  border: 1px solid rgba(135, 142, 155, 0.55);
+  border-radius: 5px;
+  padding: 8px 16px;
   text-align: center;
   color: #ffffff;
-  font-family: "Roboto Mono", "Segoe UI", monospace;
-  font-size: 11.5px;
+  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", monospace;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   box-sizing: border-box;
@@ -171,8 +193,8 @@
 }
 
 .as-acars-toast-btn:hover {
-  background-color: rgba(110, 115, 125, 0.85);
-  border-color: rgba(160, 165, 175, 0.7);
+  background-color: rgba(95, 102, 115, 0.95);
+  border-color: rgba(165, 172, 185, 0.8);
 }
 
 .as-acars-toast-dismiss {
@@ -180,16 +202,16 @@
   text-align: center;
   background: transparent;
   border: none;
-  font-family: "Roboto Mono", "Segoe UI", monospace;
-  font-size: 10px;
+  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", monospace;
+  font-size: 11px;
   color: #9ca3af;
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 4px 6px;
   transition: color 0.15s ease;
 }
 
 .as-acars-toast-dismiss:hover {
-  color: #e4e4e7;
+  color: #ffffff;
   text-decoration: underline;
 }
 

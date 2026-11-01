@@ -2309,9 +2309,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
   // --- Container Cleanup (Strip Flow Pro component frame & blur artifacts) ---
   function cleanParentContainers(el) {
-    if (!el) return;
+    if (!el || !el.parentElement) return;
     try {
-      let curr = el;
+      let curr = el.parentElement;
       while (curr && curr !== document.body) {
         if (curr.classList) {
           curr.classList.add("as-acars-clean-parent");
@@ -2707,6 +2707,53 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         if (stateData.toastMessage && !stateData.panelOpen && store.vocc_toast_enabled) {
           startToastTimer();
         }
+      });
+    }
+
+    const toastCloseBtn = q("#as-acars-toast-close");
+    if (toastCloseBtn) {
+      toastCloseBtn.addEventListener("mousedown", function (e) {
+        e.stopPropagation();
+      });
+      toastCloseBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        dismissToast();
+      });
+    }
+
+    const toastDismissBtn = q("#as-acars-toast-dismiss");
+    if (toastDismissBtn) {
+      toastDismissBtn.addEventListener("mousedown", function (e) {
+        e.stopPropagation();
+      });
+      toastDismissBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (stateData.toastMessage) {
+          confirmMessageById(stateData.toastMessage.id);
+        }
+        dismissToast();
+      });
+    }
+
+    const toastOpenBtn = q("#as-acars-toast-open");
+    if (toastOpenBtn) {
+      toastOpenBtn.addEventListener("mousedown", function (e) {
+        e.stopPropagation();
+      });
+      toastOpenBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (stateData.toastMessage) {
+          confirmMessageById(stateData.toastMessage.id);
+        }
+        dismissToast();
+        stateData.panelOpen = true;
+        stateData.activeView = "main";
+        stateData.activeTab = "vocc";
+        renderAll();
+        scrollChatToBottom();
       });
     }
   }

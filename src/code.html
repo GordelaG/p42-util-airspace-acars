@@ -6,13 +6,17 @@
     data-dragtarget="airspace_acars_toast"
     data-defaultx="65"
     data-defaulty="8"
+    data-defaultoffsetx="0"
+    data-defaultoffsety="0"
   >
-    <div class="as-acars-toast-header" data-dragarea="airspace_acars_toast">
-      <div class="as-acars-toast-title">
+    <div class="as-acars-toast-header">
+      <div class="as-acars-toast-title" data-dragarea="airspace_acars_toast">
         <span class="as-acars-pulse-dot"></span>
         <span id="as-acars-toast-sender">vOCC DISPATCH</span>
       </div>
-      <button type="button" class="as-acars-toast-close" id="as-acars-toast-close" title="Dispensar" data-i18n-title="toast.close_title">X</button>
+      <div class="as-acars-toast-actions-header">
+        <button type="button" class="as-acars-toast-close" id="as-acars-toast-close" title="Dispensar" data-i18n-title="toast.close_title">X</button>
+      </div>
     </div>
     <div class="as-acars-toast-body" id="as-acars-toast-text"></div>
     <div class="as-acars-toast-actions">
