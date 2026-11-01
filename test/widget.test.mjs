@@ -776,8 +776,8 @@ test('Coherent GT compatibility: ASCII-escaped coui:// template JSON, findCloses
   assert.equal(/[\u0080-\uffff]/.test(parsed.scripts[0].params.code_js), false, 'Deserialized code_js must be 100% ASCII for FlowShare');
   assert.equal(/[\u0080-\uffff]/.test(parsed.scripts[0].params.code_html), false, 'Deserialized code_html must be 100% ASCII for FlowShare');
   assert.equal(/[\u0080-\uffff]/.test(parsed.scripts[0].params.code_css), false, 'Deserialized code_css must be 100% ASCII for FlowShare');
-  assert.ok(parsed.scripts[0].params.code_html.includes('Selecione sua Companhia A&eacute;rea'));
-  assert.ok(parsed.scripts[0].params.code_html.includes('Abrir P&aacute;gina de Autoriza&ccedil;&atilde;o'));
+  assert.ok(parsed.scripts[0].params.code_html.includes('Selecione sua Companhia Aerea'));
+  assert.ok(parsed.scripts[0].params.code_html.includes('Abrir Pagina de Autorizacao'));
   assert.ok(
     parsed.scripts[0].params.code_html.includes('<div class="as-acars-brand" data-dragarea="airspace_acars_panel">'),
     'data-dragarea must be on .as-acars-brand so header action buttons stay clickable outside [data-dragarea]'

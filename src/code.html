@@ -84,17 +84,17 @@
       <div class="as-acars-auth-container">
         <div class="as-acars-auth-card">
           <div class="as-acars-auth-header">
-            <h2 class="as-acars-h2">Selecione sua Companhia A&eacute;rea</h2>
-            <p class="as-acars-sub">Conecte o Flow (MSFS 2024) diretamente &agrave; sua VA no Airspace</p>
+            <h2 class="as-acars-h2">Selecione sua Companhia Aerea</h2>
+            <p class="as-acars-sub">Conecte o Flow (MSFS 2024) diretamente a sua VA no Airspace</p>
           </div>
 
           <div class="as-acars-hidden" id="as-acars-saved-tenants-wrap">
-            <div class="as-acars-section-label">Sess&otilde;es Salvas (1-Clique)</div>
+            <div class="as-acars-section-label">Sessoes Salvas (1-Clique)</div>
             <div class="as-acars-tenant-list as-acars-saved-list" id="as-acars-saved-tenants-list"></div>
             <div class="as-acars-divider"></div>
           </div>
 
-          <div class="as-acars-section-label">Organiza&ccedil;&otilde;es Dispon&iacute;veis</div>
+          <div class="as-acars-section-label">Organizacoes Disponiveis</div>
           <div class="as-acars-search-box">
             <input
               type="text"
@@ -106,7 +106,7 @@
           </div>
 
           <div class="as-acars-tenant-list" id="as-acars-tenants-list">
-            <div class="as-acars-empty-state">Carregando companhias a&eacute;reas...</div>
+            <div class="as-acars-empty-state">Carregando companhias aereas...</div>
           </div>
 
           <div class="as-acars-auth-footer">
@@ -124,31 +124,43 @@
         <div class="as-acars-auth-card as-acars-center">
           <div class="as-acars-auth-header">
             <h2 class="as-acars-h2">Autorizar Dispositivo</h2>
-            <p class="as-acars-sub" id="as-acars-auth-va-name">Conectando &agrave; VA</p>
+            <p class="as-acars-sub" id="as-acars-auth-va-name">Conectando a VA</p>
           </div>
 
           <div class="as-acars-code-box">
-            <span class="as-acars-code-label">Digite este c&oacute;digo em /acars/authorize</span>
+            <span class="as-acars-code-label">Digite este codigo em /acars/authorize</span>
             <div class="as-acars-code-value" id="as-acars-device-code">------</div>
-            <div class="as-acars-auth-url" id="as-acars-auth-url">https://samba.airspace.ferrlab.com/acars/authorize?code=------</div>
+            <a
+              class="as-acars-auth-url"
+              id="as-acars-auth-url"
+              href="https://samba.airspace.ferrlab.com/acars/authorize"
+              target="_blank"
+              onclick="if(typeof OpenBrowser==='function'){OpenBrowser(this.href);return false;}"
+            >https://samba.airspace.ferrlab.com/acars/authorize?code=------</a>
           </div>
 
           <div class="as-acars-auth-buttons">
-            <button type="button" class="as-acars-btn as-acars-btn-primary" id="as-acars-btn-open-auth">
-              Abrir P&aacute;gina de Autoriza&ccedil;&atilde;o
-            </button>
+            <a
+              href="https://samba.airspace.ferrlab.com/acars/authorize"
+              class="as-acars-btn as-acars-btn-primary"
+              id="as-acars-btn-open-auth"
+              target="_blank"
+              onclick="if(typeof OpenBrowser==='function'){OpenBrowser(this.href);return false;}"
+            >
+              Abrir Pagina de Autorizacao
+            </a>
             <button type="button" class="as-acars-btn as-acars-btn-outline" id="as-acars-btn-copy-code">
-              Copiar C&oacute;digo
+              Copiar Codigo
             </button>
           </div>
 
           <div class="as-acars-auth-status" id="as-acars-auth-status">
-            Aguardando aprova&ccedil;&atilde;o no navegador...
+            Aguardando aprovacao no navegador...
           </div>
 
           <div class="as-acars-auth-footer">
             <button type="button" class="as-acars-btn as-acars-btn-ghost as-acars-btn-sm" id="as-acars-btn-retry-auth">
-              Gerar Novo C&oacute;digo
+              Gerar Novo Codigo
             </button>
             <button type="button" class="as-acars-btn as-acars-btn-ghost as-acars-btn-sm" id="as-acars-btn-back-tenants">
               Voltar para Lista de VAs
@@ -189,7 +201,7 @@
         </div>
 
         <div class="as-acars-quick-replies">
-          <span class="as-acars-quick-label">Respostas R&aacute;pidas:</span>
+          <span class="as-acars-quick-label">Respostas Rapidas:</span>
           <button type="button" class="as-acars-chip" data-reply="WILCO">WILCO</button>
           <button type="button" class="as-acars-chip" data-reply="ROGER">ROGER</button>
           <button type="button" class="as-acars-chip" data-reply="YES">YES</button>
@@ -218,14 +230,14 @@
         <div class="as-acars-briefing-bar" id="as-acars-briefing-bar">
           <div class="as-acars-briefing-bar-left">
             <span class="as-acars-briefing-title">Atalhos de Aeroporto:</span>
-            <span class="as-acars-briefing-route" id="as-acars-briefing-route-label">Pesquisa r&aacute;pida ICAO</span>
+            <span class="as-acars-briefing-route" id="as-acars-briefing-route-label">Pesquisa rapida ICAO</span>
           </div>
           <div class="as-acars-briefing-shortcuts" id="as-acars-briefing-shortcuts">
             <button type="button" class="as-acars-chip as-acars-chip-accent as-acars-hidden" id="as-acars-btn-dep-icao"></button>
             <button type="button" class="as-acars-chip as-acars-chip-accent as-acars-hidden" id="as-acars-btn-arr-icao"></button>
             <button type="button" class="as-acars-chip as-acars-chip-accent as-acars-hidden" id="as-acars-btn-alt-icao"></button>
             <button type="button" class="as-acars-chip" id="as-acars-btn-near-icao" title="Buscar aeroporto mais proximo da aeronave no MSFS">
-              Aeroporto Pr&oacute;ximo (Sim)
+              Aeroporto Proximo (Sim)
             </button>
           </div>
         </div>
@@ -292,7 +304,7 @@
             </div>
             <div class="as-acars-docs-reader-body" id="as-acars-doc-body">
               <div class="as-acars-empty-state">
-                Selecione um briefing de aeroporto ou manual na lista ao lado, ou digite o c&oacute;digo ICAO na barra Otto do Flow (ex: <code>doc SBGR</code>).
+                Selecione um briefing de aeroporto ou manual na lista ao lado, ou digite o codigo ICAO na barra Otto do Flow (ex: <code>doc SBGR</code>).
               </div>
             </div>
           </div>

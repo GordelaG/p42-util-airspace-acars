@@ -433,7 +433,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           return t.id && t.domain;
         });
     } catch (_err) {
-      stateData.tenantsError = "N\u00e3o foi poss\u00edvel carregar a lista de companhias a\u00e9reas.";
+      stateData.tenantsError = "Nao foi possivel carregar a lista de companhias aereas.";
     } finally {
       stateData.tenantsLoading = false;
       renderTenantsView();
@@ -757,7 +757,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
     return {
       id: id,
-      title: String(d.title || "Sem t\u00edtulo"),
+      title: String(d.title || "Sem titulo"),
       type: docType,
       parent_id: parentId,
       visibility: String(d.visibility || "public"),
@@ -805,7 +805,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         selectDocument(firstReadable.id);
       }
     } catch (_e) {
-      stateData.docsError = "N\u00e3o foi poss\u00edvel carregar os documentos da companhia.";
+      stateData.docsError = "Nao foi possivel carregar os documentos da companhia.";
     } finally {
       stateData.docsLoading = false;
       renderDocsTab();
@@ -1121,7 +1121,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
 
     if (stateData.tenantsLoading) {
-      listEl.innerHTML = '<div class="as-acars-empty-state">Carregando companhias a\u00e9reas...</div>';
+      listEl.innerHTML = '<div class="as-acars-empty-state">Carregando companhias aereas...</div>';
       return;
     }
     if (stateData.tenantsError) {
@@ -1139,7 +1139,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     });
 
     if (filtered.length === 0) {
-      listEl.innerHTML = '<div class="as-acars-empty-state">Nenhuma companhia a\u00e9rea encontrada.</div>';
+      listEl.innerHTML = '<div class="as-acars-empty-state">Nenhuma companhia aerea encontrada.</div>';
       return;
     }
 
@@ -1171,31 +1171,39 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const vaNameEl = q("#as-acars-auth-va-name");
     const codeEl = q("#as-acars-device-code");
     const urlEl = q("#as-acars-auth-url");
+    const openAuthBtn = q("#as-acars-btn-open-auth");
     const statusEl = q("#as-acars-auth-status");
     const pending = stateData.pendingTenant;
     const baseUrl = getTenantBaseUrl(pending) || "https://samba.airspace.ferrlab.com";
+    const fullAuthUrl =
+      baseUrl + "/acars/authorize?code=" + (stateData.deviceCode ? encodeURIComponent(stateData.deviceCode) : "");
 
     if (vaNameEl) {
-      vaNameEl.textContent = pending ? "Conectando a " + pending.name + " (" + pending.domain + ")" : "Conectando \u00e0 VA";
+      vaNameEl.textContent = pending ? "Conectando a " + pending.name + " (" + pending.domain + ")" : "Conectando a VA";
     }
     if (codeEl) {
       codeEl.textContent = stateData.deviceCode || "------";
     }
     if (urlEl) {
+      urlEl.href = fullAuthUrl;
       urlEl.textContent =
-        baseUrl + "/acars/authorize?code=" + (stateData.deviceCode ? encodeURIComponent(stateData.deviceCode) : "------");
+        baseUrl + "/acars/authorize?code=" + (stateData.deviceCode || "------");
+    }
+    if (openAuthBtn) {
+      openAuthBtn.href = fullAuthUrl;
+      openAuthBtn.setAttribute("data-href", fullAuthUrl);
     }
     if (statusEl) {
       if (stateData.authStatus === "idle") {
-        statusEl.textContent = "Gerando c\u00f3digo de autoriza\u00e7\u00e3o...";
+        statusEl.textContent = "Gerando codigo de autorizacao...";
       } else if (stateData.authStatus === "polling") {
-        statusEl.textContent = "Aguardando aprova\u00e7\u00e3o no navegador...";
+        statusEl.textContent = "Aguardando aprovacao no navegador...";
       } else if (stateData.authStatus === "success") {
         statusEl.textContent = "Dispositivo autorizado com sucesso!";
       } else if (stateData.authStatus === "expired") {
-        statusEl.textContent = "C\u00f3digo expirado. Clique em 'Gerar Novo C\u00f3digo'.";
+        statusEl.textContent = "Codigo expirado. Clique em 'Gerar Novo Codigo'.";
       } else {
-        statusEl.textContent = "Falha ao solicitar c\u00f3digo. Tente novamente.";
+        statusEl.textContent = "Falha ao solicitar codigo. Tente novamente.";
       }
     }
   }
@@ -1336,7 +1344,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const alt = b && b.alternate_airport && b.alternate_airport.icao ? String(b.alternate_airport.icao) : "";
 
     if (routeLabel) {
-      routeLabel.textContent = dep || arr ? (dep || "----") + " -> " + (arr || "----") : "Pesquisa r\u00e1pida por ICAO";
+      routeLabel.textContent = dep || arr ? (dep || "----") + " -> " + (arr || "----") : "Pesquisa rapida por ICAO";
     }
 
     setVisible(depBtn, Boolean(dep));
@@ -1477,7 +1485,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (!bodyEl) return;
 
     if (stateData.detailDocLoading && !activeDoc.content && activeDoc.type !== "folder") {
-      bodyEl.innerHTML = '<div class="as-acars-empty-state">Carregando conte\u00fado do documento...</div>';
+      bodyEl.innerHTML = '<div class="as-acars-empty-state">Carregando conteudo do documento...</div>';
       return;
     }
 
@@ -1486,7 +1494,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return d.parent_id === activeDoc.id;
       });
       if (children.length === 0) {
-        bodyEl.innerHTML = '<div class="as-acars-empty-state">Esta pasta est\u00e1 vazia.</div>';
+        bodyEl.innerHTML = '<div class="as-acars-empty-state">Esta pasta esta vazia.</div>';
       } else {
         bodyEl.innerHTML =
           '<div class="as-acars-folder-grid">' +
@@ -1517,7 +1525,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (activeDoc.type === "pdf" || activeDoc.file_url) {
       bodyEl.innerHTML =
         '<div class="as-acars-empty-state">' +
-        "<p>Este documento est\u00e1 em formato <strong>PDF</strong> (" +
+        "<p>Este documento esta em formato <strong>PDF</strong> (" +
         escapeHtml(activeDoc.title) +
         ").</p>" +
         '<button type="button" class="as-acars-btn as-acars-btn-primary" data-open-url="' +
@@ -1527,7 +1535,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       return;
     }
 
-    bodyEl.innerHTML = '<div class="as-acars-empty-state">Nenhum conte\u00fado dispon\u00edvel para este documento.</div>';
+    bodyEl.innerHTML = '<div class="as-acars-empty-state">Nenhum conteudo disponivel para este documento.</div>';
   }
 
   function renderFlightTab() {
@@ -1567,7 +1575,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (pilotEl) {
       const p = stateData.pilot;
       if (!p) {
-        pilotEl.innerHTML = '<div class="as-acars-empty-state">Dados do piloto indispon\u00edveis.</div>';
+        pilotEl.innerHTML = '<div class="as-acars-empty-state">Dados do piloto indisponiveis.</div>';
       } else {
         const pName = p.name || (p.profile && p.profile.name) || "Piloto";
         const pCallsign = p.callsign || (p.profile && p.profile.callsign) || "-";
@@ -1873,7 +1881,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         const statusEl = q("#as-acars-auth-status");
         if (statusEl) {
           statusEl.textContent = stateData.deviceCode
-            ? "Navegador aberto em " + url + " (c\u00f3digo " + stateData.deviceCode + " copiado!)"
+            ? "Navegador aberto em " + url + " (codigo " + stateData.deviceCode + " copiado!)"
             : "Navegador aberto em " + url;
         }
         return;
@@ -1883,7 +1891,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           copyToClipboard(stateData.deviceCode);
           const statusEl = q("#as-acars-auth-status");
           if (statusEl) {
-            statusEl.textContent = "C\u00f3digo " + stateData.deviceCode + " copiado! Acesse " + getTenantBaseUrl(stateData.pendingTenant) + "/acars/authorize";
+            statusEl.textContent = "Codigo " + stateData.deviceCode + " copiado! Acesse " + getTenantBaseUrl(stateData.pendingTenant) + "/acars/authorize";
           }
         }
         return;
@@ -2152,7 +2160,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   if (typeof info === "function") {
     info(function () {
       if (!getActiveToken() || !store.activeTenant) {
-        return "Airspace ACARS - Clique para conectar \u00e0 sua VA";
+        return "Airspace ACARS - Clique para conectar a sua VA";
       }
       const unread = getUnreadMessages();
       if (unread.length > 0) {
@@ -2200,7 +2208,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           {
             uid: "airspace_acars_connect",
             label: "Conectar ao Airspace ACARS",
-            subtext: "Clique para selecionar sua companhia a\u00e9rea (VA) e autenticar via c\u00f3digo",
+            subtext: "Clique para selecionar sua companhia aerea (VA) e autenticar via codigo",
             execute: function () {
               stateData.panelOpen = true;
               stateData.activeView = "tenants";
