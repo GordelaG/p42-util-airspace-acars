@@ -4,7 +4,7 @@
 
 #define MyAppName "Airspace ACARS"
 #ifndef MyAppVersion
-#define MyAppVersion "1.0.21"
+#define MyAppVersion "1.0.22"
 #endif
 #define MyAppPublisher "Airspace Team (FerrLab)"
 #define MyAppURL "https://airspace.ferrlab.com"
@@ -21,7 +21,7 @@ AppUpdatesURL=https://github.com/GordelaG/p42-util-airspace-acars/releases
 DefaultDirName={code:GetDefaultCommunityDir}
 DisableProgramGroupPage=yes
 DisableDirPage=no
-AlwaysShowDirOnMerges=yes
+UsePreviousAppDir=no
 LicenseFile=installer\TERMOS-DE-USO.txt
 OutputDir=installer_output
 OutputBaseFilename=AirspaceACARS-Setup
