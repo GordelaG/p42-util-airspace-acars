@@ -20,7 +20,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     null;
 
   // --- Version & Releases ---
-  const APP_VERSION = "1.0.16";
+  const APP_VERSION = "1.0.17";
   const GITHUB_REPO_OWNER = "GordelaG";
   const GITHUB_REPO_NAME = "p42-util-airspace-acars";
   const REPO_RELEASES_URL = "https://github.com/" + GITHUB_REPO_OWNER + "/" + GITHUB_REPO_NAME + "/releases/latest";
@@ -2017,7 +2017,14 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       }
     }
 
-    setVisible(btnHeaderHome, isAuthed && stateData.activeView === "main" && stateData.activeTab !== "home");
+    setVisible(btnHeaderHome, isAuthed && stateData.activeView === "main");
+    if (btnHeaderHome) {
+      if (stateData.activeTab === "home") {
+        btnHeaderHome.classList.add("as-acars-btn-active");
+      } else {
+        btnHeaderHome.classList.remove("as-acars-btn-active");
+      }
+    }
     setVisible(btnSwitchVa, isAuthed || stateData.activeView === "auth");
 
     const b = stateData.booking;

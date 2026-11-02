@@ -327,6 +327,43 @@
   color: #38bdf8;
 }
 
+/* Header Home Button */
+#as-acars-btn-header-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #f1f5f9;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+#as-acars-btn-header-home svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+#as-acars-btn-header-home:hover {
+  background: #2563eb !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+#as-acars-btn-header-home.as-acars-btn-active {
+  background: rgba(37, 99, 235, 0.25);
+  border-color: #3b82f6;
+  color: #93c5fd;
+}
+
 /* Views */
 .as-acars-view {
   display: flex;
@@ -712,6 +749,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
+  margin-bottom: 18px;
 }
 
 .as-acars-tablet-pilot-info {
@@ -746,8 +784,9 @@
 .as-acars-tablet-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 14px;
-  padding: 6px 0;
+  gap: 18px 16px;
+  padding: 14px 0 16px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .as-acars-tablet-tile {
@@ -2713,9 +2752,32 @@
   color: #ffffff !important;
 }
 
+.as-acars-white-mode #as-acars-btn-header-home {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.as-acars-white-mode #as-acars-btn-header-home:hover {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+.as-acars-white-mode #as-acars-btn-header-home.as-acars-btn-active {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+
 .as-acars-white-mode .as-acars-tablet-status-card {
   background-color: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
+  margin-bottom: 18px !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-grid {
+  border-top-color: #e2e8f0 !important;
 }
 
 .as-acars-white-mode .as-acars-tablet-greeting {

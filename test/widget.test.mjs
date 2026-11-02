@@ -1128,10 +1128,11 @@ test('Tablet Home Launcher, tablet bar app switching, and return-to-home button 
   assert.ok(clock, 'Tablet UTC clock must exist on home screen');
   assert.ok(clock.textContent.includes('UTC'), 'Clock must show UTC time');
 
-  // Verify header Home button is hidden when already on home tab
+  // Verify header Home button is visible in main view and highlighted as active on home tab
   const btnHeaderHome = mockRoot.querySelector('#as-acars-btn-header-home');
   assert.ok(btnHeaderHome, 'Header home button must exist');
-  assert.equal(btnHeaderHome.classList.contains('as-acars-hidden'), true);
+  assert.equal(btnHeaderHome.classList.contains('as-acars-hidden'), false);
+  assert.equal(btnHeaderHome.classList.contains('as-acars-btn-active'), true);
 
   // Click METAR launcher tile on home screen
   const metarTile = mockRoot.querySelector('.as-acars-tablet-tile[data-tab="metar"]');
@@ -1140,10 +1141,12 @@ test('Tablet Home Launcher, tablet bar app switching, and return-to-home button 
 
   assert.equal(instance.state.activeTab, 'metar', 'Clicking tablet tile must switch activeTab to metar');
   assert.equal(btnHeaderHome.classList.contains('as-acars-hidden'), false, 'Header home button must be visible when on non-home tab');
+  assert.equal(btnHeaderHome.classList.contains('as-acars-btn-active'), false);
 
   // Click Header Home button to return to home
   mockRoot.dispatchEvent({ type: 'click', target: btnHeaderHome, preventDefault() {}, stopPropagation() {} });
   assert.equal(instance.state.activeTab, 'home', 'Clicking header home button must return to home');
+  assert.equal(btnHeaderHome.classList.contains('as-acars-btn-active'), true);
 });
 
 test('METAR parser, Flow weather API, active flight route weather, and Otto weather search work accurately', async () => {
