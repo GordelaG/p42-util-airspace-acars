@@ -4,7 +4,7 @@
 
 #define MyAppName "Airspace ACARS"
 #ifndef MyAppVersion
-#define MyAppVersion "1.0.20"
+#define MyAppVersion "1.0.21"
 #endif
 #define MyAppPublisher "Airspace Team (FerrLab)"
 #define MyAppURL "https://airspace.ferrlab.com"
@@ -51,6 +51,10 @@ brazilianportuguese.Detected=Detectado
 brazilianportuguese.NotDetected=Nao detectado automaticamente
 brazilianportuguese.FoundCommunitySubdir=Foi detectada a subpasta Community em:%n%n%1%n%nDeseja instalar nesta pasta Community recomendada?
 brazilianportuguese.WarnNotCommunityDir=ATENCAO: A pasta selecionada nao parece ser a pasta "Community" do simulador:%n%n%1%n%nO Airspace ACARS e o Flow Pro devem ser instalados dentro da pasta Community para que o widget apareca no simulador.%n%nDicas para Microsoft Store / Game Pass:%n- MSFS 2024: %%LOCALAPPDATA%%\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community%n- MSFS 2020: %%LOCALAPPDATA%%\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\Packages\Community%n- Caso tenha instalado em outro disco (D:\, E:\, etc), consulte no arquivo UserCfg.opt o caminho da linha InstalledPackagesPath.%n%nDeseja realmente continuar com esta pasta?
+brazilianportuguese.ReadyDirLabel=Pasta de Destino (Community do Simulador):
+brazilianportuguese.ReadyPackageLabel=Destino do Pacote Airspace ACARS:
+brazilianportuguese.ReadyChangeTip=Importante: Se o caminho acima nao for a pasta Community do seu simulador, clique em "Alterar Pasta..." ou no botao "Voltar" abaixo para selecionar a pasta correta.
+brazilianportuguese.BtnChangeDir=Alterar Pasta...
 
 english.SimSelectTitle=Simulator Identification
 english.SimSelectDesc=Choose the version of Microsoft Flight Simulator where Flow Pro is installed.
@@ -62,6 +66,10 @@ english.Detected=Detected
 english.NotDetected=Not detected automatically
 english.FoundCommunitySubdir=The Community subfolder was detected in:%n%n%1%n%nDo you want to install into this recommended Community folder?
 english.WarnNotCommunityDir=WARNING: The selected folder does not seem to be the simulator's "Community" folder:%n%n%1%n%nAirspace ACARS and Flow Pro must be installed inside the Community folder to be recognized by the simulator.%n%nMicrosoft Store / Game Pass tips:%n- MSFS 2024: %%LOCALAPPDATA%%\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community%n- MSFS 2020: %%LOCALAPPDATA%%\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\Packages\Community%n- If installed on another drive, check the InstalledPackagesPath line in UserCfg.opt.%n%nDo you really want to continue with this destination?
+english.ReadyDirLabel=Destination Folder (Simulator Community):
+english.ReadyPackageLabel=Airspace ACARS Package Location:
+english.ReadyChangeTip=Important: If the path above is not your simulator Community folder, click "Change Folder..." or the "Back" button below to select the correct location.
+english.BtnChangeDir=Change Folder...
 
 spanish.SimSelectTitle=Identificacion del Simulador
 spanish.SimSelectDesc=Elija la version de Microsoft Flight Simulator donde esta instalado Flow Pro.
@@ -73,6 +81,10 @@ spanish.Detected=Detectado
 spanish.NotDetected=No detectado automaticamente
 spanish.FoundCommunitySubdir=Se ha detectado la subcarpeta Community en:%n%n%1%n%nDesea instalar en esta carpeta Community recomendada?
 spanish.WarnNotCommunityDir=ATENCION: La carpeta seleccionada no parece ser la carpeta "Community" del simulador:%n%n%1%n%nAirspace ACARS y Flow Pro deben instalarse dentro de la carpeta Community.%n%nDesea continuar con este destino?
+spanish.ReadyDirLabel=Carpeta de Destino (Community del Simulador):
+spanish.ReadyPackageLabel=Ubicacion del Paquete Airspace ACARS:
+spanish.ReadyChangeTip=Importante: Si la ruta anterior no es la carpeta Community de su simulador, haga clic en "Cambiar Carpeta..." o en "Atras" para seleccionar la carpeta correcta.
+spanish.BtnChangeDir=Cambiar Carpeta...
 
 french.SimSelectTitle=Identification du Simulateur
 french.SimSelectDesc=Choisissez la version de Microsoft Flight Simulator ou Flow Pro est installe.
@@ -84,6 +96,10 @@ french.Detected=Detecte
 french.NotDetected=Non detecte automatiquement
 french.FoundCommunitySubdir=Le sous-dossier Community a ete detecte dans:%n%n%1%n%nSouhaitez-vous installer dans ce dossier Community recommande?
 french.WarnNotCommunityDir=ATTENTION: Le dossier selectionne ne semble pas etre le dossier "Community" du simulateur:%n%n%1%n%nAirspace ACARS et Flow Pro doivent etre installes dans le dossier Community.%n%nSouhaitez-vous vraiment continuer avec cette destination?
+french.ReadyDirLabel=Dossier de Destination (Community du Simulateur):
+french.ReadyPackageLabel=Emplacement du Paquet Airspace ACARS:
+french.ReadyChangeTip=Important: Si le chemin ci-dessus n'est pas le dossier Community de votre simulateur, cliquez sur "Changer de Dossier..." ou sur "Retour" pour selectionner le bon dossier.
+french.BtnChangeDir=Changer de Dossier...
 
 [Messages]
 brazilianportuguese.SelectDirLabel3=Confirme ou selecione a pasta 'Community' do seu Microsoft Flight Simulator. O pacote '{#MyPackageName}' sera instalado dentro dela.%n%nCaso use Microsoft Store e tenha instalado os pacotes em outro disco (ex: D:\, E:\), clique em 'Procurar...' para selecionar manualmente sua pasta Community.
@@ -96,6 +112,7 @@ Source: "installer\TERMOS-DE-USO.txt"; DestDir: "{app}\{#MyPackageName}"; Flags:
 [Code]
 var
   SimSelectPage: TInputOptionWizardPage;
+  ChangeDirButton: TNewButton;
   Detected2024: string;
   Detected2020: string;
 
@@ -324,6 +341,26 @@ begin
   Result := ExpandConstant('{localappdata}') + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community';
 end;
 
+// Evento disparado para alterar o texto de resumo na tela "Pronto pra Instalar" (wpReady)
+function UpdateReadyMemo(Space, NewLine, MemoUserInfoInfo, MemoDirInfo, MemoTypeInfo, MemoComponentsInfo, MemoGroupInfo, MemoTasksInfo: String): String;
+var
+  S: String;
+begin
+  S := '';
+  S := S + CustomMessage('ReadyDirLabel') + NewLine;
+  S := S + Space + WizardDirValue() + NewLine + NewLine;
+  S := S + CustomMessage('ReadyPackageLabel') + NewLine;
+  S := S + Space + WizardDirValue() + '\{#MyPackageName}' + NewLine + NewLine;
+  S := S + CustomMessage('ReadyChangeTip') + NewLine;
+  Result := S;
+end;
+
+// Clique do botao customizado na tela wpReady para voltar e alterar pasta
+procedure ChangeDirButtonClick(Sender: TObject);
+begin
+  WizardForm.BackButton.OnClick(WizardForm.BackButton);
+end;
+
 // Cria pagina visual para escolha do simulador ou identificacao manual
 procedure InitializeWizard();
 var
@@ -332,6 +369,7 @@ begin
   Detected2024 := FindMSFS2024CommunityDir();
   Detected2020 := FindMSFS2020CommunityDir();
 
+  // 1. Pagina de escolha do simulador / identificacao manual
   SimSelectPage := CreateInputOptionPage(
     wpLicense,
     CustomMessage('SimSelectTitle'),
@@ -363,6 +401,30 @@ begin
     SimSelectPage.SelectedValueIndex := 1
   else
     SimSelectPage.SelectedValueIndex := 2;
+
+  // 2. Botao customizado "Alterar Pasta..." na tela wpReady (canto inferior esquerdo)
+  ChangeDirButton := TNewButton.Create(WizardForm);
+  ChangeDirButton.Parent := WizardForm;
+  ChangeDirButton.Caption := CustomMessage('BtnChangeDir');
+  ChangeDirButton.Left := ScaleX(16);
+  ChangeDirButton.Top := WizardForm.BackButton.Top;
+  ChangeDirButton.Width := ScaleX(140);
+  ChangeDirButton.Height := WizardForm.BackButton.Height;
+  ChangeDirButton.OnClick := @ChangeDirButtonClick;
+  ChangeDirButton.Visible := False;
+end;
+
+// Atualiza visibilidade dos botoes conforme a pagina atual
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if CurPageID = wpReady then
+  begin
+    ChangeDirButton.Visible := True;
+  end
+  else
+  begin
+    ChangeDirButton.Visible := False;
+  end;
 end;
 
 // Valida transicao entre paginas e a pasta Community selecionada

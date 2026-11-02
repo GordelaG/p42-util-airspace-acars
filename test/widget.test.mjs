@@ -1262,6 +1262,12 @@ test('Inno Setup installer script handles Microsoft Store detection and manual s
   assert.ok(iss.includes('CreateInputOptionPage'), 'Must create wizard page for simulator selection or manual choice');
   assert.ok(iss.includes('FoundCommunitySubdir'), 'Must offer auto-correction if user selects simulator root');
   assert.ok(iss.includes('WarnNotCommunityDir'), 'Must warn user if selected folder is not Community');
+
+  // Verify Ready page displays destination path and change folder button
+  assert.ok(iss.includes('UpdateReadyMemo'), 'Must implement UpdateReadyMemo to show destination on ready page');
+  assert.ok(iss.includes('ReadyDirLabel'), 'Must display Community destination label in ready memo');
+  assert.ok(iss.includes('ChangeDirButton'), 'Must create Change Folder button on ready page');
+  assert.ok(iss.includes('CurPageChanged'), 'Must update button visibility on page changed');
 });
 
 
