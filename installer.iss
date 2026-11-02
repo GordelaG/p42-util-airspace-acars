@@ -4,7 +4,7 @@
 
 #define MyAppName "Airspace ACARS"
 #ifndef MyAppVersion
-#define MyAppVersion "1.0.23"
+#define MyAppVersion "1.0.24"
 #endif
 #define MyAppPublisher "Airspace Team (FerrLab)"
 #define MyAppURL "https://airspace.ferrlab.com"
@@ -28,9 +28,8 @@ OutputBaseFilename=AirspaceACARS-Setup
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
-PrivilegesRequired=lowest
 DirExistsWarning=no
-EnableDirDoesntExistWarning=yes
+EnableDirDoesntExistWarning=no
 CloseApplications=yes
 UninstallFilesDir={app}\{#MyPackageName}
 
@@ -41,37 +40,29 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 
 [CustomMessages]
-brazilianportuguese.FoundCommunitySubdir=Foi detectada a subpasta Community em:%n%n%1%n%nDeseja instalar nesta pasta Community recomendada?
-brazilianportuguese.WarnNotCommunityDir=ATENCAO: A pasta selecionada nao parece ser a pasta "Community" do simulador:%n%n%1%n%nO Airspace ACARS e o Flow Pro devem ser instalados dentro da pasta Community para que o widget apareca no simulador.%n%nDicas para Microsoft Store / Game Pass:%n- MSFS 2024: %%LOCALAPPDATA%%\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community%n- MSFS 2020: %%LOCALAPPDATA%%\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\Packages\Community%n- Caso tenha instalado em outro disco (D:\, E:\, etc), consulte no arquivo UserCfg.opt o caminho da linha InstalledPackagesPath.%n%nDeseja realmente continuar com esta pasta?
-brazilianportuguese.ReadyDirLabel=Pasta de Destino (Community do Simulador):
+brazilianportuguese.ReadyDirLabel=Pasta de Destino (Community ou Personalizada):
 brazilianportuguese.ReadyPackageLabel=Destino do Pacote Airspace ACARS:
-brazilianportuguese.ReadyChangeTip=Importante: Se o caminho acima nao for a pasta Community do seu simulador, clique em "Alterar Pasta..." ou no botao "Voltar" abaixo para selecionar a pasta correta.
+brazilianportuguese.ReadyChangeTip=Se desejar alterar a pasta de instalacao, clique em "Alterar Pasta..." ou no botao "Voltar".
 brazilianportuguese.BtnChangeDir=Alterar Pasta...
 
-english.FoundCommunitySubdir=The Community subfolder was detected in:%n%n%1%n%nDo you want to install into this recommended Community folder?
-english.WarnNotCommunityDir=WARNING: The selected folder does not seem to be the simulator's "Community" folder:%n%n%1%n%nAirspace ACARS and Flow Pro must be installed inside the Community folder to be recognized by the simulator.%n%nMicrosoft Store / Game Pass tips:%n- MSFS 2024: %%LOCALAPPDATA%%\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community%n- MSFS 2020: %%LOCALAPPDATA%%\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\Packages\Community%n- If installed on another drive, check the InstalledPackagesPath line in UserCfg.opt.%n%nDo you really want to continue with this destination?
-english.ReadyDirLabel=Destination Folder (Simulator Community):
+english.ReadyDirLabel=Destination Folder (Community or Custom):
 english.ReadyPackageLabel=Airspace ACARS Package Location:
-english.ReadyChangeTip=Important: If the path above is not your simulator Community folder, click "Change Folder..." or the "Back" button below to select the correct location.
+english.ReadyChangeTip=If you want to change the installation folder, click "Change Folder..." or the "Back" button below.
 english.BtnChangeDir=Change Folder...
 
-spanish.FoundCommunitySubdir=Se ha detectado la subcarpeta Community en:%n%n%1%n%nDesea instalar en esta carpeta Community recomendada?
-spanish.WarnNotCommunityDir=ATENCION: La carpeta seleccionada no parece ser la carpeta "Community" del simulador:%n%n%1%n%nAirspace ACARS y Flow Pro deben instalarse dentro de la carpeta Community.%n%nDesea continuar con este destino?
-spanish.ReadyDirLabel=Carpeta de Destino (Community del Simulador):
+spanish.ReadyDirLabel=Carpeta de Destino (Community o Personalizada):
 spanish.ReadyPackageLabel=Ubicacion del Paquete Airspace ACARS:
-spanish.ReadyChangeTip=Importante: Si la ruta anterior no es la carpeta Community de su simulador, haga clic en "Cambiar Carpeta..." o en "Atras" para seleccionar la carpeta correcta.
+spanish.ReadyChangeTip=Si desea cambiar la carpeta de instalacion, haga clic en "Cambiar Carpeta..." o en "Atras".
 spanish.BtnChangeDir=Cambiar Carpeta...
 
-french.FoundCommunitySubdir=Le sous-dossier Community a ete detecte dans:%n%n%1%n%nSouhaitez-vous installer dans ce dossier Community recommande?
-french.WarnNotCommunityDir=ATTENTION: Le dossier selectionne ne semble pas etre le dossier "Community" du simulateur:%n%n%1%n%nAirspace ACARS et Flow Pro doivent etre installes dans le dossier Community.%n%nSouhaitez-vous vraiment continuer avec cette destination?
-french.ReadyDirLabel=Dossier de Destination (Community du Simulateur):
+french.ReadyDirLabel=Dossier de Destination (Community ou Personnalise):
 french.ReadyPackageLabel=Emplacement du Paquet Airspace ACARS:
-french.ReadyChangeTip=Important: Si le chemin ci-dessus n'est pas le dossier Community de votre simulateur, cliquez sur "Changer de Dossier..." ou sur "Retour" pour selectionner le bon dossier.
+french.ReadyChangeTip=Si vous souhaitez modifier le dossier d'installation, cliquez sur "Changer de Dossier..." ou sur "Retour".
 french.BtnChangeDir=Changer de Dossier...
 
 [Messages]
-brazilianportuguese.SelectDirLabel3=Confirme ou selecione a pasta 'Community' do seu Microsoft Flight Simulator. O pacote '{#MyPackageName}' sera instalado dentro dela.%n%nCaso use Microsoft Store e tenha instalado os pacotes em outro disco (ex: D:\, E:\), clique em 'Procurar...' para selecionar manualmente sua pasta Community.
-english.SelectDirLabel3=Confirm or select your Microsoft Flight Simulator 'Community' directory. The '{#MyPackageName}' package will be installed inside it.%n%nIf you purchased on Microsoft Store and installed packages on a custom drive, click 'Browse...' to select your Community folder manually.
+brazilianportuguese.SelectDirLabel3=Confirme ou selecione a pasta onde deseja instalar o Airspace ACARS (recomendado: pasta Community do seu simulador). O pacote '{#MyPackageName}' sera instalado dentro dela.%n%nCaso deseje instalar em outro disco ou pasta personalizada, clique em 'Procurar...'.
+english.SelectDirLabel3=Confirm or select the folder where you want to install Airspace ACARS (recommended: simulator Community folder). The '{#MyPackageName}' package will be installed inside it.%n%nIf you want to install on another drive or custom folder, click 'Browse...'.
 
 [Files]
 Source: "dist\p42-util-airspace-acars\*"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -125,18 +116,52 @@ begin
   end;
 end;
 
-// Remove barras finais e espacos em branco de caminhos
+// Normaliza barras e remove espacos em branco de caminhos
 function CleanPath(const P: string): string;
 var
   S: string;
+  I: Integer;
 begin
   S := Trim(P);
-  while (Length(S) > 0) and ((S[Length(S)] = '\') or (S[Length(S)] = '/')) do
+  for I := 1 to Length(S) do
+  begin
+    if S[I] = '/' then
+      S[I] := '\';
+  end;
+  while (Length(S) > 0) and (S[Length(S)] = '\') do
     Delete(S, Length(S), 1);
   Result := S;
 end;
 
-// Leitura robusta de UserCfg.opt para localizar caminhos customizados da Community
+// Resolve a subpasta Community a partir de um caminho base de pacotes
+function ResolveCommunityFromBase(const BasePath: string): string;
+var
+  P: string;
+begin
+  P := CleanPath(BasePath);
+  if P = '' then
+  begin
+    Result := '';
+    Exit;
+  end;
+
+  if (Uppercase(ExtractFileName(P)) = 'COMMUNITY') and DirExists(P) then
+    Result := P
+  else if DirExists(P + '\Community') then
+    Result := P + '\Community'
+  else if DirExists(P + '\Packages\Community') then
+    Result := P + '\Packages\Community'
+  else if (Uppercase(ExtractFileName(P)) = 'COMMUNITY') then
+    Result := P
+  else if (Uppercase(ExtractFileName(P)) = 'PACKAGES') then
+    Result := P + '\Community'
+  else if DirExists(P) then
+    Result := P + '\Community'
+  else
+    Result := P + '\Community';
+end;
+
+// Leitura robusta de UserCfg.opt para extrair o caminho configurado de pacotes
 function ParseUserCfgOpt(const OptPath: string): string;
 var
   Lines: TArrayOfString;
@@ -165,16 +190,7 @@ begin
               RawPath := CleanPath(Copy(Line, 1, PEnd - 1));
               if RawPath <> '' then
               begin
-                if (Uppercase(ExtractFileName(RawPath)) = 'COMMUNITY') and DirExists(RawPath) then
-                  Result := RawPath
-                else if DirExists(RawPath + '\Community') then
-                  Result := RawPath + '\Community'
-                else if DirExists(RawPath + '\Packages\Community') then
-                  Result := RawPath + '\Packages\Community'
-                else if DirExists(RawPath) then
-                  Result := RawPath + '\Community'
-                else
-                  Result := RawPath;
+                Result := ResolveCommunityFromBase(RawPath);
                 Exit;
               end;
             end;
@@ -185,125 +201,117 @@ begin
   end;
 end;
 
-// Localiza instalacao do MSFS 2024 (Microsoft Store, Game Pass e Steam)
-function FindMSFS2024CommunityDir(): string;
+// Retorna o melhor caminho detectado automaticamente para a pasta Community
+function GetDefaultCommunityDir(Param: string): string;
 var
   LocalAppDataDir, AppDataDir, Candidate: string;
-  FindRec: TFindRec;
+  Drives: array[0..5] of string;
+  I: Integer;
 begin
-  Result := '';
   LocalAppDataDir := ExpandConstant('{localappdata}');
   AppDataDir := ExpandConstant('{userappdata}');
 
-  // 1. MSFS 2024 Microsoft Store (UserCfg.opt no LocalCache)
+  // ==========================================================================
+  // FASE 1: Prioridade Maxima - Pastas Community que JA EXISTEM no disco
+  // ==========================================================================
+
+  // 1.1 MSFS 2024 Microsoft Store / Game Pass (UserCfg.opt em LocalCache ou LocalState)
   Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\UserCfg.opt');
-  if (Candidate <> '') and (DirExists(Candidate) or DirExists(ExtractFilePath(Candidate))) then begin Result := Candidate; Exit; end;
+  if (Candidate <> '') and DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
-  // 2. MSFS 2024 Microsoft Store (UserCfg.opt no LocalState)
   Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalState\UserCfg.opt');
-  if (Candidate <> '') and (DirExists(Candidate) or DirExists(ExtractFilePath(Candidate))) then begin Result := Candidate; Exit; end;
+  if (Candidate <> '') and DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
-  // 3. Scan generico em Packages\Microsoft.Limitless*
-  if FindFirst(LocalAppDataDir + '\Packages\Microsoft.Limitless*', FindRec) then
-  begin
-    try
-      repeat
-        if ((FindRec.Attributes and 16) <> 0) and (FindRec.Name <> '.') and (FindRec.Name <> '..') then
-        begin
-          Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\' + FindRec.Name + '\LocalCache\UserCfg.opt');
-          if (Candidate <> '') and (DirExists(Candidate) or DirExists(ExtractFilePath(Candidate))) then begin Result := Candidate; Exit; end;
-          Candidate := LocalAppDataDir + '\Packages\' + FindRec.Name + '\LocalCache\Packages\Community';
-          if DirExists(Candidate) then begin Result := Candidate; Exit; end;
-        end;
-      until not FindNext(FindRec);
-    finally
-      FindClose(FindRec);
-    end;
-  end;
+  // 1.2 MSFS 2024 Steam (UserCfg.opt em Roaming)
+  Candidate := ParseUserCfgOpt(AppDataDir + '\Microsoft Flight Simulator 2024\UserCfg.opt');
+  if (Candidate <> '') and DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
-  // 4. MSFS 2024 Microsoft Store (Caminho padrao de pacotes)
+  // 1.3 MSFS 2024 Caminhos Padroes Existentes
+  Candidate := AppDataDir + '\Microsoft Flight Simulator 2024\Packages\Community';
+  if DirExists(Candidate) then begin Result := Candidate; Exit; end;
+
   Candidate := LocalAppDataDir + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community';
   if DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
-  // 5. MSFS 2024 Steam (UserCfg.opt em Roaming)
-  Candidate := ParseUserCfgOpt(AppDataDir + '\Microsoft Flight Simulator 2024\UserCfg.opt');
-  if (Candidate <> '') and (DirExists(Candidate) or DirExists(ExtractFilePath(Candidate))) then begin Result := Candidate; Exit; end;
-
-  // 6. MSFS 2024 Steam (Caminho padrao de pacotes)
-  Candidate := AppDataDir + '\Microsoft Flight Simulator 2024\Packages\Community';
+  Candidate := LocalAppDataDir + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalState\Packages\Community';
   if DirExists(Candidate) then begin Result := Candidate; Exit; end;
-end;
 
-// Localiza instalacao do MSFS 2020 (Microsoft Store, Game Pass e Steam)
-function FindMSFS2020CommunityDir(): string;
-var
-  LocalAppDataDir, AppDataDir, Candidate: string;
-  FindRec: TFindRec;
-begin
-  Result := '';
-  LocalAppDataDir := ExpandConstant('{localappdata}');
-  AppDataDir := ExpandConstant('{userappdata}');
-
-  // 1. MSFS 2020 Microsoft Store (UserCfg.opt no LocalCache)
+  // 1.4 MSFS 2020 Microsoft Store / Game Pass (UserCfg.opt em LocalCache ou LocalState)
   Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\UserCfg.opt');
-  if (Candidate <> '') and (DirExists(Candidate) or DirExists(ExtractFilePath(Candidate))) then begin Result := Candidate; Exit; end;
+  if (Candidate <> '') and DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
-  // 2. MSFS 2020 Microsoft Store (UserCfg.opt no LocalState)
   Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalState\UserCfg.opt');
-  if (Candidate <> '') and (DirExists(Candidate) or DirExists(ExtractFilePath(Candidate))) then begin Result := Candidate; Exit; end;
+  if (Candidate <> '') and DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
-  // 3. Scan generico em Packages\Microsoft.FlightSimulator*
-  if FindFirst(LocalAppDataDir + '\Packages\Microsoft.FlightSimulator*', FindRec) then
-  begin
-    try
-      repeat
-        if ((FindRec.Attributes and 16) <> 0) and (FindRec.Name <> '.') and (FindRec.Name <> '..') then
-        begin
-          Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\' + FindRec.Name + '\LocalCache\UserCfg.opt');
-          if (Candidate <> '') and (DirExists(Candidate) or DirExists(ExtractFilePath(Candidate))) then begin Result := Candidate; Exit; end;
-          Candidate := LocalAppDataDir + '\Packages\' + FindRec.Name + '\LocalCache\Packages\Community';
-          if DirExists(Candidate) then begin Result := Candidate; Exit; end;
-        end;
-      until not FindNext(FindRec);
-    finally
-      FindClose(FindRec);
-    end;
-  end;
+  // 1.5 MSFS 2020 Steam (UserCfg.opt em Roaming)
+  Candidate := ParseUserCfgOpt(AppDataDir + '\Microsoft Flight Simulator\UserCfg.opt');
+  if (Candidate <> '') and DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
-  // 4. MSFS 2020 Microsoft Store (Caminho padrao de pacotes)
+  // 1.6 MSFS 2020 Caminhos Padroes Existentes
   Candidate := LocalAppDataDir + '\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\Packages\Community';
   if DirExists(Candidate) then begin Result := Candidate; Exit; end;
 
-  // 5. MSFS 2020 Steam (UserCfg.opt em Roaming)
-  Candidate := ParseUserCfgOpt(AppDataDir + '\Microsoft Flight Simulator\UserCfg.opt');
-  if (Candidate <> '') and (DirExists(Candidate) or DirExists(ExtractFilePath(Candidate))) then begin Result := Candidate; Exit; end;
-
-  // 6. MSFS 2020 Steam (Caminho padrao de pacotes)
   Candidate := AppDataDir + '\Microsoft Flight Simulator\Packages\Community';
   if DirExists(Candidate) then begin Result := Candidate; Exit; end;
-end;
 
-// Retorna o melhor caminho detectado automaticamente para preencher o instalador
-function GetDefaultCommunityDir(Param: string): string;
-var
-  Dir2024, Dir2020: string;
-begin
-  Dir2024 := FindMSFS2024CommunityDir();
-  if Dir2024 <> '' then
+  // 1.7 Busca automatica por pasta Community existente em discos secundarios
+  Drives[0] := 'D:'; Drives[1] := 'E:'; Drives[2] := 'F:'; Drives[3] := 'G:'; Drives[4] := 'H:'; Drives[5] := 'C:';
+  for I := 0 to 5 do
   begin
-    Result := Dir2024;
+    if DirExists(Drives[I] + '\MSFS\Community') then begin Result := Drives[I] + '\MSFS\Community'; Exit; end;
+    if DirExists(Drives[I] + '\MSFS 2024\Community') then begin Result := Drives[I] + '\MSFS 2024\Community'; Exit; end;
+    if DirExists(Drives[I] + '\MSFS 2020\Community') then begin Result := Drives[I] + '\MSFS 2020\Community'; Exit; end;
+    if DirExists(Drives[I] + '\Flight Simulator\Community') then begin Result := Drives[I] + '\Flight Simulator\Community'; Exit; end;
+    if (Drives[I] <> 'C:') and DirExists(Drives[I] + '\Community') then begin Result := Drives[I] + '\Community'; Exit; end;
+  end;
+
+  // ==========================================================================
+  // FASE 2: Caso a pasta Community ainda nao exista fisicamente no disco,
+  // usar o caminho configurado pelo simulador no arquivo UserCfg.opt
+  // ==========================================================================
+  Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\UserCfg.opt');
+  if Candidate <> '' then begin Result := Candidate; Exit; end;
+
+  Candidate := ParseUserCfgOpt(AppDataDir + '\Microsoft Flight Simulator 2024\UserCfg.opt');
+  if Candidate <> '' then begin Result := Candidate; Exit; end;
+
+  Candidate := ParseUserCfgOpt(LocalAppDataDir + '\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\UserCfg.opt');
+  if Candidate <> '' then begin Result := Candidate; Exit; end;
+
+  Candidate := ParseUserCfgOpt(AppDataDir + '\Microsoft Flight Simulator\UserCfg.opt');
+  if Candidate <> '' then begin Result := Candidate; Exit; end;
+
+  // ==========================================================================
+  // FASE 3: Caso nao haja UserCfg.opt mas haja pasta do simulador no perfil
+  // ==========================================================================
+  if DirExists(AppDataDir + '\Microsoft Flight Simulator 2024') then
+  begin
+    Result := AppDataDir + '\Microsoft Flight Simulator 2024\Packages\Community';
     Exit;
   end;
 
-  Dir2020 := FindMSFS2020CommunityDir();
-  if Dir2020 <> '' then
+  if DirExists(LocalAppDataDir + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe') then
   begin
-    Result := Dir2020;
+    Result := LocalAppDataDir + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community';
     Exit;
   end;
 
-  // Fallback sugerido caso nenhum simulador seja detectado automaticamente
-  Result := ExpandConstant('{localappdata}') + '\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community';
+  if DirExists(AppDataDir + '\Microsoft Flight Simulator') then
+  begin
+    Result := AppDataDir + '\Microsoft Flight Simulator\Packages\Community';
+    Exit;
+  end;
+
+  if DirExists(LocalAppDataDir + '\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe') then
+  begin
+    Result := LocalAppDataDir + '\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\Packages\Community';
+    Exit;
+  end;
+
+  // ==========================================================================
+  // FASE 4: Fallback padrao limpo (MSFS 2024 Steam/Roaming)
+  // ==========================================================================
+  Result := AppDataDir + '\Microsoft Flight Simulator 2024\Packages\Community';
 end;
 
 // Evento disparado para alterar o texto de resumo na tela "Pronto pra Instalar" (wpReady)
@@ -353,62 +361,22 @@ begin
   end;
 end;
 
-// Valida transicao entre paginas e a pasta Community selecionada
+// Ajuste silencioso do destino caso o usuario selecione o proprio pacote
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
   SelectedPath: string;
 begin
   Result := True;
 
-  // Validacao na pagina de selecao de diretorio
   if CurPageID = wpSelectDir then
   begin
     SelectedPath := CleanPath(WizardDirValue());
 
-    // Se o usuario selecionou a pasta terminando com o nome do proprio pacote, ajusta
+    // Se o usuario selecionou a pasta terminando com o nome do proprio pacote, ajusta silenciosamente
     if Uppercase(ExtractFileName(SelectedPath)) = Uppercase('{#MyPackageName}') then
     begin
       SelectedPath := CleanPath(ExtractFilePath(SelectedPath));
       WizardForm.DirEdit.Text := SelectedPath;
-    end;
-
-    // Se o usuario selecionou uma pasta pai que possui subpasta Community, sugere a correcao
-    if (Uppercase(ExtractFileName(SelectedPath)) <> 'COMMUNITY') then
-    begin
-      if DirExists(SelectedPath + '\Community') then
-      begin
-        if MsgBox(
-          FmtMessage(CustomMessage('FoundCommunitySubdir'), [SelectedPath + '\Community']),
-          mbConfirmation, MB_YESNO) = IDYES then
-        begin
-          WizardForm.DirEdit.Text := SelectedPath + '\Community';
-          Result := True;
-          Exit;
-        end;
-      end
-      else if DirExists(SelectedPath + '\Packages\Community') then
-      begin
-        if MsgBox(
-          FmtMessage(CustomMessage('FoundCommunitySubdir'), [SelectedPath + '\Packages\Community']),
-          mbConfirmation, MB_YESNO) = IDYES then
-        begin
-          WizardForm.DirEdit.Text := SelectedPath + '\Packages\Community';
-          Result := True;
-          Exit;
-        end;
-      end;
-    end;
-
-    // Alerta se a pasta selecionada nao parecer ser uma pasta Community
-    if Pos('community', Lowercase(SelectedPath)) = 0 then
-    begin
-      if MsgBox(
-        FmtMessage(CustomMessage('WarnNotCommunityDir'), [SelectedPath]),
-        mbConfirmation, MB_YESNO) <> IDYES then
-      begin
-        Result := False;
-        Exit;
-      end;
     end;
   end;
 end;
