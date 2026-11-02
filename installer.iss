@@ -32,6 +32,10 @@ DirExistsWarning=no
 EnableDirDoesntExistWarning=no
 CloseApplications=yes
 UninstallFilesDir={app}\{#MyPackageName}
+; Inno Setup 6.7+ ativa o RedirectionGuard por padrao, que bloqueia junctions/symlinks
+; criados sem admin (ex.: Addon Linker) e gera "CreateFile failed; code 448".
+; Desativado para permitir instalar em pastas Community gerenciadas por links.
+RedirectionGuard=no
 
 [Languages]
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
@@ -44,21 +48,33 @@ brazilianportuguese.ReadyDirLabel=Pasta de Destino (Community ou Personalizada):
 brazilianportuguese.ReadyPackageLabel=Destino do Pacote Airspace ACARS:
 brazilianportuguese.ReadyChangeTip=Se desejar alterar a pasta de instalacao, clique em "Alterar Pasta..." ou no botao "Voltar".
 brazilianportuguese.BtnChangeDir=Alterar Pasta...
+brazilianportuguese.LinkedPackageWarning=O Airspace ACARS ja esta instalado nesta pasta Community atraves de um link (junction/symlink), provavelmente criado pelo Addon Linker ou ferramenta similar:%n%n%1%n%nNesse caso, instale na pasta de addons que voce usa no Addon Linker, e nao na pasta Community do simulador. Pasta recomendada:%n%n%2%n%nSim = instalar na pasta recomendada%nNao = instalar na Community mesmo assim%nCancelar = voltar e escolher outra pasta
+brazilianportuguese.LinkedCommunityWarning=A pasta Community selecionada e um link (junction/symlink) para outro local:%n%n%1%n%nRecomendamos instalar diretamente no destino real do link.%n%nSim = instalar no destino real (recomendado)%nNao = continuar com a pasta selecionada
+brazilianportuguese.LinkedAddonsWarning=Detectamos que sua pasta Community contem addons instalados atraves de links (junction/symlink), o que indica uso do Addon Linker ou ferramenta similar.%n%nSe voce gerencia seus addons pelo Addon Linker, escolha a pasta de addons que voce usa nele (e nao a pasta Community do simulador) e depois ative o Airspace ACARS pelo Addon Linker.%n%nDeseja voltar e escolher outra pasta?%n%nSim = voltar e escolher outra pasta%nNao = instalar na Community mesmo assim
 
 english.ReadyDirLabel=Destination Folder (Community or Custom):
 english.ReadyPackageLabel=Airspace ACARS Package Location:
 english.ReadyChangeTip=If you want to change the installation folder, click "Change Folder..." or the "Back" button below.
 english.BtnChangeDir=Change Folder...
+english.LinkedPackageWarning=Airspace ACARS is already installed in this Community folder through a link (junction/symlink), most likely created by Addon Linker or a similar tool:%n%n%1%n%nIn this case, install into the addons folder you use in Addon Linker, not the simulator's Community folder. Recommended folder:%n%n%2%n%nYes = install into the recommended folder%nNo = install into Community anyway%nCancel = go back and choose another folder
+english.LinkedCommunityWarning=The selected Community folder is a link (junction/symlink) to another location:%n%n%1%n%nWe recommend installing directly into the link's real target.%n%nYes = install into the real target (recommended)%nNo = continue with the selected folder
+english.LinkedAddonsWarning=Your Community folder contains addons installed through links (junction/symlink), which indicates Addon Linker or a similar tool is being used.%n%nIf you manage your addons with Addon Linker, choose the addons folder you use there (not the simulator's Community folder) and then enable Airspace ACARS in Addon Linker.%n%nDo you want to go back and choose another folder?%n%nYes = go back and choose another folder%nNo = install into Community anyway
 
 spanish.ReadyDirLabel=Carpeta de Destino (Community o Personalizada):
 spanish.ReadyPackageLabel=Ubicacion del Paquete Airspace ACARS:
 spanish.ReadyChangeTip=Si desea cambiar la carpeta de instalacion, haga clic en "Cambiar Carpeta..." o en "Atras".
 spanish.BtnChangeDir=Cambiar Carpeta...
+spanish.LinkedPackageWarning=Airspace ACARS ya esta instalado en esta carpeta Community a traves de un enlace (junction/symlink), probablemente creado por Addon Linker o una herramienta similar:%n%n%1%n%nEn este caso, instale en la carpeta de addons que usa en Addon Linker, no en la carpeta Community del simulador. Carpeta recomendada:%n%n%2%n%nSi = instalar en la carpeta recomendada%nNo = instalar en Community de todos modos%nCancelar = volver y elegir otra carpeta
+spanish.LinkedCommunityWarning=La carpeta Community seleccionada es un enlace (junction/symlink) a otra ubicacion:%n%n%1%n%nRecomendamos instalar directamente en el destino real del enlace.%n%nSi = instalar en el destino real (recomendado)%nNo = continuar con la carpeta seleccionada
+spanish.LinkedAddonsWarning=Su carpeta Community contiene addons instalados mediante enlaces (junction/symlink), lo que indica el uso de Addon Linker o una herramienta similar.%n%nSi administra sus addons con Addon Linker, elija la carpeta de addons que usa alli (no la carpeta Community del simulador) y luego active Airspace ACARS en Addon Linker.%n%nDesea volver y elegir otra carpeta?%n%nSi = volver y elegir otra carpeta%nNo = instalar en Community de todos modos
 
 french.ReadyDirLabel=Dossier de Destination (Community ou Personnalise):
 french.ReadyPackageLabel=Emplacement du Paquet Airspace ACARS:
 french.ReadyChangeTip=Si vous souhaitez modifier le dossier d'installation, cliquez sur "Changer de Dossier..." ou sur "Retour".
 french.BtnChangeDir=Changer de Dossier...
+french.LinkedPackageWarning=Airspace ACARS est deja installe dans ce dossier Community via un lien (junction/symlink), probablement cree par Addon Linker ou un outil similaire :%n%n%1%n%nDans ce cas, installez-le dans le dossier d'addons que vous utilisez dans Addon Linker, et non dans le dossier Community du simulateur. Dossier recommande :%n%n%2%n%nOui = installer dans le dossier recommande%nNon = installer dans Community quand meme%nAnnuler = revenir et choisir un autre dossier
+french.LinkedCommunityWarning=Le dossier Community selectionne est un lien (junction/symlink) vers un autre emplacement :%n%n%1%n%nNous recommandons d'installer directement dans la cible reelle du lien.%n%nOui = installer dans la cible reelle (recommande)%nNon = continuer avec le dossier selectionne
+french.LinkedAddonsWarning=Votre dossier Community contient des addons installes via des liens (junction/symlink), ce qui indique l'utilisation d'Addon Linker ou d'un outil similaire.%n%nSi vous gerez vos addons avec Addon Linker, choisissez le dossier d'addons que vous y utilisez (et non le dossier Community du simulateur), puis activez Airspace ACARS dans Addon Linker.%n%nVoulez-vous revenir et choisir un autre dossier ?%n%nOui = revenir et choisir un autre dossier%nNon = installer dans Community quand meme
 
 [Messages]
 brazilianportuguese.SelectDirLabel3=Confirme ou selecione a pasta onde deseja instalar o Airspace ACARS (recomendado: pasta Community do seu simulador). O pacote '{#MyPackageName}' sera instalado dentro dela.%n%nCaso deseje instalar em outro disco ou pasta personalizada, clique em 'Procurar...'.
@@ -361,6 +377,141 @@ begin
   end;
 end;
 
+const
+  // Quantidade minima de addons vinculados por link na Community para sugerir uso do Addon Linker
+  LINKED_ADDONS_THRESHOLD = 3;
+
+// Verifica se a pasta e um link (junction/symlink), sem atravessa-lo
+function IsLinkDir(const Path: string): Boolean;
+var
+  FindRec: TFindRec;
+begin
+  Result := False;
+  if FindFirst(CleanPath(Path), FindRec) then
+  begin
+    try
+      Result := ((FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0) and
+                ((FindRec.Attributes and FILE_ATTRIBUTE_REPARSE_POINT) <> 0);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
+end;
+
+// Conta quantas subpastas da pasta informada sao links (junction/symlink)
+function CountLinkedSubDirs(const Path: string): Integer;
+var
+  FindRec: TFindRec;
+begin
+  Result := 0;
+  if FindFirst(CleanPath(Path) + '\*', FindRec) then
+  begin
+    try
+      repeat
+        if (FindRec.Name <> '.') and (FindRec.Name <> '..') and
+           ((FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0) and
+           ((FindRec.Attributes and FILE_ATTRIBUTE_REPARSE_POINT) <> 0) then
+          Result := Result + 1;
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
+end;
+
+// Resolve o destino de um link (junction/symlink) via PowerShell; retorna '' se falhar
+function GetLinkTarget(const Path: string): string;
+var
+  TmpFile, Cmd, QuotedPath, QuotedTmp: string;
+  Lines: TArrayOfString;
+  ResultCode: Integer;
+begin
+  Result := '';
+  TmpFile := ExpandConstant('{tmp}\linktarget.txt');
+  DeleteFile(TmpFile);
+  QuotedPath := CleanPath(Path);
+  StringChangeEx(QuotedPath, '''', '''''', True);
+  QuotedTmp := TmpFile;
+  StringChangeEx(QuotedTmp, '''', '''''', True);
+  Cmd := '-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "' +
+         '(Get-Item -LiteralPath ''' + QuotedPath + ''' -Force).Target | Select-Object -First 1 | ' +
+         'Out-File -LiteralPath ''' + QuotedTmp + ''' -Encoding utf8"';
+  if Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), Cmd, '', SW_HIDE,
+          ewWaitUntilTerminated, ResultCode) and (ResultCode = 0) then
+  begin
+    if LoadStringsFromFile(TmpFile, Lines) and (GetArrayLength(Lines) > 0) then
+    begin
+      Result := CleanPath(Lines[0]);
+      // Symlinks podem retornar caminho relativo ou com prefixo \\?\
+      if Copy(Result, 1, 4) = '\\?\' then
+        Delete(Result, 1, 4);
+      if (Result <> '') and (Pos(':', Result) = 0) and (Copy(Result, 1, 2) <> '\\') then
+        Result := CleanPath(ExtractFilePath(CleanPath(Path)) + Result);
+    end;
+  end;
+  DeleteFile(TmpFile);
+end;
+
+// Detecta Community gerenciada por links (Addon Linker e similares) e orienta o usuario.
+// Retorna False para manter o usuario na pagina de selecao de pasta.
+function CheckLinkedCommunity(var SelectedPath: string): Boolean;
+var
+  PackagePath, Target, Recommended: string;
+begin
+  Result := True;
+  if WizardSilent() then
+    Exit;
+
+  PackagePath := SelectedPath + '\{#MyPackageName}';
+
+  // Caso 1: o proprio pacote ja existe na Community como link (ex.: ativado pelo Addon Linker)
+  if IsLinkDir(PackagePath) then
+  begin
+    Target := GetLinkTarget(PackagePath);
+    if Target <> '' then
+      Recommended := CleanPath(ExtractFilePath(Target))
+    else
+      Recommended := '';
+
+    if Recommended = '' then
+    begin
+      Result := MsgBox(CustomMessage('LinkedAddonsWarning'), mbConfirmation, MB_YESNO) = IDNO;
+      Exit;
+    end;
+
+    case MsgBox(FmtMessage(CustomMessage('LinkedPackageWarning'), [Target, Recommended]),
+                mbConfirmation, MB_YESNOCANCEL) of
+      IDYES:
+        begin
+          SelectedPath := Recommended;
+          WizardForm.DirEdit.Text := SelectedPath;
+        end;
+      IDNO:
+        Result := True;
+    else
+      Result := False;
+    end;
+    Exit;
+  end;
+
+  // Caso 2: a propria pasta Community e um link para outro local
+  if IsLinkDir(SelectedPath) then
+  begin
+    Target := GetLinkTarget(SelectedPath);
+    if (Target <> '') and
+       (MsgBox(FmtMessage(CustomMessage('LinkedCommunityWarning'), [Target]), mbConfirmation, MB_YESNO) = IDYES) then
+    begin
+      SelectedPath := Target;
+      WizardForm.DirEdit.Text := SelectedPath;
+    end;
+    Exit;
+  end;
+
+  // Caso 3: varios addons da Community sao links, indicando uso do Addon Linker
+  if CountLinkedSubDirs(SelectedPath) >= LINKED_ADDONS_THRESHOLD then
+    Result := MsgBox(CustomMessage('LinkedAddonsWarning'), mbConfirmation, MB_YESNO) = IDNO;
+end;
+
 // Ajuste silencioso do destino caso o usuario selecione o proprio pacote
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
@@ -378,5 +529,7 @@ begin
       SelectedPath := CleanPath(ExtractFilePath(SelectedPath));
       WizardForm.DirEdit.Text := SelectedPath;
     end;
+
+    Result := CheckLinkedCommunity(SelectedPath);
   end;
 end;
