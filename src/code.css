@@ -21,6 +21,13 @@
   pointer-events: none;
 }
 
+.as-acars-root button,
+.as-acars-root input,
+.as-acars-root textarea,
+.as-acars-root select {
+  font-family: inherit;
+}
+
 .as-acars-root *,
 .as-acars-root *::before,
 .as-acars-root *::after {
@@ -1667,6 +1674,46 @@
   user-select: text;
 }
 
+.as-acars-notam-detail-title {
+  margin: 0 0 8px 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.as-acars-notam-detail-body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #e4e4e7;
+  white-space: pre-wrap;
+}
+
+/* Vector Inline Emojis & Status Dots */
+.as-acars-emoji-icon {
+  display: inline-block;
+  vertical-align: -2px;
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+.as-acars-inline-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  vertical-align: 1px;
+  margin: 0 3px;
+  flex-shrink: 0;
+}
+.as-acars-dot-green { background: #22c55e; }
+.as-acars-dot-red { background: #ef4444; }
+.as-acars-dot-yellow { background: #eab308; }
+.as-acars-dot-blue { background: #3b82f6; }
+.as-acars-dot-orange { background: #f97316; }
+.as-acars-dot-purple { background: #a855f7; }
+.as-acars-dot-bullet { width: 5px; height: 5px; background: currentColor; opacity: 0.7; vertical-align: 2px; margin: 0 4px; }
+
 /* Shared Controls (Inputs, Buttons, Chips) */
 .as-acars-input {
   width: 100%;
@@ -2431,35 +2478,46 @@
   border: 1px solid #e2e8f0 !important;
 }
 
-.as-acars-white-mode .as-acars-notam-item {
+.as-acars-white-mode .as-acars-notams-list .as-acars-doc-item {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
-  color: #1e293b !important;
+  color: #0f172a !important;
 }
 
-.as-acars-white-mode .as-acars-notam-item:hover {
+.as-acars-white-mode .as-acars-notams-list .as-acars-doc-item:hover {
   background: #f1f5f9 !important;
 }
 
-.as-acars-white-mode .as-acars-notam-item-active {
+.as-acars-white-mode .as-acars-notams-list .as-acars-doc-item-active {
   background: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
-  color: #09090b !important;
+  border-color: #3b82f6 !important;
+  color: #0f172a !important;
   font-weight: 600 !important;
 }
 
-.as-acars-white-mode .as-acars-notam-item-title {
-  color: inherit !important;
+.as-acars-white-mode .as-acars-notams-list .as-acars-doc-item-title {
+  color: #0f172a !important;
+  font-weight: 600 !important;
 }
 
-.as-acars-white-mode .as-acars-notam-date {
-  color: #64748b !important;
+.as-acars-white-mode .as-acars-notams-list .as-acars-doc-item-sub {
+  color: #475569 !important;
+  font-weight: 500 !important;
 }
 
 .as-acars-white-mode .as-acars-notam-detail {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-notam-detail-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-notam-detail-body {
+  color: #0f172a !important;
+  font-weight: 500 !important;
 }
 
 /* 7. View 1 & View 2: Tenants & Auth */

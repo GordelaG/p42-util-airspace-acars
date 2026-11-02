@@ -1195,6 +1195,54 @@ test('METAR parser, Flow weather API, active flight route weather, and Otto weat
   assert.equal(instance.state.metarData.searched.icao, 'KJFK');
 });
 
+test('NOTAM white mode contrast, vector emoji replacement, and Coherent GT tofu stripping', async () => {
+  const { instance, mockRoot, hooks } = createFlowTestHarness(async () => makeJsonResponse(200, { data: [] }));
+  hooks.html_created(mockRoot);
+
+  const renderText = instance.renderTextWithEmojis;
+  assert.ok(typeof renderText === 'function', 'renderTextWithEmojis must be exported');
+
+  // Test vector emoji replacements
+  const announcement = renderText('📢 Novos critérios de análise ✈️');
+  assert.ok(announcement.includes('<svg class="as-acars-emoji-icon"'), 'Aviation emojis must convert to vector SVG');
+  assert.ok(announcement.includes('Novos critérios de análise'), 'Accented letters must remain intact');
+
+  // Test status dots
+  const statusStr = renderText('🟢 Online • Detalhes 🔴 Offline');
+  assert.ok(statusStr.includes('as-acars-dot-green'), 'Green dot emoji must convert to green indicator dot');
+  assert.ok(statusStr.includes('as-acars-dot-bullet'), 'Bullet must convert to bullet dot');
+
+  // Test stripping of unsupported emojis / replacement characters to prevent tofu [X]
+  const stripped = renderText('Test 🦄 and missing \uFFFD glyphs');
+  assert.equal(stripped.includes('🦄'), false, 'Unknown emojis must be stripped cleanly');
+  assert.equal(stripped.includes('\uFFFD'), false, 'Unicode replacement chars must be stripped');
+
+  // Test NOTAM detail rendering with dark text classes
+  instance.store.activeTenant = { id: 'samba', name: 'Samba Virtual', domain: 'samba.airspace.ferrlab.com' };
+  instance.store.storedTokens = { samba: { token: 'tok-123', tenant: instance.store.activeTenant } };
+  instance.state.panelOpen = true;
+  instance.state.notams = [
+    {
+      id: 'notam-1',
+      title: '📢 Novos critérios',
+      content: '<p>Atenção tripulantes ⚠️</p>',
+      created_at: '2026-10-22T10:00:00Z'
+    }
+  ];
+  instance.state.selectedNotamId = 'notam-1';
+  instance.state.detailNotam = instance.state.notams[0];
+  instance.state.activeView = 'main';
+  instance.state.activeTab = 'flight';
+  instance.renderAll();
+
+  const notamDetail = mockRoot.querySelector('#as-acars-notam-detail');
+  assert.ok(notamDetail.innerHTML.includes('as-acars-notam-detail-title'), 'NOTAM detail must use semantic title class');
+  assert.ok(notamDetail.innerHTML.includes('as-acars-notam-detail-body'), 'NOTAM detail must use semantic body class');
+  assert.equal(notamDetail.innerHTML.includes('style="color:#e4e4e7;"'), false, 'Hardcoded light-gray inline style must be removed');
+  assert.equal(notamDetail.innerHTML.includes('style="color:#fff;"'), false, 'Hardcoded white inline style must be removed');
+});
+
+
 
 
 

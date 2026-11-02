@@ -20,7 +20,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     null;
 
   // --- Version & Releases ---
-  const APP_VERSION = "1.0.18";
+  const APP_VERSION = "1.0.19";
   const GITHUB_REPO_OWNER = "GordelaG";
   const GITHUB_REPO_NAME = "p42-util-airspace-acars";
   const REPO_RELEASES_URL = "https://github.com/" + GITHUB_REPO_OWNER + "/" + GITHUB_REPO_NAME + "/releases/latest";
@@ -1096,6 +1096,91 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       .replace(/'/g, "&#39;");
   }
 
+  function renderTextWithEmojis(raw) {
+    if (raw === null || raw === undefined) return "";
+    let str = String(raw);
+
+    // 1. Normalize typographic characters that cause missing glyph tofu boxes in Coherent GT
+    str = str
+      .replace(/\u2026/g, "...")
+      .replace(/[\u2013\u2014]/g, "-")
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/\u00A0/g, " ")
+      .replace(/\uFFFD/g, "");
+
+    // 2. Escape HTML entities
+    let s = escapeHtml(str);
+
+    // 3. Convert known high-frequency aviation/announcement emojis into clean inline SVGs
+    // Megaphone / announcement (U+1F4E2, U+1F4E3)
+    s = s.replace(/(?:\uD83D[\uDCE2\uDCE3])/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg> ');
+
+    // Warning / alert (U+26A0, U+1F6A8, U+1F514)
+    s = s.replace(/(?:\u26A0\uFE0F?|\uD83D[\uDD14\uDEA8])/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> ');
+
+    // Airplane / flight (U+2708, U+1F6EB, U+1F6EC, U+1F6E9)
+    s = s.replace(/(?:\u2708\uFE0F?|\uD83D[\uDEEB\uDEEC\uDEE9])/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"></path></svg> ');
+
+    // Document / clipboard / note (U+1F4CB, U+1F4DD, U+1F4C4, U+1F4D1)
+    s = s.replace(/(?:\uD83D[\uDCCB\uDCDD\uDCC4\uDCD1])/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg> ');
+
+    // Check / verified (U+2705, U+2714, U+2713)
+    s = s.replace(/(?:\u2705|\u2714\uFE0F?|\u2713)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> ');
+
+    // Cross / error (U+274C, U+2716, U+1F6AB, U+26D4)
+    s = s.replace(/(?:\u274C|\u2716\uFE0F?|\uD83D\uDEAB|\u26D4)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> ');
+
+    // Info (U+2139)
+    s = s.replace(/(?:\u2139\uFE0F?)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> ');
+
+    // Target (U+1F3AF)
+    s = s.replace(/(?:\uD83C\uDFAF)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="6" r="6"></circle><circle cx="12" cy="2" r="2"></circle></svg> ');
+
+    // Lightbulb (U+1F4A1)
+    s = s.replace(/(?:\uD83D\uDCA1)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg> ');
+
+    // Clock (U+1F550 to U+1F567, U+23F0, U+23F1, U+23F3, U+231B)
+    s = s.replace(/(?:\uD83D[\uDD50-\uDD67]|\u23F0|\u23F1\uFE0F?|\u23F3|\u231B)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ');
+
+    // Location Pin (U+1F4CD, U+1F4CC)
+    s = s.replace(/(?:\uD83D[\uDCCD\uDCCC])/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ');
+
+    // Calendar (U+1F4C5, U+1F4C6)
+    s = s.replace(/(?:\uD83D[\uDCC5\uDCC6])/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ');
+
+    // Chart / stats (U+1F4CA, U+1F4C8, U+1F4C9)
+    s = s.replace(/(?:\uD83D[\uDCCA\uDCC8\uDCC9])/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg> ');
+
+    // Fuel (U+26FD)
+    s = s.replace(/(?:\u26FD)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h12"></path><path d="M4 9h10"></path><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"></path><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2 2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"></path></svg> ');
+
+    // Weather / Cloud / Sun / Rain (U+2601, U+1F327, U+26C8, U+2600, U+1F324, U+2744)
+    s = s.replace(/(?:\u2601\uFE0F?|\uD83C[\uDF24\uDF27]\uFE0F?|\u26C8\uFE0F?|\u2600\uFE0F?|\u2744\uFE0F?)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg> ');
+
+    // Star (U+2B50, U+1F31F, U+2728)
+    s = s.replace(/(?:\u2B50\uFE0F?|\uD83C\uDF1F|\u2728)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="#eab308" stroke="#eab308" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> ');
+
+    // Arrow right (U+27A1, U+2794)
+    s = s.replace(/(?:\u27A1\uFE0F?|\u2794)/g, '<svg class="as-acars-emoji-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg> ');
+
+    // Colored circles
+    s = s.replace(/(?:\uD83D\uDFE2)/g, '<span class="as-acars-inline-dot as-acars-dot-green"></span>');
+    s = s.replace(/(?:\uD83D\uDD34)/g, '<span class="as-acars-inline-dot as-acars-dot-red"></span>');
+    s = s.replace(/(?:\uD83D\uDFE1)/g, '<span class="as-acars-inline-dot as-acars-dot-yellow"></span>');
+    s = s.replace(/(?:\uD83D\uDD35|\uD83D\uDFE6)/g, '<span class="as-acars-inline-dot as-acars-dot-blue"></span>');
+    s = s.replace(/(?:\uD83D\uDFE0)/g, '<span class="as-acars-inline-dot as-acars-dot-orange"></span>');
+    s = s.replace(/(?:\uD83D\uDFE3)/g, '<span class="as-acars-inline-dot as-acars-dot-purple"></span>');
+
+    // Bullets (U+2022, U+2023, U+25AA, U+25B6, U+25CF)
+    s = s.replace(/(?:[\u2022\u2023\u25AA\u25B6\u25CF])/g, '<span class="as-acars-inline-dot as-acars-dot-bullet"></span>');
+
+    // 4. Strip all remaining unrenderable emojis/surrogates/variation selectors to prevent tofu box [X]
+    s = s.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF]|[\u2300-\u23FF]|[\u2B00-\u2BFF]|[\uFE00-\uFE0F]|[\u200B-\u200F\u202A-\u202E\u2060-\u206F]|\uFFFD/g, "");
+
+    return s;
+  }
+
   /**
    * Sanitizes server-provided HTML for safe rendering inside the MSFS Coherent GT panel.
    * Strips executable/embedded tags, inline event handlers, and overlay positioning classes.
@@ -1958,7 +2043,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         senderEl.textContent = (msg.senderName || t("toast.header")) + (msg.senderRole ? " (" + msg.senderRole.toUpperCase() + ")" : "");
       }
       if (textEl) {
-        textEl.textContent = msg.text || "";
+        textEl.innerHTML = renderTextWithEmojis(msg.text || "");
       }
       if (openBtn) {
         openBtn.textContent = t("toast.open");
@@ -2989,7 +3074,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       return;
     }
 
-    if (titleEl) titleEl.textContent = activeDoc.title;
+    if (titleEl) titleEl.innerHTML = renderTextWithEmojis(activeDoc.title);
     if (metaEl) {
       const mParts = [];
       if (activeDoc.source) mParts.push(activeDoc.source);
@@ -3167,11 +3252,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         notamDetailEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("flight.select_notam")) + '</div>';
       } else {
         notamDetailEl.innerHTML =
-          '<h4 style="margin:0 0 6px 0;color:#fff;">' +
-          escapeHtml(n.title) +
+          '<h4 class="as-acars-notam-detail-title">' +
+          renderTextWithEmojis(n.title) +
           "</h4>" +
-          '<div style="font-size:12px;color:#e4e4e7;">' +
-          escapeHtml(stripHtmlToText(n.content)) +
+          '<div class="as-acars-notam-detail-body">' +
+          renderTextWithEmojis(stripHtmlToText(n.content)) +
           "</div>";
       }
     }
@@ -4211,6 +4296,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       saveStore: saveStore,
       getActiveToken: getActiveToken,
       getTenantBaseUrl: getTenantBaseUrl,
+      renderTextWithEmojis: renderTextWithEmojis,
       sanitizeDocumentHtml: sanitizeDocumentHtml,
       fetchTenants: fetchTenants,
       selectAuthenticatedTenant: selectAuthenticatedTenant,
