@@ -1242,6 +1242,29 @@ test('NOTAM white mode contrast, vector emoji replacement, and Coherent GT tofu 
   assert.equal(notamDetail.innerHTML.includes('style="color:#fff;"'), false, 'Hardcoded white inline style must be removed');
 });
 
+test('Inno Setup installer script handles Microsoft Store detection and manual selection', () => {
+  const iss = fs.readFileSync(path.join(ROOT_DIR, 'installer.iss'), 'utf8');
+
+  // Verify MSFS 2024 Microsoft Store package detection
+  assert.ok(iss.includes('Microsoft.Limitless_8wekyb3d8bbwe'), 'Must detect MSFS 2024 MS Store package');
+  assert.ok(iss.includes('LocalCache\\UserCfg.opt'), 'Must check UserCfg.opt in LocalCache');
+  assert.ok(iss.includes('LocalState\\UserCfg.opt'), 'Must check UserCfg.opt in LocalState');
+
+  // Verify MSFS 2020 Microsoft Store package detection
+  assert.ok(iss.includes('Microsoft.FlightSimulator_8wekyb3d8bbwe'), 'Must detect MSFS 2020 MS Store package');
+
+  // Verify UserCfg.opt parser logic
+  assert.ok(iss.includes('ParseUserCfgOpt'), 'Must parse UserCfg.opt for custom drives');
+  assert.ok(iss.includes('InstalledPackagesPath'), 'Must read InstalledPackagesPath line');
+
+  // Verify manual identification and directory page visibility
+  assert.ok(iss.includes('DisableDirPage=no'), 'Directory selection page must never be auto-skipped');
+  assert.ok(iss.includes('CreateInputOptionPage'), 'Must create wizard page for simulator selection or manual choice');
+  assert.ok(iss.includes('FoundCommunitySubdir'), 'Must offer auto-correction if user selects simulator root');
+  assert.ok(iss.includes('WarnNotCommunityDir'), 'Must warn user if selected folder is not Community');
+});
+
+
 
 
 
