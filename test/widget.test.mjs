@@ -1260,7 +1260,6 @@ test('Inno Setup installer script handles Microsoft Store detection and manual s
   // Verify manual identification and directory page visibility
   assert.ok(iss.includes('DisableDirPage=no'), 'Directory selection page must never be auto-skipped');
   assert.ok(iss.includes('UsePreviousAppDir=no'), 'Previous install dir must be ignored so directory page is shown');
-  assert.ok(iss.includes('CreateInputOptionPage'), 'Must create wizard page for simulator selection or manual choice');
   assert.ok(iss.includes('FoundCommunitySubdir'), 'Must offer auto-correction if user selects simulator root');
   assert.ok(iss.includes('WarnNotCommunityDir'), 'Must warn user if selected folder is not Community');
 

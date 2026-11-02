@@ -20,7 +20,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     null;
 
   // --- Version & Releases ---
-  const APP_VERSION = "1.0.22";
+  const APP_VERSION = "1.0.23";
   const GITHUB_REPO_OWNER = "GordelaG";
   const GITHUB_REPO_NAME = "p42-util-airspace-acars";
   const REPO_RELEASES_URL = "https://github.com/" + GITHUB_REPO_OWNER + "/" + GITHUB_REPO_NAME + "/releases/latest";
