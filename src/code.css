@@ -565,14 +565,26 @@
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Navigation Tabs */
-.as-acars-tabs {
+.as-acars-va-logo {
+  max-height: 24px;
+  max-width: 68px;
+  object-fit: contain;
+  vertical-align: middle;
+  border-radius: 4px;
+  margin-right: 6px;
+}
+
+/* Navigation Tabs & Tablet Bar */
+.as-acars-tabs,
+.as-acars-tablet-bar {
   display: flex;
   align-items: center;
-  padding: 6px 14px 0 14px;
+  gap: 8px;
+  padding: 6px 14px;
   background: rgba(18, 20, 26, 0.95);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
+  overflow-x: auto;
 }
 
 .as-acars-tab {
@@ -599,6 +611,79 @@
   border-bottom-color: #ffffff;
 }
 
+.as-acars-tablet-app-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #a1a1aa;
+  cursor: pointer;
+  pointer-events: all;
+  min-width: 58px;
+  transition: all 0.15s ease;
+}
+
+.as-acars-tablet-app-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.as-acars-tablet-app-btn.as-acars-tab-active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.as-acars-app-icon {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e4e4e7;
+  transition: all 0.15s ease;
+}
+
+.as-acars-tablet-app-btn:hover .as-acars-app-icon {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.as-acars-tab-active .as-acars-app-icon {
+  background: #ffffff;
+  color: #09090b;
+}
+
+.as-acars-app-name {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.as-acars-app-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 0 4px;
+  border-radius: 999px;
+  line-height: 14px;
+  min-width: 14px;
+  text-align: center;
+}
+
 .as-acars-badge-count {
   background: #ffffff;
   color: #09090b;
@@ -607,6 +692,296 @@
   padding: 1px 6px;
   border-radius: 999px;
   margin-left: 6px;
+}
+
+/* Tablet Home Screen */
+.as-acars-tablet-home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 10px 4px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.as-acars-tablet-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.as-acars-tablet-pilot-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.as-acars-tablet-greeting {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+.as-acars-tablet-flight-summary {
+  font-size: 12px;
+  color: #a1a1aa;
+}
+
+.as-acars-tablet-clock {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: monospace, ui-monospace, sans-serif;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.as-acars-tablet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 14px;
+  padding: 6px 0;
+}
+
+.as-acars-tablet-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.as-acars-tablet-tile:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.as-acars-tile-icon {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.as-acars-tile-vocc { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.as-acars-tile-docs { background: linear-gradient(135deg, #059669, #047857); }
+.as-acars-tile-flight { background: linear-gradient(135deg, #d97706, #b45309); }
+.as-acars-tile-metar { background: linear-gradient(135deg, #0284c7, #0369a1); }
+.as-acars-tile-settings { background: linear-gradient(135deg, #475569, #334155); }
+
+.as-acars-tile-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 2px solid #09090b;
+}
+
+.as-acars-tile-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 3px;
+}
+
+.as-acars-tile-desc {
+  font-size: 10px;
+  color: #71717a;
+  line-height: 1.2;
+}
+
+/* METAR / Weather Page */
+.as-acars-metar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.as-acars-metar-header-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.as-acars-metar-search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.as-acars-metar-search-input {
+  max-width: 320px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.as-acars-metar-quick-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.as-acars-metar-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e4e4e7;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.as-acars-metar-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.as-acars-metar-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 4px;
+}
+
+.as-acars-metar-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 12px;
+}
+
+.as-acars-metar-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.as-acars-metar-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.as-acars-metar-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.as-acars-metar-icao {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.as-acars-metar-role {
+  font-size: 11px;
+  font-weight: 600;
+  color: #a1a1aa;
+}
+
+.as-acars-cat-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.as-acars-cat-vfr { background: #166534; color: #86efac; border: 1px solid #22c55e; }
+.as-acars-cat-mvfr { background: #1e40af; color: #93c5fd; border: 1px solid #3b82f6; }
+.as-acars-cat-ifr { background: #991b1b; color: #fca5a5; border: 1px solid #ef4444; }
+.as-acars-cat-lifr { background: #6b21a8; color: #d8b4fe; border: 1px solid #a855f7; }
+
+.as-acars-metar-raw-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
+
+.as-acars-metar-raw-text {
+  font-family: monospace, ui-monospace, sans-serif;
+  font-size: 11px;
+  color: #e4e4e7;
+  line-height: 1.4;
+  word-break: break-word;
+  flex: 1;
+}
+
+.as-acars-metar-params-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.as-acars-metar-param-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.as-acars-metar-param-label {
+  font-size: 10px;
+  color: #71717a;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.as-acars-metar-param-val {
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 /* Tab Panels */
@@ -2307,7 +2682,114 @@
   color: #0f172a !important;
 }
 
-/* 10. Scrollbars in White Mode */
+/* 10. Tablet & METAR Overrides in White Mode */
+.as-acars-white-mode .as-acars-tablet-bar {
+  background-color: #f1f5f9 !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-app-btn {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-app-btn:hover {
+  color: #0f172a !important;
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-app-btn.as-acars-tab-active {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-app-icon {
+  background: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+.as-acars-white-mode .as-acars-tab-active .as-acars-app-icon {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-status-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-greeting {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-flight-summary {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-clock {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-tile {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-tablet-tile:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-tile-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-tile-desc {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-metar-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-metar-icao {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-metar-raw-box {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-metar-raw-text {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-metar-param-item {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-metar-param-label {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-metar-param-val {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-metar-pill {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* 11. Scrollbars in White Mode */
 .as-acars-white-mode *::-webkit-scrollbar-track,
 .as-acars-toast.as-acars-white-mode *::-webkit-scrollbar-track {
   background: #f1f5f9 !important;

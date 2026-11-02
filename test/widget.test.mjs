@@ -214,11 +214,18 @@ function createMockDomFromCodeHtml() {
     root.appendChild(el);
   }
 
-  for (const tabName of ['vocc', 'docs', 'flight', 'settings']) {
+  for (const tabName of ['home', 'vocc', 'docs', 'flight', 'metar', 'settings']) {
     const btn = new MockElement('button', root);
     btn.setAttribute('class', 'as-acars-tab');
     btn.setAttribute('data-tab', tabName);
     root.appendChild(btn);
+  }
+
+  for (const tabName of ['vocc', 'docs', 'flight', 'metar', 'settings']) {
+    const tile = new MockElement('div', root);
+    tile.setAttribute('class', 'as-acars-tablet-tile');
+    tile.setAttribute('data-tab', tabName);
+    root.appendChild(tile);
   }
 
   for (const catName of ['all', 'briefing', 'manuals', 'fdm', 'load']) {
@@ -268,6 +275,24 @@ function createFlowTestHarness(customFetch) {
           }
         },
         find_airports_by_icao: (icao) => [{ icao, ident: icao }]
+      },
+      weather: {
+        find_metar_by_icao: (icao, cb) => {
+          if (icao === 'INVALID') {
+            cb(null);
+          } else {
+            cb({
+              metarString: `METAR ${icao} 021200Z 12015G25KT 9999 FEW025 BKN080 24/18 Q1016`,
+              windDir: 120,
+              windSpeed: 15,
+              windGust: 25,
+              visibility: 9999,
+              temp: 24,
+              dewPoint: 18,
+              altimeter: 1016
+            });
+          }
+        }
       },
       command: {
         open_browser: (url) => openedUrls.push(url),
@@ -1048,6 +1073,125 @@ test('GitHub release update checker detects newer releases, renders banner, and 
   assert.equal(instance.state.updateBannerDismissed, true);
   assert.equal(banner.classList.contains('as-acars-hidden'), true, 'Banner must be hidden after dismiss');
 });
+
+test('Header renders VA logo when authenticated and falls back to default Airspace logo when absent', async () => {
+  const { hooks, instance, mockRoot } = createFlowTestHarness();
+  hooks.html_created(mockRoot);
+
+  const defaultLogo = mockRoot.querySelector('#as-acars-default-logo');
+  const vaLogo = mockRoot.querySelector('#as-acars-va-logo');
+  assert.ok(defaultLogo, 'Default Airspace SVG logo must exist in header');
+  assert.ok(vaLogo, 'VA Logo img element must exist in header');
+
+  // Before login: default logo visible, VA logo hidden
+  assert.equal(defaultLogo.classList.contains('as-acars-hidden'), false);
+  assert.equal(vaLogo.classList.contains('as-acars-hidden'), true);
+
+  // Authenticate with tenant containing logo
+  instance.store.activeTenant = {
+    id: 'va-123',
+    name: 'Voe Samba',
+    domain: 'samba.airspace.ferrlab.com',
+    logo_url: 'https://cdn.airspace.com/logos/samba.png'
+  };
+  instance.store.storedTokens = {
+    'va-123': { token: 'tok_abc', tenant: instance.store.activeTenant }
+  };
+  instance.state.activeView = 'main';
+  instance.renderAll();
+
+  // After login with VA logo: VA logo visible with correct src, default logo hidden
+  assert.equal(vaLogo.classList.contains('as-acars-hidden'), false);
+  assert.equal(vaLogo.getAttribute('src'), 'https://cdn.airspace.com/logos/samba.png');
+  assert.equal(defaultLogo.classList.contains('as-acars-hidden'), true);
+
+  // Fallback test: tenant has no logo_url
+  instance.store.activeTenant.logo_url = null;
+  instance.renderAll();
+  assert.equal(vaLogo.classList.contains('as-acars-hidden'), true);
+  assert.equal(defaultLogo.classList.contains('as-acars-hidden'), false);
+});
+
+test('Tablet Home Launcher, tablet bar app switching, and return-to-home button work properly', async () => {
+  const { hooks, instance, mockRoot } = createFlowTestHarness();
+  hooks.html_created(mockRoot);
+
+  instance.store.activeTenant = { id: 'va-123', name: 'Voe Samba', domain: 'samba' };
+  instance.store.storedTokens = { 'va-123': { token: 'tok_abc', tenant: instance.store.activeTenant } };
+  instance.state.activeView = 'main';
+  instance.state.activeTab = 'home';
+  instance.renderAll();
+
+  const greeting = mockRoot.querySelector('#as-acars-tablet-greeting');
+  const clock = mockRoot.querySelector('#as-acars-tablet-clock');
+  assert.ok(greeting, 'Tablet greeting must exist on home screen');
+  assert.ok(clock, 'Tablet UTC clock must exist on home screen');
+  assert.ok(clock.textContent.includes('UTC'), 'Clock must show UTC time');
+
+  // Verify header Home button is hidden when already on home tab
+  const btnHeaderHome = mockRoot.querySelector('#as-acars-btn-header-home');
+  assert.ok(btnHeaderHome, 'Header home button must exist');
+  assert.equal(btnHeaderHome.classList.contains('as-acars-hidden'), true);
+
+  // Click METAR launcher tile on home screen
+  const metarTile = mockRoot.querySelector('.as-acars-tablet-tile[data-tab="metar"]');
+  assert.ok(metarTile, 'METAR tile must exist on tablet home screen');
+  mockRoot.dispatchEvent({ type: 'click', target: metarTile, preventDefault() {}, stopPropagation() {} });
+
+  assert.equal(instance.state.activeTab, 'metar', 'Clicking tablet tile must switch activeTab to metar');
+  assert.equal(btnHeaderHome.classList.contains('as-acars-hidden'), false, 'Header home button must be visible when on non-home tab');
+
+  // Click Header Home button to return to home
+  mockRoot.dispatchEvent({ type: 'click', target: btnHeaderHome, preventDefault() {}, stopPropagation() {} });
+  assert.equal(instance.state.activeTab, 'home', 'Clicking header home button must return to home');
+});
+
+test('METAR parser, Flow weather API, active flight route weather, and Otto weather search work accurately', async () => {
+  const { hooks, instance, mockRoot } = createFlowTestHarness();
+  hooks.html_created(mockRoot);
+
+  // 1. METAR Parser verification
+  const raw = 'METAR SBGR 021200Z 13018G28KT 8000 BKN015 OVC040 22/19 Q1015';
+  const parsed = instance.parseMetar(raw, 'SBGR');
+  assert.ok(parsed, 'Parsed METAR object must exist');
+  assert.equal(parsed.icao, 'SBGR');
+  assert.equal(parsed.windDir, 130);
+  assert.equal(parsed.windSpeed, 18);
+  assert.equal(parsed.windGust, 28);
+  assert.ok(parsed.windText.includes('130'), 'Wind text should format direction');
+  assert.ok(parsed.windText.includes('G 28 kt'), 'Wind text should include gust');
+  assert.equal(parsed.temp, 22);
+  assert.equal(parsed.dew, 19);
+  assert.equal(parsed.qnh, 1015);
+  assert.equal(parsed.flightCategory, 'MVFR', 'BKN015 should yield MVFR ceiling');
+
+  // 2. Fetch via Flow API
+  const metarResult = await instance.fetchMetarForIcao('SBGR');
+  assert.ok(metarResult, 'Flow weather API result should be parsed');
+  assert.equal(metarResult.icao, 'SBGR');
+
+  // 3. Active Flight route METAR
+  instance.store.activeTenant = { id: 'va-123', name: 'Voe Samba', domain: 'samba' };
+  instance.store.storedTokens = { 'va-123': { token: 'tok_abc', tenant: instance.store.activeTenant } };
+  instance.state.booking = {
+    flight_number: 'SAM101',
+    departure_airport: { icao: 'SBGR' },
+    arrival_airport: { icao: 'SBRJ' }
+  };
+  instance.state.activeView = 'main';
+  instance.state.activeTab = 'metar';
+  instance.renderAll();
+
+  await instance.loadRouteMetars(true);
+  assert.ok(instance.state.metarData.dep, 'DEP METAR should be loaded');
+  assert.ok(instance.state.metarData.arr, 'ARR METAR should be loaded');
+
+  // 4. METAR Search
+  await instance.searchMetar('KJFK');
+  assert.ok(instance.state.metarData.searched, 'Searched METAR should be populated');
+  assert.equal(instance.state.metarData.searched.icao, 'KJFK');
+});
+
 
 
 

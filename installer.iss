@@ -4,7 +4,7 @@
 
 #define MyAppName "Airspace ACARS"
 #ifndef MyAppVersion
-#define MyAppVersion "1.0.15"
+#define MyAppVersion "1.0.16"
 #endif
 #define MyAppPublisher "Airspace Team (FerrLab)"
 #define MyAppURL "https://airspace.ferrlab.com"

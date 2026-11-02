@@ -40,7 +40,7 @@
     <!-- Top Header / Drag Area (brand is drag handle so action buttons stay clickable outside [data-dragarea]) -->
     <div class="as-acars-header" id="as-acars-header">
       <div class="as-acars-brand" data-dragarea="airspace_acars_panel">
-        <svg class="as-acars-logo" viewBox="0 0 377 303" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="as-acars-logo" id="as-acars-default-logo" viewBox="0 0 377 303" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M300.95 154.574V215.038H183.849V198.265L227.643 154.574H300.95Z" fill="#FC1A02"/>
           <path d="M98.8591 283.051L160.586 221.46V303H98.8591V283.051Z" fill="#FC1A02"/>
           <path d="M321.207 54.1096L320.046 54.9636L319.977 55.0319L293.093 74.7764L238.847 114.607H199.939C194.234 114.607 189.213 115.564 184.669 117.408C180.092 119.253 175.993 122.02 172.167 125.812L172.098 125.914L171.996 125.982C168.409 129.398 165.779 132.985 163.9 136.845C162.089 140.671 160.962 144.77 160.621 149.348V172.064L98.8591 217.395V152.73C98.8591 139.237 101.319 126.563 106.272 114.846C111.225 103.129 118.672 92.5055 128.408 82.9748C138.109 73.4783 149.074 66.2022 161.03 61.3515C173.021 56.5349 186.036 54.1437 199.871 54.1437H321.173L321.207 54.1096Z" fill="#FC1A02"/>
@@ -48,6 +48,7 @@
           <path d="M376.718 0.0341187L350.414 25.0051L352.771 68.081C354.035 74.8789 353.796 80.0712 353.694 81.6084C361.38 54.3828 369.032 27.2256 376.683 0.0341187H376.718Z" fill="white"/>
           <path d="M376.717 0L294.528 20.906C295.929 20.8377 300.062 20.8035 305.63 21.7258L350.414 25.0393L376.717 0.0341601Z" fill="white"/>
         </svg>
+        <img class="as-acars-va-logo as-acars-hidden" id="as-acars-va-logo" alt="VA Logo" />
         <div class="as-acars-brand-text">
           <span class="as-acars-title">Airspace ACARS</span>
           <span class="as-acars-va-badge as-acars-hidden" id="as-acars-va-badge"></span>
@@ -58,25 +59,12 @@
         <span class="as-acars-route-pill as-acars-hidden" id="as-acars-route-pill"></span>
         <button
           type="button"
-          class="as-acars-btn as-acars-btn-ghost as-acars-btn-xs"
-          id="as-acars-btn-open-settings"
-          title="Configuracoes"
-          data-i18n-title="tabs.settings"
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-          </svg>
-        </button>
-        <button
-          type="button"
           class="as-acars-btn as-acars-btn-ghost as-acars-btn-xs as-acars-hidden"
-          id="as-acars-btn-refresh"
-          title="Atualizar dados"
-          data-i18n="common.refresh"
-          data-i18n-title="header.refresh_title"
+          id="as-acars-btn-header-home"
+          title="Inicio / Apps"
+          data-i18n="tablet.home"
         >
-          Atualizar
+          Inicio
         </button>
         <button
           type="button"
@@ -215,21 +203,123 @@
 
     <!-- VIEW 3: Authenticated Main Workspace -->
     <div class="as-acars-view as-acars-hidden" id="as-acars-view-main">
-      <!-- Navigation Tabs -->
-      <div class="as-acars-tabs">
-        <button type="button" class="as-acars-tab as-acars-tab-active" data-tab="vocc" id="as-acars-tab-btn-vocc">
-          <span data-i18n="tabs.vocc">vOCC &amp; Mensagens</span>
-          <span class="as-acars-badge-count as-acars-hidden" id="as-acars-unread-badge">0</span>
+      <!-- Navigation Tablet Bar -->
+      <div class="as-acars-tablet-bar" id="as-acars-tablet-bar">
+        <button type="button" class="as-acars-tab as-acars-tablet-app-btn as-acars-tab-active" data-tab="home" id="as-acars-tab-btn-home" title="Inicio / Apps">
+          <div class="as-acars-app-icon as-acars-icon-home">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <span class="as-acars-app-name" data-i18n="tablet.home">Inicio</span>
         </button>
-        <button type="button" class="as-acars-tab" data-tab="docs" id="as-acars-tab-btn-docs">
-          <span data-i18n="tabs.docs">Aeroportos &amp; Documentos</span>
+
+        <button type="button" class="as-acars-tab as-acars-tablet-app-btn" data-tab="vocc" id="as-acars-tab-btn-vocc" title="vOCC & Mensagens">
+          <div class="as-acars-app-icon as-acars-icon-vocc">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="as-acars-app-badge as-acars-hidden" id="as-acars-unread-badge">0</span>
+          </div>
+          <span class="as-acars-app-name">vOCC</span>
         </button>
-        <button type="button" class="as-acars-tab" data-tab="flight" id="as-acars-tab-btn-flight">
-          <span data-i18n="tabs.flight">Voo Ativo &amp; NOTAMs</span>
+
+        <button type="button" class="as-acars-tab as-acars-tablet-app-btn" data-tab="docs" id="as-acars-tab-btn-docs" title="Aeroportos & Documentos">
+          <div class="as-acars-app-icon as-acars-icon-docs">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <span class="as-acars-app-name" data-i18n="tablet.docs">Documentos</span>
         </button>
-        <button type="button" class="as-acars-tab" data-tab="settings" id="as-acars-tab-btn-settings">
-          <span data-i18n="tabs.settings">Configuracoes</span>
+
+        <button type="button" class="as-acars-tab as-acars-tablet-app-btn" data-tab="flight" id="as-acars-tab-btn-flight" title="Voo Ativo & NOTAMs">
+          <div class="as-acars-app-icon as-acars-icon-flight">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"></path>
+            </svg>
+          </div>
+          <span class="as-acars-app-name" data-i18n="tablet.flight">Voo Ativo</span>
         </button>
+
+        <button type="button" class="as-acars-tab as-acars-tablet-app-btn" data-tab="metar" id="as-acars-tab-btn-metar" title="Meteorologia (METAR)">
+          <div class="as-acars-app-icon as-acars-icon-metar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+            </svg>
+          </div>
+          <span class="as-acars-app-name">METAR</span>
+        </button>
+
+        <button type="button" class="as-acars-tab as-acars-tablet-app-btn" data-tab="settings" id="as-acars-tab-btn-settings" title="Configuracoes">
+          <div class="as-acars-app-icon as-acars-icon-settings">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+          <span class="as-acars-app-name" data-i18n="tablet.settings">Ajustes</span>
+        </button>
+      </div>
+
+      <!-- TAB 0: Tablet Home Screen -->
+      <div class="as-acars-tab-panel" id="as-acars-tab-home">
+        <div class="as-acars-tablet-home-container">
+          <div class="as-acars-tablet-status-card">
+            <div class="as-acars-tablet-pilot-info">
+              <span class="as-acars-tablet-greeting" id="as-acars-tablet-greeting">Airspace ACARS EFB</span>
+              <div class="as-acars-tablet-flight-summary" id="as-acars-tablet-flight-summary">Pronto para a operacao</div>
+            </div>
+            <div class="as-acars-tablet-clock" id="as-acars-tablet-clock">--:-- UTC</div>
+          </div>
+
+          <div class="as-acars-tablet-grid">
+            <div class="as-acars-tablet-tile" data-tab="vocc">
+              <div class="as-acars-tile-icon as-acars-tile-vocc">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span class="as-acars-tile-badge as-acars-hidden" id="as-acars-home-unread-badge">0</span>
+              </div>
+              <div class="as-acars-tile-title">vOCC</div>
+              <div class="as-acars-tile-desc" data-i18n="tablet.vocc_sub">Mensagens &amp; Despacho</div>
+            </div>
+
+            <div class="as-acars-tablet-tile" data-tab="docs">
+              <div class="as-acars-tile-icon as-acars-tile-docs">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              </div>
+              <div class="as-acars-tile-title" data-i18n="tablet.docs">Documentos</div>
+              <div class="as-acars-tile-desc" data-i18n="tablet.docs_sub">Aeroportos &amp; SOPs</div>
+            </div>
+
+            <div class="as-acars-tablet-tile" data-tab="flight">
+              <div class="as-acars-tile-icon as-acars-tile-flight">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"></path></svg>
+              </div>
+              <div class="as-acars-tile-title" data-i18n="tablet.flight">Voo Ativo</div>
+              <div class="as-acars-tile-desc" data-i18n="tablet.flight_sub">Briefing &amp; NOTAMs</div>
+            </div>
+
+            <div class="as-acars-tablet-tile" data-tab="metar">
+              <div class="as-acars-tile-icon as-acars-tile-metar">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+              </div>
+              <div class="as-acars-tile-title">METAR</div>
+              <div class="as-acars-tile-desc" data-i18n="tablet.metar_sub">Meteorologia &amp; Clima</div>
+            </div>
+
+            <div class="as-acars-tablet-tile" data-tab="settings">
+              <div class="as-acars-tile-icon as-acars-tile-settings">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              </div>
+              <div class="as-acars-tile-title" data-i18n="tablet.settings">Configuracoes</div>
+              <div class="as-acars-tile-desc" data-i18n="tablet.settings_sub">Idioma &amp; Tema</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- TAB 1: vOCC & Dispatch Messages -->
@@ -378,6 +468,48 @@
             </div>
             <div class="as-acars-notam-detail" id="as-acars-notam-detail">
               <div class="as-acars-empty-state" data-i18n="flight.select_notam">Selecione um NOTAM para ler.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Dedicated METAR / Weather Page -->
+      <div class="as-acars-tab-panel as-acars-hidden" id="as-acars-tab-metar">
+        <div class="as-acars-metar-container">
+          <div class="as-acars-metar-header-bar">
+            <div class="as-acars-metar-search-row">
+              <input
+                type="text"
+                class="as-acars-input as-acars-metar-search-input"
+                id="as-acars-metar-search-input"
+                placeholder="Pesquisar ICAO (ex: SBGR, SBRJ, SBKP, KJFK)..."
+                data-i18n-placeholder="metar.search_placeholder"
+                maxlength="5"
+                autocomplete="off"
+              />
+              <button type="button" class="as-acars-btn as-acars-btn-primary as-acars-btn-sm" id="as-acars-btn-search-metar" data-i18n="metar.btn_search">
+                Buscar METAR
+              </button>
+              <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-btn-sm" id="as-acars-btn-refresh-metar" data-i18n="common.refresh">
+                Atualizar
+              </button>
+            </div>
+            <div class="as-acars-metar-quick-pills" id="as-acars-metar-quick-pills"></div>
+          </div>
+
+          <div class="as-acars-metar-content" id="as-acars-metar-content">
+            <!-- Searched airport result section -->
+            <div class="as-acars-metar-section as-acars-hidden" id="as-acars-metar-searched-section">
+              <div class="as-acars-section-label" data-i18n="metar.search_result">Resultado da Pesquisa</div>
+              <div class="as-acars-metar-cards-grid" id="as-acars-metar-searched-card-wrap"></div>
+            </div>
+
+            <!-- Active Flight Route METARs (Origin, Destination, Alternate) -->
+            <div class="as-acars-metar-section" id="as-acars-metar-flight-section">
+              <div class="as-acars-section-label" data-i18n="metar.flight_route_title">METAR do Voo Ativo (Origem / Destino)</div>
+              <div class="as-acars-metar-cards-grid" id="as-acars-metar-flight-cards">
+                <div class="as-acars-empty-state" data-i18n="metar.loading">Carregando condicoes meteorologicas...</div>
+              </div>
             </div>
           </div>
         </div>

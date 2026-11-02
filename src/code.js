@@ -20,7 +20,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     null;
 
   // --- Version & Releases ---
-  const APP_VERSION = "1.0.15";
+  const APP_VERSION = "1.0.16";
   const GITHUB_REPO_OWNER = "GordelaG";
   const GITHUB_REPO_NAME = "p42-util-airspace-acars";
   const REPO_RELEASES_URL = "https://github.com/" + GITHUB_REPO_OWNER + "/" + GITHUB_REPO_NAME + "/releases/latest";
@@ -126,10 +126,43 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         btn_back: "Voltar para Lista de VAs",
       },
       tabs: {
-        vocc: "vOCC & Mensagens",
-        docs: "Aeroportos & Documentos",
-        flight: "Voo Ativo & NOTAMs",
+        home: "Inicio",
+        vocc: "vOCC",
+        docs: "Documentos",
+        flight: "Voo Ativo",
+        metar: "METAR",
         settings: "Configuracoes",
+      },
+      tablet: {
+        home: "Inicio",
+        docs: "Documentos",
+        flight: "Voo Ativo",
+        settings: "Configuracoes",
+        vocc_sub: "Mensagens & Despacho",
+        docs_sub: "Aeroportos & SOPs",
+        flight_sub: "Briefing & NOTAMs",
+        metar_sub: "Meteorologia & Clima",
+        settings_sub: "Idioma & Tema",
+      },
+      metar: {
+        title: "Meteorologia (METAR)",
+        search_placeholder: "Pesquisar ICAO (ex: SBGR, SBRJ, SBKP, KJFK)...",
+        btn_search: "Buscar METAR",
+        search_result: "Resultado da Pesquisa",
+        flight_route_title: "METAR do Voo Ativo (Origem / Destino)",
+        origin: "Origem (DEP)",
+        destination: "Destino (ARR)",
+        alternate: "Alternado (ALT)",
+        loading: "Carregando condicoes meteorologicas...",
+        no_flight: "Nenhum voo ativo conectado. Pesquise um aeroporto acima.",
+        btn_copy: "Copiar",
+        copied: "Copiado!",
+        wind: "Vento",
+        visibility: "Visibilidade",
+        clouds: "Nuvens",
+        temp: "Temp / PO",
+        qnh: "QNH / Altimetro",
+        not_found: "METAR nao encontrado para {icao}",
       },
       settings: {
         title: "Configuracoes",
@@ -251,10 +284,43 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         btn_back: "Back to VA List",
       },
       tabs: {
-        vocc: "vOCC & Messages",
-        docs: "Airports & Documents",
-        flight: "Active Flight & NOTAMs",
+        home: "Home",
+        vocc: "vOCC",
+        docs: "Documents",
+        flight: "Active Flight",
+        metar: "METAR",
         settings: "Settings",
+      },
+      tablet: {
+        home: "Home",
+        docs: "Documents",
+        flight: "Active Flight",
+        settings: "Settings",
+        vocc_sub: "Messages & Dispatch",
+        docs_sub: "Airports & SOPs",
+        flight_sub: "Briefing & NOTAMs",
+        metar_sub: "Weather & METAR",
+        settings_sub: "Language & Theme",
+      },
+      metar: {
+        title: "Weather (METAR)",
+        search_placeholder: "Search ICAO (e.g. SBGR, SBRJ, KJFK)...",
+        btn_search: "Search METAR",
+        search_result: "Search Result",
+        flight_route_title: "Active Flight METAR (Origin / Destination)",
+        origin: "Origin (DEP)",
+        destination: "Destination (ARR)",
+        alternate: "Alternate (ALT)",
+        loading: "Loading weather conditions...",
+        no_flight: "No active flight connected. Search for an airport above.",
+        btn_copy: "Copy",
+        copied: "Copied!",
+        wind: "Wind",
+        visibility: "Visibility",
+        clouds: "Clouds",
+        temp: "Temp / Dew",
+        qnh: "Altimeter / QNH",
+        not_found: "METAR not found for {icao}",
       },
       settings: {
         title: "Settings",
@@ -376,10 +442,43 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         btn_back: "Volver a la Lista de VAs",
       },
       tabs: {
-        vocc: "vOCC & Mensajes",
-        docs: "Aeropuertos & Documentos",
-        flight: "Vuelo Activo & NOTAMs",
+        home: "Inicio",
+        vocc: "vOCC",
+        docs: "Documentos",
+        flight: "Vuelo Activo",
+        metar: "METAR",
         settings: "Configuracion",
+      },
+      tablet: {
+        home: "Inicio",
+        docs: "Documentos",
+        flight: "Vuelo Activo",
+        settings: "Configuracion",
+        vocc_sub: "Mensajes y Despacho",
+        docs_sub: "Aeropuertos y SOPs",
+        flight_sub: "Briefing y NOTAMs",
+        metar_sub: "Meteorologia y Clima",
+        settings_sub: "Idioma y Tema",
+      },
+      metar: {
+        title: "Meteorologia (METAR)",
+        search_placeholder: "Buscar ICAO (ej: SBGR, LEMD, KJFK)...",
+        btn_search: "Buscar METAR",
+        search_result: "Resultado de la Busqueda",
+        flight_route_title: "METAR del Vuelo Activo (Origen / Destino)",
+        origin: "Origen (DEP)",
+        destination: "Destino (ARR)",
+        alternate: "Alternativo (ALT)",
+        loading: "Cargando condiciones meteorologicas...",
+        no_flight: "Ningun vuelo activo conectado. Busque un aeropuerto arriba.",
+        btn_copy: "Copiar",
+        copied: "Copiado!",
+        wind: "Viento",
+        visibility: "Visibilidad",
+        clouds: "Nubes",
+        temp: "Temp / PR",
+        qnh: "QNH / Altimetro",
+        not_found: "METAR no encontrado para {icao}",
       },
       settings: {
         title: "Configuracion",
@@ -501,10 +600,43 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         btn_back: "Retour a la liste des VAs",
       },
       tabs: {
-        vocc: "vOCC & Messages",
-        docs: "Aeroports & Documents",
-        flight: "Vol Actif & NOTAMs",
+        home: "Accueil",
+        vocc: "vOCC",
+        docs: "Documents",
+        flight: "Vol Actif",
+        metar: "METAR",
         settings: "Parametres",
+      },
+      tablet: {
+        home: "Accueil",
+        docs: "Documents",
+        flight: "Vol Actif",
+        settings: "Parametres",
+        vocc_sub: "Messages & Dispatch",
+        docs_sub: "Aeroports & SOPs",
+        flight_sub: "Briefing & NOTAMs",
+        metar_sub: "Meteo & METAR",
+        settings_sub: "Langue & Theme",
+      },
+      metar: {
+        title: "Meteorologie (METAR)",
+        search_placeholder: "Rechercher ICAO (ex : SBGR, LFPG, KJFK)...",
+        btn_search: "Chercher METAR",
+        search_result: "Resultat de la recherche",
+        flight_route_title: "METAR du Vol Actif (Origine / Destination)",
+        origin: "Origine (DEP)",
+        destination: "Destination (ARR)",
+        alternate: "Degagement (ALT)",
+        loading: "Chargement des conditions meteorologiques...",
+        no_flight: "Aucun vol actif connecte. Recherchez un aeroport ci-dessus.",
+        btn_copy: "Copier",
+        copied: "Copie !",
+        wind: "Vent",
+        visibility: "Visibilite",
+        clouds: "Nuages",
+        temp: "Temp / PtR",
+        qnh: "QNH / Altimetre",
+        not_found: "METAR non trouve pour {icao}",
       },
       settings: {
         title: "Parametres",
@@ -694,7 +826,17 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   const stateData = {
     panelOpen: false,
     activeView: "tenants", // "tenants" | "auth" | "main"
-    activeTab: "vocc",     // "vocc" | "docs" | "flight"
+    activeTab: "home",     // "home" | "vocc" | "docs" | "flight" | "metar" | "settings"
+
+    // METAR & Weather State
+    metarData: {
+      dep: null,
+      arr: null,
+      alt: null,
+      searched: null,
+    },
+    isFetchingMetar: false,
+    metarSearchQuery: "",
 
     // Tenants / VA list
     tenants: [],
@@ -1612,6 +1754,33 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     } catch (_e) {}
   }
 
+  function findNearestAirportForMetar() {
+    if (!api || !api.variables || !api.airports) return;
+    try {
+      const lat = api.variables.get("A:PLANE LATITUDE", "degrees");
+      const lon = api.variables.get("A:PLANE LONGITUDE", "degrees");
+      if (typeof lat !== "number" || typeof lon !== "number") return;
+      api.airports.find_airports_by_coords(
+        "airspace_acars_nearest_metar",
+        lon,
+        lat,
+        25000,
+        5,
+        function (added) {
+          if (Array.isArray(added) && added.length > 0 && added[0].icao) {
+            const icao = added[0].icao;
+            const inp = q("#as-acars-metar-search-input");
+            if (inp) inp.value = icao;
+            searchMetar(icao);
+          }
+        },
+        function () {},
+        function () {},
+        true
+      );
+    } catch (_e) {}
+  }
+
   // --- Company NOTAMs ---
   async function fetchNotams() {
     if (!getActiveToken()) return;
@@ -1807,8 +1976,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (!rootEl) return;
     const vaBadge = q("#as-acars-va-badge");
     const routePill = q("#as-acars-route-pill");
-    const btnRefresh = q("#as-acars-btn-refresh");
     const btnSwitchVa = q("#as-acars-btn-switch-va");
+    const btnHeaderHome = q("#as-acars-btn-header-home");
+    const defaultLogo = q("#as-acars-default-logo");
+    const vaLogoImg = q("#as-acars-va-logo");
 
     const isAuthed = Boolean(getActiveToken() && store.activeTenant);
     setVisible(vaBadge, Boolean(store.activeTenant && store.activeTenant.name));
@@ -1816,7 +1987,37 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       vaBadge.textContent = store.activeTenant.name;
     }
 
-    setVisible(btnRefresh, isAuthed && stateData.activeView === "main");
+    // Logo VA vs Airspace Logo
+    const vaLogoUrl =
+      (store.activeTenant && store.activeTenant.logo_url) ||
+      (stateData.pilot && (stateData.pilot.airline_logo || (stateData.pilot.airline && stateData.pilot.airline.logo_url))) ||
+      null;
+
+    if (vaLogoImg && defaultLogo) {
+      if (isAuthed && vaLogoUrl) {
+        let fullLogo = String(vaLogoUrl).trim();
+        if (!/^https?:\/\//i.test(fullLogo)) {
+          const base = getTenantBaseUrl();
+          fullLogo = (base ? base.replace(/\/+$/, "") : "https://airspace.ferrlab.com") + (fullLogo.startsWith("/") ? "" : "/") + fullLogo;
+        }
+        if (vaLogoImg.getAttribute("data-src") !== fullLogo) {
+          vaLogoImg.setAttribute("data-src", fullLogo);
+          vaLogoImg.setAttribute("src", fullLogo);
+          vaLogoImg.src = fullLogo;
+          vaLogoImg.onerror = function () {
+            setVisible(vaLogoImg, false);
+            setVisible(defaultLogo, true);
+          };
+        }
+        setVisible(vaLogoImg, true);
+        setVisible(defaultLogo, false);
+      } else {
+        setVisible(vaLogoImg, false);
+        setVisible(defaultLogo, true);
+      }
+    }
+
+    setVisible(btnHeaderHome, isAuthed && stateData.activeView === "main" && stateData.activeTab !== "home");
     setVisible(btnSwitchVa, isAuthed || stateData.activeView === "auth");
 
     const b = stateData.booking;
@@ -1980,7 +2181,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
   function renderMainView() {
     if (!rootEl) return;
-    const tabs = ["vocc", "docs", "flight", "settings"];
+    const tabs = ["home", "vocc", "docs", "flight", "metar", "settings"];
     for (let i = 0; i < tabs.length; i++) {
       const t = tabs[i];
       const btn = q("#as-acars-tab-btn-" + t);
@@ -1995,12 +2196,431 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       setVisible(panel, stateData.activeTab === t);
     }
 
+    renderHeader();
     renderTabsBadge();
-    renderChatTab();
-    renderBriefingShortcuts();
-    renderDocsTab();
-    renderFlightTab();
-    renderSettingsTab();
+
+    if (stateData.activeTab === "home") {
+      renderHomeTab();
+    } else if (stateData.activeTab === "vocc") {
+      renderChatTab();
+    } else if (stateData.activeTab === "docs") {
+      renderBriefingShortcuts();
+      renderDocsTab();
+    } else if (stateData.activeTab === "flight") {
+      renderFlightTab();
+    } else if (stateData.activeTab === "metar") {
+      renderMetarTab();
+    } else if (stateData.activeTab === "settings") {
+      renderSettingsTab();
+    }
+  }
+
+  function renderHomeTab() {
+    if (!rootEl) return;
+    const greetingEl = q("#as-acars-tablet-greeting");
+    const summaryEl = q("#as-acars-tablet-flight-summary");
+    const clockEl = q("#as-acars-tablet-clock");
+
+    if (greetingEl) {
+      if (stateData.pilot && (stateData.pilot.callsign || stateData.pilot.name)) {
+        greetingEl.textContent = "Comandante " + (stateData.pilot.callsign || stateData.pilot.name);
+      } else if (store.activeTenant && store.activeTenant.name) {
+        greetingEl.textContent = store.activeTenant.name + " - Airspace EFB";
+      } else {
+        greetingEl.textContent = "Airspace ACARS EFB";
+      }
+    }
+
+    if (summaryEl) {
+      const b = stateData.booking;
+      if (b && (b.callsign || b.flight_number)) {
+        const fn = b.flight_number || b.callsign || "VOO";
+        const dep = (b.departure_airport && b.departure_airport.icao) || "----";
+        const arr = (b.arrival_airport && b.arrival_airport.icao) || "----";
+        summaryEl.textContent = fn + " (" + dep + " -> " + arr + ") - Status: Operacional";
+      } else {
+        summaryEl.textContent = "Nenhum voo ativo conectado - Sistema Pronto";
+      }
+    }
+
+    if (clockEl) {
+      const now = new Date();
+      const hh = String(now.getUTCHours()).padStart(2, "0");
+      const mm = String(now.getUTCMinutes()).padStart(2, "0");
+      clockEl.textContent = hh + ":" + mm + " UTC";
+    }
+  }
+
+  // --- METAR & Weather Functionality ---
+  function parseMetar(rawMetar, defaultIcao) {
+    if (!rawMetar) return null;
+    const raw = String(rawMetar).trim();
+    const parts = raw.split(/\s+/);
+    let icao = (defaultIcao || "").toUpperCase();
+    for (let i = 0; i < parts.length && i < 4; i++) {
+      const p = parts[i].toUpperCase();
+      if (p !== "METAR" && p !== "SPECI" && p !== "COR" && /^[A-Z]{4}$/.test(p)) {
+        icao = p;
+        break;
+      }
+    }
+    if (!icao && parts[0]) icao = parts[0].toUpperCase();
+
+    let flightCategory = "VFR";
+    let catClass = "vfr";
+
+    // Wind
+    let windText = "--";
+    let windDir = null;
+    let windSpeed = null;
+    let windGust = null;
+    const windMatch = raw.match(/\b(\d{3}|VRB)(\d{2,3})(?:G(\d{2,3}))?KT\b/);
+    if (windMatch) {
+      windDir = windMatch[1] === "VRB" ? "VRB" : parseInt(windMatch[1], 10);
+      windSpeed = parseInt(windMatch[2], 10);
+      if (windMatch[3]) {
+        windGust = parseInt(windMatch[3], 10);
+        windText = (windDir === "VRB" ? "VRB" : String(windDir).padStart(3, "0") + "o") + " / " + windSpeed + " kt (G " + windGust + " kt)";
+      } else {
+        windText = (windDir === "VRB" ? "VRB" : String(windDir).padStart(3, "0") + "o") + " / " + windSpeed + " kt";
+      }
+    }
+
+    // Visibility
+    let visText = "--";
+    let visKm = null;
+    const visSmMatch = raw.match(/\b(\d+(?:\/\d+)?)SM\b/);
+    const visMetresMatch = raw.match(/\b(\d{4})\b/);
+    if (visSmMatch) {
+      visText = visSmMatch[1] + " SM";
+    } else if (visMetresMatch) {
+      const v = parseInt(visMetresMatch[1], 10);
+      visKm = v;
+      if (v >= 9999) {
+        visText = "> 10 km (9999)";
+      } else {
+        visText = v + " m";
+      }
+    } else if (/\bCAVOK\b/.test(raw)) {
+      visText = "CAVOK (> 10 km)";
+    }
+
+    // Clouds
+    const cloudsList = [];
+    let lowestCeiling = 99999;
+    const cloudRegex = /\b(FEW|SCT|BKN|OVC|VV)(\d{3})(CB|TCU)?\b/g;
+    let cm;
+    while ((cm = cloudRegex.exec(raw)) !== null) {
+      const type = cm[1];
+      const altFt = parseInt(cm[2], 10) * 100;
+      const extra = cm[3] ? " " + cm[3] : "";
+      cloudsList.push(type + " " + altFt + " ft" + extra);
+      if ((type === "BKN" || type === "OVC" || type === "VV") && altFt < lowestCeiling) {
+        lowestCeiling = altFt;
+      }
+    }
+    const cloudsText =
+      cloudsList.length > 0
+        ? cloudsList.join(", ")
+        : (/\bCAVOK\b/.test(raw) ? "CAVOK (Ceu limpo)" : (/\bSKC|CLR|NSC\b/.test(raw) ? "Ceu claro" : "--"));
+
+    // Temperature / Dew point
+    let tempText = "--";
+    let tempVal = null;
+    let dewVal = null;
+    const tempMatch = raw.match(/\b(M?\d{2})\/(M?\d{2})\b/);
+    if (tempMatch) {
+      tempVal = parseInt(tempMatch[1].replace("M", "-"), 10);
+      dewVal = parseInt(tempMatch[2].replace("M", "-"), 10);
+      tempText = tempVal + "oC / " + dewVal + "oC";
+    }
+
+    // Altimeter / QNH
+    let qnhText = "--";
+    let qnhVal = null;
+    const qnhMatch = raw.match(/\bQ(\d{4})\b/);
+    const altMatch = raw.match(/\bA(\d{4})\b/);
+    if (qnhMatch) {
+      qnhVal = parseInt(qnhMatch[1], 10);
+      const inHg = (qnhVal * 0.0295299830714).toFixed(2);
+      qnhText = qnhVal + " hPa (" + inHg + " inHg)";
+    } else if (altMatch) {
+      const inHgNum = (parseInt(altMatch[1], 10) / 100).toFixed(2);
+      qnhVal = Math.round(parseFloat(inHgNum) * 33.8639);
+      qnhText = inHgNum + " inHg (" + qnhVal + " hPa)";
+    }
+
+    if (lowestCeiling < 500 || (visKm !== null && visKm < 1600)) {
+      flightCategory = "LIFR";
+      catClass = "lifr";
+    } else if (lowestCeiling < 1000 || (visKm !== null && visKm < 4800)) {
+      flightCategory = "IFR";
+      catClass = "ifr";
+    } else if (lowestCeiling <= 3000 || (visKm !== null && visKm < 8000)) {
+      flightCategory = "MVFR";
+      catClass = "mvfr";
+    } else {
+      flightCategory = "VFR";
+      catClass = "vfr";
+    }
+
+    return {
+      raw: raw,
+      icao: icao,
+      flightCategory: flightCategory,
+      catClass: catClass,
+      windDir: windDir,
+      windSpeed: windSpeed,
+      windGust: windGust,
+      windText: windText,
+      visText: visText,
+      cloudsText: cloudsText,
+      temp: tempVal,
+      dew: dewVal,
+      tempText: tempText,
+      qnh: qnhVal,
+      qnhText: qnhText,
+    };
+  }
+
+  function fetchMetarForIcao(rawIcao) {
+    if (!rawIcao) return Promise.resolve(null);
+    const icao = String(rawIcao).trim().toUpperCase();
+    if (!icao || icao.length < 3) return Promise.resolve(null);
+
+    return new Promise(function (resolve) {
+      let resolved = false;
+
+      // 1. Flow native API
+      try {
+        const flowApi = (__flowContext && __flowContext.$api) || (typeof window !== "undefined" && window.$api);
+        if (flowApi && flowApi.weather && typeof flowApi.weather.find_metar_by_icao === "function") {
+          const timer = setTimeout(function () {
+            if (!resolved) fallbackFetch();
+          }, 1500);
+
+          flowApi.weather.find_metar_by_icao(icao, function (flowMetar) {
+            if (resolved) return;
+            clearTimeout(timer);
+            if (flowMetar && (flowMetar.metarString || flowMetar.raw)) {
+              resolved = true;
+              resolve(parseMetar(flowMetar.metarString || flowMetar.raw, icao));
+              return;
+            }
+            fallbackFetch();
+          });
+          return;
+        }
+      } catch (_e) {}
+
+      fallbackFetch();
+
+      function fallbackFetch() {
+        if (resolved) return;
+        fetch("https://metar.vatsim.net/metar.php?id=" + encodeURIComponent(icao))
+          .then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.text();
+          })
+          .then(function (txt) {
+            if (resolved) return;
+            resolved = true;
+            const clean = String(txt || "").trim();
+            if (!clean || clean.indexOf("No METAR") !== -1 || clean.indexOf("<html>") !== -1) {
+              resolve(null);
+              return;
+            }
+            resolve(parseMetar(clean, icao));
+          })
+          .catch(function () {
+            if (!resolved) {
+              resolved = true;
+              resolve(null);
+            }
+          });
+      }
+    });
+  }
+
+  function buildMetarCardHtml(m, roleLabel) {
+    if (!m) return "";
+    const icao = escapeHtml(m.icao || "----");
+    const role = roleLabel ? '<span class="as-acars-metar-role">' + escapeHtml(roleLabel) + '</span>' : "";
+    const cat = m.flightCategory || "VFR";
+    const catClass = m.catClass || "vfr";
+    const raw = escapeHtml(m.raw || "");
+
+    return (
+      '<div class="as-acars-metar-card">' +
+        '<div class="as-acars-metar-card-header">' +
+          '<div class="as-acars-metar-card-title">' +
+            '<span class="as-acars-metar-icao">' + icao + '</span>' +
+            role +
+          '</div>' +
+          '<span class="as-acars-cat-badge as-acars-cat-' + catClass + '">' + escapeHtml(cat) + '</span>' +
+        '</div>' +
+        '<div class="as-acars-metar-raw-box">' +
+          '<span class="as-acars-metar-raw-text">' + raw + '</span>' +
+          '<button type="button" class="as-acars-btn as-acars-btn-xs as-acars-btn-outline as-acars-btn-copy-metar" data-raw="' + escapeHtml(m.raw || "") + '">' +
+            t("metar.btn_copy", "Copiar") +
+          '</button>' +
+        '</div>' +
+        '<div class="as-acars-metar-params-grid">' +
+          '<div class="as-acars-metar-param-item">' +
+            '<span class="as-acars-metar-param-label">' + t("metar.wind", "Vento") + '</span>' +
+            '<span class="as-acars-metar-param-val">' + escapeHtml(m.windText || "--") + '</span>' +
+          '</div>' +
+          '<div class="as-acars-metar-param-item">' +
+            '<span class="as-acars-metar-param-label">' + t("metar.visibility", "Visibilidade") + '</span>' +
+            '<span class="as-acars-metar-param-val">' + escapeHtml(m.visText || "--") + '</span>' +
+          '</div>' +
+          '<div class="as-acars-metar-param-item">' +
+            '<span class="as-acars-metar-param-label">' + t("metar.clouds", "Nuvens") + '</span>' +
+            '<span class="as-acars-metar-param-val">' + escapeHtml(m.cloudsText || "--") + '</span>' +
+          '</div>' +
+          '<div class="as-acars-metar-param-item">' +
+            '<span class="as-acars-metar-param-label">' + t("metar.temp", "Temp / PO") + '</span>' +
+            '<span class="as-acars-metar-param-val">' + escapeHtml(m.tempText || "--") + '</span>' +
+          '</div>' +
+          '<div class="as-acars-metar-param-item">' +
+            '<span class="as-acars-metar-param-label">' + t("metar.qnh", "QNH / Altimetro") + '</span>' +
+            '<span class="as-acars-metar-param-val">' + escapeHtml(m.qnhText || "--") + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function renderMetarCards() {
+    if (!rootEl) return;
+    const flightCardsWrap = q("#as-acars-metar-flight-cards");
+    const searchedSection = q("#as-acars-metar-searched-section");
+    const searchedCardWrap = q("#as-acars-metar-searched-card-wrap");
+    const pillsWrap = q("#as-acars-metar-quick-pills");
+
+    const b = stateData.booking;
+    const depIcao = b && b.departure_airport && b.departure_airport.icao ? b.departure_airport.icao.toUpperCase() : "";
+    const arrIcao = b && b.arrival_airport && b.arrival_airport.icao ? b.arrival_airport.icao.toUpperCase() : "";
+    const altIcao = b && b.alternate_airport && b.alternate_airport.icao ? b.alternate_airport.icao.toUpperCase() : "";
+
+    if (pillsWrap) {
+      let pillsHtml = "";
+      if (depIcao) {
+        pillsHtml += '<button type="button" class="as-acars-metar-pill" data-icao="' + depIcao + '">DEP: ' + depIcao + '</button>';
+      }
+      if (arrIcao) {
+        pillsHtml += '<button type="button" class="as-acars-metar-pill" data-icao="' + arrIcao + '">ARR: ' + arrIcao + '</button>';
+      }
+      if (altIcao) {
+        pillsHtml += '<button type="button" class="as-acars-metar-pill" data-icao="' + altIcao + '">ALT: ' + altIcao + '</button>';
+      }
+      pillsHtml += '<button type="button" class="as-acars-metar-pill" data-action="nearest">Mais Proximo (Sim)</button>';
+      pillsWrap.innerHTML = pillsHtml;
+    }
+
+    if (searchedSection && searchedCardWrap) {
+      if (stateData.metarData.searched) {
+        setVisible(searchedSection, true);
+        searchedCardWrap.innerHTML = buildMetarCardHtml(stateData.metarData.searched, "Pesquisa");
+      } else {
+        setVisible(searchedSection, false);
+      }
+    }
+
+    if (flightCardsWrap) {
+      if (!depIcao && !arrIcao) {
+        flightCardsWrap.innerHTML =
+          '<div class="as-acars-empty-state">' +
+          t("metar.no_flight", "Nenhum voo ativo conectado. Pesquise um aeroporto acima.") +
+          '</div>';
+      } else {
+        let cardsHtml = "";
+        if (stateData.metarData.dep) {
+          cardsHtml += buildMetarCardHtml(stateData.metarData.dep, t("metar.origin", "Origem (DEP)"));
+        } else if (depIcao) {
+          cardsHtml +=
+            '<div class="as-acars-metar-card"><div class="as-acars-empty-state">' +
+            (stateData.isFetchingMetar ? t("metar.loading", "Carregando...") : "METAR nao disponivel para " + depIcao) +
+            '</div></div>';
+        }
+
+        if (stateData.metarData.arr) {
+          cardsHtml += buildMetarCardHtml(stateData.metarData.arr, t("metar.destination", "Destino (ARR)"));
+        } else if (arrIcao) {
+          cardsHtml +=
+            '<div class="as-acars-metar-card"><div class="as-acars-empty-state">' +
+            (stateData.isFetchingMetar ? t("metar.loading", "Carregando...") : "METAR nao disponivel para " + arrIcao) +
+            '</div></div>';
+        }
+
+        if (stateData.metarData.alt) {
+          cardsHtml += buildMetarCardHtml(stateData.metarData.alt, t("metar.alternate", "Alternado (ALT)"));
+        }
+
+        flightCardsWrap.innerHTML = cardsHtml;
+      }
+    }
+  }
+
+  async function loadRouteMetars(force) {
+    const b = stateData.booking;
+    const depIcao = b && b.departure_airport && b.departure_airport.icao ? b.departure_airport.icao.toUpperCase() : "";
+    const arrIcao = b && b.arrival_airport && b.arrival_airport.icao ? b.arrival_airport.icao.toUpperCase() : "";
+    const altIcao = b && b.alternate_airport && b.alternate_airport.icao ? b.alternate_airport.icao.toUpperCase() : "";
+
+    const promises = [];
+    if (depIcao && (force || !stateData.metarData.dep || stateData.metarData.dep.icao !== depIcao)) {
+      promises.push(fetchMetarForIcao(depIcao).then(function (m) { stateData.metarData.dep = m; }));
+    }
+    if (arrIcao && (force || !stateData.metarData.arr || stateData.metarData.arr.icao !== arrIcao)) {
+      promises.push(fetchMetarForIcao(arrIcao).then(function (m) { stateData.metarData.arr = m; }));
+    }
+    if (altIcao && (force || !stateData.metarData.alt || stateData.metarData.alt.icao !== altIcao)) {
+      promises.push(fetchMetarForIcao(altIcao).then(function (m) { stateData.metarData.alt = m; }));
+    }
+
+    if (promises.length > 0) {
+      stateData.isFetchingMetar = true;
+      renderMetarCards();
+      try {
+        await Promise.all(promises);
+      } finally {
+        stateData.isFetchingMetar = false;
+        renderMetarCards();
+      }
+    } else {
+      renderMetarCards();
+    }
+  }
+
+  async function searchMetar(rawIcao) {
+    const icao = String(rawIcao || "").trim().toUpperCase();
+    if (!icao || icao.length < 3) return;
+    stateData.metarSearchQuery = icao;
+    stateData.isFetchingMetar = true;
+    renderMetarCards();
+    try {
+      const res = await fetchMetarForIcao(icao);
+      stateData.metarData.searched = res || {
+        icao: icao,
+        raw: "METAR nao disponivel para " + icao,
+        flightCategory: "--",
+        catClass: "mvfr",
+        windText: "--",
+        visText: "--",
+        cloudsText: "--",
+        tempText: "--",
+        qnhText: "--",
+      };
+    } finally {
+      stateData.isFetchingMetar = false;
+      renderMetarCards();
+    }
+  }
+
+  function renderMetarTab() {
+    renderMetarCards();
+    loadRouteMetars(false);
   }
 
   function renderSettingsTab() {
@@ -2103,10 +2723,15 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   function renderTabsBadge() {
     if (!rootEl) return;
     const badge = q("#as-acars-unread-badge");
+    const homeBadge = q("#as-acars-home-unread-badge");
     const unreadCount = getUnreadMessages().length;
     setVisible(badge, unreadCount > 0);
     if (badge && unreadCount > 0) {
       badge.textContent = String(unreadCount);
+    }
+    setVisible(homeBadge, unreadCount > 0);
+    if (homeBadge && unreadCount > 0) {
+      homeBadge.textContent = String(unreadCount);
     }
   }
 
@@ -2625,6 +3250,8 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       } else {
         renderDocsTab();
       }
+    } else if (inputEl.id === "as-acars-metar-search-input") {
+      stateData.metarSearchQuery = inputEl.value || "";
     }
   }
 
@@ -2788,6 +3415,13 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
+      // Return to Tablet Home Screen
+      if (findClosest(target, "#as-acars-btn-header-home")) {
+        stateData.activeTab = "home";
+        renderMainView();
+        return;
+      }
+
       // Toast actions
       if (findClosest(target, "#as-acars-toast-close") || findClosest(target, "#as-acars-toast-dismiss")) {
         if (findClosest(target, "#as-acars-toast-dismiss") && stateData.toastMessage) {
@@ -2895,8 +3529,8 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
-      // Main Navigation Tabs
-      const tabBtn = findClosest(target, ".as-acars-tab[data-tab]");
+      // Main Navigation Tabs & Tablet Tiles
+      const tabBtn = findClosest(target, ".as-acars-tab[data-tab]") || findClosest(target, ".as-acars-tablet-tile[data-tab]");
       if (tabBtn) {
         const tabName = tabBtn.getAttribute("data-tab");
         if (tabName) {
@@ -2908,6 +3542,53 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           if (tabName === "vocc") {
             scrollChatToBottom();
           }
+        }
+        return;
+      }
+
+      // METAR Search Button
+      if (findClosest(target, "#as-acars-btn-search-metar")) {
+        const inp = q("#as-acars-metar-search-input");
+        if (inp && inp.value.trim()) {
+          searchMetar(inp.value.trim());
+        }
+        return;
+      }
+
+      // METAR Refresh Active Route Button
+      if (findClosest(target, "#as-acars-btn-refresh-metar")) {
+        loadRouteMetars(true);
+        return;
+      }
+
+      // METAR Quick Airport Pills
+      const metarPill = findClosest(target, ".as-acars-metar-pill");
+      if (metarPill) {
+        const action = metarPill.getAttribute("data-action");
+        if (action === "nearest") {
+          findNearestAirportForMetar();
+        } else {
+          const icao = metarPill.getAttribute("data-icao");
+          if (icao) {
+            const inp = q("#as-acars-metar-search-input");
+            if (inp) inp.value = icao;
+            searchMetar(icao);
+          }
+        }
+        return;
+      }
+
+      // METAR Copy Raw Text Button
+      const copyMetarBtn = findClosest(target, ".as-acars-btn-copy-metar");
+      if (copyMetarBtn) {
+        const raw = copyMetarBtn.getAttribute("data-raw");
+        if (raw) {
+          copyToClipboard(raw);
+          const orig = copyMetarBtn.textContent;
+          copyMetarBtn.textContent = t("metar.copied", "Copiado!");
+          setTimeout(function () {
+            copyMetarBtn.textContent = orig;
+          }, 2000);
         }
         return;
       }
@@ -3046,7 +3727,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     });
 
     // Bind focus, blur, and input handlers on all text inputs
-    const inputs = ["#as-acars-tenant-search", "#as-acars-doc-search", "#as-acars-chat-input"];
+    const inputs = ["#as-acars-tenant-search", "#as-acars-doc-search", "#as-acars-chat-input", "#as-acars-metar-search-input"];
     for (let i = 0; i < inputs.length; i++) {
       const inp = q(inputs[i]);
       if (!inp) continue;
@@ -3080,6 +3761,20 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           if (val) {
             chatInput.value = "";
             sendChatMessage(val);
+          }
+        }
+      });
+    }
+
+    const metarInput = q("#as-acars-metar-search-input");
+    if (metarInput) {
+      metarInput.addEventListener("keydown", function (e) {
+        e.stopPropagation();
+        if (e.key === "Enter" || e.keyCode === 13) {
+          e.preventDefault();
+          const val = metarInput.value.trim();
+          if (val) {
+            searchMetar(val);
           }
         }
       });
@@ -3292,7 +3987,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
   // 7. Otto Search Bar Integration
   if (typeof search === "function") {
-    const searchPrefixes = ["airspace", "acars", "vocc", "doc", "docs", "briefing", "apt", "notam"];
+    const searchPrefixes = ["airspace", "acars", "vocc", "doc", "docs", "briefing", "apt", "notam", "metar", "wx", "clima"];
     search(searchPrefixes, function (query, callback) {
       const raw = String(query || "").trim();
       const parts = raw.split(/\s+/);
@@ -3402,6 +4097,41 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
+      // METAR / Weather Search via Otto
+      if (prefix === "metar" || prefix === "wx" || prefix === "clima") {
+        const icaoTerm = (term || "").toUpperCase().slice(0, 4);
+        if (icaoTerm) {
+          results.push({
+            uid: "airspace_metar_" + icaoTerm,
+            label: "METAR: " + icaoTerm,
+            subtext: "Consultar informacoes meteorologicas para " + icaoTerm,
+            execute: function () {
+              stateData.panelOpen = true;
+              stateData.activeView = "main";
+              stateData.activeTab = "metar";
+              renderAll();
+              searchMetar(icaoTerm);
+              return false;
+            },
+          });
+        } else {
+          results.push({
+            uid: "airspace_metar_open",
+            label: "Abrir Meteorologia (METAR)",
+            subtext: "Digite 'metar <ICAO>' para buscar condicoes meteorologicas",
+            execute: function () {
+              stateData.panelOpen = true;
+              stateData.activeView = "main";
+              stateData.activeTab = "metar";
+              renderAll();
+              return false;
+            },
+          });
+        }
+        callback(results);
+        return;
+      }
+
       // Documents & Airport Briefings Search via Otto (doc, docs, briefing, apt, airspace, acars)
       const docsPool = stateData.documents.filter(function (d) {
         if (prefix === "briefing" || prefix === "apt") {
@@ -3491,6 +4221,13 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       getFilteredDocuments: getFilteredDocuments,
       searchAirportDocumentByIcao: searchAirportDocumentByIcao,
       findNearestSimAirportAndSearch: findNearestSimAirportAndSearch,
+      findNearestAirportForMetar: findNearestAirportForMetar,
+      parseMetar: parseMetar,
+      fetchMetarForIcao: fetchMetarForIcao,
+      searchMetar: searchMetar,
+      loadRouteMetars: loadRouteMetars,
+      renderHomeTab: renderHomeTab,
+      renderMetarTab: renderMetarTab,
       fetchNotams: fetchNotams,
       renderAll: renderAll,
       findClosest: findClosest,
