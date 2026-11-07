@@ -5,6 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "node dev/server.mjs",
+    "preview": "node dev/server.mjs",
     "build": "node scripts/build.mjs",
     "test": "node --test test/widget.test.mjs"
   },

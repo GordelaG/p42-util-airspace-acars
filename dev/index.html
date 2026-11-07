@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airspace ACARS - Dev Preview (MSFS 2024 / Flow Pro)</title>
+  
+  <!-- Fonts matching MSFS 2024 & Flow Pro -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Flow Widget Styles -->
+  <link rel="stylesheet" href="/src/code.css">
+  
+  <!-- Leaflet CSS & JS for Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <style>
+    /* Reset & Cockpit Simulator Canvas */
+    *, *::before, *::after {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 0px !important;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Roboto', 'Inter', -apple-system, sans-serif;
+      background-color: #0c0c0e;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Simulated Flight Deck Backdrop */
+    #sim-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 50% 30%, #18181b 0%, #101012 75%, #0a0a0b 100%);
+      background-size: cover;
+      background-position: center;
+      transition: background 0.3s ease;
+      overflow: hidden;
+    }
+
+    #sim-canvas.theme-clean {
+      background: #141416;
+    }
+
+    #sim-canvas.theme-light {
+      background: #e4e7eb;
+    }
+
+    /* Subtle Cockpit Horizon line & HUD guides */
+    .cockpit-hud {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      opacity: 0.15;
+      background-image: 
+        radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 80px 80px, 80px 80px, 80px 80px;
+    }
+
+    /* Top Dev Info Bar */
+    .dev-top-status {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 10000;
+      pointer-events: all;
+    }
+
+    .dev-badge-sim {
+      background: rgba(24, 24, 27, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(8px);
+    }
+
+    .dev-dot-live {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseLive 2s infinite;
+    }
+
+    @keyframes pulseLive {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Floating Collapsible DevTools Dock */
+    .devtools-panel {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      width: 330px;
+      background: rgba(24, 24, 27, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      color: #e2e8f0;
+      font-size: 12px;
+      z-index: 10000;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      overflow: hidden;
+      pointer-events: all;
+    }
+
+    .devtools-panel.minimized {
+      transform: translateY(-85%);
+      opacity: 0.85;
+    }
+
+    .devtools-header {
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .devtools-title {
+      font-weight: 600;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #38bdf8;
+    }
+
+    .devtools-btn-toggle {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .devtools-btn-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .devtools-body {
+      padding: 12px 14px;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .devtools-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .devtools-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .devtools-btn {
+      flex: 1;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.08s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      text-align: center;
+    }
+
+    .devtools-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .devtools-btn:active {
+      transform: scale(0.97);
+    }
+
+    .devtools-btn-primary {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #fff;
+    }
+
+    .devtools-btn-primary:hover {
+      background: #0369a1;
+    }
+
+    .devtools-btn-success {
+      background: #059669;
+      border-color: #34d399;
+      color: #fff;
+    }
+
+    .devtools-btn-success:hover {
+      background: #047857;
+    }
+
+    .devtools-btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+
+    .devtools-btn-danger:hover {
+      background: rgba(239, 68, 68, 0.35);
+    }
+
+    .devtools-select {
+      width: 100%;
+      padding: 6px 8px;
+      background: #0b0e14;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #e2e8f0;
+      border-radius: 6px;
+      font-size: 11px;
+      outline: none;
+    }
+
+    /* Bottom Flow Pro Dock Bar */
+    .flow-bar {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(14, 18, 26, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 36px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(14px);
+      z-index: 9999;
+      pointer-events: all;
+    }
+
+    .flow-tile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #f1f5f9;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.18s ease;
+      position: relative;
+    }
+
+    .flow-tile:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .flow-tile:active {
+      transform: translateY(0);
+    }
+
+    .flow-tile.flow-active {
+      background: rgba(2, 132, 199, 0.35);
+      border-color: #38bdf8;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+    }
+
+    .flow-tile.flow-armed {
+      border-color: #f59e0b;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+      animation: armedGlow 1.8s infinite;
+    }
+
+    @keyframes armedGlow {
+      0%, 100% { border-color: #f59e0b; }
+      50% { border-color: #fbbf24; }
+    }
+
+    .flow-tile-icon {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flow-badge {
+      background: #ef4444;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 12px;
+    }
+
+    /* Otto Search Launcher Tile */
+    .flow-otto-tile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.18s;
+    }
+
+    .flow-otto-tile:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .flow-otto-kbd {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      color: #cbd5e1;
+    }
+
+    /* Otto Floating Search Modal */
+    .otto-modal-wrap {
+      position: absolute;
+      top: 14%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 580px;
+      max-width: 90vw;
+      background: rgba(15, 18, 26, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
+      z-index: 10001;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      pointer-events: all;
+    }
+
+    .otto-modal-wrap.open {
+      display: flex;
+      animation: modalSlide 0.15s ease-out;
+    }
+
+    @keyframes modalSlide {
+      from { opacity: 0; transform: translate(-50%, -10px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    .otto-input-bar {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      gap: 12px;
+    }
+
+    .otto-icon {
+      color: #38bdf8;
+      width: 20px;
+      height: 20px;
+    }
+
+    .otto-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #f8fafc;
+      font-size: 15px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .otto-close-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .otto-results-list {
+      max-height: 340px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 6px;
+    }
+
+    .otto-result-item {
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: background 0.1s;
+    }
+
+    .otto-result-item:hover, .otto-result-item.selected {
+      background: rgba(2, 132, 199, 0.25);
+    }
+
+    .otto-result-label {
+      font-weight: 600;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+
+    .otto-result-sub {
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
+    .otto-empty {
+      padding: 24px;
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    /* Mount Container for Flow Widget HTML */
+    #widget-mount {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <!-- Simulated Flight Deck Background -->
+  <div id="sim-canvas">
+    <div class="cockpit-hud"></div>
+  </div>
+
+  <!-- Top Dev Status -->
+  <div class="dev-top-status">
+    <div class="dev-badge-sim">
+      <div class="dev-dot-live"></div>
+      <span>Flow Pro Simulator Ativo</span>
+    </div>
+    <div class="dev-badge-sim" id="dev-simvar-badge">
+      <span>Pos: SBGR (-23.43, -46.47) | Alt: FL280 | G31542</span>
+    </div>
+  </div>
+
+  <!-- Floating DevTools Dock -->
+  <div class="devtools-panel" id="devtools-panel">
+    <div class="devtools-header" id="devtools-toggle-header">
+      <div class="devtools-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span>Painel de Desenvolvedor</span>
+      </div>
+      <button type="button" class="devtools-btn-toggle" id="btn-minimize-devtools">_</button>
+    </div>
+
+    <div class="devtools-body">
+      <!-- Controls -->
+      <div>
+        <div class="devtools-section-title">Janela &amp; Navegacao</div>
+        <div class="devtools-row">
+          <button type="button" class="devtools-btn devtools-btn-primary" id="btn-dev-toggle-window">
+            Alternar Janela (Run)
+          </button>
+          <button type="button" class="devtools-btn" id="btn-dev-toggle-theme">
+            Mudar Tema (White/Dark)
+          </button>
+        </div>
+      </div>
+
+      <!-- vOCC / Chat -->
+      <div>
+        <div class="devtools-section-title">Simulacao vOCC &amp; Alertas</div>
+        <div class="devtools-row">
+          <button type="button" class="devtools-btn" id="btn-dev-trigger-toast">
+            Simular Toast vOCC
+          </button>
+          <button type="button" class="devtools-btn" id="btn-dev-incoming-chat">
+            Receber Msg vOCC
+          </button>
+        </div>
+      </div>
+
+      <!-- Flight Simulation -->
+      <div>
+        <div class="devtools-section-title">Voo Ativo (Booking)</div>
+        <select class="devtools-select" id="dev-flight-select">
+          <option value="sxb7282" selected>Voe Samba SXB7282 (SBEG -&gt; SBBV | E195)</option>
+          <option value="g31542">GOL G3 1542 (SBGR -&gt; SBRJ | B738)</option>
+          <option value="ad4120">Azul AD 4120 (SBSP -&gt; SBEG | A320)</option>
+          <option value="jj3054">LATAM JJ 3054 (SBKP -&gt; SBCT | A321)</option>
+          <option value="none">Nenhum Voo Ativo (Sem Booking)</option>
+        </select>
+      </div>
+
+      <!-- GPS Location -->
+      <div>
+        <div class="devtools-section-title">Localizacao GPS da Aeronave</div>
+        <select class="devtools-select" id="dev-gps-select">
+          <option value="sbgr">Guarulhos (SBGR) - Lat -23.435, Lon -46.473</option>
+          <option value="sbrj">Santos Dumont (SBRJ) - Lat -22.910, Lon -43.163</option>
+          <option value="sbkp">Viracopos (SBKP) - Lat -23.007, Lon -47.134</option>
+          <option value="sbct">Curitiba (SBCT) - Lat -25.528, Lon -49.175</option>
+          <option value="kjfk">New York (KJFK) - Lat 40.639, Lon -73.778</option>
+        </select>
+      </div>
+
+      <!-- Session & VA Auth -->
+      <div>
+        <div class="devtools-section-title">Sessao &amp; Virtual Airline</div>
+        <div class="devtools-row">
+          <button type="button" class="devtools-btn devtools-btn-success" id="btn-dev-quick-login">
+            Login Rapido (Voe Samba)
+          </button>
+          <button type="button" class="devtools-btn devtools-btn-danger" id="btn-dev-reset-store">
+            Resetar LocalStorage
+          </button>
+        </div>
+      </div>
+
+      <!-- Backdrop style -->
+      <div>
+        <div class="devtools-section-title">Visual de Fundo</div>
+        <div class="devtools-row">
+          <button type="button" class="devtools-btn" id="btn-canvas-flightdeck">Cockpit</button>
+          <button type="button" class="devtools-btn" id="btn-canvas-clean">Studio Escuro</button>
+          <button type="button" class="devtools-btn" id="btn-canvas-light">Studio Claro</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Flow Pro Dock Bar -->
+  <div class="flow-bar">
+    <div class="flow-tile" id="flow-acars-tile" title="Airspace ACARS - Clique para abrir">
+      <div class="flow-tile-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
+        </svg>
+      </div>
+      <span id="flow-tile-text">Airspace ACARS</span>
+      <span class="flow-badge" id="flow-tile-badge" style="display:none;">0</span>
+    </div>
+
+    <div class="flow-otto-tile" id="flow-otto-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <span>Otto Search</span>
+      <span class="flow-otto-kbd">Ctrl+K</span>
+    </div>
+  </div>
+
+  <!-- Otto Search Modal -->
+  <div class="otto-modal-wrap" id="otto-modal">
+    <div class="otto-input-bar">
+      <svg class="otto-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" class="otto-input" id="otto-search-input" placeholder="Digite um comando (ex: vocc ola, notam sbgr, metar sbrj, doc guia)..." autocomplete="off" />
+      <button type="button" class="otto-close-btn" id="otto-close-btn">ESC</button>
+    </div>
+    <div class="otto-results-list" id="otto-results-list">
+      <div class="otto-empty">Digite algo para pesquisar com o Otto...</div>
+    </div>
+  </div>
+
+  <!-- Mount Container where widget HTML will be inserted -->
+  <div id="widget-mount"></div>
+
+  <!-- Flow Lifecycle & Simulator Mock Implementation -->
+  <script>
+    window.flowLifecycle = {
+      html_created: null,
+      run: null,
+      state: null,
+      style: null,
+      info: null,
+      loop_1hz: null,
+      search: null,
+      exit: null
+    };
+
+    window.html_created = function (fn) { window.flowLifecycle.html_created = fn; };
+    window.run = function (fn) { window.flowLifecycle.run = fn; };
+    window.state = function (fn) { window.flowLifecycle.state = fn; };
+    window.style = function (fn) { window.flowLifecycle.style = fn; };
+    window.info = function (fn) { window.flowLifecycle.info = fn; };
+    window.loop_1hz = function (fn) { window.flowLifecycle.loop_1hz = fn; };
+    window.search = function (prefixes, fn) {
+      window.flowLifecycle.search = fn;
+      window.flowLifecycle.searchPrefixes = prefixes;
+    };
+    window.exit = function (fn) { window.flowLifecycle.exit = fn; };
+
+    // Mock SimVars
+    window.mockSimVars = {
+      "A:PLANE LATITUDE": -3.0358,
+      "A:PLANE LONGITUDE": -60.0497,
+      "A:PLANE ALTITUDE": 260,
+      "A:PLANE HEADING DEGREES TRUE": 350,
+      "A:AIRSPEED INDICATED": 0,
+      "A:GROUND VELOCITY": 0,
+      "A:VERTICAL SPEED": 0,
+      "A:SIM ON GROUND": 1,
+      "A:FUEL TOTAL QUANTITY WEIGHT": 3737,
+      "A:TITLE": "Embraer 195 - Voe Samba (PS-SZA)"
+    };
+
+    // Preset Airports Directory
+    const MOCK_AIRPORTS = [
+      { icao: "SBGR", name: "Guarulhos - Governador Andre Franco Montoro Int'l", city: "Sao Paulo", lat: -23.4356, lon: -46.4731 },
+      { icao: "SBRJ", name: "Santos Dumont", city: "Rio de Janeiro", lat: -22.9105, lon: -43.1631 },
+      { icao: "SBSP", name: "Congonhas", city: "Sao Paulo", lat: -23.6261, lon: -46.6564 },
+      { icao: "SBKP", name: "Viracopos", city: "Campinas", lat: -23.0074, lon: -47.1345 },
+      { icao: "SBGL", name: "Galeao - Antonio Carlos Jobim Int'l", city: "Rio de Janeiro", lat: -22.8090, lon: -43.2506 },
+      { icao: "SBCT", name: "Afonso Pena", city: "Curitiba", lat: -25.5284, lon: -49.1758 },
+      { icao: "SBEG", name: "Eduardo Gomes Int'l", city: "Manaus", lat: -3.0386, lon: -60.0497 },
+      { icao: "KJFK", name: "John F. Kennedy Int'l", city: "New York", lat: 40.6398, lon: -73.7789 },
+      { icao: "EGLL", name: "Heathrow", city: "London", lat: 51.4700, lon: -0.4543 }
+    ];
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function findNearestMockAirport(lat, lon) {
+      let nearest = MOCK_AIRPORTS[0];
+      let minDist = Infinity;
+      for (const apt of MOCK_AIRPORTS) {
+        const d = calculateDistance(lat, lon, apt.lat, apt.lon);
+        if (d < minDist) {
+          minDist = d;
+          nearest = apt;
+        }
+      }
+      return {
+        icao: nearest.icao,
+        name: nearest.name,
+        city: nearest.city,
+        distance_nm: Math.round(minDist * 0.539957)
+      };
+    }
+
+    // Parallel 42 Flow API Mock
+    window.$api = {
+      datastore: {
+        import: function (defaults) {
+          try {
+            const raw = localStorage.getItem("airspace_acars_dev_store");
+            return raw ? Object.assign({}, defaults, JSON.parse(raw)) : defaults;
+          } catch (e) {
+            return defaults;
+          }
+        },
+        export: function (data) {
+          try {
+            localStorage.setItem("airspace_acars_dev_store", JSON.stringify(data));
+          } catch (e) {
+            console.warn("[datastore.export error]", e);
+          }
+        }
+      },
+      command: {
+        open_browser: function (url) {
+          console.log("[api.command.open_browser]", url);
+          window.open(url, "_blank");
+        },
+        copy_text: function (str) {
+          console.log("[api.command.copy_text]", str);
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(str);
+          }
+        }
+      },
+      variables: {
+        get: function (name, unit) {
+          return window.mockSimVars[name] ?? 0;
+        }
+      },
+      airports: {
+        find_airports_by_coords: function (lat, lon, max, callback) {
+          const nearest = findNearestMockAirport(lat, lon);
+          if (typeof callback === "function") {
+            setTimeout(function () {
+              callback([nearest]);
+            }, 60);
+          }
+        }
+      },
+      weather: {
+        find_metar_by_icao: function (icao, callback) {
+          const code = String(icao || "").toUpperCase().trim();
+          fetch("https://aviationweather.gov/api/data/metar?ids=" + code + "&format=raw")
+            .then(function (r) { return r.text(); })
+            .then(function (text) {
+              const raw = text.trim();
+              if (raw && !raw.includes("No data")) {
+                callback({ icao: code, metar: raw });
+              } else {
+                callback(null);
+              }
+            })
+            .catch(function () {
+              callback(null);
+            });
+        }
+      }
+    };
+
+    // Hot Reload Listener via Server-Sent Events
+    try {
+      const sse = new EventSource("/events");
+      sse.onmessage = function (e) {
+        if (e.data === "reload") {
+          console.log("[hot-reload] Arquivos alterados em src/! Recarregando preview...");
+          window.location.reload();
+        }
+      };
+    } catch (_err) {
+      // Ignore if not running via server.mjs
+    }
+  </script>
+
+  <!-- Load and mount widget HTML -->
+  <script>
+    // Mock Airspace backend API calls for local preview testing
+    const originalFetch = window.fetch;
+    window.fetch = async function (resource, options) {
+      const url = typeof resource === "string" ? resource : (resource ? resource.url : "");
+
+      // Mock Company NOTAMs
+      if (url.includes("/api/v2/acars/notams")) {
+        return new Response(JSON.stringify({
+          status: "ok",
+          data: [
+            {
+              id: "notam-101",
+              title: "\uD83D\uDCE2 Operacao Norte & Amazonia (SBEG / SBBV)",
+              content: "<p>Aos Comandantes e Primeiros Oficiais operando nas rotas da regiao norte:</p><p>Devido a formacoes meteorologicas convectivas tipicas da tarde, recomendamos atencao redobrada com combustivel de contingencia em esperas e verificacao antecipada dos alternativos disponiveis.</p><p>\uD83D\uDFE2 Voos pontuais e dentro do perfil de subida padrao recebem pontuacao FDM maxima.</p>",
+              created_at: "2026-11-05T14:30:00Z"
+            },
+            {
+              id: "notam-102",
+              title: "\u2708\uFE0F Procedimento de Pouso em Pistas Curtas (SBRJ)",
+              content: "<p>Procedimento obrigatorio para operacoes na pista 02R/20L do Santos Dumont (SBRJ):</p><p>1. Flaps Full e velocidade de referencia rigorosamente mantida no gate de 1000 ft AGL.</p><p>2. Toque firme e decidido dentro da zona de toque designada (touchdown zone).</p><p>3. Max reverse e frenagem automatica ativada imediatamente apos contato do trem principal.</p>",
+              created_at: "2026-11-04T09:15:00Z"
+            },
+            {
+              id: "notam-103",
+              title: "\u26A0\uFE0F Atualizacao dos Parametros de FDM - Taxa de Toque",
+              content: "<p>Prezados tripulantes,</p><p>Lembramos que pousos entre -50 ft/min e -180 ft/min sao classificados como <strong>Butter</strong> e recebem bonus de pontuacao operacional no logbook. Pousos acima de -400 ft/min serao encaminhados para revisao de seguranca automatica pelo sistema.</p>",
+              created_at: "2026-11-01T18:00:00Z"
+            }
+          ]
+        }), { status: 200, headers: { "Content-Type": "application/json" } });
+      }
+
+      // Mock vOCC Messages API
+      if (url.includes("/api/v2/acars/message/confirm")) {
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+      if (url.includes("/api/v2/acars/message") && (options && options.method === "POST")) {
+        let sentText = "Copiado vOCC.";
+        try {
+          if (options.body) {
+            const parsed = JSON.parse(options.body);
+            if (parsed.message) sentText = parsed.message;
+          }
+        } catch (_e) {}
+        return new Response(JSON.stringify({
+          data: {
+            id: "msg-" + Date.now(),
+            message: sentText,
+            text: sentText,
+            user_id: 42,
+            sender_id: 42,
+            sender_name: "Ailton Souza",
+            created_at: new Date().toISOString()
+          }
+        }), { status: 200, headers: { "Content-Type": "application/json" } });
+      }
+
+      // Mock Tenancy listing
+      if (url.includes("/api/v2/tenants") || url.includes("/api/v2/acars/tenants")) {
+        return new Response(JSON.stringify({
+          data: [
+            { id: "tenant-voe-samba", name: "Voe Samba", domain: "voesamba.airspace.com", logo_url: "https://airspace.ferrlab.com/storage/tenants/samba.png" },
+            { id: "tenant-azul-virtual", name: "Azul Virtual", domain: "azulvirtual.airspace.com", logo_url: "" },
+            { id: "tenant-latam-va", name: "LATAM Virtual", domain: "latam.airspace.com", logo_url: "" }
+          ]
+        }), { status: 200, headers: { "Content-Type": "application/json" } });
+      }
+
+
+
+      // Mock Pilot Profile
+      if (url.includes("/api/v2/acars/pilot") && !url.includes("/flights")) {
+        return new Response(JSON.stringify({
+          id: 42,
+          name: "Ailton Souza",
+          callsign: "SMB1042",
+          rank: { name: "Commander", image_url: "" },
+          points: 1250,
+          flights_count: 24,
+          flight_hours: 62.5,
+          avg_landing_rate: -145,
+          total_distance: 14280
+        }), { status: 200, headers: { "Content-Type": "application/json" } });
+      }
+
+
+
+      // Mock Flight Track Telemetry
+      if (url.includes("/api/v2/acars/flights/") && url.includes("/track")) {
+        const points = [];
+        const baseTime = Date.parse("2026-11-06T11:52:00Z");
+        const phases = [
+          { name: "preflight", duration: 5, alt: 260, spd: 0 },
+          { name: "taxi", duration: 5, alt: 260, spd: 18 },
+          { name: "takeoff", duration: 3, alt: 800, spd: 145 },
+          { name: "climb", duration: 15, alt: 24000, spd: 310 },
+          { name: "cruise", duration: 18, alt: 36000, spd: 440 },
+          { name: "descent", duration: 10, alt: 10000, spd: 280 },
+          { name: "approach", duration: 6, alt: 2500, spd: 150 },
+          { name: "landing", duration: 4, alt: 280, spd: 128 }
+        ];
+        let currTime = baseTime;
+        for (const ph of phases) {
+          for (let m = 0; m < ph.duration; m++) {
+            currTime += 60000;
+            const progress = m / ph.duration;
+            const alt = ph.alt + (Math.sin(progress * Math.PI) * 150);
+            const spd = ph.spd + (Math.sin(progress * Math.PI) * 5);
+            points.push({
+              sent_at: new Date(currTime).toISOString(),
+              altitude: Math.round(alt),
+              indicated_airspeed: Math.round(spd),
+              phase: ph.name
+            });
+          }
+        }
+        return new Response(JSON.stringify({ status: "ok", points: points }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      // Mock Flight Single Detail
+      if (url.includes("/api/v2/acars/flights/")) {
+        const flightDetail = {
+          id: "flt-437282",
+          callsign: "SX07282",
+          flight_number: "437282",
+          status: "accepted",
+          departure_airport: { icao: "SBEG", name: "Eduardo Gomes Int'l", city: "Manaus", latitude: -3.0358, longitude: -60.0497 },
+          arrival_airport: { icao: "SBBV", name: "Atlas Brasil Cantanhede", city: "Boa Vista", latitude: 2.8464, longitude: -60.6922 },
+          aircraft: { registration: "PS-SZA", icao_code: "E195", name: "Alianca" },
+          flight_time_minutes: 58,
+          distance_nm: 355,
+          landing_rate_fpm: -353,
+          fuel_used_kg: 1695,
+          score: 9.8,
+          landing_g_force: 1.22,
+          approach_type: "ils",
+          departure_time: "2026-11-06T11:52:00Z",
+          arrival_time: "2026-11-06T13:08:00Z",
+          created_at: "2026-11-06T11:52:00Z",
+          landing: {
+            landing_rate_band: "firm",
+            touchdown_distance_m: 420,
+            touchdown_offset_m: 1.2,
+            touchdown_ground_speed: 128,
+            touchdown_indicated_airspeed: 132,
+            runway_used_m: 1450,
+            runway_used_percent: 53.7,
+            runway: { designator: "08", length_m: 2700, width_m: 45 },
+            wind: { direction_degrees: 90, speed_knots: 12, headwind_knots: 11.5, crosswind_knots: 3.4 },
+            stabilized_approach: {
+              gate_height_ft: 1000,
+              passed: true,
+              criteria: {
+                flaps: { required_pct: 35, measured_pct: 40, passed: true },
+                gear: { down: true, passed: true },
+                speed: { limit_kt: 150, measured_kt: 135, passed: true }
+              },
+              failures: []
+            }
+          },
+          takeoff: {
+            liftoff_distance_m: 1620,
+            takeoff_roll_m: 1580,
+            liftoff_offset_m: 0,
+            liftoff_ground_speed: 142,
+            liftoff_indicated_airspeed: 145,
+            runway_used_percent: 60.0,
+            runway: { designator: "10", length_m: 2700, width_m: 45 },
+            wind: { direction_degrees: 100, speed_knots: 8, headwind_knots: 7.8, crosswind_knots: 1.4 }
+          },
+          score_breakdown: {
+            score: 9.8,
+            categories: [
+              { key: "otp", name: "Pontualidade", available: true, score: 10.0 },
+              { key: "eco", name: "Eficiencia de Combustivel", available: true, score: 9.5 },
+              { key: "manual", name: "Voo Manual", available: true, score: 10.0 },
+              { key: "comfort", name: "Conforto dos Passageiros", available: true, score: 9.8 },
+              { key: "safety", name: "Seguranca", available: true, score: 10.0 }
+            ]
+          },
+          events: [
+            { id: "e1", type: "warning", event: "Aproximacao ligeiramente veloz na final", duration_seconds: 4, happened_at: "2026-11-06T13:02:15Z" }
+          ],
+          points: {
+            total: 120,
+            entries: [
+              { id: "pt-1", source: "fdm", reason: "Voo regular concluido dentro do perfil padrao", remarks: "Nivel de servico excelente", points: 100 },
+              { id: "pt-2", source: "staff", reason: "Bonus de rota regional Manaus - Boa Vista", remarks: "Operacao Amazonia", points: 20 }
+            ]
+          }
+        };
+        return new Response(JSON.stringify({ status: "ok", data: flightDetail }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      // Mock Pilot Flights List (My Flights)
+      if (url.includes("/api/v2/acars/pilot/flights")) {
+        const mockFlights = [
+          {
+            id: "flt-437282",
+            callsign: "SX07282",
+            flight_number: "437282",
+            status: "accepted",
+            departure_airport: { icao: "SBEG", name: "Eduardo Gomes Int'l", city: "Manaus", latitude: -3.0358, longitude: -60.0497 },
+            arrival_airport: { icao: "SBBV", name: "Atlas Brasil Cantanhede", city: "Boa Vista", latitude: 2.8464, longitude: -60.6922 },
+            aircraft: { registration: "PS-SZA", icao_code: "E195", name: "Alianca" },
+            flight_time_minutes: 58,
+            distance_nm: 355,
+            landing_rate_fpm: -353,
+            fuel_used_kg: 1695,
+            score: 9.8,
+            landing_g_force: 1.22,
+            approach_type: "ils",
+            departure_time: "2026-11-06T11:52:00Z",
+            arrival_time: "2026-11-06T13:08:00Z",
+            created_at: "2026-11-06T11:52:00Z",
+            landing: {
+              landing_rate_band: "firm",
+              touchdown_distance_m: 420,
+              touchdown_offset_m: 1.2,
+              touchdown_ground_speed: 128,
+              touchdown_indicated_airspeed: 132,
+              runway_used_m: 1450,
+              runway_used_percent: 53.7,
+              runway: { designator: "08", length_m: 2700, width_m: 45 },
+              wind: { direction_degrees: 90, speed_knots: 12, headwind_knots: 11.5, crosswind_knots: 3.4 },
+              stabilized_approach: {
+                gate_height_ft: 1000,
+                passed: true,
+                criteria: {
+                  flaps: { required_pct: 35, measured_pct: 40, passed: true },
+                  gear: { down: true, passed: true },
+                  speed: { limit_kt: 150, measured_kt: 135, passed: true }
+                },
+                failures: []
+              }
+            },
+            takeoff: {
+              liftoff_distance_m: 1620,
+              takeoff_roll_m: 1580,
+              liftoff_offset_m: 0,
+              liftoff_ground_speed: 142,
+              liftoff_indicated_airspeed: 145,
+              runway_used_percent: 60.0,
+              runway: { designator: "10", length_m: 2700, width_m: 45 },
+              wind: { direction_degrees: 100, speed_knots: 8, headwind_knots: 7.8, crosswind_knots: 1.4 }
+            },
+            score_breakdown: {
+              score: 9.8,
+              categories: [
+                { key: "otp", name: "Pontualidade", available: true, score: 10.0 },
+                { key: "eco", name: "Eficiencia de Combustivel", available: true, score: 9.5 },
+                { key: "manual", name: "Voo Manual", available: true, score: 10.0 },
+                { key: "comfort", name: "Conforto dos Passageiros", available: true, score: 9.8 },
+                { key: "safety", name: "Seguranca", available: true, score: 10.0 }
+              ]
+            },
+            events: [
+              { id: "e1", type: "warning", event: "Aproximacao ligeiramente veloz na final", duration_seconds: 4, happened_at: "2026-11-06T13:02:15Z" }
+            ],
+            points: {
+              total: 120,
+              entries: [
+                { id: "pt-1", source: "fdm", reason: "Voo regular concluido dentro do perfil padrao", remarks: "Nivel de servico excelente", points: 100 },
+                { id: "pt-2", source: "staff", reason: "Bonus de rota regional Manaus - Boa Vista", remarks: "Operacao Amazonia", points: 20 }
+              ]
+            }
+          },
+          {
+            id: "flt-101",
+            callsign: "SMB1542",
+            flight_number: "1542",
+            status: "accepted",
+            departure_airport: { icao: "SBGR", name: "Guarulhos Int'l", city: "Sao Paulo" },
+            arrival_airport: { icao: "SBRJ", name: "Santos Dumont", city: "Rio de Janeiro" },
+            aircraft: { registration: "PR-SMB", icao_code: "B738", name: "Boeing 737-800" },
+            flight_time_minutes: 52,
+            distance_nm: 214,
+            landing_rate_fpm: -112,
+            fuel_used_kg: 1940,
+            score: 98,
+            departure_time: new Date(Date.now() - 86400000 * 1).toISOString(),
+            arrival_time: new Date(Date.now() - 86400000 * 1 + 3120000).toISOString(),
+            created_at: new Date(Date.now() - 86400000 * 1).toISOString()
+          },
+          {
+            id: "flt-102",
+            callsign: "SMB4120",
+            flight_number: "4120",
+            status: "accepted",
+            departure_airport: { icao: "SBKP", name: "Viracopos", city: "Campinas" },
+            arrival_airport: { icao: "SBCF", name: "Confins Int'l", city: "Belo Horizonte" },
+            aircraft: { registration: "PR-AYX", icao_code: "E195", name: "Embraer E195-E2" },
+            flight_time_minutes: 68,
+            distance_nm: 278,
+            landing_rate_fpm: -88,
+            fuel_used_kg: 1620,
+            score: 100,
+            departure_time: new Date(Date.now() - 86400000 * 3).toISOString(),
+            arrival_time: new Date(Date.now() - 86400000 * 3 + 4080000).toISOString(),
+            created_at: new Date(Date.now() - 86400000 * 3).toISOString()
+          },
+          {
+            id: "flt-103",
+            callsign: "SMB3054",
+            flight_number: "3054",
+            status: "accepted",
+            departure_airport: { icao: "SBRJ", name: "Santos Dumont", city: "Rio de Janeiro" },
+            arrival_airport: { icao: "SBBR", name: "Presidente Juscelino Kubitschek", city: "Brasilia" },
+            aircraft: { registration: "PR-MBJ", icao_code: "A320", name: "Airbus A320neo" },
+            flight_time_minutes: 94,
+            distance_nm: 498,
+            landing_rate_fpm: -245,
+            fuel_used_kg: 2850,
+            score: 92,
+            departure_time: new Date(Date.now() - 86400000 * 5).toISOString(),
+            arrival_time: new Date(Date.now() - 86400000 * 5 + 5640000).toISOString(),
+            created_at: new Date(Date.now() - 86400000 * 5).toISOString()
+          },
+          {
+            id: "flt-104",
+            callsign: "SMB8012",
+            flight_number: "8012",
+            status: "pending",
+            departure_airport: { icao: "SBGR", name: "Guarulhos Int'l", city: "Sao Paulo" },
+            arrival_airport: { icao: "SBPA", name: "Salgado Filho", city: "Porto Alegre" },
+            aircraft: { registration: "PR-SMB", icao_code: "B738", name: "Boeing 737-800" },
+            flight_time_minutes: 98,
+            distance_nm: 476,
+            landing_rate_fpm: -380,
+            fuel_used_kg: 2980,
+            score: 85,
+            departure_time: new Date(Date.now() - 86400000 * 7).toISOString(),
+            arrival_time: new Date(Date.now() - 86400000 * 7 + 5880000).toISOString(),
+            created_at: new Date(Date.now() - 86400000 * 7).toISOString()
+          },
+          {
+            id: "flt-105",
+            callsign: "SMB2201",
+            flight_number: "2201",
+            status: "accepted",
+            departure_airport: { icao: "SBBR", name: "Presidente Juscelino Kubitschek", city: "Brasilia" },
+            arrival_airport: { icao: "SBSV", name: "Deputado Luis Eduardo Magalhaes", city: "Salvador" },
+            aircraft: { registration: "PR-MBJ", icao_code: "A320", name: "Airbus A320neo" },
+            flight_time_minutes: 105,
+            distance_nm: 574,
+            landing_rate_fpm: -140,
+            fuel_used_kg: 3100,
+            score: 95,
+            departure_time: new Date(Date.now() - 86400000 * 10).toISOString(),
+            arrival_time: new Date(Date.now() - 86400000 * 10 + 6300000).toISOString(),
+            created_at: new Date(Date.now() - 86400000 * 10).toISOString()
+          }
+        ];
+
+        return new Response(JSON.stringify({
+          data: mockFlights,
+          current_page: 1,
+          last_page: 1,
+          total: mockFlights.length,
+          pilot: {
+            total_flights: 24,
+            total_hours: 62.5,
+            avg_landing_rate: -145,
+            total_distance: 14280,
+            points: 1250
+          }
+        }), { status: 200, headers: { "Content-Type": "application/json" } });
+      }
+
+
+
+      // Mock Documents & Airport Briefings
+      if (url.includes("/api/v2/acars/documents")) {
+        const mockDocList = [
+          // Airport Briefings
+          {
+            id: "55",
+            title: "SBGR \u2014 Guarulhos - Sao Paulo",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 1,
+            content: ""
+          },
+          {
+            id: "56",
+            title: "SBEG \u2014 Eduardo Gomes",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 2,
+            content: ""
+          },
+          {
+            id: "169",
+            title: "SBKP \u2014 Viracopos - Campinas",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 3,
+            content: ""
+          },
+          {
+            id: "135",
+            title: "SBGL \u2014 Gale\u00E3o",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 4,
+            content: ""
+          },
+          {
+            id: "172",
+            title: "SBSJ \u2014 Sao Jose dos Campos",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 5,
+            content: ""
+          },
+          {
+            id: "136",
+            title: "SBSP \u2014 Congonhas - Sao Paulo",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 6,
+            content: ""
+          },
+          {
+            id: "10",
+            title: "SBBR \u2014 Bras\u00EDlia Juscelino Kubitschek",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 7,
+            content: ""
+          },
+          {
+            id: "141",
+            title: "EGKK \u2014 London Gatwick",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 8,
+            content: JSON.stringify({
+              icao: "EGKK",
+              iata: "LGW",
+              name: "London Gatwick",
+              city: "London",
+              country: "United Kingdom",
+              timezone: "UTC+0",
+              timezone_sub: "0",
+              operation: "IFR + Night",
+              operation_type: "Operation type",
+              elevation_ft: 202,
+              transition_altitude: 6000,
+              runways: [
+                { designator: "08R", length_m: 3316, width_m: 45, heading: 80, ils: true },
+                { designator: "26L", length_m: 3316, width_m: 45, heading: 260, ils: true }
+              ],
+              services: [
+                { type: "Fuel (Jet)", provider: "Shell Aviation", dot: "dot-green", notes: "\u2014" },
+                { type: "Ground Handling", provider: "Menzies Aviation", dot: "dot-red", notes: "\u2014" },
+                { type: "Ground Power", provider: "Menzies Aviation", dot: "dot-red", notes: "\u2014" },
+                { type: "Air Starter", provider: "Menzies Aviation", dot: "dot-red", notes: "\u2014" }
+              ],
+              threats: [
+                { type: "Noise Abatement", severity: "rose" },
+                { type: "Obstacles", severity: "amber" },
+                { type: "Wildlife \u2014 Birds", severity: "emerald" }
+              ],
+              stands: [
+                { fleets: "A320, A20N, A21N, B738", stands: "Pier 1-3 | POS 10-38" },
+                { fleets: "ALL AIRCRAFT", stands: "South Terminal | POS 41-59" }
+              ],
+              alternates: [
+                { icao: "EGLL", name: "London Heathrow" },
+                { icao: "EGSS", name: "London Stansted" },
+                { icao: "EGGW", name: "London Luton" }
+              ],
+              operational_notes: [
+                {
+                  context: "General",
+                  category: "Operation",
+                  body: "Strict noise preferential routes on departure. Continuous descent approach (CDA) mandatory for all jet aircraft."
+                },
+                {
+                  context: "Arrival",
+                  category: "Operation",
+                  body: "RWY 26L/08R in use. Rapid exit taxiways (RET) available to maximize runway capacity."
+                }
+              ]
+            })
+          },
+          {
+            id: "89",
+            title: "KJFK \u2014 John F Kennedy International Airport",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 9,
+            content: JSON.stringify({
+              icao: "KJFK",
+              iata: "JFK",
+              name: "John F Kennedy International Airport",
+              city: "New York",
+              country: "United States",
+              timezone: "UTC-5",
+              timezone_sub: "-5",
+              operation: "IFR + Night",
+              operation_type: "Operation type",
+              elevation_ft: 13,
+              transition_altitude: 18000,
+              runways: [
+                { designator: "13L", length_m: 4423, width_m: 45, heading: 134, ils: true },
+                { designator: "31R", length_m: 4423, width_m: 45, heading: 314, ils: true },
+                { designator: "04L", length_m: 3682, width_m: 45, heading: 44, ils: true },
+                { designator: "22R", length_m: 3682, width_m: 45, heading: 224, ils: true }
+              ],
+              services: [
+                { type: "Fuel (Jet)", provider: "Allied Aviation", dot: "dot-green", notes: "\u2014" },
+                { type: "Ground Handling", provider: "Swissport USA", dot: "dot-red", notes: "\u2014" },
+                { type: "Ground Power", provider: "Swissport USA", dot: "dot-red", notes: "\u2014" },
+                { type: "Air Starter", provider: "Swissport USA", dot: "dot-red", notes: "\u2014" }
+              ],
+              threats: [
+                { type: "Runway Crossing / Congestion", severity: "rose" },
+                { type: "Bird Activity (Jamaica Bay)", severity: "emerald" },
+                { type: "Complex ATC Clearances", severity: "amber" }
+              ],
+              stands: [
+                { fleets: "A320, A321, B738, B739", stands: "Terminal 4 / 7 | POS 1-28" },
+                { fleets: "ALL AIRCRAFT", stands: "Terminal 1 / 8 | POS 1-16 Heavy" }
+              ],
+              alternates: [
+                { icao: "KEWR", name: "Newark Liberty Intl" },
+                { icao: "KLGA", name: "LaGuardia" },
+                { icao: "KBOS", name: "Boston Logan" }
+              ],
+              operational_notes: [
+                {
+                  context: "General",
+                  category: "Operation",
+                  body: "Kennedy Tower applies strict runway hold short instructions. Canarsie visual approach RWY 13L/13R when active."
+                }
+              ]
+            })
+          },
+          {
+            id: "142",
+            title: "KMIA \u2014 Miami International Airport",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 10,
+            content: ""
+          },
+          {
+            id: "321",
+            title: "LPPT \u2014 Lisboa Humberto Delgado",
+            type: "html",
+            parent_id: "9",
+            visibility: "public",
+            is_auto_generated: true,
+            source: "Airport briefing",
+            source_type: "airport",
+            created_at: "2026-02-23T10:00:00Z",
+            updated_at: "2026-02-23T10:00:00Z",
+            sort_order: 11,
+            content: ""
+          },
+
+          // Manuals & SOPs
+          {
+            id: "57",
+            title: "SOP A320 \u2014 Procedimentos Operacionais",
+            type: "html",
+            parent_id: null,
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Operacoes de Voo",
+            source_type: "document",
+            created_at: "2026-01-10T14:00:00Z",
+            updated_at: "2026-01-10T14:00:00Z",
+            sort_order: 12,
+            content: '<div style="padding:16px;"><h2 style="font-size:18px;margin-bottom:8px;color:#f4f4f5;">Procedimentos Operacionais Padrao A320</h2><p style="color:#a1a1aa;margin-bottom:12px;">Diretrizes operacionais para a frota A320/A321 da Voe Samba.</p><ul style="padding-left:20px;line-height:1.8;color:#d4d4d8;"><li><strong>Briefing de Partida:</strong> Revisar altidude de transicao, contingencias e perfil de subida.</li><li><strong>Subida:</strong> Aceleracao standard apos 1.500 ft AGL; manter modo CLB com autothrust engajado.</li><li><strong>Descida:</strong> Top of Descent calculado pelo FMGS; monitorar perfil vertical e deceleracao a 10.000 ft.</li><li><strong>Aproximacao e Pouso:</strong> Criterios de aproximao estabilizada mandatorios a 1.000 ft IMC e 500 ft VMC.</li></ul></div>'
+          },
+          {
+            id: "58",
+            title: "Manual Geral de Operacoes (MGO 2026)",
+            type: "pdf",
+            parent_id: null,
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Diretoria de Seguranca",
+            source_type: "document",
+            file_url: "https://voesamba.com.br/docs/mgo-2026.pdf",
+            created_at: "2026-01-01T08:00:00Z",
+            updated_at: "2026-01-01T08:00:00Z",
+            sort_order: 13
+          },
+          {
+            id: "60",
+            title: "Guia de Fraseologia Aeronautica Samba",
+            type: "pdf",
+            parent_id: null,
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Instrucao e Treinamento",
+            source_type: "document",
+            file_url: "https://voesamba.com.br/docs/fraseologia.pdf",
+            created_at: "2026-01-15T09:00:00Z",
+            updated_at: "2026-01-15T09:00:00Z",
+            sort_order: 14
+          },
+          {
+            id: "61",
+            title: "Politica de Combustivel & Despacho Operacional",
+            type: "html",
+            parent_id: null,
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Despacho Operacional",
+            source_type: "document",
+            created_at: "2026-02-01T11:00:00Z",
+            updated_at: "2026-02-01T11:00:00Z",
+            sort_order: 15,
+            content: '<div style="padding:16px;"><h2 style="font-size:18px;margin-bottom:8px;color:#f4f4f5;">Politica de Combustivel de Voo</h2><p style="color:#a1a1aa;margin-bottom:12px;">Regras da Voe Samba em conformidade com as normas RBAC 121 e ICAO Annex 6.</p><p style="line-height:1.6;color:#d4d4d8;">O combustivel minimo de despacho deve incluir Taxi + Trip Fuel + Contingencia (5% ou 15 min) + Combustivel de Alternativa + Reserva Final (30 min de espera a 1.500 ft).</p></div>'
+          },
+
+          // FDM Profiles (parent_id 3)
+          {
+            id: "7",
+            title: "Perfil FDM \u2014 Airbus A320ceo / A320neo",
+            type: "html",
+            parent_id: "3",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "FDM / Flight Safety",
+            source_type: "fdm_profile",
+            created_at: "2026-01-20T10:00:00Z",
+            updated_at: "2026-01-20T10:00:00Z",
+            sort_order: 16,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Perfil FDM \u2014 Airbus A320ceo / A320neo</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Parametros de monitoramento de voo da diretoria de Seguranca Operacional para aeronaves da familia Airbus A320.</p><table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px;"><thead><tr style="border-bottom:1px solid #27272a;color:#71717a;text-align:left;"><th style="padding:8px 6px;">Evento</th><th style="padding:8px 6px;">Limite Alerta</th><th style="padding:8px 6px;">Limite Critico</th><th style="padding:8px 6px;">Acao Requerida</th></tr></thead><tbody><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">Landing Rate</td><td style="padding:8px 6px;color:#f59e0b;">&gt; -400 fpm</td><td style="padding:8px 6px;color:#ef4444;">&gt; -600 fpm</td><td style="padding:8px 6px;color:#a1a1aa;">Inspecao de trem de pouso</td></tr><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">Bank Angle (&lt;1000ft)</td><td style="padding:8px 6px;color:#f59e0b;">&gt; 7 deg</td><td style="padding:8px 6px;color:#ef4444;">&gt; 10 deg</td><td style="padding:8px 6px;color:#a1a1aa;">Aproximacao Desestabilizada</td></tr><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">Pitch Angle no Pouso</td><td style="padding:8px 6px;color:#f59e0b;">&gt; 8.5 deg</td><td style="padding:8px 6px;color:#ef4444;">&gt; 10.0 deg</td><td style="padding:8px 6px;color:#a1a1aa;">Tailstrike Warning</td></tr><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">Excesso Velocidade Flaps (Vfe)</td><td style="padding:8px 6px;color:#f59e0b;">Vfe + 3 kt</td><td style="padding:8px 6px;color:#ef4444;">Vfe + 8 kt</td><td style="padding:8px 6px;color:#a1a1aa;">Inspecao Estrutural Flaps</td></tr></tbody></table></div>'
+          },
+          {
+            id: "234",
+            title: "Perfil FDM \u2014 Boeing 737 MAX",
+            type: "html",
+            parent_id: "3",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "FDM / Flight Safety",
+            source_type: "fdm_profile",
+            created_at: "2026-01-20T10:00:00Z",
+            updated_at: "2026-01-20T10:00:00Z",
+            sort_order: 17,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Perfil FDM \u2014 Boeing 737 MAX</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Tolerancias e gatilhos de seguranca operacional para a frota Boeing 737-8 MAX.</p></div>'
+          },
+          {
+            id: "331",
+            title: "Perfil FDM \u2014 Embraer 195",
+            type: "html",
+            parent_id: "3",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "FDM / Flight Safety",
+            source_type: "fdm_profile",
+            created_at: "2026-01-20T10:00:00Z",
+            updated_at: "2026-01-20T10:00:00Z",
+            sort_order: 18,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Perfil FDM \u2014 Embraer 195</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Diretrizes operacionais e analise de voo para jatos regionais Embraer E195.</p></div>'
+          },
+          {
+            id: "54",
+            title: "Perfil FDM \u2014 Boeing 777-200F / 300ER",
+            type: "html",
+            parent_id: "3",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "FDM / Flight Safety",
+            source_type: "fdm_profile",
+            created_at: "2026-01-20T10:00:00Z",
+            updated_at: "2026-01-20T10:00:00Z",
+            sort_order: 19,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Perfil FDM \u2014 Boeing 777</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Parametros de voo de longo curso e operacoes cargueiras pesadas.</p></div>'
+          },
+          {
+            id: "91",
+            title: "Perfil FDM \u2014 McDonnell Douglas MD-11",
+            type: "html",
+            parent_id: "3",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "FDM / Flight Safety",
+            source_type: "fdm_profile",
+            created_at: "2026-01-20T10:00:00Z",
+            updated_at: "2026-01-20T10:00:00Z",
+            sort_order: 20,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Perfil FDM \u2014 MD-11</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Parametros de estabilizacao trijato e limites de arremetida tardia.</p></div>'
+          },
+
+          // Load & Cargo Profiles (parent_id 1)
+          {
+            id: "4",
+            title: "Manifesto de Carga & Balanceamento A320",
+            type: "html",
+            parent_id: "1",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Carga & Balanceamento",
+            source_type: "load_profile",
+            created_at: "2026-01-25T10:00:00Z",
+            updated_at: "2026-01-25T10:00:00Z",
+            sort_order: 21,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Manifesto de Carga & Balanceamento \u2014 Airbus A320</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Tabela oficial de pesos, limites de centragem e configuracao de poroes de carga da frota A320 da Voe Samba.</p><table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px;"><thead><tr style="border-bottom:1px solid #27272a;color:#71717a;text-align:left;"><th style="padding:8px 6px;">Parametro</th><th style="padding:8px 6px;">Valor Maximo</th><th style="padding:8px 6px;">Notas</th></tr></thead><tbody><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">MTOW (Peso Maximo Decolagem)</td><td style="padding:8px 6px;color:#10b981;font-weight:600;">77.000 kg</td><td style="padding:8px 6px;color:#a1a1aa;">Configuracao Sharklets</td></tr><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">MLW (Peso Maximo Pouso)</td><td style="padding:8px 6px;color:#10b981;font-weight:600;">66.000 kg</td><td style="padding:8px 6px;color:#a1a1aa;">Limite Estrutural Pouso</td></tr><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">MZFW (Peso Maximo Sem Combustivel)</td><td style="padding:8px 6px;color:#10b981;font-weight:600;">62.500 kg</td><td style="padding:8px 6px;color:#a1a1aa;">Limite Estrutural Asa</td></tr><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">Capacidade Maxima Carga (Belly)</td><td style="padding:8px 6px;color:#10b981;font-weight:600;">9.427 kg</td><td style="padding:8px 6px;color:#a1a1aa;">Compartimentos FWD + AFT + BULK</td></tr><tr style="border-bottom:1px solid #1f1f23;"><td style="padding:8px 6px;color:#e4e4e7;">Passageiros Max (Single-class)</td><td style="padding:8px 6px;color:#10b981;font-weight:600;">174 assentos</td><td style="padding:8px 6px;color:#a1a1aa;">Configuracao comercial Samba</td></tr></tbody></table></div>'
+          },
+          {
+            id: "132",
+            title: "Manifesto de Carga & Balanceamento B737-800BCF",
+            type: "html",
+            parent_id: "1",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Carga & Balanceamento",
+            source_type: "load_profile",
+            created_at: "2026-01-25T10:00:00Z",
+            updated_at: "2026-01-25T10:00:00Z",
+            sort_order: 22,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Manifesto de Carga \u2014 Boeing 737-800BCF</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Configuracao cargueira com capacidade para 12 pallets de deck principal (88x125).</p></div>'
+          },
+          {
+            id: "5",
+            title: "Manifesto de Carga & Balanceamento B777F Heavy",
+            type: "html",
+            parent_id: "1",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Carga & Balanceamento",
+            source_type: "load_profile",
+            created_at: "2026-01-25T10:00:00Z",
+            updated_at: "2026-01-25T10:00:00Z",
+            sort_order: 23,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Manifesto de Carga \u2014 Boeing 777F Heavy Cargo</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Capacidade de carga util de 102.000 kg para voos intercontinentais de carga.</p></div>'
+          },
+          {
+            id: "330",
+            title: "Manifesto de Carga & Balanceamento E190/E195",
+            type: "html",
+            parent_id: "1",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Carga & Balanceamento",
+            source_type: "load_profile",
+            created_at: "2026-01-25T10:00:00Z",
+            updated_at: "2026-01-25T10:00:00Z",
+            sort_order: 24,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Manifesto de Carga \u2014 Embraer 190 / 195</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Especificacoes de carregamento de bagagem e distribuicao de cabine para jatos Embraer.</p></div>'
+          },
+          {
+            id: "6",
+            title: "Manifesto de Carga & Balanceamento B747-200F",
+            type: "html",
+            parent_id: "1",
+            visibility: "public",
+            is_auto_generated: false,
+            source: "Carga & Balanceamento",
+            source_type: "load_profile",
+            created_at: "2026-01-25T10:00:00Z",
+            updated_at: "2026-01-25T10:00:00Z",
+            sort_order: 25,
+            content: '<div style="padding:16px;"><h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:#f4f4f5;">Manifesto de Carga \u2014 Boeing 747-200F Freighter</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin-bottom:16px;">Tabela de carregamento com porta de nariz (nose cargo door) e posicoes de pallets pesados.</p></div>'
+          }
+        ];
+
+        const detailMatch = url.match(/\/api\/v2\/acars\/documents\/([^\/\?]+)/);
+        if (detailMatch && !url.includes("?page=")) {
+          const docId = decodeURIComponent(detailMatch[1]);
+          let found = mockDocList.find(function (d) {
+            return String(d.id) === docId || (d.id && String(d.id).toLowerCase() === docId.toLowerCase());
+          });
+          if (!found) {
+            found = mockDocList.find(function (d) {
+              return d.title && d.title.toLowerCase().indexOf(docId.toLowerCase()) !== -1;
+            });
+          }
+          if (found) {
+            return new Response(JSON.stringify({
+              data: found
+            }), { status: 200, headers: { "Content-Type": "application/json" } });
+          }
+        }
+
+        return new Response(JSON.stringify({
+          data: mockDocList,
+          current_page: 1,
+          last_page: 1,
+          total: mockDocList.length
+        }), { status: 200, headers: { "Content-Type": "application/json" } });
+      }
+
+
+
+      return originalFetch.apply(this, arguments);
+    };
+
+    async function initWidget() {
+      try {
+        const resp = await fetch("/src/code.html");
+        const html = await resp.text();
+        const mount = document.getElementById("widget-mount");
+        mount.innerHTML = html;
+
+        // Now load widget script
+        const scriptEl = document.createElement("script");
+        scriptEl.src = "/src/code.js";
+        scriptEl.onload = function () {
+          console.log("[dev-preview] src/code.js carregado com sucesso!");
+          const root = document.getElementById("as-acars-root");
+          if (window.flowLifecycle.html_created && root) {
+            window.flowLifecycle.html_created(root);
+          }
+
+          // Initial state: automatically open panel on dev launch
+          if (window.flowLifecycle.run) {
+            window.flowLifecycle.run();
+          }
+
+          // Setup Flow loop & status tickers
+          startFlowTickers();
+          setupWindowDragging();
+          setupDevTools();
+          setupOttoModal();
+        };
+        document.body.appendChild(scriptEl);
+      } catch (err) {
+        console.error("Falha ao inicializar o preview:", err);
+      }
+    }
+
+    // Window & Toast Dragging Logic (Smooth requestAnimationFrame + GPU transform)
+    function setupWindowDragging() {
+      let isDragging = false;
+      let dragTarget = null;
+      let startX = 0, startY = 0;
+      let initLeft = 0, initTop = 0;
+      let currX = 0, currY = 0;
+      let dragRafScheduled = false;
+
+      function onTick() {
+        dragRafScheduled = false;
+        if (!isDragging || !dragTarget) return;
+        const dx = currX - startX;
+        const dy = currY - startY;
+        const newLeft = Math.max(10, Math.min(window.innerWidth - 80, initLeft + dx));
+        const newTop = Math.max(10, Math.min(window.innerHeight - 60, initTop + dy));
+        dragTarget.style.left = Math.round(newLeft) + "px";
+        dragTarget.style.top = Math.round(newTop) + "px";
+        dragTarget.style.right = "auto";
+        dragTarget.style.bottom = "auto";
+      }
+
+      document.addEventListener("mousedown", function (e) {
+        const handle = e.target.closest("[data-dragarea]");
+        if (!handle) return;
+
+        // Do not drag if user clicked an interactive control inside header
+        if (e.target.closest("button, input, select, textarea, a, .as-acars-icon-btn, .as-acars-lang-btn, .as-acars-header-actions, .as-acars-toast-actions-header")) return;
+
+        const areaName = handle.getAttribute("data-dragarea");
+        dragTarget = document.querySelector("[data-dragtarget='" + areaName + "']");
+        if (!dragTarget) return;
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        currX = e.clientX;
+        currY = e.clientY;
+        const rect = dragTarget.getBoundingClientRect();
+        initLeft = rect.left;
+        initTop = rect.top;
+
+        dragTarget.classList.add("as-acars-is-dragging");
+        e.preventDefault();
+      });
+
+      document.addEventListener("mousemove", function (e) {
+        if (!isDragging || !dragTarget) return;
+        currX = e.clientX;
+        currY = e.clientY;
+        if (!dragRafScheduled) {
+          dragRafScheduled = true;
+          requestAnimationFrame(onTick);
+        }
+      });
+
+      document.addEventListener("mouseup", function () {
+        if (!isDragging) return;
+        isDragging = false;
+        if (dragTarget) {
+          dragTarget.classList.remove("as-acars-is-dragging");
+          dragTarget = null;
+        }
+      });
+    }
+
+    // Flow Pro Tickers (loop_1hz, state, style, info)
+    function startFlowTickers() {
+      const tile = document.getElementById("flow-acars-tile");
+      const tileText = document.getElementById("flow-tile-text");
+      const tileBadge = document.getElementById("flow-tile-badge");
+
+      // 1. Loop 1Hz
+      setInterval(function () {
+        if (window.flowLifecycle.loop_1hz) {
+          window.flowLifecycle.loop_1hz();
+        }
+      }, 1000);
+
+      // 2. State & Style (every 400ms)
+      setInterval(function () {
+        if (window.flowLifecycle.state) {
+          const stateStr = window.flowLifecycle.state(); // e.g. "mdi:message-badge:vOCC (2)"
+          if (stateStr) {
+            const parts = stateStr.split(":");
+            const label = parts[2] || parts[1] || "Airspace";
+            tileText.textContent = label;
+
+            const matchCount = label.match(/\((\d+)\)/);
+            if (matchCount && parseInt(matchCount[1], 10) > 0) {
+              tileBadge.style.display = "inline-block";
+              tileBadge.textContent = matchCount[1];
+            } else {
+              tileBadge.style.display = "none";
+            }
+          }
+        }
+
+        if (window.flowLifecycle.style) {
+          const styleStr = window.flowLifecycle.style(); // "active" | "armed" | null
+          tile.classList.remove("flow-active", "flow-armed");
+          if (styleStr === "active") tile.classList.add("flow-active");
+          if (styleStr === "armed") tile.classList.add("flow-armed");
+        }
+
+        if (window.flowLifecycle.info) {
+          const infoStr = window.flowLifecycle.info();
+          if (infoStr) tile.title = infoStr;
+        }
+      }, 400);
+
+      // Tile click triggers run()
+      tile.addEventListener("click", function () {
+        if (window.flowLifecycle.run) {
+          window.flowLifecycle.run();
+        }
+      });
+    }
+
+    // DevTools Actions & Presets
+    function setupDevTools() {
+      const devPanel = document.getElementById("devtools-panel");
+      const btnMin = document.getElementById("btn-minimize-devtools");
+      const toggleHeader = document.getElementById("devtools-toggle-header");
+
+      btnMin.addEventListener("click", function (e) {
+        e.stopPropagation();
+        devPanel.classList.toggle("minimized");
+        btnMin.textContent = devPanel.classList.contains("minimized") ? "+" : "_";
+      });
+
+      toggleHeader.addEventListener("click", function () {
+        if (devPanel.classList.contains("minimized")) {
+          devPanel.classList.remove("minimized");
+          btnMin.textContent = "_";
+        }
+      });
+
+      // Toggle Window
+      document.getElementById("btn-dev-toggle-window").addEventListener("click", function () {
+        if (window.flowLifecycle.run) window.flowLifecycle.run();
+      });
+
+      // Toggle Theme
+      document.getElementById("btn-dev-toggle-theme").addEventListener("click", function () {
+        const flow = window.__AIRSPACE_ACARS_FLOW__;
+        if (!flow) return;
+        flow.store.white_mode = !flow.store.white_mode;
+        flow.saveStore();
+        flow.renderAll();
+      });
+
+      // Simulate vOCC Toast
+      document.getElementById("btn-dev-trigger-toast").addEventListener("click", function () {
+        const flow = window.__AIRSPACE_ACARS_FLOW__;
+        if (flow) {
+          flow.state.toastMessage = {
+            id: "msg-" + Date.now(),
+            senderName: "vOCC DISPATCH",
+            senderRole: "Carla",
+            text: "Comandante, confirmamos autorizacao de voo para SBRJ. Vento 150/09kt. Bom voo!",
+            confirmed: false
+          };
+          flow.state.panelOpen = false;
+          flow.renderAll();
+        } else {
+          const toast = document.getElementById("as-acars-toast");
+          const toastText = document.getElementById("as-acars-toast-text");
+          const toastSender = document.getElementById("as-acars-toast-sender");
+          if (toast && toastText) {
+            toastSender.textContent = "vOCC DISPATCH - CARLA";
+            toastText.textContent = "Comandante, confirmamos autorizacao de voo para SBRJ. Vento 150/09kt. Bom voo!";
+            toast.classList.remove("as-acars-hidden");
+          }
+        }
+      });
+
+      // Simulate Incoming vOCC Message in Chat
+      document.getElementById("btn-dev-incoming-chat").addEventListener("click", function () {
+        const flow = window.__AIRSPACE_ACARS_FLOW__;
+        if (!flow) return;
+        const newMsg = {
+          id: "dev-msg-" + Date.now(),
+          senderName: "vOCC Dispatch",
+          senderCallsign: "DISPATCH",
+          isDispatch: true,
+          text: "MENSAGEM DE TESTE: Pista 09R em Guarulhos disponivel para decolagem imediata. Transponder 4321.",
+          timestamp: new Date().toISOString(),
+          confirmed: false
+        };
+        flow.state.messages.push(newMsg);
+        flow.state.activeTab = "vocc";
+        flow.renderAll();
+
+        // Also trigger toast
+        const toast = document.getElementById("as-acars-toast");
+        const toastText = document.getElementById("as-acars-toast-text");
+        if (toast && toastText) {
+          toastText.textContent = newMsg.text;
+          toast.classList.remove("as-acars-hidden");
+        }
+      });
+
+      // Flight Simulation Presets
+      const flightSelect = document.getElementById("dev-flight-select");
+      flightSelect.addEventListener("change", function () {
+        const flow = window.__AIRSPACE_ACARS_FLOW__;
+        if (!flow) return;
+
+        if (flightSelect.value === "none") {
+          flow.state.booking = null;
+        } else if (flightSelect.value === "sxb7282") {
+          flow.state.booking = {
+            id: "b-sxb7282",
+            callsign: "SXB7282",
+            flight_number: "437282",
+            aircraft: { name: "Embraer 195", registration: "PS-SZA", icao: "E195", type: "E195 (Alianca)" },
+            departure_airport: { icao: "SBEG", name: "Eduardo Gomes Int'l", city: "Manaus", latitude: -3.0358, longitude: -60.0497 },
+            arrival_airport: { icao: "SBBV", name: "Atlas Brasil Cantanhede", city: "Boa Vista", latitude: 2.8464, longitude: -60.6922 },
+            alternate_airport: { icao: "SYCJ", name: "Cheddi Jagan Int'l", city: "Georgetown", latitude: 6.4986, longitude: -58.2541 },
+            planned_altitude: 36000,
+            route: "DCT SBEG UZ14 SBBV DCT",
+            status: "active"
+          };
+        } else if (flightSelect.value === "g31542") {
+          flow.state.booking = {
+            id: "b-g31542",
+            callsign: "GLO1542",
+            flight_number: "G31542",
+            aircraft: { name: "Boeing 737-800", registration: "PR-GZO", icao: "B738" },
+            departure_airport: { icao: "SBGR", name: "Guarulhos Int'l", city: "Sao Paulo" },
+            arrival_airport: { icao: "SBRJ", name: "Santos Dumont", city: "Rio de Janeiro" },
+            alternate_airport: { icao: "SBGL", name: "Galeao Int'l", city: "Rio de Janeiro" },
+            planned_altitude: 27000,
+            route: "UW14 VEDET BGC",
+            status: "active"
+          };
+        } else if (flightSelect.value === "ad4120") {
+          flow.state.booking = {
+            id: "b-ad4120",
+            callsign: "AZU4120",
+            flight_number: "AD4120",
+            aircraft: { name: "Airbus A320neo", registration: "PR-YRS", icao: "A20N" },
+            departure_airport: { icao: "SBSP", name: "Congonhas", city: "Sao Paulo" },
+            arrival_airport: { icao: "SBEG", name: "Eduardo Gomes Int'l", city: "Manaus" },
+            alternate_airport: { icao: "SBBV", name: "Boa Vista", city: "Boa Vista" },
+            planned_altitude: 36000,
+            route: "DCT BSI UZ26 MANAU",
+            status: "active"
+          };
+        } else if (flightSelect.value === "jj3054") {
+          flow.state.booking = {
+            id: "b-jj3054",
+            callsign: "TAM3054",
+            flight_number: "JJ3054",
+            aircraft: { name: "Airbus A321", registration: "PT-MXM", icao: "A321" },
+            departure_airport: { icao: "SBKP", name: "Viracopos", city: "Campinas" },
+            arrival_airport: { icao: "SBCT", name: "Afonso Pena", city: "Curitiba" },
+            alternate_airport: { icao: "SBBI", name: "Bacacheri", city: "Curitiba" },
+            planned_altitude: 24000,
+            route: "UZ32 CWB",
+            status: "active"
+          };
+        }
+        flow.renderAll();
+      });
+
+      // GPS Position Presets
+      const gpsSelect = document.getElementById("dev-gps-select");
+      const simvarBadge = document.getElementById("dev-simvar-badge");
+      gpsSelect.addEventListener("change", function () {
+        const val = gpsSelect.value;
+        const apt = MOCK_AIRPORTS.find(a => a.icao.toLowerCase() === val) || MOCK_AIRPORTS[0];
+        window.mockSimVars["A:PLANE LATITUDE"] = apt.lat;
+        window.mockSimVars["A:PLANE LONGITUDE"] = apt.lon;
+        simvarBadge.textContent = "Pos: " + apt.icao + " (" + apt.lat.toFixed(2) + ", " + apt.lon.toFixed(2) + ") | Alt: FL280";
+      });
+
+      // Quick Login (Voe Samba)
+      document.getElementById("btn-dev-quick-login").addEventListener("click", function () {
+        const flow = window.__AIRSPACE_ACARS_FLOW__;
+        if (!flow) return;
+        const mockTenant = {
+          id: "tenant-voe-samba",
+          name: "Voe Samba",
+          domain: "voesamba.airspace.com",
+          logo_url: "https://airspace.ferrlab.com/storage/tenants/samba.png"
+        };
+        flow.store.activeTenant = mockTenant;
+        flow.store.storedTokens[mockTenant.id] = {
+          token: "mock_jwt_token_for_preview",
+          tenant: mockTenant
+        };
+        flow.state.activeView = "main";
+        flow.state.activeTab = "home";
+        flow.saveStore();
+        flightSelect.value = "sxb7282";
+        flightSelect.dispatchEvent(new Event("change"));
+        flow.renderAll();
+        if (typeof flow.fetchMyFlights === "function") {
+          flow.fetchMyFlights(1);
+        }
+      });
+
+      // Reset Store
+      document.getElementById("btn-dev-reset-store").addEventListener("click", function () {
+        localStorage.removeItem("airspace_acars_dev_store");
+        window.location.reload();
+      });
+
+      // Canvas themes
+      const canvas = document.getElementById("sim-canvas");
+      document.getElementById("btn-canvas-flightdeck").addEventListener("click", () => {
+        canvas.className = "";
+      });
+      document.getElementById("btn-canvas-clean").addEventListener("click", () => {
+        canvas.className = "theme-clean";
+      });
+      document.getElementById("btn-canvas-light").addEventListener("click", () => {
+        canvas.className = "theme-light";
+      });
+    }
+
+    // Otto Search Bar Modal
+    function setupOttoModal() {
+      const modal = document.getElementById("otto-modal");
+      const input = document.getElementById("otto-search-input");
+      const resultsContainer = document.getElementById("otto-results-list");
+      const closeBtn = document.getElementById("otto-close-btn");
+      const ottoTrigger = document.getElementById("flow-otto-btn");
+
+      function openOtto() {
+        modal.classList.add("open");
+        input.value = "";
+        resultsContainer.innerHTML = "<div class='otto-empty'>Digite algo para pesquisar com o Otto...</div>";
+        setTimeout(() => input.focus(), 50);
+      }
+
+      function closeOtto() {
+        modal.classList.remove("open");
+      }
+
+      ottoTrigger.addEventListener("click", openOtto);
+      closeBtn.addEventListener("click", closeOtto);
+
+      document.addEventListener("keydown", function (e) {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          if (modal.classList.contains("open")) closeOtto();
+          else openOtto();
+        } else if (e.key === "Escape" && modal.classList.contains("open")) {
+          closeOtto();
+        }
+      });
+
+      input.addEventListener("input", function () {
+        const query = input.value.trim();
+        if (!query) {
+          resultsContainer.innerHTML = "<div class='otto-empty'>Digite um comando ou pesquisa...</div>";
+          return;
+        }
+
+        if (window.flowLifecycle.search) {
+          window.flowLifecycle.search(query, function (results) {
+            if (!results || results.length === 0) {
+              resultsContainer.innerHTML = "<div class='otto-empty'>Nenhum resultado encontrado para '" + query + "'</div>";
+              return;
+            }
+
+            resultsContainer.innerHTML = "";
+            for (const r of results) {
+              const item = document.createElement("div");
+              item.className = "otto-result-item";
+              item.innerHTML = "<div class='otto-result-label'>" + (r.label || "") + "</div><div class='otto-result-sub'>" + (r.subtext || "") + "</div>";
+              item.addEventListener("click", function () {
+                if (typeof r.execute === "function") {
+                  r.execute();
+                }
+                closeOtto();
+              });
+              resultsContainer.appendChild(item);
+            }
+          });
+        }
+      });
+    }
+
+    // Initialize on page load
+    window.addEventListener("DOMContentLoaded", initWidget);
+  </script>
+</body>
+</html>
+
