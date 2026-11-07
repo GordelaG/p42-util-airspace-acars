@@ -9,16 +9,53 @@
     data-defaultoffsetx="0"
     data-defaultoffsety="0"
   >
-    <div class="as-acars-toast-header">
+    <div class="as-acars-toast-header" id="as-acars-toast-header">
       <div class="as-acars-toast-title" data-dragarea="airspace_acars_toast">
-        <span class="as-acars-pulse-dot"></span>
-        <span id="as-acars-toast-sender">vOCC DISPATCH</span>
+        <img class="as-acars-toast-va-logo as-acars-hidden" id="as-acars-toast-va-logo" alt="VA Logo" />
+        <svg class="as-acars-toast-default-logo" id="as-acars-toast-default-logo" viewBox="0 0 377 303" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M300.95 154.574V215.038H183.849V198.265L227.643 154.574H300.95Z" fill="#FC1A02"/>
+          <path d="M98.8591 283.051L160.586 221.46V303H98.8591V283.051Z" fill="#FC1A02"/>
+          <path d="M321.207 54.1096L320.046 54.9636L319.977 55.0319L293.093 74.7764L238.847 114.607H199.939C194.234 114.607 189.213 115.564 184.669 117.408C180.092 119.253 175.993 122.02 172.167 125.812L172.098 125.914L171.996 125.982C168.409 129.398 165.779 132.985 163.9 136.845C162.089 140.671 160.962 144.77 160.621 149.348V172.064L98.8591 217.395V152.73C98.8591 139.237 101.319 126.563 106.272 114.846C111.225 103.129 118.672 92.5055 128.408 82.9748C138.109 73.4783 149.074 66.2022 161.03 61.3515C173.021 56.5349 186.036 54.1437 199.871 54.1437H321.173L321.207 54.1096Z" fill="#FC1A02"/>
+          <path d="M91.6174 282.846H0L98.8593 210.255L160.587 164.959L229.146 114.607L311.54 54.1096L320.08 47.8242L346.93 28.1479L320.9 54.1096L320.012 54.9636L319.978 54.9978" fill="white"/>
+          <path d="M376.718 0.0341187L350.414 25.0051L352.771 68.081C354.035 74.8789 353.796 80.0712 353.694 81.6084C361.38 54.3828 369.032 27.2256 376.683 0.0341187H376.718Z" fill="white"/>
+          <path d="M376.717 0L294.528 20.906C295.929 20.8377 300.062 20.8035 305.63 21.7258L350.414 25.0393L376.717 0.0341601Z" fill="white"/>
+        </svg>
+        <span class="as-acars-toast-title-text" id="as-acars-toast-sender">OCC</span>
       </div>
       <div class="as-acars-toast-actions-header">
         <button type="button" class="as-acars-toast-close" id="as-acars-toast-close" title="Dispensar" data-i18n-title="toast.close_title">X</button>
       </div>
     </div>
     <div class="as-acars-toast-body" id="as-acars-toast-text"></div>
+    <div class="as-acars-toast-reply-box">
+      <form
+        id="as-acars-toast-form"
+        class="as-acars-toast-reply-row"
+        action="javascript:void(0);"
+        onsubmit="return false;"
+      >
+        <input
+          type="text"
+          id="as-acars-toast-input"
+          class="as-acars-toast-input"
+          placeholder="Responder ao despacho..."
+          data-i18n-placeholder="toast.reply_placeholder"
+          autocomplete="off"
+        />
+        <button
+          type="submit"
+          id="as-acars-toast-send"
+          class="as-acars-toast-send-btn"
+          title="Enviar resposta"
+          data-i18n-title="toast.send_title"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="as-acars-toast-send-icon">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </div>
     <div class="as-acars-toast-actions">
       <button type="button" class="as-acars-toast-btn" id="as-acars-toast-open" data-i18n="toast.open">
         Abrir no vOCC
@@ -309,23 +346,24 @@
           <div class="as-acars-empty-state" data-i18n="vocc.no_messages">Nenhuma mensagem recebida ainda.</div>
         </div>
 
-        <div class="as-acars-chat-compose">
+        <form
+          id="as-acars-chat-form"
+          class="as-acars-chat-compose"
+          action="javascript:void(0);"
+          onsubmit="return false;"
+        >
           <input
             type="text"
-            id="as-acars-chat-input"
             class="as-acars-input"
-            placeholder="Mensagem para o despacho operacional..."
-            data-i18n-placeholder="vocc.placeholder"
+            id="as-acars-chat-input"
+            placeholder="Enviar mensagem para o vOCC / Dispatch (ex: REQUESTING PUSHBACK)..."
+            data-i18n-placeholder="vocc.input_placeholder"
+            autocomplete="off"
           />
-          <button
-            type="button"
-            id="as-acars-btn-send-chat"
-            class="as-acars-btn as-acars-btn-primary"
-            data-i18n="vocc.send"
-          >
+          <button type="submit" class="as-acars-btn as-acars-btn-primary" id="as-acars-chat-send" data-i18n="vocc.btn_send">
             Enviar
           </button>
-        </div>
+        </form>
       </div>
 
       <!-- TAB 2: Airport Briefings & VA Documents -->
