@@ -141,6 +141,16 @@ class MockElement {
     if (trimmed.startsWith('#')) {
       return this.id === trimmed.slice(1);
     }
+    if (trimmed.startsWith('[')) {
+      const attrMatch = trimmed.match(/\[([a-zA-Z0-9_-]+)(?:="([^"]*)")?\]/);
+      if (attrMatch) {
+        const attrVal = this.getAttribute(attrMatch[1]);
+        if (attrVal === null) return false;
+        if (attrMatch[2] !== undefined && attrVal !== attrMatch[2]) return false;
+        return true;
+      }
+      return false;
+    }
     if (trimmed.startsWith('.')) {
       const cls = trimmed.slice(1).split('[')[0];
       if (!this.classList.contains(cls)) return false;
@@ -182,6 +192,15 @@ class MockElement {
     }
     return null;
   }
+
+  contains(node) {
+    let curr = node;
+    while (curr) {
+      if (curr === this) return true;
+      curr = curr.parentNode;
+    }
+    return false;
+  }
 }
 
 /**
@@ -221,17 +240,32 @@ function createMockDomFromCodeHtml() {
     root.appendChild(btn);
   }
 
-  for (const tabName of ['vocc', 'docs', 'flight', 'metar', 'settings']) {
+  for (const tabName of ['vocc', 'docs', 'notams', 'flight', 'metar', 'settings']) {
     const tile = new MockElement('div', root);
     tile.setAttribute('class', 'as-acars-tablet-tile');
     tile.setAttribute('data-tab', tabName);
     root.appendChild(tile);
   }
 
+  for (const filterVal of ['all', 'accepted', 'pending']) {
+    const filterBtn = new MockElement('button', root);
+    filterBtn.setAttribute('class', 'as-acars-btn-filter');
+    filterBtn.setAttribute('data-flight-filter', filterVal);
+    root.appendChild(filterBtn);
+  }
+
   for (const catName of ['all', 'briefing', 'manuals', 'fdm', 'load']) {
     const btn = new MockElement('button', root);
     btn.setAttribute('class', 'as-acars-cat-btn');
     btn.setAttribute('data-cat', catName);
+    root.appendChild(btn);
+  }
+
+  for (const detailTab of ['overview', 'landing', 'takeoff', 'telemetry', 'score']) {
+    const btn = new MockElement('button', root);
+    btn.setAttribute('class', 'as-acars-detail-tab-btn');
+    btn.setAttribute('data-detail-tab', detailTab);
+    btn.setAttribute('id', `as-acars-tab-btn-${detailTab}`);
     root.appendChild(btn);
   }
 
@@ -924,6 +958,23 @@ test('Language removed from Flow wheel settings, defaults to English, and can be
     mockRoot.dispatchEvent({ type: 'click', target: toastSwitch, preventDefault() {}, stopPropagation() {} });
     assert.equal(instance.store.vocc_toast_enabled, true, 'Clicking #as-acars-switch-toast again must toggle store.vocc_toast_enabled to true');
   }
+
+  // Test Switch VA / Logout button inside Settings
+  instance.store.activeTenant = { id: 'va-123', name: 'Voe Samba', domain: 'samba' };
+  instance.state.activeView = 'main';
+  instance.state.activeTab = 'settings';
+  instance.renderAll();
+
+  const switchVaBtn = mockRoot.querySelector('#as-acars-btn-switch-va');
+  assert.ok(switchVaBtn, 'Switch VA / Logout button must exist inside Settings');
+  const settingsVaBadge = mockRoot.querySelector('#as-acars-settings-va-badge');
+  assert.ok(settingsVaBadge, 'Settings VA badge must exist');
+  assert.equal(settingsVaBadge.textContent, 'Voe Samba');
+
+  // Verify clicking Switch VA / Logout switches view to tenants
+  mockRoot.dispatchEvent({ type: 'click', target: switchVaBtn, preventDefault() {}, stopPropagation() {} });
+  assert.equal(instance.state.activeView, 'tenants', 'Clicking Switch VA / Logout must switch view to tenants');
+  assert.equal(instance.state.activeTab, 'home', 'Clicking Switch VA / Logout must reset activeTab to home');
 });
 
 test('Toast auto-dismiss timer closes floating vOCC alert after configured duration', async () => {
@@ -963,8 +1014,9 @@ test('Toast auto-dismiss timer closes floating vOCC alert after configured durat
   assert.equal(toastEl.classList.contains('as-acars-hidden'), true);
 });
 
-test('Toast close button and dismiss link immediately dismiss the toast notification', async () => {
-  const mockFetch = async (url) => {
+test('Toast close button, dismiss link, and quick reply work properly', async () => {
+  let sentMessageBody = null;
+  const mockFetch = async (url, opts) => {
     if (url.includes('/api/v2/acars/messages')) {
       return makeJsonResponse(200, {
         data: [
@@ -977,6 +1029,10 @@ test('Toast close button and dismiss link immediately dismiss the toast notifica
           }
         ]
       });
+    }
+    if (url.includes('/api/v2/acars/message') && opts && opts.method === 'POST') {
+      sentMessageBody = JSON.parse(opts.body);
+      return makeJsonResponse(200, { data: { id: 999, message: sentMessageBody.message } });
     }
     return makeJsonResponse(200, { data: [] });
   };
@@ -992,6 +1048,29 @@ test('Toast close button and dismiss link immediately dismiss the toast notifica
 
   assert.ok(instance.state.toastMessage, 'Toast message should be shown');
   const toastEl = mockRoot.querySelector('#as-acars-toast');
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), false);
+
+  const senderEl = mockRoot.querySelector('#as-acars-toast-sender');
+  assert.equal(senderEl.textContent, 'OCC - Samba Virtual', 'Toast header sender should show OCC - [Company Name]');
+
+  // Quick reply input & send button (supports Enter key and form submit)
+  const toastForm = mockRoot.querySelector('#as-acars-toast-form');
+  const toastInput = mockRoot.querySelector('#as-acars-toast-input');
+  const toastSendBtn = mockRoot.querySelector('#as-acars-toast-send');
+  assert.ok(toastForm, '#as-acars-toast-form must exist');
+  assert.ok(toastInput, '#as-acars-toast-input must exist');
+  assert.ok(toastSendBtn, '#as-acars-toast-send must exist');
+
+  toastInput.value = 'COPIADO VOO 100';
+  toastInput.dispatchEvent({ type: 'keydown', key: 'Enter', keyCode: 13, target: toastInput, preventDefault() {}, stopPropagation() {} });
+  await new Promise((r) => setTimeout(r, 40));
+  assert.equal(instance.state.toastMessage, null, 'Toast message should be cleared after reply via Enter key');
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), true, 'Toast element should be hidden after reply');
+  assert.deepEqual(sentMessageBody, { message: 'COPIADO VOO 100' });
+
+  // Simulate next incoming toast message
+  instance.state.toastMessage = { id: 889, text: 'NEXT vOCC MESSAGE' };
+  instance.renderAll();
   assert.equal(toastEl.classList.contains('as-acars-hidden'), false);
 
   const closeBtn = mockRoot.querySelector('#as-acars-toast-close');
@@ -1122,17 +1201,44 @@ test('Tablet Home Launcher, tablet bar app switching, and return-to-home button 
   instance.state.activeTab = 'home';
   instance.renderAll();
 
+  // Status card removed for pure iPhone SpringBoard home screen
   const greeting = mockRoot.querySelector('#as-acars-tablet-greeting');
   const clock = mockRoot.querySelector('#as-acars-tablet-clock');
-  assert.ok(greeting, 'Tablet greeting must exist on home screen');
-  assert.ok(clock, 'Tablet UTC clock must exist on home screen');
-  assert.ok(clock.textContent.includes('UTC'), 'Clock must show UTC time');
+  assert.equal(greeting, null, 'Tablet greeting status card must be removed from home screen');
+  assert.equal(clock, null, 'Tablet clock card must be removed from home screen');
 
-  // Verify header Home button is visible in main view and highlighted as active on home tab
+  // Verify old header Home button and route pill are removed
   const btnHeaderHome = mockRoot.querySelector('#as-acars-btn-header-home');
-  assert.ok(btnHeaderHome, 'Header home button must exist');
-  assert.equal(btnHeaderHome.classList.contains('as-acars-hidden'), false);
-  assert.equal(btnHeaderHome.classList.contains('as-acars-btn-active'), true);
+  const routePill = mockRoot.querySelector('#as-acars-route-pill');
+  assert.equal(btnHeaderHome, null, 'Old header home button must be removed');
+  assert.equal(routePill, null, 'Old header route pill must be removed');
+
+  // Verify iOS Home Indicator Bar exists at bottom
+  const homeBarWrap = mockRoot.querySelector('#as-acars-ios-home-bar-wrap');
+  const btnIosHome = mockRoot.querySelector('#as-acars-btn-ios-home');
+  assert.ok(homeBarWrap, 'iOS home bar wrap must exist');
+  assert.ok(btnIosHome, 'iOS home bar button must exist');
+  assert.equal(homeBarWrap.classList.contains('as-acars-hidden'), true, 'iOS home bar wrap should be hidden while on home screen');
+
+  // Verify iOS Lock Screen / Header widget (Date, Time UTC, Weather Pill)
+  const iosDate = mockRoot.querySelector('#as-acars-ios-home-date');
+  const iosTime = mockRoot.querySelector('#as-acars-ios-home-time');
+  const iosWeather = mockRoot.querySelector('#as-acars-ios-home-weather');
+  const iosWeatherTemp = mockRoot.querySelector('#as-acars-ios-weather-temp');
+  assert.ok(iosDate, 'iOS date element must exist');
+  assert.ok(iosTime, 'iOS time element must exist');
+  assert.ok(iosWeather, 'iOS weather pill element must exist');
+  assert.ok(iosWeatherTemp, 'iOS weather temp element must exist');
+  assert.ok(iosDate.textContent.length > 5, 'Date should be populated');
+  assert.match(iosTime.textContent, /^\d{2}:\d{2}$/, 'Time should be HH:MM format');
+
+  // Test weather pill click navigates to METAR tab
+  mockRoot.dispatchEvent({ type: 'click', target: iosWeather, preventDefault() {}, stopPropagation() {} });
+  assert.equal(instance.state.activeTab, 'metar', 'Clicking iOS weather pill must open METAR tab');
+
+  // Return to home
+  mockRoot.dispatchEvent({ type: 'click', target: btnIosHome, preventDefault() {}, stopPropagation() {} });
+  assert.equal(instance.state.activeTab, 'home', 'Clicking iOS home bar must return to home');
 
   // Click METAR launcher tile on home screen
   const metarTile = mockRoot.querySelector('.as-acars-tablet-tile[data-tab="metar"]');
@@ -1140,13 +1246,12 @@ test('Tablet Home Launcher, tablet bar app switching, and return-to-home button 
   mockRoot.dispatchEvent({ type: 'click', target: metarTile, preventDefault() {}, stopPropagation() {} });
 
   assert.equal(instance.state.activeTab, 'metar', 'Clicking tablet tile must switch activeTab to metar');
-  assert.equal(btnHeaderHome.classList.contains('as-acars-hidden'), false, 'Header home button must be visible when on non-home tab');
-  assert.equal(btnHeaderHome.classList.contains('as-acars-btn-active'), false);
+  assert.equal(homeBarWrap.classList.contains('as-acars-hidden'), false, 'iOS home bar must become visible when inside an app');
 
-  // Click Header Home button to return to home
-  mockRoot.dispatchEvent({ type: 'click', target: btnHeaderHome, preventDefault() {}, stopPropagation() {} });
-  assert.equal(instance.state.activeTab, 'home', 'Clicking header home button must return to home');
-  assert.equal(btnHeaderHome.classList.contains('as-acars-btn-active'), true);
+  // Click iOS Home Bar button to return to home
+  mockRoot.dispatchEvent({ type: 'click', target: btnIosHome, preventDefault() {}, stopPropagation() {} });
+  assert.equal(instance.state.activeTab, 'home', 'Clicking iOS home bar must return to home');
+  assert.equal(homeBarWrap.classList.contains('as-acars-hidden'), true, 'iOS home bar wrap should hide again on home screen');
 });
 
 test('METAR parser, Flow weather API, active flight route weather, and Otto weather search work accurately', async () => {
@@ -1232,7 +1337,7 @@ test('NOTAM white mode contrast, vector emoji replacement, and Coherent GT tofu 
   instance.state.selectedNotamId = 'notam-1';
   instance.state.detailNotam = instance.state.notams[0];
   instance.state.activeView = 'main';
-  instance.state.activeTab = 'flight';
+  instance.state.activeTab = 'notams';
   instance.renderAll();
 
   const notamDetail = mockRoot.querySelector('#as-acars-notam-detail');
@@ -1270,6 +1375,107 @@ test('Inno Setup installer script handles Microsoft Store detection and manual s
   assert.ok(iss.includes('ChangeDirButton'), 'Must create Change Folder button on ready page');
   assert.ok(iss.includes('CurPageChanged'), 'Must update button visibility on page changed');
 });
+
+test('My Flights: app and detail screens are cleanly removed per user request', async () => {
+  const { hooks, instance: flow, mockRoot } = createFlowTestHarness();
+  hooks.html_created(mockRoot);
+
+  // 1. Verify code.html does not contain flights tab or tile
+  const htmlContent = fs.readFileSync('src/code.html', 'utf8');
+  assert.equal(htmlContent.includes('id="as-acars-tab-flights"'), false, 'My Flights tab panel must be removed from code.html');
+  assert.equal(htmlContent.includes('data-tab="flights"'), false, 'My Flights tablet tile must be removed from code.html');
+  assert.equal(htmlContent.includes('id="as-acars-flight-detail-view"'), false, 'Flight Detail view must be removed from code.html');
+
+  // 2. Verify code.css does not contain flights table or detail views
+  const cssContent = fs.readFileSync('src/code.css', 'utf8');
+  assert.equal(cssContent.includes('.as-acars-flights-table'), false, 'My Flights table CSS must be removed from code.css');
+  assert.equal(cssContent.includes('.as-acars-flight-detail-view'), false, 'Flight Detail view CSS must be removed from code.css');
+
+  // 3. Stubs safely return without throwing errors
+  await assert.doesNotReject(async () => {
+    await flow.fetchMyFlights();
+    flow.renderFlightsTab();
+    flow.renderFlightDetail();
+  }, 'Removed functions must have safe no-op stubs');
+});
+
+test('Active Flight / ACARS Dashboard: live telemetry, progress track, auto-tracking phase, and streamlined layout', async () => {
+  const customFetch = async () => makeJsonResponse(200, {});
+  const { hooks, instance: flow, mockRoot } = createFlowTestHarness(customFetch);
+  hooks.html_created(mockRoot);
+
+  flow.store.activeTenant = { id: 'samba', name: 'Voe Samba', domain: 'voesamba.airspace.com' };
+  flow.store.storedTokens['samba'] = { token: 'jwt_mock', tenant: flow.store.activeTenant };
+  flow.state.activeView = 'main';
+  flow.saveStore();
+
+  // Provide mock booking
+  flow.state.booking = {
+    id: 'b-sxb7282',
+    callsign: 'SXB7282',
+    flight_number: '437282',
+    aircraft: { name: 'Embraer 195', registration: 'PS-SZA', icao: 'E195' },
+    departure_airport: { icao: 'SBEG', name: 'Manaus', city: 'Manaus', latitude: -3.0358, longitude: -60.0497 },
+    arrival_airport: { icao: 'SBBV', name: 'Boa Vista', city: 'Boa Vista', latitude: 2.8464, longitude: -60.6922 },
+    status: 'active'
+  };
+
+  // Provide mock telemetry
+  flow.state.telemetry = {
+    latitude: -3.0358,
+    longitude: -60.0497,
+    altitude: 260,
+    groundSpeed: 0,
+    verticalSpeed: 0,
+    heading: 350,
+    onGround: true,
+    fuelKg: 1695,
+    aircraftName: 'Embraer 195 - Voe Samba (PS-SZA)'
+  };
+
+  flow.renderAll();
+
+  // Switch to Flight tab via Tablet Tile
+  const flightTile = mockRoot.querySelector('.as-acars-tablet-tile[data-tab="flight"]');
+  assert.ok(flightTile, 'Flight tablet tile must exist');
+  mockRoot.dispatchEvent({ type: 'click', target: flightTile, preventDefault() {}, stopPropagation() {} });
+  assert.equal(flow.state.activeTab, 'flight', 'Active tab must switch to flight');
+
+  // 1. Connection badge and metadata
+  const connBadge = mockRoot.querySelector('#as-acars-af-conn-badge');
+  assert.ok(connBadge, 'Connection badge must exist');
+  assert.equal(connBadge.classList.contains('as-acars-disconnected'), false, 'Simulator should be connected');
+
+  const depIcao = mockRoot.querySelector('#as-acars-af-dep-icao');
+  const arrIcao = mockRoot.querySelector('#as-acars-af-arr-icao');
+  assert.equal(depIcao.textContent, 'SBEG', 'Departure ICAO must be SBEG');
+  assert.equal(arrIcao.textContent, 'SBBV', 'Arrival ICAO must be SBBV');
+
+  // 2. Flight Phase badge / title (auto-detected pre-flight)
+  const phaseTitle = mockRoot.querySelector('#as-acars-af-phase-title');
+  assert.ok(phaseTitle, 'Phase title element must exist');
+
+  // 3. Telemetry KPIs
+  const telAlt = mockRoot.querySelector('#as-acars-af-telemetry-alt');
+  const telGs = mockRoot.querySelector('#as-acars-af-telemetry-gs');
+  const telVs = mockRoot.querySelector('#as-acars-af-telemetry-vs');
+  const telHdg = mockRoot.querySelector('#as-acars-af-telemetry-hdg');
+  const telFuel = mockRoot.querySelector('#as-acars-af-telemetry-fuel');
+
+  assert.ok(telAlt && telAlt.textContent.includes('260'), 'Altitude KPI should display 260 ft');
+  assert.ok(telGs && telGs.textContent.includes('0 kts'), 'Ground Speed KPI should display 0 kts');
+  assert.ok(telVs && telVs.textContent.includes('0 fpm'), 'Vertical Speed KPI should display 0 fpm');
+  assert.ok(telHdg && (telHdg.textContent.includes('350')), 'Heading KPI should display 350');
+  assert.ok(telFuel && (telFuel.textContent.includes('1,695') || telFuel.textContent.includes('1.695') || telFuel.textContent.includes('1695')), 'Fuel KPI should display 1,695 or 1.695 kg');
+
+  // 4. Verify removed unneeded elements (Start button, Before departure checklist, secondary map, cabin audio, recording bar)
+  assert.equal(mockRoot.querySelector('#as-acars-btn-start-flight'), null, 'Start flight button should be removed');
+  assert.equal(mockRoot.querySelector('#as-acars-af-checklist-status'), null, 'Checklist status should be removed');
+  assert.equal(mockRoot.querySelector('#as-acars-active-flight-map'), null, 'Secondary map should be removed');
+  assert.equal(mockRoot.querySelector('#as-acars-af-volume-slider'), null, 'Cabin audio slider should be removed');
+  assert.equal(mockRoot.querySelector('#as-acars-btn-toggle-rec'), null, 'Recording toggle button should be removed');
+});
+
 
 
 
