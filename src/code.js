@@ -130,19 +130,94 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC",
         docs: "Documentos",
         flight: "Voo Ativo",
+        flights: "Meus Voos",
         metar: "METAR",
         settings: "Configuracoes",
       },
       tablet: {
         home: "Inicio",
         docs: "Documentos",
+        notams: "NOTAMs",
         flight: "Voo Ativo",
+        my_flights: "Meus Voos",
         settings: "Configuracoes",
         vocc_sub: "Mensagens & Despacho",
         docs_sub: "Aeroportos & SOPs",
-        flight_sub: "Briefing & NOTAMs",
+        notams_sub: "Avisos da Companhia",
+        flight_sub: "Briefing & Telemetria",
+        flights_sub: "Historico & Estatisticas",
         metar_sub: "Meteorologia & Clima",
         settings_sub: "Idioma & Tema",
+      },
+      notams: {
+        title: "NOTAMs da Companhia",
+        subtitle: "Avisos e comunicados operacionais aos aeronautas",
+        refresh: "Recarregar",
+        empty: "Nenhum NOTAM ativo no momento.",
+        select_prompt: "Selecione um NOTAM para ler.",
+      },
+      flights: {
+        title: "Meus Voos",
+        subtitle: "Historico de voos realizados, estatisticas e auditoria operacional.",
+        filter_all: "Todos",
+        filter_accepted: "Aprovados",
+        filter_pending: "Pendentes",
+        search_placeholder: "Buscar por voo, aeroporto, aeronave...",
+        total_flights: "Total de Voos",
+        total_hours: "Horas de Voo",
+        avg_landing: "Media de Pouso",
+        total_distance: "Distancia Total",
+        avg_score: "Score Medio",
+        col_flight: "Voo",
+        col_origin: "Origem",
+        col_destination: "Destino",
+        col_departure: "Partida (UTC)",
+        col_aircraft: "Aeronave",
+        col_duration: "Duracao",
+        col_distance: "Distancia",
+        col_landing: "Toque",
+        col_score: "Score",
+        col_status: "Status",
+        col_action: "Acao",
+        btn_back: "Voltar",
+        touchdown_rate: "Taxa de Toque",
+        butter: "Butter",
+        good: "Bom",
+        firm: "Firme",
+        hard: "Duro",
+        fuel_burned: "Combustivel Gasto",
+        flight_duration: "Duracao do Voo",
+        operational_score: "Score Operacional",
+        facts_title: "Informacoes da Operacao",
+        tab_overview: "Overview",
+        tab_landing: "Landing",
+        tab_takeoff: "Takeoff",
+        tab_telemetry: "Telemetry",
+        tab_score: "Score",
+        summary_title: "FLIGHT SUMMARY",
+        fact_flight: "Numero do Voo",
+        fact_flight_number: "Numero do Voo",
+        fact_callsign: "Callsign",
+        fact_aircraft: "Aeronave",
+        fact_registration: "Matricula",
+        fact_aircraft_used: "Aeronave Utilizada",
+        fact_departure: "Aeroporto de Partida",
+        fact_origin: "Origem",
+        fact_arrival: "Aeroporto de Chegada",
+        fact_destination: "Destino",
+        fact_flight_time: "Tempo de Voo",
+        fact_dept_time: "Horario de Partida",
+        fact_departure_time: "Horario de Partida",
+        fact_arr_time: "Horario de Chegada",
+        fact_arrival_time: "Horario de Chegada",
+        loading: "Carregando voos...",
+        empty: "Nenhum voo encontrado.",
+        prev_page: "Anterior",
+        next_page: "Proxima",
+        page_info: "Pagina {page} de {lastPage}",
+        status_accepted: "Aprovado",
+        status_pending: "Pendente",
+        status_rejected: "Rejeitado",
       },
       metar: {
         title: "Meteorologia (METAR)",
@@ -181,6 +256,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         update_status_current: "Voce esta utilizando a versao mais recente.",
         btn_check_updates: "Verificar Atualizacoes",
         btn_download_installer: "Baixar Instalador",
+        account_title: "Sessao & Companhia Aerea",
+        account_desc: "Conectado como piloto. Clique para trocar de VA ou encerrar a sessao.",
+        btn_logout: "Trocar VA / Logout",
+        connected_as: "Conectado como {pilot} na {va}.",
+        connected_va: "Conectado a {va}. Clique para trocar de companhia ou sair.",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Ativo",
@@ -213,6 +293,32 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         no_content: "Nenhum conteudo disponivel para este documento.",
       },
       flight: {
+        title: "Meu Voo (ACARS)",
+        subtitle: "Da preparacao ao toque, acompanhe seu voo em tempo real.",
+        departure: "PARTIDA",
+        arrival: "CHEGADA",
+        elapsed: "DECORRIDO",
+        remaining: "RESTANTE",
+        duration: "Duracao Est.",
+        btn_start: "Iniciar Voo",
+        btn_finish: "Finalizar Voo (PIREP)",
+        btn_cancel: "Cancelar",
+        checklist_title: "Antes da Partida",
+        check_sim: "Simulador conectado",
+        check_booking: "Reserva ativa",
+        check_ground: "Aeronave no solo",
+        check_stationary: "Aeronave parada",
+        telemetry_alt: "Altitude",
+        telemetry_gs: "Velocidade Solo (GS)",
+        telemetry_vs: "Velocidade Vertical (VS)",
+        telemetry_hdg: "Proa (Heading)",
+        telemetry_fuel: "Combustivel Restante",
+        map_title: "Mapa da Rota & Posicao ao Vivo",
+        cabin_audio: "Audio da Cabine (Cabin Audio)",
+        cabin_audio_sub: "Volume dos avisos aos passageiros e tripulacao",
+        start_recording: "Gravar Telemetria",
+        stop_recording: "Parar Gravacao",
+        export_csv: "Exportar CSV",
         booking_title: "Reserva Ativa (Booking)",
         no_booking: "Nenhuma reserva ativa no momento.",
         pilot_title: "Tripulante Conectado",
@@ -223,11 +329,14 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       },
       toast: {
         header: "vOCC DISPATCH",
-        open: "Abrir no vOCC / Responder",
+        open: "Abrir no vOCC",
         dismiss: "Marcar Lida",
         close_title: "Dispensar",
+        reply_placeholder: "Responder ao despacho...",
+        send_title: "Enviar resposta",
       },
       update: {
+        time_now: "agora",
         badge_new: "NOVO",
         banner_title: "Nova versao disponivel:",
         banner_hint: "Feche o simulador antes de executar o instalador.",
@@ -288,6 +397,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC",
         docs: "Documents",
         flight: "Active Flight",
+        flights: "My Flights",
         metar: "METAR",
         settings: "Settings",
       },
@@ -295,12 +405,77 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         home: "Home",
         docs: "Documents",
         flight: "Active Flight",
+        my_flights: "My Flights",
         settings: "Settings",
         vocc_sub: "Messages & Dispatch",
         docs_sub: "Airports & SOPs",
         flight_sub: "Briefing & NOTAMs",
+        flights_sub: "History & Statistics",
         metar_sub: "Weather & METAR",
         settings_sub: "Language & Theme",
+      },
+      flights: {
+        title: "My Flights",
+        subtitle: "Completed flights history, statistics, and operational audit.",
+        filter_all: "All",
+        filter_accepted: "Accepted",
+        filter_pending: "Pending",
+        search_placeholder: "Search by flight, airport, aircraft...",
+        total_flights: "Total Flights",
+        total_hours: "Flight Hours",
+        avg_landing: "Avg Landing Rate",
+        total_distance: "Total Distance",
+        avg_score: "Avg Score",
+        col_flight: "Flight",
+        col_origin: "Origin",
+        col_destination: "Destination",
+        col_departure: "Departure (UTC)",
+        col_aircraft: "Aircraft",
+        col_duration: "Duration",
+        col_distance: "Distance",
+        col_landing: "Touchdown",
+        col_score: "Score",
+        col_status: "Status",
+        col_action: "Action",
+        btn_back: "Back",
+        touchdown_rate: "Touchdown Rate",
+        butter: "Butter",
+        good: "Good",
+        firm: "Firm",
+        hard: "Hard",
+        fuel_burned: "Fuel Burned",
+        flight_duration: "Flight Duration",
+        operational_score: "Operational Score",
+        facts_title: "Flight Operation Details",
+        tab_overview: "Overview",
+        tab_landing: "Landing",
+        tab_takeoff: "Takeoff",
+        tab_telemetry: "Telemetry",
+        tab_score: "Score",
+        summary_title: "FLIGHT SUMMARY",
+        fact_flight: "Flight Number",
+        fact_flight_number: "Flight Number",
+        fact_callsign: "Callsign",
+        fact_aircraft: "Aircraft",
+        fact_registration: "Registration",
+        fact_aircraft_used: "Aircraft Used",
+        fact_departure: "Departure Airport",
+        fact_origin: "Origin",
+        fact_arrival: "Arrival Airport",
+        fact_destination: "Destination",
+        fact_flight_time: "Flight Time",
+        fact_dept_time: "Departure Time",
+        fact_departure_time: "Departure Time",
+        fact_arr_time: "Arrival Time",
+        fact_arrival_time: "Arrival Time",
+        loading: "Loading flights...",
+        empty: "No flights found.",
+        prev_page: "Previous",
+        next_page: "Next",
+        page_info: "Page {page} of {lastPage}",
+        status_accepted: "Accepted",
+        status_pending: "Pending",
+        status_rejected: "Rejected",
       },
       metar: {
         title: "Weather (METAR)",
@@ -339,6 +514,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         update_status_current: "You are running the latest version.",
         btn_check_updates: "Check for Updates",
         btn_download_installer: "Download Installer",
+        account_title: "Session & Virtual Airline",
+        account_desc: "Connected as pilot. Click to switch airline or log out.",
+        btn_logout: "Switch VA / Logout",
+        connected_as: "Connected as {pilot} at {va}.",
+        connected_va: "Connected to {va}. Click to switch airline or log out.",
       },
       vocc: {
         channel_active: "ACARS / vOCC Dispatch Channel Active",
@@ -371,6 +551,32 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         no_content: "No content available for this document.",
       },
       flight: {
+        title: "Your flight",
+        subtitle: "From preparation to touchdown, follow your flight here.",
+        departure: "DEPARTURE",
+        arrival: "ARRIVAL",
+        elapsed: "ELAPSED",
+        remaining: "REMAINING",
+        duration: "Est. Duration",
+        btn_start: "Start Flight",
+        btn_finish: "Finish Flight (PIREP)",
+        btn_cancel: "Cancel",
+        checklist_title: "Before departure",
+        check_sim: "Simulator connected",
+        check_booking: "Active booking",
+        check_ground: "Aircraft on the ground",
+        check_stationary: "Aircraft stationary",
+        telemetry_alt: "Altitude",
+        telemetry_gs: "Ground Speed (GS)",
+        telemetry_vs: "Vertical Speed (VS)",
+        telemetry_hdg: "Heading",
+        telemetry_fuel: "Fuel Remaining",
+        map_title: "Route Map & Live Position",
+        cabin_audio: "Cabin Audio",
+        cabin_audio_sub: "Adjust passenger and crew announcement volume",
+        start_recording: "Start Recording",
+        stop_recording: "Stop Recording",
+        export_csv: "Export CSV",
         booking_title: "Active Booking",
         no_booking: "No active booking found at the moment.",
         pilot_title: "Connected Crew Member",
@@ -381,11 +587,14 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       },
       toast: {
         header: "vOCC DISPATCH",
-        open: "Open in vOCC / Reply",
+        open: "Open in vOCC",
         dismiss: "Mark Read",
         close_title: "Dismiss",
+        reply_placeholder: "Reply to dispatch...",
+        send_title: "Send reply",
       },
       update: {
+        time_now: "now",
         badge_new: "NEW",
         banner_title: "New version available:",
         banner_hint: "Close the simulator before running the installer.",
@@ -446,6 +655,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC",
         docs: "Documentos",
         flight: "Vuelo Activo",
+        flights: "Mis Vuelos",
         metar: "METAR",
         settings: "Configuracion",
       },
@@ -453,12 +663,63 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         home: "Inicio",
         docs: "Documentos",
         flight: "Vuelo Activo",
+        my_flights: "Mis Vuelos",
         settings: "Configuracion",
         vocc_sub: "Mensajes y Despacho",
         docs_sub: "Aeropuertos y SOPs",
         flight_sub: "Briefing y NOTAMs",
+        flights_sub: "Historial y Estadisticas",
         metar_sub: "Meteorologia y Clima",
         settings_sub: "Idioma y Tema",
+      },
+      flights: {
+        title: "Mis Vuelos",
+        subtitle: "Historial de vuelos completados, estadisticas y auditoria operativa.",
+        filter_all: "Todos",
+        filter_accepted: "Aceptados",
+        filter_pending: "Pendientes",
+        search_placeholder: "Buscar por vuelo, aeropuerto, aeronave...",
+        total_flights: "Total de Vuelos",
+        total_hours: "Horas de Vuelo",
+        avg_landing: "Media de Aterrizaje",
+        total_distance: "Distancia Total",
+        avg_score: "Score Medio",
+        col_flight: "Vuelo",
+        col_origin: "Origen",
+        col_destination: "Destino",
+        col_departure: "Salida (UTC)",
+        col_aircraft: "Aeronave",
+        col_duration: "Duracion",
+        col_distance: "Distancia",
+        col_landing: "Contacto",
+        col_score: "Score",
+        col_status: "Estado",
+        col_action: "Accion",
+        btn_back: "Volver",
+        touchdown_rate: "Tasa de Contacto",
+        butter: "Butter",
+        good: "Bueno",
+        firm: "Firme",
+        hard: "Duro",
+        fuel_burned: "Combustible Usado",
+        flight_duration: "Duracion del Vuelo",
+        operational_score: "Score Operativo",
+        facts_title: "Informacion del Vuelo",
+        fact_flight: "Numero de Vuelo",
+        fact_callsign: "Callsign",
+        fact_aircraft: "Aeronave",
+        fact_departure: "Aeropuerto de Salida",
+        fact_arrival: "Aeropuerto de Llegada",
+        fact_dept_time: "Hora de Salida",
+        fact_arr_time: "Hora de Llegada",
+        loading: "Cargando vuelos...",
+        empty: "No se encontraron vuelos.",
+        prev_page: "Anterior",
+        next_page: "Siguiente",
+        page_info: "Pagina {page} de {lastPage}",
+        status_accepted: "Aceptado",
+        status_pending: "Pendiente",
+        status_rejected: "Rechazado",
       },
       metar: {
         title: "Meteorologia (METAR)",
@@ -497,6 +758,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         update_status_current: "Esta utilizando la version mas reciente.",
         btn_check_updates: "Buscar Actualizaciones",
         btn_download_installer: "Descargar Instalador",
+        account_title: "Sesion y Aerolinea Virtual",
+        account_desc: "Conectado como piloto. Haga clic para cambiar de aerolinea o cerrar sesion.",
+        btn_logout: "Cambiar VA / Desconectar",
+        connected_as: "Conectado como {pilot} en {va}.",
+        connected_va: "Conectado a {va}. Haga clic para cambiar de aerolinea o cerrar sesion.",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Activo",
@@ -529,6 +795,32 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         no_content: "No hay contenido disponible para este documento.",
       },
       flight: {
+        title: "Mi Vuelo (ACARS)",
+        subtitle: "De la preparacion al aterrizaje, siga su vuelo en tiempo real.",
+        departure: "SALIDA",
+        arrival: "LLEGADA",
+        elapsed: "TRANSCURRIDO",
+        remaining: "RESTANTE",
+        duration: "Duracion Est.",
+        btn_start: "Iniciar Vuelo",
+        btn_finish: "Finalizar Vuelo (PIREP)",
+        btn_cancel: "Cancelar",
+        checklist_title: "Antes de la Salida",
+        check_sim: "Simulador conectado",
+        check_booking: "Reserva activa",
+        check_ground: "Aeronave en tierra",
+        check_stationary: "Aeronave parada",
+        telemetry_alt: "Altitud",
+        telemetry_gs: "Velocidad Tierra (GS)",
+        telemetry_vs: "Velocidad Vertical (VS)",
+        telemetry_hdg: "Rumbo (Heading)",
+        telemetry_fuel: "Combustible Restante",
+        map_title: "Mapa de Ruta & Posicion en Vivo",
+        cabin_audio: "Audio de Cabina (Cabin Audio)",
+        cabin_audio_sub: "Ajustar volumen de anuncios a pasajeros",
+        start_recording: "Grabar Telemetria",
+        stop_recording: "Detener Grabacion",
+        export_csv: "Exportar CSV",
         booking_title: "Reserva Activa (Booking)",
         no_booking: "No se encontro ninguna reserva activa.",
         pilot_title: "Tripulante Conectado",
@@ -539,11 +831,14 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       },
       toast: {
         header: "vOCC DESPACHO",
-        open: "Abrir en vOCC / Responder",
+        open: "Abrir en vOCC",
         dismiss: "Marcar Leido",
         close_title: "Descartar",
+        reply_placeholder: "Responder al despacho...",
+        send_title: "Enviar respuesta",
       },
       update: {
+        time_now: "ahora",
         badge_new: "NUEVO",
         banner_title: "Nueva version disponible:",
         banner_hint: "Cierre el simulador antes de ejecutar el instalador.",
@@ -604,6 +899,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         vocc: "vOCC",
         docs: "Documents",
         flight: "Vol Actif",
+        flights: "Mes Vols",
         metar: "METAR",
         settings: "Parametres",
       },
@@ -611,12 +907,63 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         home: "Accueil",
         docs: "Documents",
         flight: "Vol Actif",
+        my_flights: "Mes Vols",
         settings: "Parametres",
         vocc_sub: "Messages & Dispatch",
         docs_sub: "Aeroports & SOPs",
         flight_sub: "Briefing & NOTAMs",
+        flights_sub: "Historique & Statistiques",
         metar_sub: "Meteo & METAR",
         settings_sub: "Langue & Theme",
+      },
+      flights: {
+        title: "Mes Vols",
+        subtitle: "Historique des vols effectues, statistiques et audit operationnel.",
+        filter_all: "Tous",
+        filter_accepted: "Acceptes",
+        filter_pending: "En attente",
+        search_placeholder: "Rechercher par vol, aeroport, appareil...",
+        total_flights: "Total des Vols",
+        total_hours: "Heures de Vol",
+        avg_landing: "Toucher Moyen",
+        total_distance: "Distance Totale",
+        avg_score: "Score Moyen",
+        col_flight: "Vol",
+        col_origin: "Origine",
+        col_destination: "Destination",
+        col_departure: "Depart (UTC)",
+        col_aircraft: "Appareil",
+        col_duration: "Duree",
+        col_distance: "Distance",
+        col_landing: "Toucher",
+        col_score: "Score",
+        col_status: "Statut",
+        col_action: "Action",
+        btn_back: "Retour",
+        touchdown_rate: "Taux de Toucher",
+        butter: "Butter",
+        good: "Bon",
+        firm: "Ferme",
+        hard: "Dur",
+        fuel_burned: "Carburant Consomme",
+        flight_duration: "Duree du Vol",
+        operational_score: "Score Operationnel",
+        facts_title: "Details de l'Operation",
+        fact_flight: "Numero de Vol",
+        fact_callsign: "Callsign",
+        fact_aircraft: "Appareil",
+        fact_departure: "Aeroport de Depart",
+        fact_arrival: "Aeroport d'Arrivee",
+        fact_dept_time: "Heure de Depart",
+        fact_arr_time: "Heure d'Arrivee",
+        loading: "Chargement des vols...",
+        empty: "Aucun vol trouve.",
+        prev_page: "Precedent",
+        next_page: "Suivant",
+        page_info: "Page {page} sur {lastPage}",
+        status_accepted: "Accepte",
+        status_pending: "En attente",
+        status_rejected: "Rejete",
       },
       metar: {
         title: "Meteorologie (METAR)",
@@ -655,6 +1002,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         update_status_current: "Vous utilisez la version la plus recente.",
         btn_check_updates: "Verifier les Mises a jour",
         btn_download_installer: "Telecharger l'Installeur",
+        account_title: "Session et Compagnie Virtuelle",
+        account_desc: "Connecte en tant que pilote. Cliquez pour changer de compagnie ou vous deconnecter.",
+        btn_logout: "Changer de VA / Deconnexion",
+        connected_as: "Connecte en tant que {pilot} chez {va}.",
+        connected_va: "Connecte a {va}. Cliquez pour changer de compagnie ou vous deconnecter.",
       },
       vocc: {
         channel_active: "Canal ACARS / vOCC Dispatch Actif",
@@ -687,6 +1039,32 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         no_content: "Aucun contenu disponible pour ce document.",
       },
       flight: {
+        title: "Votre Vol (ACARS)",
+        subtitle: "De la preparation a l'atterrissage, suivez votre vol en temps reel.",
+        departure: "DEPART",
+        arrival: "ARRIVEE",
+        elapsed: "ECOULE",
+        remaining: "RESTANT",
+        duration: "Duree Est.",
+        btn_start: "Demarrer le Vol",
+        btn_finish: "Terminer le Vol (PIREP)",
+        btn_cancel: "Annuler",
+        checklist_title: "Avant le Depart",
+        check_sim: "Simulateur connecte",
+        check_booking: "Reservation active",
+        check_ground: "Appareil au sol",
+        check_stationary: "Appareil a l'arret",
+        telemetry_alt: "Altitude",
+        telemetry_gs: "Vitesse Sol (GS)",
+        telemetry_vs: "Vitesse Verticale (VS)",
+        telemetry_hdg: "Cap (Heading)",
+        telemetry_fuel: "Carburant Restant",
+        map_title: "Carte de la Route & Position en Direct",
+        cabin_audio: "Audio Cabine (Cabin Audio)",
+        cabin_audio_sub: "Ajuster le volume des annonces passagers",
+        start_recording: "Enregistrer Telemetrie",
+        stop_recording: "Arreter Enregistrement",
+        export_csv: "Exporter CSV",
         booking_title: "Reservation Active (Booking)",
         no_booking: "Aucune reservation active trouvee pour le moment.",
         pilot_title: "Membre d'Equipage Connecte",
@@ -697,11 +1075,14 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       },
       toast: {
         header: "vOCC DISPATCH",
-        open: "Ouvrir dans vOCC / Repondre",
+        open: "Ouvrir dans vOCC",
         dismiss: "Marquer comme Lu",
         close_title: "Ignorer",
+        reply_placeholder: "Repondre a la regulation...",
+        send_title: "Envoyer reponse",
       },
       update: {
+        time_now: "maintenant",
         badge_new: "NOUVEAU",
         banner_title: "Nouvelle version disponible :",
         banner_hint: "Fermez le simulateur avant de lancer l'installeur.",
@@ -826,7 +1207,22 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   const stateData = {
     panelOpen: false,
     activeView: "tenants", // "tenants" | "auth" | "main"
-    activeTab: "home",     // "home" | "vocc" | "docs" | "flight" | "metar" | "settings"
+    activeTab: "home",     // "home" | "vocc" | "docs" | "flight" | "flights" | "metar" | "settings"
+
+    // My Flights State
+    flights: [],
+    flightsLoading: false,
+    flightsError: "",
+    flightFilter: "all",
+    flightSearch: "",
+    flightPage: 1,
+    flightLastPage: 1,
+    flightTotal: 0,
+    pilotStats: null,
+    selectedFlight: null,
+    selectedFlightDetail: null,
+    selectedFlightTrack: null,
+    detailActiveTab: "overview",
 
     // METAR & Weather State
     metarData: {
@@ -837,6 +1233,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     },
     isFetchingMetar: false,
     metarSearchQuery: "",
+    homeLocalWeather: null,
+    lastHomeWeatherFetch: 0,
+    nearestAirportIcao: null,
 
     // Tenants / VA list
     tenants: [],
@@ -855,6 +1254,24 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     // Authenticated Data
     pilot: null,
     booking: null,
+
+    // Active Flight / ACARS Dashboard
+    flightState: "idle", // "idle" | "active" | "finished"
+    flightStartTime: null,
+    cabinAudioVolume: 31,
+    isRecordingTelemetry: false,
+    recordedTelemetry: [],
+    telemetry: {
+      latitude: 0,
+      longitude: 0,
+      altitude: 0,
+      groundSpeed: 0,
+      verticalSpeed: 0,
+      heading: 0,
+      onGround: true,
+      fuelKg: 0,
+      aircraftName: "",
+    },
 
     // vOCC & Messages
     messages: [],
@@ -887,9 +1304,47 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   };
 
   const seenSet = new Set(Array.isArray(store.seenMessageIds) ? store.seenMessageIds : []);
+
+  // --- In-Memory TTL Caches & Concurrency Guards (Anti-Lag / Zero-Stutter) ---
+  const metarCache = new Map();           // icao -> { data, timestamp } (TTL: 5 min)
+  const metarPendingPromises = new Map(); // icao -> Promise (request deduplication)
+  const docDetailCache = new Map();       // docId -> { data, timestamp } (TTL: 15 min)
+  let docsListCache = null;               // { data, timestamp } (TTL: 10 min)
+  let notamsCache = null;                 // { data, timestamp } (TTL: 5 min)
+  const flightsCache = new Map();         // page -> { flights, curPage, lastPage, totalCount, pilotStats, timestamp } (TTL: 5 min)
+  const flightDetailCache = new Map();    // flightId -> { data, timestamp } (TTL: 15 min)
+  const flightTrackCache = new Map();     // flightId -> { points, timestamp } (TTL: 15 min)
+  const domElementCache = new Map();      // selector -> element (O(1) DOM query cache)
+
+  // In-flight active promise deduplication
+  let activePilotBookingPromise = null;
+  let activeMessagesPromise = null;
+  let activeDocsPromise = null;
+  let activeNotamsPromise = null;
+  let activeFlightsPromise = null;
+
+  function clearAllCaches() {
+    metarCache.clear();
+    metarPendingPromises.clear();
+    docDetailCache.clear();
+    docsListCache = null;
+    notamsCache = null;
+    flightsCache.clear();
+    flightDetailCache.clear();
+    flightTrackCache.clear();
+    domElementCache.clear();
+    activePilotBookingPromise = null;
+    activeMessagesPromise = null;
+    activeDocsPromise = null;
+    activeNotamsPromise = null;
+    activeFlightsPromise = null;
+  }
   let rootEl = null;
   let activeInputEl = null;
   let toastTimerId = null;
+  let activeFlightMapInstance = null;
+  let activeFlightPlaneMarker = null;
+  let activeFlightRouteLine = null;
 
   function clearToastTimer() {
     if (toastTimerId) {
@@ -913,6 +1368,25 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     clearToastTimer();
     stateData.toastMessage = null;
     renderToast();
+  }
+
+  async function sendToastReply() {
+    const input = q("#as-acars-toast-input");
+    const text = input ? input.value.trim() : "";
+    if (!text) return false;
+
+    if (stateData.toastMessage && stateData.toastMessage.id) {
+      confirmMessageById(stateData.toastMessage.id);
+    }
+
+    if (input) {
+      input.value = "";
+    }
+    unfocusCoherentInput();
+
+    dismissToast();
+
+    return await sendChatMessage(text);
   }
 
   // --- Flow Settings Definition ---
@@ -1005,6 +1479,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     return dom ? "https://" + dom : "";
   }
 
+  let lastOpenUrlTime = 0;
+  let lastOpenedUrl = "";
+
   function openExternalUrl(rawUrl) {
     if (!rawUrl) return false;
     let target = String(rawUrl).trim();
@@ -1014,6 +1491,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       target = base + (target.startsWith("/") ? "" : "/") + target;
     }
     if (!/^https?:\/\//i.test(target)) return false;
+
+    // Strict debounce: do not open the same URL multiple times within 2 seconds
+    
+    lastOpenUrlTime = now;
+    lastOpenedUrl = target;
 
     let opened = false;
     try {
@@ -1300,6 +1782,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   }
 
   function handleSessionExpired() {
+    clearAllCaches();
     if (store.activeTenant && store.activeTenant.id && store.storedTokens) {
       delete store.storedTokens[store.activeTenant.id];
     }
@@ -1466,45 +1949,65 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     stateData.detailNotam = null;
     stateData.booking = null;
     stateData.pilot = null;
+    stateData.flights = [];
+    stateData.selectedFlight = null;
+    stateData.pilotStats = null;
+    stateData.flightPage = 1;
     renderAll();
     refreshAllAuthenticatedData();
   }
 
-  function refreshAllAuthenticatedData() {
+  function refreshAllAuthenticatedData(force) {
     if (!getActiveToken()) return;
+    if (force) {
+      clearAllCaches();
+    }
     fetchPilotAndBooking();
     fetchMessages();
-    fetchDocuments();
-    fetchNotams();
+    fetchDocuments(force);
+    fetchNotams(force);
+    fetchMyFlights(stateData.flightPage || 1, force);
   }
 
   // --- Pilot & Active Booking ---
-  async function fetchPilotAndBooking() {
-    if (!getActiveToken()) return;
-    try {
-      const pilotRes = await apiRequest("GET", "/api/v2/acars/pilot");
-      if (pilotRes.ok && pilotRes.data) {
-        stateData.pilot = pilotRes.data;
-        const pid = pilotRes.data.id || (pilotRes.data.profile && pilotRes.data.profile.id);
-        if (pid && !isNaN(Number(pid))) {
-          store.myUserId = Number(pid);
-          saveStore();
+  function fetchPilotAndBooking() {
+    if (!getActiveToken()) return Promise.resolve();
+    if (activePilotBookingPromise) return activePilotBookingPromise;
+
+    activePilotBookingPromise = (async function () {
+      try {
+        const pilotRes = await apiRequest("GET", "/api/v2/acars/pilot");
+        if (pilotRes.ok && pilotRes.data) {
+          stateData.pilot = pilotRes.data;
+          const pid = pilotRes.data.id || (pilotRes.data.profile && pilotRes.data.profile.id);
+          if (pid && !isNaN(Number(pid))) {
+            store.myUserId = Number(pid);
+            saveStore();
+          }
+        }
+      } catch (_e) {}
+
+      try {
+        const bookRes = await apiRequest("GET", "/api/v2/acars/booking");
+        if (bookRes.ok && bookRes.data && (bookRes.data.callsign || bookRes.data.flight_number)) {
+          stateData.booking = bookRes.data;
+        } else if (bookRes.status === 404) {
+          stateData.booking = null;
+        }
+      } catch (_e) {}
+
+      if (stateData.panelOpen) {
+        renderHeader();
+        renderBriefingShortcuts();
+        if (stateData.activeTab === "flight") {
+          renderFlightTab();
         }
       }
-    } catch (_e) {}
+    })().finally(function () {
+      activePilotBookingPromise = null;
+    });
 
-    try {
-      const bookRes = await apiRequest("GET", "/api/v2/acars/booking");
-      if (bookRes.ok && bookRes.data && (bookRes.data.callsign || bookRes.data.flight_number)) {
-        stateData.booking = bookRes.data;
-      } else if (bookRes.status === 404) {
-        stateData.booking = null;
-      }
-    } catch (_e) {}
-
-    renderHeader();
-    renderBriefingShortcuts();
-    renderFlightTab();
+    return activePilotBookingPromise;
   }
 
   // --- vOCC & Dispatch Messages ---
@@ -1541,58 +2044,68 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     });
   }
 
-  async function fetchMessages() {
-    if (!getActiveToken()) return;
-    try {
-      const res = await apiRequest("GET", "/api/v2/acars/messages?page=1");
-      if (!res.ok || !res.data) return;
+  function fetchMessages() {
+    if (!getActiveToken()) return Promise.resolve();
+    if (activeMessagesPromise) return activeMessagesPromise;
 
-      const list = Array.isArray(res.data.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
-      const mapped = list.map(mapMessage).filter(function (m) {
-        return m.id > 0;
-      });
+    activeMessagesPromise = (async function () {
+      try {
+        const res = await apiRequest("GET", "/api/v2/acars/messages?page=1");
+        if (!res.ok || !res.data) return;
 
-      const byId = new Map();
-      for (let i = 0; i < stateData.messages.length; i++) {
-        byId.set(stateData.messages[i].id, stateData.messages[i]);
-      }
+        const list = Array.isArray(res.data.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
+        const mapped = list.map(mapMessage).filter(function (m) {
+          return m.id > 0;
+        });
 
-      let newestUnseenVocc = null;
-      for (let i = 0; i < mapped.length; i++) {
-        const msg = mapped[i];
-        byId.set(msg.id, msg);
-        const senderKind = classifyMessageSender(msg);
-        if (!seenSet.has(msg.id)) {
-          seenSet.add(msg.id);
-          if (senderKind !== "user" && !msg.read) {
-            newestUnseenVocc = msg;
+        const byId = new Map();
+        for (let i = 0; i < stateData.messages.length; i++) {
+          byId.set(stateData.messages[i].id, stateData.messages[i]);
+        }
+
+        let newestUnseenVocc = null;
+        for (let i = 0; i < mapped.length; i++) {
+          const msg = mapped[i];
+          byId.set(msg.id, msg);
+          const senderKind = classifyMessageSender(msg);
+          if (!seenSet.has(msg.id)) {
+            seenSet.add(msg.id);
+            if (senderKind !== "user" && !msg.read) {
+              newestUnseenVocc = msg;
+            }
           }
         }
+
+        store.seenMessageIds = Array.from(seenSet).slice(-200);
+        saveStore();
+
+        stateData.messages = Array.from(byId.values()).sort(function (a, b) {
+          return a.id - b.id;
+        });
+
+        if (stateData.panelOpen && stateData.activeView === "main" && stateData.activeTab === "vocc" && store.auto_confirm_read) {
+          confirmAllUnreadMessages();
+        } else if (newestUnseenVocc && store.vocc_toast_enabled) {
+          stateData.toastMessage = newestUnseenVocc;
+          renderToast();
+        }
+
+        if (stateData.panelOpen) {
+          renderTabsBadge();
+          const isChatOpen = stateData.activeView === "main" && stateData.activeTab === "vocc";
+          renderChatTab(isChatOpen);
+          if (isChatOpen) {
+            scrollChatToBottom();
+          }
+        }
+      } catch (_e) {
+        // Ignore transient polling error
       }
+    })().finally(function () {
+      activeMessagesPromise = null;
+    });
 
-      store.seenMessageIds = Array.from(seenSet).slice(-200);
-      saveStore();
-
-      stateData.messages = Array.from(byId.values()).sort(function (a, b) {
-        return a.id - b.id;
-      });
-
-      if (stateData.panelOpen && stateData.activeView === "main" && stateData.activeTab === "vocc" && store.auto_confirm_read) {
-        confirmAllUnreadMessages();
-      } else if (newestUnseenVocc && store.vocc_toast_enabled) {
-        stateData.toastMessage = newestUnseenVocc;
-        renderToast();
-      }
-
-      renderTabsBadge();
-      const isChatOpen = stateData.panelOpen && stateData.activeView === "main" && stateData.activeTab === "vocc";
-      renderChatTab(isChatOpen);
-      if (isChatOpen) {
-        scrollChatToBottom();
-      }
-    } catch (_e) {
-      // Ignore transient polling error
-    }
+    return activeMessagesPromise;
   }
 
   async function confirmMessageById(messageId) {
@@ -1684,68 +2197,130 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     };
   }
 
-  async function fetchDocuments() {
-    if (!getActiveToken()) return;
-    stateData.docsLoading = true;
-    stateData.docsError = "";
-    renderDocsTab();
-
-    try {
-      const res = await apiRequest("GET", "/api/v2/acars/documents?page=1&per_page=100&sort=sort_order&sort_dir=asc");
-      if (!res.ok || !res.data) {
-        throw new Error("HTTP " + res.status);
-      }
-      const rawItems = Array.isArray(res.data.data) ? res.data.data : [];
-      let allDocs = rawItems.map(normalizeDocWire).filter(Boolean);
-
-      const lastPage = (res.data.meta && res.data.meta.last_page) || res.data.last_page || 1;
-      for (let p = 2; p <= lastPage && p <= 5; p++) {
-        const pageRes = await apiRequest(
-          "GET",
-          "/api/v2/acars/documents?page=" + p + "&per_page=100&sort=sort_order&sort_dir=asc"
-        );
-        if (pageRes.ok && pageRes.data && Array.isArray(pageRes.data.data)) {
-          allDocs = allDocs.concat(pageRes.data.data.map(normalizeDocWire).filter(Boolean));
-        }
-      }
-
-      stateData.documents = allDocs;
-      if (!stateData.selectedDocId && allDocs.length > 0) {
-        const firstReadable = allDocs.find(function (d) {
-          return d.type !== "folder";
-        }) || allDocs[0];
+  function fetchDocuments(force) {
+    if (!getActiveToken()) return Promise.resolve();
+    const now = Date.now();
+    if (!force && docsListCache && (now - docsListCache.timestamp < 600000) && stateData.documents.length > 0) {
+      stateData.documents = docsListCache.data;
+      if (!stateData.selectedDocId && stateData.documents.length > 0) {
+        const firstReadable = stateData.documents.find(function (d) {
+          return d.type !== "folder" && d.id !== "1" && d.id !== "3" && d.id !== "9";
+        }) || stateData.documents[0];
         selectDocument(firstReadable.id);
       }
-    } catch (_e) {
-      stateData.docsError = "Nao foi possivel carregar os documentos da companhia.";
-    } finally {
-      stateData.docsLoading = false;
       renderDocsTab();
+      return Promise.resolve();
     }
+
+    if (activeDocsPromise) return activeDocsPromise;
+
+    activeDocsPromise = (async function () {
+      stateData.docsLoading = true;
+      stateData.docsError = "";
+      renderDocsTab();
+
+      try {
+        const res = await apiRequest("GET", "/api/v2/acars/documents?page=1&per_page=100&sort=sort_order&sort_dir=asc");
+        if (!res.ok || !res.data) {
+          throw new Error("HTTP " + res.status);
+        }
+        const rawItems = Array.isArray(res.data.data)
+          ? res.data.data
+          : Array.isArray(res.data.documents)
+          ? res.data.documents
+          : Array.isArray(res.data)
+          ? res.data
+          : [];
+        let allDocs = rawItems.map(normalizeDocWire).filter(Boolean);
+
+        const lastPage = (res.data.meta && res.data.meta.last_page) || res.data.last_page || 1;
+        for (let p = 2; p <= lastPage && p <= 5; p++) {
+          const pageRes = await apiRequest(
+            "GET",
+            "/api/v2/acars/documents?page=" + p + "&per_page=100&sort=sort_order&sort_dir=asc"
+          );
+          if (pageRes.ok && pageRes.data) {
+            const pageItems = Array.isArray(pageRes.data.data)
+              ? pageRes.data.data
+              : Array.isArray(pageRes.data.documents)
+              ? pageRes.data.documents
+              : Array.isArray(pageRes.data)
+              ? pageRes.data
+              : [];
+            allDocs = allDocs.concat(pageItems.map(normalizeDocWire).filter(Boolean));
+          }
+        }
+
+        stateData.documents = allDocs;
+        docsListCache = { data: allDocs, timestamp: Date.now() };
+
+        if (!stateData.selectedDocId && allDocs.length > 0) {
+          const firstReadable = allDocs.find(function (d) {
+            return d.type !== "folder" && d.id !== "1" && d.id !== "3" && d.id !== "9";
+          }) || allDocs[0];
+          selectDocument(firstReadable.id);
+        }
+      } catch (_e) {
+        stateData.docsError = "Nao foi possivel carregar os documentos da companhia.";
+      } finally {
+        stateData.docsLoading = false;
+        renderDocsTab();
+      }
+    })().finally(function () {
+      activeDocsPromise = null;
+    });
+
+    return activeDocsPromise;
   }
 
-  async function selectDocument(docId) {
+  async function selectDocument(docId, force) {
     if (!docId) {
       stateData.selectedDocId = null;
       stateData.detailDoc = null;
       renderDocsTab();
       return;
     }
-    stateData.selectedDocId = String(docId);
-    const cached = stateData.documents.find(function (d) {
-      return d.id === stateData.selectedDocId;
+    const docIdStr = String(docId);
+    stateData.selectedDocId = docIdStr;
+
+    // 1. Check in-memory detail cache (TTL: 15 min)
+    const now = Date.now();
+    const cachedEntry = docDetailCache.get(docIdStr);
+    if (!force && cachedEntry && (now - cachedEntry.timestamp < 900000)) {
+      stateData.detailDoc = cachedEntry.data;
+      stateData.detailDocLoading = false;
+      renderDocsTab();
+      return;
+    }
+
+    // 2. Pre-populate from list cache if available
+    const cachedFromList = stateData.documents.find(function (d) {
+      return d.id === docIdStr;
     });
-    stateData.detailDoc = cached || null;
+    if (cachedFromList && cachedFromList.content) {
+      stateData.detailDoc = cachedFromList;
+      stateData.detailDocLoading = false;
+      docDetailCache.set(docIdStr, { data: cachedFromList, timestamp: now });
+      renderDocsTab();
+      return;
+    }
+
+    stateData.detailDoc = cachedFromList || null;
     stateData.detailDocLoading = true;
     renderDocsTab();
 
     try {
-      const res = await apiRequest("GET", "/api/v2/acars/documents/" + encodeURIComponent(stateData.selectedDocId));
+      const res = await apiRequest("GET", "/api/v2/acars/documents/" + encodeURIComponent(docIdStr));
       if (res.ok && res.data) {
         const raw = res.data.data ? res.data.data : res.data;
         const parsed = normalizeDocWire(raw);
         if (parsed) {
           stateData.detailDoc = parsed;
+          docDetailCache.set(docIdStr, { data: parsed, timestamp: Date.now() });
+          const idx = stateData.documents.findIndex(function (d) { return d.id === docIdStr; });
+          if (idx !== -1) {
+            stateData.documents[idx] = parsed;
+          }
         }
       }
     } catch (_e) {
@@ -1760,38 +2335,59 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const q = stateData.docSearch.toLowerCase().trim();
 
     return stateData.documents.filter(function (doc) {
-      const titleLower = doc.title.toLowerCase();
+      const docIdStr = String(doc.id || "").trim();
+      const parentIdStr = String(doc.parent_id || "").trim();
+      const titleLower = (doc.title || "").toLowerCase();
       const sourceLower = (doc.source || "").toLowerCase();
+      const sourceType = (doc.source_type || "").toLowerCase();
+
+      // Filter out top-level category container folders from direct document listing
+      if (
+        (!parentIdStr || parentIdStr === "null" || parentIdStr === "0") &&
+        (docIdStr === "1" || docIdStr === "3" || docIdStr === "9" ||
+         titleLower === "airport briefings" || titleLower === "fdm profiles" || titleLower === "load profiles")
+      ) {
+        return false;
+      }
+
+      const isAirportBriefing =
+        parentIdStr === "9" ||
+        sourceType === "airport" ||
+        /^[a-z0-9]{4}\s*(\u2014|-)/i.test(doc.title || "") ||
+        titleLower.indexOf("briefing") !== -1 ||
+        titleLower.indexOf("airport") !== -1 ||
+        titleLower.indexOf("aeroporto") !== -1 ||
+        sourceLower.indexOf("airport") !== -1;
+
+      const isFdm =
+        parentIdStr === "3" ||
+        sourceType === "fdm_profile" ||
+        titleLower.indexOf("fdm") !== -1 ||
+        titleLower.indexOf("safety") !== -1 ||
+        sourceLower.indexOf("fdm") !== -1;
+
+      const isLoad =
+        parentIdStr === "1" ||
+        sourceType === "load_profile" ||
+        titleLower.indexOf("load") !== -1 ||
+        titleLower.indexOf("carga") !== -1 ||
+        sourceLower.indexOf("load") !== -1;
 
       if (cat === "briefing") {
-        const isBriefing =
-          doc.source_type === "airport" ||
-          titleLower.indexOf("briefing") !== -1 ||
-          titleLower.indexOf("airport") !== -1 ||
-          titleLower.indexOf("aeroporto") !== -1 ||
-          sourceLower.indexOf("airport") !== -1;
-        if (!isBriefing) return false;
+        if (!isAirportBriefing) return false;
       } else if (cat === "fdm") {
-        const isFdm =
-          doc.source_type === "fdm_profile" ||
-          titleLower.indexOf("fdm") !== -1 ||
-          titleLower.indexOf("safety") !== -1 ||
-          sourceLower.indexOf("fdm") !== -1;
         if (!isFdm) return false;
       } else if (cat === "load") {
-        const isLoad =
-          doc.source_type === "load_profile" ||
-          titleLower.indexOf("load") !== -1 ||
-          titleLower.indexOf("carga") !== -1 ||
-          sourceLower.indexOf("load") !== -1;
         if (!isLoad) return false;
       } else if (cat === "manuals") {
         const isManual =
+          (!isAirportBriefing && !isFdm && !isLoad) ||
           titleLower.indexOf("sop") !== -1 ||
           titleLower.indexOf("manual") !== -1 ||
           titleLower.indexOf("guide") !== -1 ||
+          titleLower.indexOf("guia") !== -1 ||
           titleLower.indexOf("procedimento") !== -1 ||
-          (!doc.is_auto_generated && doc.type !== "folder");
+          titleLower.indexOf("politica") !== -1;
         if (!isManual) return false;
       }
 
@@ -1811,6 +2407,30 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const filtered = getFilteredDocuments();
     if (filtered.length > 0) {
       selectDocument(filtered[0].id);
+    } else if (typeof AIRPORT_BRIEFING_DATABASE !== "undefined" && AIRPORT_BRIEFING_DATABASE[code]) {
+      let doc = stateData.documents.find(function (d) {
+        return d.id === "briefing-" + code.toLowerCase();
+      });
+      if (!doc) {
+        const b = AIRPORT_BRIEFING_DATABASE[code];
+        doc = {
+          id: "briefing-" + code.toLowerCase(),
+          title: b.icao + " \u2014 " + b.name,
+          type: "html",
+          parent_id: "",
+          visibility: "public",
+          is_auto_generated: true,
+          source: "Airport briefing",
+          source_type: "airport",
+          content: "",
+          file_url: "",
+          sort_order: 1,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        stateData.documents.push(doc);
+      }
+      selectDocument(doc.id);
     }
     renderMainView();
   }
@@ -1867,31 +2487,69 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   }
 
   // --- Company NOTAMs ---
-  async function fetchNotams() {
-    if (!getActiveToken()) return;
-    try {
-      const res = await apiRequest("GET", "/api/v2/acars/notams?page=1&per_page=25&filter[is_active]=1&sort=created_at&sort_dir=desc");
-      if (!res.ok || !res.data) return;
-      const list = Array.isArray(res.data.data) ? res.data.data : [];
-      stateData.notams = list.map(function (n) {
-        return {
-          id: String(n.id || ""),
-          title: String(n.title || "NOTAM"),
-          content: String(n.content || n.body || n.description || ""),
-          created_at: String(n.created_at || ""),
-        };
-      });
+  function fetchNotams(force) {
+    if (!getActiveToken()) return Promise.resolve();
+    const now = Date.now();
+    if (!force && notamsCache && (now - notamsCache.timestamp < 300000) && stateData.notams.length > 0) {
+      stateData.notams = notamsCache.data;
       if (!stateData.selectedNotamId && stateData.notams.length > 0) {
         stateData.selectedNotamId = stateData.notams[0].id;
         stateData.detailNotam = stateData.notams[0];
       }
-      renderFlightTab();
-    } catch (_e) {}
+      renderNotamsTab();
+      renderTabsBadge();
+      return Promise.resolve();
+    }
+
+    if (activeNotamsPromise) return activeNotamsPromise;
+
+    activeNotamsPromise = (async function () {
+      try {
+        const res = await apiRequest("GET", "/api/v2/acars/notams?page=1&per_page=25&filter[is_active]=1&sort=created_at&sort_dir=desc");
+        if (!res.ok || !res.data) return;
+        const list = Array.isArray(res.data.data) ? res.data.data : [];
+        const parsedNotams = list.map(function (n) {
+          return {
+            id: String(n.id || ""),
+            title: String(n.title || "NOTAM"),
+            content: String(n.content || n.body || n.description || ""),
+            created_at: String(n.created_at || ""),
+          };
+        });
+        stateData.notams = parsedNotams;
+        notamsCache = { data: parsedNotams, timestamp: Date.now() };
+
+        if (!stateData.selectedNotamId && stateData.notams.length > 0) {
+          stateData.selectedNotamId = stateData.notams[0].id;
+          stateData.detailNotam = stateData.notams[0];
+        }
+        renderNotamsTab();
+        renderTabsBadge();
+      } catch (_e) {
+      }
+    })().finally(function () {
+      activeNotamsPromise = null;
+    });
+
+    return activeNotamsPromise;
   }
+
+  // --- My Flights / Logbook (Removed per user request) ---
+  function mapFlightLog() { return null; }
+  function fetchMyFlights() { return Promise.resolve(); }
+  function fetchFlightDetail() { return Promise.resolve(); }
 
   // --- DOM Rendering ---
   function q(selector) {
-    return rootEl ? rootEl.querySelector(selector) : null;
+    if (!rootEl) return null;
+    if (typeof rootEl.contains === "function") {
+      let el = domElementCache.get(selector);
+      if (el && rootEl.contains(el)) return el;
+      el = rootEl.querySelector(selector);
+      if (el) domElementCache.set(selector, el);
+      return el;
+    }
+    return rootEl.querySelector(selector);
   }
 
   function setVisible(el, visible) {
@@ -2038,10 +2696,51 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       const textEl = q("#as-acars-toast-text");
       const openBtn = q("#as-acars-toast-open");
       const dismissBtn = q("#as-acars-toast-dismiss");
+      const toastVaLogo = q("#as-acars-toast-va-logo");
+      const toastDefaultLogo = q("#as-acars-toast-default-logo");
 
+      // OCC + Logged Company Name header (e.g. OCC - Voe Samba)
+      const companyName = (store.activeTenant && store.activeTenant.name)
+        ? String(store.activeTenant.name).trim()
+        : (stateData.pilot && stateData.pilot.airline && stateData.pilot.airline.name)
+          ? String(stateData.pilot.airline.name).trim()
+          : "";
+      const toastHeaderText = companyName ? ("OCC - " + companyName) : "OCC";
       if (senderEl) {
-        senderEl.textContent = (msg.senderName || t("toast.header")) + (msg.senderRole ? " (" + msg.senderRole.toUpperCase() + ")" : "");
+        senderEl.textContent = toastHeaderText;
       }
+
+      // VA Logo vs Default Logo in Toast Header
+      const isAuthed = Boolean(getActiveToken() && store.activeTenant);
+      const vaLogoUrl =
+        (store.activeTenant && store.activeTenant.logo_url) ||
+        (stateData.pilot && (stateData.pilot.airline_logo || (stateData.pilot.airline && stateData.pilot.airline.logo_url))) ||
+        null;
+
+      if (toastVaLogo && toastDefaultLogo) {
+        if (isAuthed && vaLogoUrl) {
+          let fullLogo = String(vaLogoUrl).trim();
+          if (!/^https?:\/\//i.test(fullLogo)) {
+            const base = getTenantBaseUrl();
+            fullLogo = (base ? base.replace(/\/+$/, "") : "https://airspace.ferrlab.com") + (fullLogo.startsWith("/") ? "" : "/") + fullLogo;
+          }
+          if (toastVaLogo.getAttribute("data-src") !== fullLogo) {
+            toastVaLogo.setAttribute("data-src", fullLogo);
+            toastVaLogo.setAttribute("src", fullLogo);
+            toastVaLogo.src = fullLogo;
+            toastVaLogo.onerror = function () {
+              setVisible(toastVaLogo, false);
+              setVisible(toastDefaultLogo, true);
+            };
+          }
+          setVisible(toastVaLogo, true);
+          setVisible(toastDefaultLogo, false);
+        } else {
+          setVisible(toastVaLogo, false);
+          setVisible(toastDefaultLogo, true);
+        }
+      }
+
       if (textEl) {
         textEl.innerHTML = renderTextWithEmojis(msg.text || "");
       }
@@ -2050,6 +2749,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       }
       if (dismissBtn) {
         dismissBtn.textContent = t("toast.dismiss");
+      }
+      const toastInput = q("#as-acars-toast-input");
+      if (toastInput) {
+        toastInput.value = "";
       }
       startToastTimer();
     } else {
@@ -2060,9 +2763,6 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   function renderHeader() {
     if (!rootEl) return;
     const vaBadge = q("#as-acars-va-badge");
-    const routePill = q("#as-acars-route-pill");
-    const btnSwitchVa = q("#as-acars-btn-switch-va");
-    const btnHeaderHome = q("#as-acars-btn-header-home");
     const defaultLogo = q("#as-acars-default-logo");
     const vaLogoImg = q("#as-acars-va-logo");
 
@@ -2100,31 +2800,6 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         setVisible(vaLogoImg, false);
         setVisible(defaultLogo, true);
       }
-    }
-
-    setVisible(btnHeaderHome, isAuthed && stateData.activeView === "main");
-    if (btnHeaderHome) {
-      if (stateData.activeTab === "home") {
-        btnHeaderHome.classList.add("as-acars-btn-active");
-      } else {
-        btnHeaderHome.classList.remove("as-acars-btn-active");
-      }
-    }
-    setVisible(btnSwitchVa, isAuthed || stateData.activeView === "auth");
-
-    const b = stateData.booking;
-    const dep = b && b.departure_airport && b.departure_airport.icao ? b.departure_airport.icao : "";
-    const arr =
-      b && b.alternate_airport && b.alternate_airport.icao
-        ? b.alternate_airport.icao
-        : b && b.arrival_airport && b.arrival_airport.icao
-          ? b.arrival_airport.icao
-          : "";
-    const cs = b ? b.callsign || b.flight_number || "" : "";
-
-    setVisible(routePill, Boolean(isAuthed && (cs || dep || arr)));
-    if (routePill && (cs || dep || arr)) {
-      routePill.textContent = (cs ? cs + " | " : "") + (dep || "----") + " -> " + (arr || "----");
     }
   }
 
@@ -2248,12 +2923,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       codeEl.textContent = stateData.deviceCode || "------";
     }
     if (urlEl) {
-      urlEl.href = fullAuthUrl;
+      urlEl.setAttribute("data-href", fullAuthUrl);
       urlEl.textContent =
         baseUrl + "/acars/authorize?code=" + (stateData.deviceCode || "------");
     }
     if (openAuthBtn) {
-      openAuthBtn.href = fullAuthUrl;
       openAuthBtn.setAttribute("data-href", fullAuthUrl);
     }
     if (statusEl) {
@@ -2273,7 +2947,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
   function renderMainView() {
     if (!rootEl) return;
-    const tabs = ["home", "vocc", "docs", "flight", "metar", "settings"];
+    const tabs = ["home", "vocc", "docs", "notams", "flight", "flights", "metar", "settings"];
     for (let i = 0; i < tabs.length; i++) {
       const t = tabs[i];
       const btn = q("#as-acars-tab-btn-" + t);
@@ -2288,6 +2962,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       setVisible(panel, stateData.activeTab === t);
     }
 
+    const homeBarWrap = q("#as-acars-ios-home-bar-wrap");
+    setVisible(homeBarWrap, stateData.activeTab !== "home");
+
     renderHeader();
     renderTabsBadge();
 
@@ -2298,6 +2975,8 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     } else if (stateData.activeTab === "docs") {
       renderBriefingShortcuts();
       renderDocsTab();
+    } else if (stateData.activeTab === "notams") {
+      renderNotamsTab();
     } else if (stateData.activeTab === "flight") {
       renderFlightTab();
     } else if (stateData.activeTab === "metar") {
@@ -2307,40 +2986,354 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
   }
 
-  function renderHomeTab() {
+  const AIRPORT_CITIES = {
+    SBGR: "Guarulhos",
+    SBRJ: "Rio de Janeiro",
+    SBSP: "Congonhas",
+    SBKP: "Campinas",
+    SBGL: "Galeao",
+    SBBR: "Brasilia",
+    SBEG: "Manaus",
+    SBBV: "Boa Vista",
+    SBCT: "Curitiba",
+    SBPA: "Porto Alegre",
+    SBFZ: "Fortaleza",
+    SBSV: "Salvador",
+    SBCF: "Belo Horizonte",
+    SBCG: "Campo Grande",
+    SBGO: "Goiania",
+    SBCR: "Corumba",
+    SBCY: "Cuiaba",
+    SBFL: "Florianopolis",
+    SBVT: "Vitoria",
+    SBNF: "Navegantes",
+    KJFK: "New York",
+    KLAX: "Los Angeles",
+    KMIA: "Miami",
+    EGLL: "London",
+    LFPG: "Paris",
+    LEMD: "Madrid",
+    EDDF: "Frankfurt"
+  };
+
+  function getAirportCityName(icao) {
+    if (!icao) return "Aeroporto Local";
+    const code = icao.toUpperCase();
+    if (AIRPORT_CITIES[code]) {
+      return AIRPORT_CITIES[code] + " (" + code + ")";
+    }
+    const b = stateData.booking;
+    if (b && b.departure_airport && b.departure_airport.icao === code) {
+      const city = b.departure_airport.city || b.departure_airport.name;
+      if (city) return city + " (" + code + ")";
+    }
+    return code;
+  }
+
+  function formatIosDate(d, lang) {
+    const l = (lang || getLanguage() || "pt-br").toLowerCase();
+    const dayOfWeek = d.getUTCDay();
+    const day = d.getUTCDate();
+    const month = d.getUTCMonth();
+
+    if (l === "en") {
+      const daysShortEn = ["sun.", "mon.", "tue.", "wed.", "thu.", "fri.", "sat."];
+      const monthsShortEn = ["jan.", "feb.", "mar.", "apr.", "may", "jun.", "jul.", "aug.", "sep.", "oct.", "nov.", "dec."];
+      return daysShortEn[dayOfWeek] + ", " + monthsShortEn[month] + " " + day;
+    }
+    if (l === "es") {
+      const daysShortEs = ["dom.", "lun.", "mar.", "mie.", "jue.", "vie.", "sab."];
+      const monthsShortEs = ["ene.", "feb.", "mar.", "abr.", "may.", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
+      return daysShortEs[dayOfWeek] + ", " + day + " de " + monthsShortEs[month];
+    }
+    if (l === "fr") {
+      const daysShortFr = ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."];
+      const monthsShortFr = ["janv.", "fevr.", "mars", "avr.", "mai", "juin", "juil.", "aout", "sept.", "oct.", "nov.", "dec."];
+      return daysShortFr[dayOfWeek] + ", " + day + " " + monthsShortFr[month];
+    }
+    // Default PT-BR (strict 7-bit ASCII): sex., 6 de nov.
+    const daysShortPt = ["dom.", "seg.", "ter.", "qua.", "qui.", "sex.", "sab."];
+    const monthsShortPt = ["jan.", "fev.", "mar.", "abr.", "mai.", "jun.", "jul.", "ago.", "set.", "out.", "nov.", "dez."];
+    return daysShortPt[dayOfWeek] + ", " + day + " de " + monthsShortPt[month];
+  }
+
+  function isNightTime(icao) {
+    const flowApi = (__flowContext && __flowContext.$api) || (typeof window !== "undefined" && window.$api);
+    if (flowApi && flowApi.variables) {
+      try {
+        const tod = flowApi.variables.get("E:TIME OF DAY", "enum");
+        if (tod === 3) return true;
+        if (tod === 1) return false;
+      } catch (_e) {}
+    }
+
+    let lon = -46.5;
+    if (stateData.booking && stateData.booking.departure_airport && typeof stateData.booking.departure_airport.longitude === "number") {
+      lon = stateData.booking.departure_airport.longitude;
+    }
+    const now = new Date();
+    const utcHours = now.getUTCHours() + now.getUTCMinutes() / 60;
+    const localSolarHour = (utcHours + (lon / 15) + 24) % 24;
+
+    return localSolarHour < 5.5 || localSolarHour >= 18.5;
+  }
+
+  function getIosWeatherSvg(type) {
+    if (type === "day-partly") {
+      return '<svg width="44" height="42" viewBox="0 0 52 48" fill="none"><circle cx="33" cy="20" r="10" fill="#FBBF24"/><path d="M33 6V9M47 20H44M42.9 10.1L40.8 12.2M42.9 29.9L40.8 27.8" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/><path d="M19 40H37C41.4 40 45 36.4 45 32C45 27.8 41.8 24.3 37.7 24.1C36.7 18.4 31.8 14 26 14C19.8 14 14.7 19 14.1 25.1C9.6 25.6 6 29.4 6 34C6 38.4 9.6 40 14 40H19Z" fill="#FFFFFF"/></svg>';
+    }
+    if (type === "day-sun") {
+      return '<svg width="42" height="42" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="11" fill="#FBBF24"/><path d="M24 4V8M24 40V44M4 24H8M40 24H44M9.86 9.86L12.69 12.69M35.31 35.31L38.14 38.14M9.86 38.14L12.69 35.31M35.31 12.69L38.14 9.86" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/></svg>';
+    }
+    if (type === "night-clear") {
+      return '<svg width="42" height="42" viewBox="0 0 48 48" fill="none"><path d="M31 12C23.2 12 17 18.3 17 26C17 33.7 23.2 40 31 40C33.5 40 35.8 39.3 37.8 38.1C30.5 36.7 25 30.5 25 23C25 17.5 28.1 12.8 32.7 10.5C32.1 10.5 31.6 12 31 12Z" fill="#FDE047"/><path d="M14 14L15.5 18L19.5 19.5L15.5 21L14 25L12.5 21L8.5 19.5L12.5 18L14 14Z" fill="#FEF08A"/></svg>';
+    }
+    if (type === "night-partly") {
+      return '<svg width="44" height="42" viewBox="0 0 52 48" fill="none"><path d="M33 11C27.5 11 23 15.5 23 21C23 23.8 24.2 26.3 26.1 28.1C24.5 28 23 26 23 24C23 18.5 27.5 14 33 14C34.2 14 35.3 14.2 36.3 14.7C35.3 12.5 33.3 11 31 11H33Z" fill="#FDE047"/><path d="M19 40H37C41.4 40 45 36.4 45 32C45 27.8 41.8 24.3 37.7 24.1C36.7 18.4 31.8 14 26 14C19.8 14 14.7 19 14.1 25.1C9.6 25.6 6 29.4 6 34C6 38.4 9.6 40 14 40H19Z" fill="#E2E8F0"/></svg>';
+    }
+    if (type === "rain") {
+      return '<svg width="44" height="44" viewBox="0 0 52 50" fill="none"><path d="M17 32H35C39.4 32 43 28.4 43 24C43 19.8 39.8 16.3 35.7 16.1C34.7 10.4 29.8 6 24 6C17.8 6 12.7 11 12.1 17.1C7.6 17.6 4 21.4 4 26C4 30.4 7.6 32 12 32H17Z" fill="#CBD5E1"/><line x1="16" y1="36" x2="13" y2="44" stroke="#60A5FA" stroke-width="2.5" stroke-linecap="round"/><line x1="25" y1="36" x2="22" y2="44" stroke="#60A5FA" stroke-width="2.5" stroke-linecap="round"/><line x1="34" y1="36" x2="31" y2="44" stroke="#60A5FA" stroke-width="2.5" stroke-linecap="round"/></svg>';
+    }
+    if (type === "storm") {
+      return '<svg width="44" height="44" viewBox="0 0 52 50" fill="none"><path d="M17 30H35C39.4 30 43 26.4 43 22C43 17.8 39.8 14.3 35.7 14.1C34.7 8.4 29.8 4 24 4C17.8 4 12.7 9 12.1 15.1C7.6 15.6 4 19.4 4 24C4 28.4 7.6 30 12 30H17Z" fill="#94A3B8"/><polygon points="26,24 19,35 25,35 22,46 32,32 26,32" fill="#FACC15"/></svg>';
+    }
+    if (type === "fog") {
+      return '<svg width="44" height="42" viewBox="0 0 52 48" fill="none"><path d="M17 28H35C39.4 28 43 24.4 43 20C43 15.8 39.8 12.3 35.7 12.1C34.7 6.4 29.8 2 24 2C17.8 2 12.7 7 12.1 13.1C7.6 13.6 4 17.4 4 22C4 26.4 7.6 28 12 28H17Z" fill="#CBD5E1"/><line x1="10" y1="34" x2="40" y2="34" stroke="#E2E8F0" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="40" x2="36" y2="40" stroke="#E2E8F0" stroke-width="2" stroke-linecap="round"/></svg>';
+    }
+    // Default Overcast Cloud
+    return '<svg width="44" height="42" viewBox="0 0 52 48" fill="none"><path d="M22 28H38C42 28 45 25 45 21C45 17 42 14 38 14C37 9 32 5 27 5C21 5 17 9 16 14C12 15 9 18 9 22C9 25 12 28 16 28H22Z" fill="#94A3B8" fill-opacity="0.5"/><path d="M17 40H35C39.4 40 43 36.4 43 32C43 27.8 39.8 24.3 35.7 24.1C34.7 18.4 29.8 14 24 14C17.8 14 12.7 19 12.1 25.1C7.6 25.6 4 29.4 4 34C4 38.4 7.6 40 12 40H17Z" fill="#FFFFFF"/></svg>';
+  }
+
+  function getMetarWeatherWidgetState(m, icao) {
+    const isNight = isNightTime(icao);
+    const raw = m && m.raw ? m.raw.toUpperCase() : "";
+
+    let themeClass = isNight ? "as-acars-ios-widget-night" : "as-acars-ios-widget-day";
+    let iconType = isNight ? "night-partly" : "day-partly";
+    let cond = "Tempo estavel";
+
+    if (/\b(TS|VCTS|\+TSRA|-TSRA|TSRA|CB)\b/.test(raw)) {
+      themeClass = "as-acars-ios-widget-storm";
+      iconType = "storm";
+      cond = "Tempestade";
+    } else if (/\b(\+RA|-RA|RA|DZ|-DZ|SHRA|\+SHRA)\b/.test(raw)) {
+      themeClass = "as-acars-ios-widget-rain";
+      iconType = "rain";
+      cond = "Chuva";
+    } else if (/\b(SN|-SN|\+SN)\b/.test(raw)) {
+      themeClass = "as-acars-ios-widget-rain";
+      iconType = "rain";
+      cond = "Neve";
+    } else if (/\b(FG|BR|HZ|MIFG|BCFG)\b/.test(raw)) {
+      themeClass = isNight ? "as-acars-ios-widget-night" : "as-acars-ios-widget-cloudy";
+      iconType = "fog";
+      cond = "Nevoeiro";
+    } else if (/\b(OVC|BKN)\b/.test(raw)) {
+      themeClass = isNight ? "as-acars-ios-widget-night" : "as-acars-ios-widget-cloudy";
+      iconType = "cloud";
+      cond = "Nublado";
+    } else if (/\b(CAVOK|CLR|SKC|NSC)\b/.test(raw)) {
+      themeClass = isNight ? "as-acars-ios-widget-night" : "as-acars-ios-widget-day-clear";
+      iconType = isNight ? "night-clear" : "day-sun";
+      cond = "Ceu limpo";
+    } else if (/\b(FEW|SCT)\b/.test(raw)) {
+      themeClass = isNight ? "as-acars-ios-widget-night" : "as-acars-ios-widget-day";
+      iconType = isNight ? "night-partly" : "day-partly";
+      cond = "Poucas nuvens";
+    }
+
+    return {
+      isNight: isNight,
+      themeClass: themeClass,
+      iconSvg: getIosWeatherSvg(iconType),
+      cond: cond,
+    };
+  }
+
+  function resolveCurrentSimAirportIcao() {
+    const b = stateData.booking;
+    if (b && b.departure_airport && b.departure_airport.icao) {
+      return b.departure_airport.icao.toUpperCase();
+    }
+    if (stateData.nearestAirportIcao) {
+      return stateData.nearestAirportIcao;
+    }
+    return "SBGR";
+  }
+
+  function renderHomeClockAndDate() {
     if (!rootEl) return;
-    const greetingEl = q("#as-acars-tablet-greeting");
-    const summaryEl = q("#as-acars-tablet-flight-summary");
-    const clockEl = q("#as-acars-tablet-clock");
+    const dateEl = q("#as-acars-ios-home-date");
+    const timeEl = q("#as-acars-ios-home-time");
 
-    if (greetingEl) {
-      if (stateData.pilot && (stateData.pilot.callsign || stateData.pilot.name)) {
-        greetingEl.textContent = "Comandante " + (stateData.pilot.callsign || stateData.pilot.name);
-      } else if (store.activeTenant && store.activeTenant.name) {
-        greetingEl.textContent = store.activeTenant.name + " - Airspace EFB";
-      } else {
-        greetingEl.textContent = "Airspace ACARS EFB";
-      }
+    const now = new Date();
+    if (dateEl) {
+      dateEl.textContent = formatIosDate(now, getLanguage());
     }
-
-    if (summaryEl) {
-      const b = stateData.booking;
-      if (b && (b.callsign || b.flight_number)) {
-        const fn = b.flight_number || b.callsign || "VOO";
-        const dep = (b.departure_airport && b.departure_airport.icao) || "----";
-        const arr = (b.arrival_airport && b.arrival_airport.icao) || "----";
-        summaryEl.textContent = fn + " (" + dep + " -> " + arr + ") - Status: Operacional";
-      } else {
-        summaryEl.textContent = "Nenhum voo ativo conectado - Sistema Pronto";
-      }
-    }
-
-    if (clockEl) {
-      const now = new Date();
+    if (timeEl) {
       const hh = String(now.getUTCHours()).padStart(2, "0");
       const mm = String(now.getUTCMinutes()).padStart(2, "0");
-      clockEl.textContent = hh + ":" + mm + " UTC";
+      timeEl.textContent = hh + ":" + mm;
     }
+  }
+
+  function getSimAmbientTempCelsius() {
+    try {
+      const flowApi = (__flowContext && __flowContext.$api) || (typeof window !== "undefined" && window.$api);
+      if (flowApi && flowApi.variables && typeof flowApi.variables.get === "function") {
+        const t = flowApi.variables.get("A:AMBIENT TEMPERATURE", "celsius");
+        if (typeof t === "number" && !isNaN(t) && t > -90 && t < 70) {
+          return Math.round(t);
+        }
+      }
+    } catch (_e) {}
+    try {
+      if (typeof SimVar !== "undefined" && typeof SimVar.GetSimVarValue === "function") {
+        const v = SimVar.GetSimVarValue("A:AMBIENT TEMPERATURE", "celsius");
+        if (typeof v === "number" && !isNaN(v) && v > -90 && v < 70) {
+          return Math.round(v);
+        }
+      }
+    } catch (_e) {}
+    return null;
+  }
+
+  function renderHomeWeatherWidget() {
+    if (!rootEl) return;
+    const w = stateData.homeLocalWeather;
+    const widgetEl = q("#as-acars-ios-home-weather");
+    const tempEl = q("#as-acars-ios-weather-temp");
+    const locEl = q("#as-acars-ios-weather-loc");
+    const iconEl = q("#as-acars-ios-weather-icon");
+
+    const currentIcao = (w && w.icao) || resolveCurrentSimAirportIcao();
+
+    if (!w) {
+      const liveSimTemp = getSimAmbientTempCelsius();
+      if (tempEl) {
+        if (liveSimTemp !== null) {
+          tempEl.innerHTML = liveSimTemp + '<span class="as-acars-deg">o</span>';
+        } else {
+          tempEl.innerHTML = '--<span class="as-acars-deg">o</span>';
+        }
+      }
+      if (locEl) locEl.textContent = getAirportCityName(currentIcao);
+      return;
+    }
+
+    if (widgetEl && w.themeClass) {
+      widgetEl.className = "as-acars-ios-capsule-widget " + w.themeClass;
+    }
+    if (tempEl) {
+      const displayTemp = (w.temp !== null && w.temp !== undefined) ? w.temp : getSimAmbientTempCelsius();
+      tempEl.innerHTML = (displayTemp !== null && displayTemp !== undefined ? displayTemp : "--") + '<span class="as-acars-deg">o</span>';
+    }
+    if (locEl) {
+      locEl.textContent = w.locationName || getAirportCityName(currentIcao);
+    }
+    if (iconEl && w.iconSvg) {
+      iconEl.innerHTML = w.iconSvg;
+    }
+  }
+
+  function fetchHomeLocalWeather(force) {
+    const now = Date.now();
+    if (!force && stateData.homeLocalWeather && (now - stateData.lastHomeWeatherFetch < 120000)) {
+      return;
+    }
+
+    const currentIcao = resolveCurrentSimAirportIcao();
+    const liveSimTemp = getSimAmbientTempCelsius();
+
+    if (liveSimTemp !== null && !stateData.homeLocalWeather) {
+      stateData.homeLocalWeather = {
+        icao: currentIcao,
+        temp: liveSimTemp,
+        locationName: getAirportCityName(currentIcao),
+        condition: "VMC",
+        themeClass: "as-acars-ios-widget-day",
+        iconSvg: getIosWeatherSvg("day-partly"),
+        flightCategory: "VFR",
+        fetchedAt: Date.now(),
+      };
+      renderHomeWeatherWidget();
+    }
+
+    const flowApi = (__flowContext && __flowContext.$api) || (typeof window !== "undefined" && window.$api);
+    if (flowApi && flowApi.airports && flowApi.variables) {
+      try {
+        const lat = flowApi.variables.get("A:PLANE LATITUDE", "degrees");
+        const lon = flowApi.variables.get("A:PLANE LONGITUDE", "degrees");
+        if (typeof lat === "number" && typeof lon === "number" && (lat !== 0 || lon !== 0)) {
+          let cbFired = false;
+          const fallbackTimer = setTimeout(function () {
+            if (!cbFired) {
+              doFetchHomeWeather(currentIcao);
+            }
+          }, 1500);
+
+          flowApi.airports.find_airports_by_coords(
+            "home_wx_nearest",
+            lon,
+            lat,
+            35000,
+            3,
+            function (added) {
+              cbFired = true;
+              clearTimeout(fallbackTimer);
+              if (Array.isArray(added) && added.length > 0 && added[0].icao) {
+                stateData.nearestAirportIcao = added[0].icao.toUpperCase();
+                doFetchHomeWeather(added[0].icao.toUpperCase());
+                return;
+              }
+              doFetchHomeWeather(currentIcao);
+            },
+            function () {},
+            function () {},
+            true
+          );
+          return;
+        }
+      } catch (_e) {}
+    }
+
+    doFetchHomeWeather(currentIcao);
+  }
+
+  function doFetchHomeWeather(icao) {
+    if (!icao) return;
+    stateData.lastHomeWeatherFetch = Date.now();
+    fetchMetarForIcao(icao).then(function (metar) {
+      const liveSimTemp = getSimAmbientTempCelsius();
+      const finalTemp = (metar && metar.tempVal !== null && metar.tempVal !== undefined)
+        ? metar.tempVal
+        : (liveSimTemp !== null ? liveSimTemp : 22);
+
+      const widgetState = metar ? getMetarWeatherWidgetState(metar, icao) : {
+        cond: "VMC",
+        themeClass: "as-acars-ios-widget-day",
+        iconSvg: getIosWeatherSvg("day-partly")
+      };
+
+      stateData.homeLocalWeather = {
+        icao: icao,
+        temp: finalTemp,
+        locationName: getAirportCityName(icao),
+        condition: widgetState.cond,
+        themeClass: widgetState.themeClass,
+        iconSvg: widgetState.iconSvg,
+        flightCategory: metar ? metar.flightCategory : "VFR",
+        fetchedAt: Date.now(),
+      };
+      renderHomeWeatherWidget();
+    });
+  }
+
+  function renderHomeTab() {
+    if (!rootEl) return;
+    renderHomeClockAndDate();
+    renderHomeWeatherWidget();
+    fetchHomeLocalWeather(false);
   }
 
   // --- METAR & Weather Functionality ---
@@ -2372,9 +3365,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       windSpeed = parseInt(windMatch[2], 10);
       if (windMatch[3]) {
         windGust = parseInt(windMatch[3], 10);
-        windText = (windDir === "VRB" ? "VRB" : String(windDir).padStart(3, "0") + "o") + " / " + windSpeed + " kt (G " + windGust + " kt)";
+        windText = (windDir === "VRB" ? "VRB" : String(windDir).padStart(3, "0")) + " / " + windSpeed + " kt (G " + windGust + " kt)";
       } else {
-        windText = (windDir === "VRB" ? "VRB" : String(windDir).padStart(3, "0") + "o") + " / " + windSpeed + " kt";
+        windText = (windDir === "VRB" ? "VRB" : String(windDir).padStart(3, "0")) + " / " + windSpeed + " kt";
       }
     }
 
@@ -2424,7 +3417,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (tempMatch) {
       tempVal = parseInt(tempMatch[1].replace("M", "-"), 10);
       dewVal = parseInt(tempMatch[2].replace("M", "-"), 10);
-      tempText = tempVal + "oC / " + dewVal + "oC";
+      tempText = tempVal + " C / " + dewVal + " C";
     }
 
     // Altimeter / QNH
@@ -2475,13 +3468,33 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     };
   }
 
-  function fetchMetarForIcao(rawIcao) {
+  function fetchMetarForIcao(rawIcao, force) {
     if (!rawIcao) return Promise.resolve(null);
     const icao = String(rawIcao).trim().toUpperCase();
     if (!icao || icao.length < 3) return Promise.resolve(null);
 
-    return new Promise(function (resolve) {
+    const now = Date.now();
+    const cached = metarCache.get(icao);
+    if (!force && cached && (now - cached.timestamp < 300000)) {
+      return Promise.resolve(cached.data);
+    }
+
+    if (!force && metarPendingPromises.has(icao)) {
+      return metarPendingPromises.get(icao);
+    }
+
+    const p = new Promise(function (resolve) {
       let resolved = false;
+
+      function finish(result) {
+        if (resolved) return;
+        resolved = true;
+        metarPendingPromises.delete(icao);
+        if (result) {
+          metarCache.set(icao, { data: result, timestamp: Date.now() });
+        }
+        resolve(result);
+      }
 
       // 1. Flow native API
       try {
@@ -2494,9 +3507,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           flowApi.weather.find_metar_by_icao(icao, function (flowMetar) {
             if (resolved) return;
             clearTimeout(timer);
-            if (flowMetar && (flowMetar.metarString || flowMetar.raw)) {
-              resolved = true;
-              resolve(parseMetar(flowMetar.metarString || flowMetar.raw, icao));
+            const rawMetarStr = flowMetar && (flowMetar.metarString || flowMetar.raw || flowMetar.metar || (typeof flowMetar === "string" ? flowMetar : ""));
+            if (rawMetarStr) {
+              finish(parseMetar(rawMetarStr, icao));
               return;
             }
             fallbackFetch();
@@ -2515,23 +3528,21 @@ const __flowContext = typeof this !== "undefined" ? this : null;
             return r.text();
           })
           .then(function (txt) {
-            if (resolved) return;
-            resolved = true;
             const clean = String(txt || "").trim();
             if (!clean || clean.indexOf("No METAR") !== -1 || clean.indexOf("<html>") !== -1) {
-              resolve(null);
+              finish(null);
               return;
             }
-            resolve(parseMetar(clean, icao));
+            finish(parseMetar(clean, icao));
           })
           .catch(function () {
-            if (!resolved) {
-              resolved = true;
-              resolve(null);
-            }
+            finish(null);
           });
       }
     });
+
+    metarPendingPromises.set(icao, p);
+    return p;
   }
 
   function buildMetarCardHtml(m, roleLabel) {
@@ -2662,13 +3673,13 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
     const promises = [];
     if (depIcao && (force || !stateData.metarData.dep || stateData.metarData.dep.icao !== depIcao)) {
-      promises.push(fetchMetarForIcao(depIcao).then(function (m) { stateData.metarData.dep = m; }));
+      promises.push(fetchMetarForIcao(depIcao, force).then(function (m) { stateData.metarData.dep = m; }));
     }
     if (arrIcao && (force || !stateData.metarData.arr || stateData.metarData.arr.icao !== arrIcao)) {
-      promises.push(fetchMetarForIcao(arrIcao).then(function (m) { stateData.metarData.arr = m; }));
+      promises.push(fetchMetarForIcao(arrIcao, force).then(function (m) { stateData.metarData.arr = m; }));
     }
     if (altIcao && (force || !stateData.metarData.alt || stateData.metarData.alt.icao !== altIcao)) {
-      promises.push(fetchMetarForIcao(altIcao).then(function (m) { stateData.metarData.alt = m; }));
+      promises.push(fetchMetarForIcao(altIcao, force).then(function (m) { stateData.metarData.alt = m; }));
     }
 
     if (promises.length > 0) {
@@ -2810,6 +3821,29 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         ? t("update.status_checking", "Verificando...")
         : t("settings.btn_check_updates", "Verificar Atualizacoes");
     }
+
+    // Session & Virtual Airline (Switch VA / Logout)
+    const vaBadgeEl = q("#as-acars-settings-va-badge");
+    if (vaBadgeEl) {
+      if (store.activeTenant && store.activeTenant.name) {
+        vaBadgeEl.textContent = store.activeTenant.name;
+        setVisible(vaBadgeEl, true);
+      } else {
+        setVisible(vaBadgeEl, false);
+      }
+    }
+
+    const sessionDesc = q("#as-acars-settings-session-desc");
+    if (sessionDesc) {
+      if (stateData.pilot && (stateData.pilot.callsign || stateData.pilot.name)) {
+        sessionDesc.textContent = t("settings.connected_as", "Conectado como {pilot} na {va}.")
+          .replace("{pilot}", stateData.pilot.callsign || stateData.pilot.name)
+          .replace("{va}", (store.activeTenant && store.activeTenant.name) || "VA");
+      } else if (store.activeTenant && store.activeTenant.name) {
+        sessionDesc.textContent = t("settings.connected_va", "Conectado a {va}. Clique para trocar de companhia ou sair.")
+          .replace("{va}", store.activeTenant.name);
+      }
+    }
   }
 
   function renderTabsBadge() {
@@ -2824,6 +3858,13 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     setVisible(homeBadge, unreadCount > 0);
     if (homeBadge && unreadCount > 0) {
       homeBadge.textContent = String(unreadCount);
+    }
+
+    const notamsBadge = q("#as-acars-home-notams-badge");
+    const notamsCount = stateData.notams.length;
+    setVisible(notamsBadge, notamsCount > 0);
+    if (notamsBadge && notamsCount > 0) {
+      notamsBadge.textContent = String(notamsCount);
     }
   }
 
@@ -2986,6 +4027,772 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     return '<span class="as-acars-doc-badge as-acars-doc-badge-html">HTML</span>';
   }
 
+  function formatBriefingDate(iso) {
+    if (!iso) return "";
+    try {
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "";
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return months[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear();
+    } catch (_e) {
+      return "";
+    }
+  }
+
+  const AIRPORT_BRIEFING_DATABASE = {
+    SBGR: {
+      icao: "SBGR",
+      iata: "GRU",
+      name: "Guarulhos - Sao Paulo",
+      city: "S\u00E3o Paulo",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 2461,
+      transition_altitude: 8000,
+      runways: [
+        { designator: "10L", length_m: 3700, width_m: 45, heading: 95, ils: true },
+        { designator: "28R", length_m: 3700, width_m: 45, heading: 275, ils: true },
+        { designator: "10R", length_m: 3000, width_m: 45, heading: 95, ils: true },
+        { designator: "28L", length_m: 3000, width_m: 45, heading: 275, ils: true }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "AirBP", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" },
+        { type: "Ground Power", provider: "Swissport", dot: "dot-red", notes: "\u2014" },
+        { type: "Air Starter", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Obstacles", severity: "amber" },
+        { type: "Wildlife \u2014 P\u00E1ssaros", severity: "emerald" },
+        { type: "Runway Incursion", severity: "rose" }
+      ],
+      stands: [
+        { fleets: "A320, A20N, A21N, B738, B737, B38M, E195, E295, B77W, B789, A339", stands: "1 | POS 101-104, 105L, 106, 107L, 108, 109L, 110, 111L, 112, 113L, 114, 115L, 201-209, 217-226" },
+        { fleets: "ALL AIRCRAFT", stands: "2 | POS 210-216, 301-304, 401-411, 501-507" },
+        { fleets: "B737NG, B737, B38M, E190, E195, E295, A319, A320, A20N, A321, A21N", stands: "3 | POS 601-608" }
+      ],
+      alternates: [
+        { icao: "SBKP", name: "Viracopos - Campinas" },
+        { icao: "SBSJ", name: "Sao Jose Dos Campos" },
+        { icao: "SBGL", name: "Gale\u00E3o" }
+      ],
+      operational_notes: [
+        {
+          context: "Arrival",
+          category: "Operation",
+          body: "Os pilotos dever\u00E3o livrar a pista de pouso e decolagem nas pistas de t\u00E1xi indicadas abaixo ou informar \u00E0 TWR Guarulhos no primeiro contato caso n\u00E3o estejam configuradas para utilizar as seguintes pistas de t\u00E1xi: Aeronaves CAT C, D ou E: Pista de T\u00E1xi BB ou CC Dist\u00E2ncia dispon\u00EDvel da cabeceira 10R at\u00E9 a Pista de T\u00E1xi CC: 2450m."
+        },
+        {
+          context: "Arrival",
+          category: "Operation",
+          body: "Os pilotos dever\u00E3o livrar a pista de pouso e decolagem nas pistas de t\u00E1xi indicadas abaixo ou informar \u00E0 TWR Guarulhos no primeiro contato caso n\u00E3o estejam configuradas para utilizar as seguintes pistas de t\u00E1xi: Aeronaves CAT C, D ou E: Pista de T\u00E1xi G Dist\u00E2ncia dispon\u00EDvel da cabeceira 28L at\u00E9 a Pista de T\u00E1xi G: 2487m"
+        },
+        {
+          context: "Departure",
+          category: "Operation",
+          body: "Os pilotos devem estar prontos para a decolagem quando chegarem ao ponto de espera. Caso contr\u00E1rio, informar o controle de solo."
+        },
+        {
+          context: "Departure",
+          category: "Operation",
+          body: "Alinhamento deve ser imediato assim que autorizado"
+        }
+      ]
+    },
+    SBKP: {
+      icao: "SBKP",
+      iata: "VCP",
+      name: "Viracopos - Campinas",
+      city: "Campinas",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 2170,
+      transition_altitude: 8000,
+      runways: [
+        { designator: "15", length_m: 3240, width_m: 45, heading: 148, ils: true },
+        { designator: "33", length_m: 3240, width_m: 45, heading: 328, ils: true }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "BR Aviation", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" },
+        { type: "Ground Power", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Obstacles", severity: "amber" },
+        { type: "Wildlife \u2014 P\u00E1ssaros", severity: "emerald" }
+      ],
+      stands: [
+        { fleets: "ALL AIRCRAFT", stands: "POS 01-18, 101-115" }
+      ],
+      alternates: [
+        { icao: "SBGR", name: "Guarulhos - Sao Paulo" },
+        { icao: "SBSJ", name: "Sao Jose Dos Campos" },
+        { icao: "SBGL", name: "Gale\u00E3o" }
+      ],
+      operational_notes: [
+        {
+          context: "General",
+          category: "Operation",
+          body: "Principal aeroporto alternativo para a TMA Sao Paulo. Operacao 24h sem restricoes de slot."
+        },
+        {
+          context: "Arrival",
+          category: "Operation",
+          body: "RWY 15 preferencial com procedimentos RNAV/ILS integrados."
+        }
+      ]
+    },
+    SBSJ: {
+      icao: "SBSJ",
+      iata: "SJK",
+      name: "Prof. Urbano Ernesto Stumpf",
+      city: "Sao Jose dos Campos",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 2120,
+      transition_altitude: 8000,
+      runways: [
+        { designator: "15", length_m: 2676, width_m: 45, heading: 146, ils: true },
+        { designator: "33", length_m: 2676, width_m: 45, heading: 326, ils: false }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "Shell Aviation", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Dnata", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Obstacles", severity: "amber" }
+      ],
+      stands: [
+        { fleets: "ALL AIRCRAFT", stands: "POS 1-6" }
+      ],
+      alternates: [
+        { icao: "SBGR", name: "Guarulhos - Sao Paulo" },
+        { icao: "SBKP", name: "Viracopos - Campinas" }
+      ],
+      operational_notes: [
+        {
+          context: "General",
+          category: "Operation",
+          body: "Operacao conjunta civil e militar (DCTA). Coordenacao previa com o controle recomendada."
+        }
+      ]
+    },
+    SBGL: {
+      icao: "SBGL",
+      iata: "GIG",
+      name: "Gale\u00E3o - Antonio Carlos Jobim",
+      city: "Rio de Janeiro",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 28,
+      transition_altitude: 7000,
+      runways: [
+        { designator: "10", length_m: 4000, width_m: 45, heading: 96, ils: true },
+        { designator: "28", length_m: 4000, width_m: 45, heading: 276, ils: true },
+        { designator: "15", length_m: 3180, width_m: 47, heading: 146, ils: true },
+        { designator: "33", length_m: 3180, width_m: 47, heading: 326, ils: true }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "AirBP", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" },
+        { type: "Ground Power", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Wildlife \u2014 P\u00E1ssaros", severity: "emerald" },
+        { type: "Obstacles", severity: "amber" }
+      ],
+      stands: [
+        { fleets: "ALL AIRCRAFT", stands: "POS 1-60" }
+      ],
+      alternates: [
+        { icao: "SBGR", name: "Guarulhos - Sao Paulo" },
+        { icao: "SBKP", name: "Viracopos - Campinas" }
+      ],
+      operational_notes: [
+        {
+          context: "Arrival",
+          category: "Operation",
+          body: "RWY 10/28 preferencial para chegadas IFR com aproximacao sobre a baia de Guanabara."
+        }
+      ]
+    },
+    SBEG: {
+      icao: "SBEG",
+      iata: "MAO",
+      name: "Eduardo Gomes",
+      city: "Manaus",
+      country: "Brazil",
+      timezone: "UTC-4",
+      timezone_sub: "-4",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 262,
+      transition_altitude: 5000,
+      runways: [
+        { designator: "11", length_m: 2700, width_m: 45, heading: 106, ils: true },
+        { designator: "29", length_m: 2700, width_m: 45, heading: 286, ils: false }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "Ra\u00EDzen", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Dnata", dot: "dot-red", notes: "\u2014" },
+        { type: "Ground Power", provider: "Dnata", dot: "dot-red", notes: "\u2014" },
+        { type: "Air Starter", provider: "Dnata", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "General Aviation", severity: "amber" },
+        { type: "Wildlife \u2014 P\u00E1ssaros", severity: "emerald" }
+      ],
+      stands: [
+        { fleets: "A320, A20N, A321, B737MAX", stands: "1 | POS 22-26" },
+        { fleets: "ALL AIRCRAFT", stands: "1 | POS 19-21, 19A, 21A, 23A" }
+      ],
+      alternates: [
+        { icao: "SBBV", name: "Boa Vista" },
+        { icao: "SBBE", name: "Bel\u00E9m Val De Cans" },
+        { icao: "SBSN", name: "Santar\u00E9m" }
+      ],
+      operational_notes: [
+        {
+          context: "General",
+          category: "Operation",
+          body: "Operacao Amazonica: atencao redobrada para formacoes convectivas e chuvas torrenciais no periodo vespertino."
+        },
+        {
+          context: "Arrival",
+          category: "Operation",
+          body: "RWY 11 preferencial para pouso com procedimento ILS disponivel."
+        }
+      ]
+    },
+    SBSP: {
+      icao: "SBSP",
+      iata: "CGH",
+      name: "Congonhas - Sao Paulo",
+      city: "S\u00E3o Paulo",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 2631,
+      transition_altitude: 8000,
+      runways: [
+        { designator: "17R", length_m: 1883, width_m: 45, heading: 169, ils: true },
+        { designator: "35L", length_m: 1883, width_m: 45, heading: 349, ils: true },
+        { designator: "17L", length_m: 1495, width_m: 45, heading: 169, ils: false },
+        { designator: "35R", length_m: 1495, width_m: 45, heading: 349, ils: false }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "BR Aviation", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" },
+        { type: "Ground Power", provider: "Swissport", dot: "dot-red", notes: "\u2014" },
+        { type: "Air Starter", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Obstacles \u2014 Edificios circundantes", severity: "rose" },
+        { type: "Runway Length / Overrun", severity: "amber" },
+        { type: "Wildlife \u2014 Passaros", severity: "emerald" }
+      ],
+      stands: [
+        { fleets: "A320, A20N, B738, B38M, E195", stands: "3 | POS 13-29" },
+        { fleets: "ALL AIRCRAFT", stands: "3 | POS 1-12 Remotas" }
+      ],
+      alternates: [
+        { icao: "SBKP", name: "Viracopos - Campinas" },
+        { icao: "SBGR", name: "Guarulhos - Sao Paulo" },
+        { icao: "SBGL", name: "Gale\u00E3o" }
+      ],
+      operational_notes: [
+        {
+          context: "General",
+          category: "Operation",
+          body: "Operacao restrita a pista seca ou molhada com EMAS ativo. Curva de ruido mandatoria apos a decolagem."
+        },
+        {
+          context: "Arrival",
+          category: "Operation",
+          body: "RWY 17R/35L preferencial para pouso com procedimento ILS disponivel."
+        }
+      ]
+    },
+    SBBR: {
+      icao: "SBBR",
+      iata: "BSB",
+      name: "Brasilia Juscelino Kubitschek",
+      city: "Bras\u00EDlia",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 3497,
+      transition_altitude: 7000,
+      runways: [
+        { designator: "11R", length_m: 3300, width_m: 45, heading: 108, ils: true },
+        { designator: "29L", length_m: 3300, width_m: 45, heading: 288, ils: true },
+        { designator: "11L", length_m: 3200, width_m: 45, heading: 108, ils: true },
+        { designator: "29R", length_m: 3200, width_m: 45, heading: 288, ils: true }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "AirBP", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" },
+        { type: "Ground Power", provider: "Swissport", dot: "dot-red", notes: "\u2014" },
+        { type: "Air Starter", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Obstacles", severity: "amber" },
+        { type: "General Aviation", severity: "amber" },
+        { type: "Terrain / High Elevation", severity: "amber" }
+      ],
+      stands: [
+        { fleets: "A320, A20N, A21N, B38M", stands: "2 | POS 61-66" },
+        { fleets: "B737, B747, B777, MD11", stands: "1 | POS 47A, 49A, 52-60" }
+      ],
+      alternates: [
+        { icao: "SBGO", name: "Goiania Santa Genoveva" },
+        { icao: "SBCF", name: "Confins Tancredo Neves" },
+        { icao: "SBGR", name: "Guarulhos - Sao Paulo" }
+      ],
+      operational_notes: [
+        {
+          context: "General",
+          category: "Operation",
+          body: "Operacoes HIRO aplicadas nos horarios de pico. Chamada imediata ao APP Brasilia apos a decolagem."
+        },
+        {
+          context: "Arrival",
+          category: "Operation",
+          body: "Configuracao preferencial RWY 11R/11L com vento de cauda ate 7KT."
+        }
+      ]
+    },
+    SBRJ: {
+      icao: "SBRJ",
+      iata: "SDU",
+      name: "Santos Dumont",
+      city: "Rio de Janeiro",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 9,
+      transition_altitude: 7000,
+      runways: [
+        { designator: "02R", length_m: 1323, width_m: 42, heading: 24, ils: false },
+        { designator: "20L", length_m: 1323, width_m: 42, heading: 204, ils: false },
+        { designator: "02L", length_m: 1260, width_m: 30, heading: 24, ils: false },
+        { designator: "20R", length_m: 1260, width_m: 30, heading: 204, ils: false }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "BR Aviation", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Terrain / Pao de Acucar", severity: "rose" },
+        { type: "Short Runway", severity: "amber" }
+      ],
+      stands: [
+        { fleets: "A320, B737, E195", stands: "POS 1-8" }
+      ]
+    },
+    SBCF: {
+      icao: "SBCF",
+      iata: "CNF",
+      name: "Tancredo Neves - Confins",
+      city: "Belo Horizonte",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 2717,
+      transition_altitude: 8000,
+      runways: [
+        { designator: "16", length_m: 3600, width_m: 45, heading: 160, ils: true },
+        { designator: "34", length_m: 3600, width_m: 45, heading: 340, ils: true }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "AirBP / Shell", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Obstacles", severity: "amber" },
+        { type: "Bird Activity", severity: "emerald" }
+      ],
+      stands: [
+        { fleets: "ALL AIRCRAFT", stands: "POS 1-32" }
+      ]
+    },
+    SBPA: {
+      icao: "SBPA",
+      iata: "POA",
+      name: "Salgado Filho",
+      city: "Porto Alegre",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 11,
+      transition_altitude: 6000,
+      runways: [
+        { designator: "11", length_m: 3200, width_m: 45, heading: 107, ils: true },
+        { designator: "29", length_m: 3200, width_m: 45, heading: 287, ils: true }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "BR Aviation", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Birds / Jacui Delta", severity: "emerald" },
+        { type: "Fog / Low Visibility", severity: "amber" }
+      ],
+      stands: [
+        { fleets: "ALL AIRCRAFT", stands: "POS 1-16" }
+      ]
+    },
+    SBRF: {
+      icao: "SBRF",
+      iata: "REC",
+      name: "Guararapes - Gilberto Freyre",
+      city: "Recife",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 33,
+      transition_altitude: 5000,
+      runways: [
+        { designator: "18", length_m: 3007, width_m: 45, heading: 177, ils: true },
+        { designator: "36", length_m: 3007, width_m: 45, heading: 357, ils: true }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "BR / Shell", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Obstacles / Urban Area", severity: "amber" }
+      ],
+      stands: [
+        { fleets: "ALL AIRCRAFT", stands: "POS 1-22" }
+      ]
+    },
+    SBSV: {
+      icao: "SBSV",
+      iata: "SSA",
+      name: "Deputado Luis Eduardo Magalhaes",
+      city: "Salvador",
+      country: "Brazil",
+      timezone: "UTC-3",
+      timezone_sub: "-3",
+      operation: "IFR + Night",
+      operation_type: "Operation type",
+      elevation_ft: 64,
+      transition_altitude: 5000,
+      runways: [
+        { designator: "10", length_m: 3003, width_m: 45, heading: 101, ils: true },
+        { designator: "28", length_m: 3003, width_m: 45, heading: 281, ils: true },
+        { designator: "17", length_m: 1520, width_m: 45, heading: 168, ils: false },
+        { designator: "35", length_m: 1520, width_m: 45, heading: 348, ils: false }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "BR Aviation", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Birds / Dunes", severity: "emerald" },
+        { type: "Windshear on Approach", severity: "amber" }
+      ],
+      stands: [
+        { fleets: "ALL AIRCRAFT", stands: "POS 1-24" }
+      ]
+    }
+  };
+
+  function parseAirportBriefingContent(content, defaultCode, title) {
+    const text = String(content || "")
+      .replace(/<[^>]+>/g, "\n")
+      .replace(/&nbsp;/gi, " ")
+      .replace(/&amp;/gi, "&");
+
+    const icaoMatch = (title || "").match(/\b([A-Z0-9]{4})\b/) || text.match(/\b([A-Z0-9]{4})\s*(\/|-)/);
+    const icao = (defaultCode || (icaoMatch ? icaoMatch[1] : "AIRP")).toUpperCase();
+
+    const iataMatch = text.match(/\b[A-Z0-9]{4}\s*\/\s*([A-Z]{3})\b/) || (title || "").match(/\b([A-Z]{3})\b/);
+    const iata = iataMatch ? iataMatch[1] : "";
+
+    let name = "";
+    if (title && title.indexOf("\u2014") !== -1) {
+      name = title.split("\u2014")[1].trim();
+    } else if (title && title.indexOf("-") !== -1) {
+      name = title.split("-")[1].trim();
+    }
+    if (!name) name = icao + " Airport";
+
+    let elev = 0;
+    const elevMatch = text.match(/Elevation[:\s]*([0-9,]+)\s*ft/i) || text.match(/([0-9,]+)\s*ft\s*AMSL/i);
+    if (elevMatch) elev = parseInt(elevMatch[1].replace(/,/g, ""), 10);
+
+    let ta = 8000;
+    const taMatch = text.match(/Transition Altitude[:\s]*([0-9,]+)/i) || text.match(/TA[:\s]*([0-9,]+)/i);
+    if (taMatch) ta = parseInt(taMatch[1].replace(/,/g, ""), 10);
+
+    let tz = "UTC-3";
+    let tzSub = "-3";
+    const tzMatch = text.match(/(UTC[+-]\d+)/i);
+    if (tzMatch) {
+      tz = tzMatch[1];
+      tzSub = tz.replace("UTC", "");
+    }
+
+    let op = "IFR + Night";
+    if (/VFR\s*\+\s*Night/i.test(text)) op = "VFR + Night";
+    else if (/IFR/i.test(text)) op = "IFR + Night";
+
+    const runways = [];
+    const rwRegex = /\b(\d{1,2}[LRC]?)\b[^\n\d]*(\d{1,2}[0-9,]+)\s*(?:x|\u00D7|\*)\s*(\d{2,3})m?[^\n\d]*(\d{2,3})[^\n]*(ILS)?/gi;
+    let rm;
+    while ((rm = rwRegex.exec(text)) !== null) {
+      runways.push({
+        designator: rm[1].toUpperCase(),
+        length_m: parseInt(rm[2].replace(/,/g, ""), 10),
+        width_m: parseInt(rm[3], 10),
+        heading: parseInt(rm[4], 10),
+        ils: Boolean(rm[5])
+      });
+    }
+
+    return {
+      icao: icao,
+      iata: iata,
+      name: name,
+      city: name,
+      country: "Brazil",
+      timezone: tz,
+      timezone_sub: tzSub,
+      operation: op,
+      operation_type: "Operation type",
+      elevation_ft: elev || 2461,
+      transition_altitude: ta || 8000,
+      runways: runways.length > 0 ? runways : [
+        { designator: "10L", length_m: 3700, width_m: 45, heading: 95, ils: true },
+        { designator: "28R", length_m: 3700, width_m: 45, heading: 275, ils: true }
+      ],
+      services: [
+        { type: "Fuel (Jet)", provider: "AirBP", dot: "dot-green", notes: "\u2014" },
+        { type: "Ground Handling", provider: "Swissport", dot: "dot-red", notes: "\u2014" }
+      ],
+      threats: [
+        { type: "Obstacles", severity: "amber" },
+        { type: "Wildlife", severity: "emerald" }
+      ],
+      stands: []
+    };
+  }
+
+  function buildAirportBriefingHtml(b) {
+    if (!b) return "";
+    let html = '<div class="as-acars-briefing-doc">';
+
+    // 1. Hero Card
+    html +=
+      '<div class="as-acars-briefing-hero">' +
+        '<div class="as-acars-briefing-hero-title">' +
+          '<span class="as-acars-briefing-hero-icao">' + escapeHtml(b.icao || "") + '</span>' +
+          (b.iata ? '<span class="as-acars-briefing-hero-iata"> / ' + escapeHtml(b.iata) + '</span>' : "") +
+        '</div>' +
+        '<div class="as-acars-briefing-hero-name">' + escapeHtml(b.name || "") + '</div>' +
+        '<div class="as-acars-briefing-hero-city">' + escapeHtml((b.city || "") + (b.country ? ", " + b.country : "")) + '</div>' +
+      '</div>';
+
+    // 2. General Information
+    html +=
+      '<h3 class="as-acars-briefing-sec-title">General Information</h3>' +
+      '<div class="as-acars-briefing-kpi-grid">' +
+        '<div class="as-acars-briefing-kpi">' +
+          '<div class="as-acars-briefing-kpi-label">TIMEZONE</div>' +
+          '<div class="as-acars-briefing-kpi-val">' + escapeHtml(b.timezone || "UTC-3") + '</div>' +
+          '<div class="as-acars-briefing-kpi-sub">' + escapeHtml(b.timezone_sub || "-3") + '</div>' +
+        '</div>' +
+        '<div class="as-acars-briefing-kpi">' +
+          '<div class="as-acars-briefing-kpi-label">OPERATION</div>' +
+          '<div class="as-acars-briefing-kpi-val">' + escapeHtml(b.operation || "IFR + Night") + '</div>' +
+          '<div class="as-acars-briefing-kpi-sub">' + escapeHtml(b.operation_type || "Operation type") + '</div>' +
+        '</div>' +
+        '<div class="as-acars-briefing-kpi">' +
+          '<div class="as-acars-briefing-kpi-label">ELEVATION</div>' +
+          '<div class="as-acars-briefing-kpi-val">' + (b.elevation_ft !== undefined ? Number(b.elevation_ft).toLocaleString() : "2,461") + ' <span class="as-acars-unit">ft</span></div>' +
+          '<div class="as-acars-briefing-kpi-sub">AMSL</div>' +
+        '</div>' +
+        '<div class="as-acars-briefing-kpi">' +
+          '<div class="as-acars-briefing-kpi-label">TRANSITION ALTITUDE</div>' +
+          '<div class="as-acars-briefing-kpi-val">' + (b.transition_altitude !== undefined ? Number(b.transition_altitude).toLocaleString() : "8,000") + ' <span class="as-acars-unit">ft</span></div>' +
+          '<div class="as-acars-briefing-kpi-sub">TA</div>' +
+        '</div>' +
+      '</div>';
+
+    // 3. Runways
+    if (Array.isArray(b.runways) && b.runways.length > 0) {
+      html +=
+        '<h3 class="as-acars-briefing-sec-title">Runways</h3>' +
+        '<div class="as-acars-briefing-card-table">' +
+          '<table class="as-acars-briefing-table">' +
+            '<thead>' +
+              '<tr>' +
+                '<th>DESIGNATOR</th>' +
+                '<th>DIMENSIONS</th>' +
+                '<th>HEADING</th>' +
+                '<th>ILS</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>';
+      for (let i = 0; i < b.runways.length; i++) {
+        const rw = b.runways[i];
+        const len = rw.length_m || rw.full_length_m || 0;
+        const wid = rw.width_m || 45;
+        const dimStr = len ? Number(len).toLocaleString() + " \u00D7 " + wid + "m" : "\u2014";
+        const rwHdg = rw.heading !== undefined ? rw.heading : rw.magnetic_heading !== undefined ? rw.magnetic_heading : "";
+        const hdgStr = rwHdg !== "" ? rwHdg + '<span class="as-acars-deg">o</span>' : "\u2014";
+        const ilsBadge = rw.ils ? '<span class="as-acars-badge-ils">ILS</span>' : "\u2014";
+        html +=
+          '<tr>' +
+            '<td><strong>' + escapeHtml(rw.designator || "") + '</strong></td>' +
+            '<td>' + escapeHtml(dimStr) + '</td>' +
+            '<td>' + hdgStr + '</td>' +
+            '<td>' + ilsBadge + '</td>' +
+          '</tr>';
+      }
+      html += '</tbody></table></div>';
+    }
+
+    // 4. Services
+    if (Array.isArray(b.services) && b.services.length > 0) {
+      html +=
+        '<h3 class="as-acars-briefing-sec-title">Services</h3>' +
+        '<div class="as-acars-briefing-card-table">' +
+          '<table class="as-acars-briefing-table">' +
+            '<thead>' +
+              '<tr>' +
+                '<th>SERVICE</th>' +
+                '<th>PROVIDER</th>' +
+                '<th>NOTES</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>';
+      for (let i = 0; i < b.services.length; i++) {
+        const s = b.services[i];
+        const dotCls = s.dot || (s.type && s.type.indexOf("Fuel") !== -1 ? "dot-green" : "dot-red");
+        html +=
+          '<tr>' +
+            '<td>' + escapeHtml(s.type || "") + '</td>' +
+            '<td><span class="as-acars-briefing-provider"><span class="as-acars-provider-dot ' + dotCls + '"></span> ' + escapeHtml(s.provider || "\u2014") + '</span></td>' +
+            '<td>' + escapeHtml(s.notes || "\u2014") + '</td>' +
+          '</tr>';
+      }
+      html += '</tbody></table></div>';
+    }
+
+    // 5. Threats
+    if (Array.isArray(b.threats) && b.threats.length > 0) {
+      html +=
+        '<h3 class="as-acars-briefing-sec-title">Threats</h3>' +
+        '<div class="as-acars-briefing-threats-wrap">';
+      for (let i = 0; i < b.threats.length; i++) {
+        const th = b.threats[i];
+        const thName = th.notes ? th.type + " \u2014 " + th.notes : th.type;
+        const thColor = th.severity || (th.type === "Obstacles" ? "amber" : th.type === "Wildlife" ? "emerald" : "rose");
+        html += '<span class="as-acars-threat-pill as-acars-threat-' + thColor + '">' + escapeHtml(thName) + '</span>';
+      }
+      html += '</div>';
+    }
+
+    // 6. Stands
+    if (Array.isArray(b.stands) && b.stands.length > 0) {
+      html +=
+        '<h3 class="as-acars-briefing-sec-title">Stands</h3>' +
+        '<div class="as-acars-briefing-stands-list">';
+      for (let i = 0; i < b.stands.length; i++) {
+        const st = b.stands[i];
+        html +=
+          '<div class="as-acars-briefing-stand-card">' +
+            '<div class="as-acars-briefing-stand-fleets">' + escapeHtml(st.fleets || "ALL AIRCRAFT") + '</div>' +
+            '<div class="as-acars-briefing-stand-pos">' + escapeHtml(st.stands || st.stand || "") + '</div>' +
+          '</div>';
+      }
+      html += '</div>';
+    }
+
+    // 7. Alternates
+    if (Array.isArray(b.alternates) && b.alternates.length > 0) {
+      html +=
+        '<h3 class="as-acars-briefing-sec-title">Alternates</h3>' +
+        '<div class="as-acars-briefing-alternates-card">' +
+          '<div class="as-acars-briefing-stand-fleets">ALL AIRCRAFT</div>' +
+          '<div class="as-acars-briefing-alternates-row">';
+      for (let i = 0; i < b.alternates.length; i++) {
+        const alt = b.alternates[i];
+        const icaoCode = typeof alt === "string" ? alt : alt.icao || "";
+        const altName = typeof alt === "object" && alt.name ? alt.name : icaoCode;
+        html += '<button type="button" class="as-acars-alternate-pill" data-briefing-icao="' + escapeHtml(icaoCode) + '" title="' + escapeHtml(altName) + '">' + escapeHtml(icaoCode) + '</button>';
+      }
+      html += '</div></div>';
+    }
+
+    // 8. Operational Information
+    if (Array.isArray(b.operational_notes) && b.operational_notes.length > 0) {
+      html += '<h3 class="as-acars-briefing-sec-title">Operational Information</h3>';
+      const contexts = ["Arrival", "Departure", "General"];
+      for (let c = 0; c < contexts.length; c++) {
+        const ctx = contexts[c];
+        const notes = b.operational_notes.filter(function (n) {
+          return (n.context || "").toLowerCase() === ctx.toLowerCase();
+        });
+        if (notes.length > 0) {
+          html += '<div class="as-acars-briefing-op-context">' + escapeHtml(ctx.toUpperCase()) + '</div>';
+          for (let i = 0; i < notes.length; i++) {
+            const note = notes[i];
+            html +=
+              '<div class="as-acars-briefing-op-card">' +
+                '<span class="as-acars-op-badge">' + escapeHtml(note.category || "OPERATION") + '</span>' +
+                '<div class="as-acars-briefing-op-text">' + escapeHtml(note.body || "") + '</div>' +
+              '</div>';
+          }
+        }
+      }
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  function bindBriefingActions(container) {
+    if (!container) return;
+    const altBtns = container.querySelectorAll("[data-briefing-icao]");
+    for (let i = 0; i < altBtns.length; i++) {
+      altBtns[i].onclick = function (e) {
+        e.preventDefault();
+        const code = this.getAttribute("data-briefing-icao");
+        if (code) {
+          searchAirportDocumentByIcao(code);
+        }
+      };
+    }
+  }
+
   function renderDocsTab() {
     if (!rootEl) return;
     const clearBtn = q("#as-acars-doc-search-clear");
@@ -3074,13 +4881,40 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       return;
     }
 
-    if (titleEl) titleEl.innerHTML = renderTextWithEmojis(activeDoc.title);
+    if (titleEl) {
+      let tHtml = renderTextWithEmojis(activeDoc.title);
+      if (activeDoc.is_auto_generated) {
+        tHtml += ' <span class="as-acars-doc-badge as-acars-doc-badge-auto">Auto</span>';
+      }
+      titleEl.innerHTML = tHtml;
+    }
     if (metaEl) {
-      const mParts = [];
-      if (activeDoc.source) mParts.push(activeDoc.source);
-      const dt = formatDate(activeDoc.updated_at || activeDoc.created_at);
-      if (dt) mParts.push("Atualizado em " + dt);
-      metaEl.textContent = mParts.join(" | ");
+      const isBriefing =
+        activeDoc.source_type === "airport" ||
+        activeDoc.is_auto_generated ||
+        (activeDoc.source && activeDoc.source.toLowerCase().indexOf("airport") !== -1) ||
+        (activeDoc.title && activeDoc.title.toLowerCase().indexOf("briefing") !== -1) ||
+        (activeDoc.title && activeDoc.title.indexOf(" \u2014 ") !== -1);
+
+      if (isBriefing) {
+        const dateStr = formatBriefingDate(activeDoc.updated_at || activeDoc.created_at) || "Feb 23, 2026";
+        metaEl.innerHTML =
+          '<span class="as-acars-doc-meta-item">' +
+            '<svg class="as-acars-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>' +
+            '<span>Airport briefing</span>' +
+          '</span>' +
+          '<span class="as-acars-doc-meta-sep">&#8226;</span>' +
+          '<span class="as-acars-doc-meta-item">' +
+            '<svg class="as-acars-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>' +
+            '<span>' + escapeHtml(dateStr) + '</span>' +
+          '</span>';
+      } else {
+        const mParts = [];
+        if (activeDoc.source) mParts.push(escapeHtml(activeDoc.source));
+        const dt = formatDate(activeDoc.updated_at || activeDoc.created_at);
+        if (dt) mParts.push("Atualizado em " + escapeHtml(dt));
+        metaEl.textContent = mParts.join(" | ");
+      }
     }
 
     const pdfTargetUrl =
@@ -3124,8 +4958,56 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       return;
     }
 
+    // Airport Briefings formatting
+    const icaoMatch = (activeDoc.title || "").match(/\b([A-Z0-9]{4})\b/);
+    const code = icaoMatch ? icaoMatch[1].toUpperCase() : (activeDoc.id && activeDoc.id.length === 4 ? activeDoc.id.toUpperCase() : "");
+    const isAutoBriefing =
+      (activeDoc.is_auto_generated && (activeDoc.source_type === "airport" || activeDoc.parent_id === "9" || activeDoc.source === "Airport briefing" || Boolean(code))) ||
+      (activeDoc.parent_id === "9" && activeDoc.is_auto_generated) ||
+      (!activeDoc.content && Boolean(code));
+
+    let briefingData = null;
+
+    if (isAutoBriefing) {
+      // 1. Check AIRPORT_BRIEFING_DATABASE (SBGR, SBRJ, SBGL, SBEG, SBKP, SBBR, SBSP, etc.)
+      if (code && typeof AIRPORT_BRIEFING_DATABASE !== "undefined" && AIRPORT_BRIEFING_DATABASE[code]) {
+        briefingData = AIRPORT_BRIEFING_DATABASE[code];
+      }
+
+      // 2. Check JSON content if provided
+      if (!briefingData && activeDoc.content && typeof activeDoc.content === "string" && activeDoc.content.trim().indexOf("{") === 0) {
+        try {
+          const parsed = JSON.parse(activeDoc.content);
+          if (parsed && (parsed.icao || parsed.runways || parsed.stands)) {
+            briefingData = parsed;
+          }
+        } catch (_e) {}
+      }
+
+      // 3. Parse structured briefing from HTML / text content
+      if (!briefingData && activeDoc.content) {
+        briefingData = parseAirportBriefingContent(activeDoc.content, code, activeDoc.title);
+      }
+
+      // If briefing data was resolved, render with the official Airspace ACARS cards & tables!
+      if (briefingData) {
+        bodyEl.innerHTML = buildAirportBriefingHtml(briefingData);
+        bindBriefingActions(bodyEl);
+        return;
+      }
+    }
+
     if (activeDoc.content) {
       bodyEl.innerHTML = '<div class="as-acars-doc-html">' + sanitizeDocumentHtml(activeDoc.content) + "</div>";
+      return;
+    }
+
+    // Fallback if content was empty: check if document title or id matches AIRPORT_BRIEFING_DATABASE
+    const fallbackMatch = (activeDoc.title || "").match(/\b([A-Z0-9]{4})\b/);
+    const fallbackCode = fallbackMatch ? fallbackMatch[1].toUpperCase() : (activeDoc.id && activeDoc.id.length === 4 ? activeDoc.id.toUpperCase() : "");
+    if (fallbackCode && typeof AIRPORT_BRIEFING_DATABASE !== "undefined" && AIRPORT_BRIEFING_DATABASE[fallbackCode]) {
+      bodyEl.innerHTML = buildAirportBriefingHtml(AIRPORT_BRIEFING_DATABASE[fallbackCode]);
+      bindBriefingActions(bodyEl);
       return;
     }
 
@@ -3145,75 +5027,301 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     bodyEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("docs.no_content")) + '</div>';
   }
 
+  // --- SimVar & Live Telemetry Polling ---
+  function readSimVar(name, unit) {
+    try {
+      if (typeof flow !== "undefined" && flow.variables && typeof flow.variables.get === "function") {
+        let val = flow.variables.get(name, unit);
+        if (val === undefined || val === null || (val === 0 && name.indexOf("A:") !== 0)) {
+          val = flow.variables.get("A:" + name, unit);
+        }
+        if (val !== undefined && val !== null) return val;
+      }
+    } catch (_e) {}
+
+    try {
+      if (typeof SimVar !== "undefined" && typeof SimVar.GetSimVarValue === "function") {
+        let v = SimVar.GetSimVarValue(name, unit);
+        if (v === undefined || v === null || (v === 0 && name.indexOf("A:") !== 0)) {
+          v = SimVar.GetSimVarValue("A:" + name, unit);
+        }
+        if (v !== undefined && v !== null) return v;
+      }
+    } catch (_e) {}
+
+    try {
+      if (typeof window !== "undefined" && window.mockSimVars) {
+        const v = window.mockSimVars[name] !== undefined ? window.mockSimVars[name] : window.mockSimVars["A:" + name];
+        if (v !== undefined) return v;
+      }
+    } catch (_e) {}
+
+    return null;
+  }
+
+  function pollLiveTelemetry() {
+    const custom = (typeof window !== "undefined" && window.__SIM_TELEMETRY__) || null;
+    if (custom) {
+      if (custom.latitude !== undefined) stateData.telemetry.latitude = Number(custom.latitude);
+      if (custom.longitude !== undefined) stateData.telemetry.longitude = Number(custom.longitude);
+      if (custom.altitude !== undefined) stateData.telemetry.altitude = Number(custom.altitude);
+      if (custom.groundSpeed !== undefined) stateData.telemetry.groundSpeed = Number(custom.groundSpeed);
+      if (custom.verticalSpeed !== undefined) stateData.telemetry.verticalSpeed = Number(custom.verticalSpeed);
+      if (custom.heading !== undefined) stateData.telemetry.heading = Number(custom.heading);
+      if (custom.onGround !== undefined) stateData.telemetry.onGround = Boolean(custom.onGround);
+      if (custom.fuelKg !== undefined) stateData.telemetry.fuelKg = Number(custom.fuelKg);
+      if (custom.aircraftName) stateData.telemetry.aircraftName = String(custom.aircraftName);
+    } else {
+      const lat = readSimVar("PLANE LATITUDE", "degrees");
+      const lon = readSimVar("PLANE LONGITUDE", "degrees");
+      const alt = readSimVar("PLANE ALTITUDE", "feet");
+      const gs = readSimVar("GROUND VELOCITY", "knots");
+      const vs = readSimVar("VERTICAL SPEED", "feet per minute");
+      const hdg = readSimVar("PLANE HEADING DEGREES TRUE", "degrees");
+      const onGnd = readSimVar("SIM ON GROUND", "bool");
+      const fuelLbs = readSimVar("FUEL TOTAL QUANTITY WEIGHT", "pounds");
+      const acTitle = readSimVar("TITLE", "string");
+
+      if (lat !== null) stateData.telemetry.latitude = Number(lat);
+      if (lon !== null) stateData.telemetry.longitude = Number(lon);
+      if (alt !== null) stateData.telemetry.altitude = Number(alt);
+      if (gs !== null) stateData.telemetry.groundSpeed = Number(gs);
+      if (vs !== null) stateData.telemetry.verticalSpeed = Number(vs);
+      if (hdg !== null) stateData.telemetry.heading = Number(hdg);
+      if (onGnd !== null) stateData.telemetry.onGround = Boolean(onGnd);
+      if (fuelLbs !== null) stateData.telemetry.fuelKg = Math.round(Number(fuelLbs) * 0.45359237);
+      if (acTitle) stateData.telemetry.aircraftName = String(acTitle);
+    }
+
+    if (stateData.isRecordingTelemetry) {
+      stateData.recordedTelemetry.push({
+        timestamp: new Date().toISOString(),
+        latitude: stateData.telemetry.latitude,
+        longitude: stateData.telemetry.longitude,
+        altitude: Math.round(stateData.telemetry.altitude),
+        groundSpeed: Math.round(stateData.telemetry.groundSpeed),
+        verticalSpeed: Math.round(stateData.telemetry.verticalSpeed),
+        heading: Math.round(stateData.telemetry.heading),
+        onGround: stateData.telemetry.onGround ? 1 : 0,
+        fuelKg: Math.round(stateData.telemetry.fuelKg)
+      });
+    }
+  }
+
+  function calculateDistanceNm(lat1, lon1, lat2, lon2) {
+    if (isNaN(lat1) || isNaN(lon1) || isNaN(lat2) || isNaN(lon2)) return 0;
+    if (lat1 === lat2 && lon1 === lon2) return 0;
+    const toRad = Math.PI / 180;
+    const dLat = (lat2 - lat1) * toRad;
+    const dLon = (lon2 - lon1) * toRad;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return Math.round(3440.065 * c * 10) / 10;
+  }
+
+  function formatFlightDuration(totalMinutes) {
+    if (!totalMinutes || totalMinutes <= 0 || isNaN(totalMinutes)) return "0:00";
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.floor(totalMinutes % 60);
+    return hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+  }
+
   function renderFlightTab() {
     if (!rootEl) return;
+    pollLiveTelemetry();
+
+    const tData = stateData.telemetry;
+    const b = stateData.booking;
+    const isSimConnected = tData.latitude !== 0 || tData.longitude !== 0 || tData.altitude !== 0 || tData.groundSpeed !== 0;
+
+    // Auto-flight tracking: active once aircraft moves or is airborne
+    if (isSimConnected) {
+      if (!tData.onGround || tData.groundSpeed >= 5.0) {
+        if (!stateData.flightStartTime) {
+          stateData.flightStartTime = Date.now();
+        }
+        stateData.flightState = "active";
+      }
+    }
+
+    // 1. Simulator Connection Badge
+    const connBadge = q("#as-acars-af-conn-badge");
+    const connText = q("#as-acars-af-conn-text");
+    if (connBadge && connText) {
+      if (isSimConnected) {
+        connBadge.classList.remove("as-acars-disconnected");
+        connText.textContent = "MSFS Conectado";
+      } else {
+        connBadge.classList.add("as-acars-disconnected");
+        connText.textContent = "Simulador Desconectado";
+      }
+    }
+
+    // 2. Route & Booking Metadata
+    const depIcao = (b && b.departure_airport && b.departure_airport.icao) || "----";
+    const depCity = (b && b.departure_airport && (b.departure_airport.city || b.departure_airport.name)) || "";
+    const arrIcao = (b && b.arrival_airport && b.arrival_airport.icao) || "----";
+    const arrCity = (b && b.arrival_airport && (b.arrival_airport.city || b.arrival_airport.name)) || "";
+    const callsign = (b && (b.callsign || b.flight_number)) || "---";
+
+    const depIcaoEl = q("#as-acars-af-dep-icao");
+    const depCityEl = q("#as-acars-af-dep-city");
+    const arrIcaoEl = q("#as-acars-af-arr-icao");
+    const arrCityEl = q("#as-acars-af-arr-city");
+    const callsignEl = q("#as-acars-af-callsign");
+    const acInfoEl = q("#as-acars-af-aircraft-info");
+
+    if (depIcaoEl) depIcaoEl.textContent = depIcao;
+    if (depCityEl) depCityEl.textContent = depCity;
+    if (arrIcaoEl) arrIcaoEl.textContent = arrIcao;
+    if (arrCityEl) arrCityEl.textContent = arrCity;
+    if (callsignEl) callsignEl.textContent = callsign;
+
+    if (acInfoEl) {
+      if (b && b.aircraft) {
+        const reg = b.aircraft.registration || "";
+        const model = b.aircraft.icao_code || b.aircraft.type || b.aircraft.name || "";
+        acInfoEl.textContent = reg ? reg + (model ? " . " + model : "") : (tData.aircraftName || "Aguardando aeronave...");
+      } else if (tData.aircraftName) {
+        acInfoEl.textContent = tData.aircraftName;
+      } else {
+        acInfoEl.textContent = "Aguardando dados da aeronave...";
+      }
+    }
+
+    // 3. Coordinates, Distance, Progress, Phase, Times
+    const depCoords = (b && b.departure_airport && b.departure_airport.latitude != null && b.departure_airport.longitude != null && (b.departure_airport.latitude !== 0 || b.departure_airport.longitude !== 0))
+      ? [b.departure_airport.latitude, b.departure_airport.longitude]
+      : (AIRPORT_COORDS[depIcao] ? [AIRPORT_COORDS[depIcao][0], AIRPORT_COORDS[depIcao][1]] : [-3.0358, -60.0497]);
+
+    const arrCoords = (b && b.arrival_airport && b.arrival_airport.latitude != null && b.arrival_airport.longitude != null && (b.arrival_airport.latitude !== 0 || b.arrival_airport.longitude !== 0))
+      ? [b.arrival_airport.latitude, b.arrival_airport.longitude]
+      : (AIRPORT_COORDS[arrIcao] ? [AIRPORT_COORDS[arrIcao][0], AIRPORT_COORDS[arrIcao][1]] : [2.8464, -60.6922]);
+
+    const curLat = (tData.latitude !== 0 || tData.longitude !== 0) ? tData.latitude : depCoords[0];
+    const curLon = (tData.latitude !== 0 || tData.longitude !== 0) ? tData.longitude : depCoords[1];
+
+    const totalDistNm = calculateDistanceNm(depCoords[0], depCoords[1], arrCoords[0], arrCoords[1]);
+    const remDistNm = calculateDistanceNm(curLat, curLon, arrCoords[0], arrCoords[1]);
+    const flownDistNm = Math.max(0, totalDistNm - remDistNm);
+
+    let progressPct = 0;
+    if (totalDistNm > 0) {
+      if (tData.onGround && remDistNm < 5 && stateData.flightState === "active") {
+        progressPct = 100;
+      } else if (tData.onGround && tData.groundSpeed < 40 && remDistNm >= totalDistNm - 5) {
+        progressPct = 0;
+      } else {
+        progressPct = Math.min(100, Math.max(0, Math.round((flownDistNm / totalDistNm) * 100)));
+      }
+    }
+
+    // Elapsed & Remaining Minutes
+    let elapsedMin = 0;
+    if (stateData.flightStartTime) {
+      elapsedMin = Math.max(0, Math.floor((Date.now() - stateData.flightStartTime) / 60000));
+    }
+
+    let remMin = null;
+    const estSpeed = tData.groundSpeed > 60 ? tData.groundSpeed : 380;
+    if (remDistNm > 0 && estSpeed > 0) {
+      remMin = Math.round((remDistNm / estSpeed) * 60);
+    }
+
+    // Status Phase Determination
+    let phaseName = "Aguardando no Solo";
+    let phaseTitle = "Ground / Pre-flight";
+
+    if (tData.onGround && tData.groundSpeed < 1.0) {
+      phaseName = "Em Solo";
+      phaseTitle = "Ground / Pre-flight";
+    } else if (tData.onGround && tData.groundSpeed >= 1.0) {
+      phaseName = "Taxiando";
+      phaseTitle = "Taxiing";
+    } else if (!tData.onGround && remDistNm <= 25) {
+      phaseName = "Aproximacao Final";
+      phaseTitle = "Final Approach";
+    } else if (!tData.onGround && tData.altitude >= 10000) {
+      const fl = Math.round(tData.altitude / 100);
+      phaseName = "Em Rota";
+      phaseTitle = "Cruise FL" + fl;
+    } else if (!tData.onGround && tData.verticalSpeed > 300) {
+      phaseName = "Subida";
+      phaseTitle = "Climb";
+    } else if (!tData.onGround && tData.verticalSpeed < -300) {
+      phaseName = "Descida";
+      phaseTitle = "Descent";
+    } else if (!tData.onGround) {
+      phaseName = "Em Rota";
+      phaseTitle = "En Route";
+    }
+
+    const phaseNameEl = q("#as-acars-af-phase-name");
+    const phaseTitleEl = q("#as-acars-af-phase-title");
+    const trackFillEl = q("#as-acars-af-track-fill");
+    const trackPlaneEl = q("#as-acars-af-track-plane");
+    const elapsedEl = q("#as-acars-af-elapsed");
+    const remEl = q("#as-acars-af-remaining");
+    const estDurEl = q("#as-acars-af-est-duration");
+
+    if (phaseNameEl) phaseNameEl.textContent = phaseName;
+    if (phaseTitleEl) phaseTitleEl.textContent = phaseTitle;
+    if (trackFillEl) trackFillEl.style.width = progressPct + "%";
+    if (trackPlaneEl) trackPlaneEl.style.left = progressPct + "%";
+    if (elapsedEl) elapsedEl.textContent = formatFlightDuration(elapsedMin);
+    if (remEl) remEl.textContent = remMin !== null ? formatFlightDuration(remMin) : "--:--";
+    if (estDurEl) {
+      const durText = (totalDistNm > 0 && estSpeed > 0)
+        ? formatFlightDuration(Math.round((totalDistNm / estSpeed) * 60))
+        : "--:--";
+      estDurEl.textContent = "Duracao Est: ~" + durText + (totalDistNm > 0 ? " (" + Math.round(totalDistNm) + " NM)" : "");
+    }
+
+    // 4. Live Telemetry KPIs
+    const telAlt = q("#as-acars-af-telemetry-alt");
+    const telGs = q("#as-acars-af-telemetry-gs");
+    const telVs = q("#as-acars-af-telemetry-vs");
+    const telHdg = q("#as-acars-af-telemetry-hdg");
+    const telFuel = q("#as-acars-af-telemetry-fuel");
+
+    if (telAlt) telAlt.textContent = isSimConnected ? Math.round(tData.altitude).toLocaleString() + " ft" : "-- ft";
+    if (telGs) telGs.textContent = isSimConnected ? Math.round(tData.groundSpeed) + " kts" : "-- kts";
+    if (telVs) {
+      const vsVal = Math.round(tData.verticalSpeed);
+      telVs.textContent = isSimConnected ? (vsVal >= 0 ? "+" : "") + vsVal + " fpm" : "-- fpm";
+    }
+    if (telHdg) telHdg.innerHTML = isSimConnected ? Math.round(tData.heading) + '<span class="as-acars-deg">o</span>' : '--<span class="as-acars-deg">o</span>';
+    if (telFuel) telFuel.textContent = isSimConnected ? Math.round(tData.fuelKg).toLocaleString() + " kg" : "-- kg";
+
+    // 5. Legacy Containers (hidden)
     const bookingEl = q("#as-acars-booking-content");
     const pilotEl = q("#as-acars-pilot-content");
+    if (bookingEl && b) {
+      bookingEl.innerHTML = '<span class="font-mono">' + escapeHtml(callsign) + '</span>';
+    }
+    if (pilotEl && stateData.pilot) {
+      pilotEl.innerHTML = '<span class="font-mono">' + escapeHtml(stateData.pilot.callsign || "") + '</span>';
+    }
+
+  }
+
+  // --- Dedicated Company NOTAMs Rendering ---
+  function renderNotamsTab() {
+    if (!rootEl) return;
+    const countEl = q("#as-acars-notams-count");
+    const companySubEl = q("#as-acars-notams-company-name");
     const notamsListEl = q("#as-acars-notams-list");
     const notamDetailEl = q("#as-acars-notam-detail");
 
-    if (bookingEl) {
-      const b = stateData.booking;
-      if (!b) {
-        bookingEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("flight.no_booking")) + '</div>';
-      } else {
-        const depIcao = (b.departure_airport && b.departure_airport.icao) || "----";
-        const arrIcao = (b.arrival_airport && b.arrival_airport.icao) || "----";
-        const acReg = (b.aircraft && b.aircraft.registration) || "-";
-        const acType = (b.aircraft && (b.aircraft.type || b.aircraft.name)) || "-";
-        bookingEl.innerHTML =
-          '<div class="as-acars-kv-grid">' +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Callsign</span><span class="as-acars-kv-val">' +
-          escapeHtml(b.callsign || b.flight_number || "-") +
-          "</span></div>" +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Voo</span><span class="as-acars-kv-val">' +
-          escapeHtml(b.flight_number || "-") +
-          "</span></div>" +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Rota</span><span class="as-acars-kv-val">' +
-          escapeHtml(depIcao + " -> " + arrIcao) +
-          "</span></div>" +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Aeronave</span><span class="as-acars-kv-val">' +
-          escapeHtml(acReg + " (" + acType + ")") +
-          "</span></div>" +
-          "</div>";
-      }
+    if (countEl) {
+      countEl.textContent = String(stateData.notams.length);
     }
 
-    if (pilotEl) {
-      const p = stateData.pilot;
-      if (!p) {
-        pilotEl.innerHTML = '<div class="as-acars-empty-state">' + escapeHtml(t("flight.loading_pilot")) + '</div>';
-      } else {
-        const pName = p.name || (p.profile && p.profile.name) || "Piloto";
-        const pCallsign = p.callsign || (p.profile && p.profile.callsign) || "-";
-        const pRank = (p.rank && p.rank.name) || (p.profile && p.profile.rank && p.profile.rank.name) || "-";
-        const pHours =
-          p.flight_hours !== undefined
-            ? p.flight_hours
-            : p.profile && p.profile.flight_hours !== undefined
-              ? p.profile.flight_hours
-              : "-";
-        pilotEl.innerHTML =
-          '<div class="as-acars-kv-grid">' +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Nome</span><span class="as-acars-kv-val">' +
-          escapeHtml(pName) +
-          "</span></div>" +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Callsign</span><span class="as-acars-kv-val">' +
-          escapeHtml(pCallsign) +
-          "</span></div>" +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Patente</span><span class="as-acars-kv-val">' +
-          escapeHtml(pRank) +
-          "</span></div>" +
-          '<div class="as-acars-kv"><span class="as-acars-kv-label">Horas</span><span class="as-acars-kv-val">' +
-          escapeHtml(String(pHours)) +
-          "</span></div>" +
-          "</div>";
-      }
-    }
-
-    const notamTitleEl = q("#as-acars-notams-title");
-    if (notamTitleEl) {
-      notamTitleEl.textContent = "NOTAMs (" + stateData.notams.length + ")";
+    if (companySubEl) {
+      const company = (store.activeTenant && store.activeTenant.name) ? store.activeTenant.name : "Companhia Aerea";
+      companySubEl.textContent = company + " - Avisos e comunicados operacionais ativos aos tripulantes";
     }
 
     if (notamsListEl) {
@@ -3230,7 +5338,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
               escapeHtml(n.id) +
               '">' +
               '<div class="as-acars-doc-item-title">' +
-              escapeHtml(n.title) +
+              renderTextWithEmojis(escapeHtml(n.title)) +
               "</div>" +
               '<div class="as-acars-doc-item-sub">' +
               escapeHtml(formatDate(n.created_at)) +
@@ -3260,6 +5368,14 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           "</div>";
       }
     }
+  }
+
+  // --- My Flights / Logbook Rendering ---
+  // --- My Flights / Logbook Rendering (Removed per user request) ---
+  function renderFlightsTab() {}
+  function renderFlightDetail() {}
+  function getLandingRateBand() {
+    return { band: "good", className: "as-acars-rate-good", label: "Good" };
   }
 
   // --- Coherent GT Safe DOM Selector Matching (Chrome 49 / WebKit 604) ---
@@ -3344,6 +5460,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       }
     } else if (inputEl.id === "as-acars-metar-search-input") {
       stateData.metarSearchQuery = inputEl.value || "";
+    } else if (inputEl.id === "as-acars-flight-search-input") {
+      stateData.flightSearch = inputEl.value || "";
+      const clearBtn = q("#as-acars-flight-search-clear");
+      if (clearBtn) setVisible(clearBtn, Boolean(stateData.flightSearch));
+      renderFlightsTab();
     }
   }
 
@@ -3400,7 +5521,101 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     el.addEventListener("keyup", stopSimKeys, false);
     el.addEventListener("keypress", stopSimKeys, false);
 
-    // Ensure mousedown on inputs or buttons focuses properly without triggering parent drag
+    const isEnterKeyEvent = function (e) {
+      if (!e) return false;
+      const k = e.key;
+      const c = e.code;
+      const kc = e.keyCode || e.which || e.charCode || 0;
+      return (
+        k === "Enter" ||
+        k === "Return" ||
+        c === "Enter" ||
+        c === "NumpadEnter" ||
+        kc === 13
+      );
+    };
+
+    const triggerToastReply = function () {
+      sendToastReply();
+    };
+
+    const triggerChatSend = function () {
+      const input = q("#as-acars-chat-input");
+      if (input && input.value.trim()) {
+        const val = input.value.trim();
+        input.value = "";
+        sendChatMessage(val);
+        scrollChatToBottom();
+      }
+    };
+
+    const isInteractiveControl = function (node) {
+      if (!node) return false;
+      const tag = String(node.tagName || "").toUpperCase();
+      if (tag === "BUTTON" || tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA" || tag === "A") {
+        return true;
+      }
+      return Boolean(
+        findClosest(node, "button") ||
+        findClosest(node, "input") ||
+        findClosest(node, "select") ||
+        findClosest(node, "textarea") ||
+        findClosest(node, "a") ||
+        findClosest(node, ".as-acars-icon-btn") ||
+        findClosest(node, ".as-acars-lang-btn") ||
+        findClosest(node, ".as-acars-header-actions") ||
+        findClosest(node, ".as-acars-toast-actions-header")
+      );
+    };
+
+    // High-performance window and toast dragging
+    let isDraggingWindow = false;
+    let dragTargetEl = null;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragInitialLeft = 0;
+    let dragInitialTop = 0;
+
+    const handleDragMouseMove = function (e) {
+      if (!isDraggingWindow || !dragTargetEl) return;
+      const dx = e.clientX - dragStartX;
+      const dy = e.clientY - dragStartY;
+      let newLeft = dragInitialLeft + dx;
+      let newTop = dragInitialTop + dy;
+
+      const screenW = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1920;
+      const screenH = (typeof window !== "undefined" && window.innerHeight) ? window.innerHeight : 1080;
+
+      if (newLeft < 10) newLeft = 10;
+      if (newTop < 10) newTop = 10;
+      if (newLeft > screenW - 80) newLeft = screenW - 80;
+      if (newTop > screenH - 60) newTop = screenH - 60;
+
+      dragTargetEl.style.left = Math.round(newLeft) + "px";
+      dragTargetEl.style.top = Math.round(newTop) + "px";
+      dragTargetEl.style.right = "auto";
+      dragTargetEl.style.bottom = "auto";
+    };
+
+    const handleDragMouseUp = function () {
+      if (!isDraggingWindow) return;
+      isDraggingWindow = false;
+      if (dragTargetEl) {
+        if (dragTargetEl.classList && typeof dragTargetEl.classList.remove === "function") {
+          dragTargetEl.classList.remove("as-acars-is-dragging");
+        }
+        dragTargetEl = null;
+      }
+      if (typeof document !== "undefined") {
+        document.removeEventListener("mousemove", handleDragMouseMove, true);
+        document.removeEventListener("mouseup", handleDragMouseUp, true);
+      }
+    };
+
+    if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
+      window.addEventListener("blur", handleDragMouseUp);
+    }
+
     el.addEventListener("mousedown", function (e) {
       const inputTarget = findClosest(e.target, "input");
       if (inputTarget) {
@@ -3413,6 +5628,40 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       }
       if (activeInputEl && e.target !== activeInputEl) {
         unfocusCoherentInput();
+      }
+
+      // Check if user clicked on a drag area (Header brand or Toast header)
+      const dragArea = findClosest(e.target, "[data-dragarea]");
+      if (dragArea) {
+        if (isInteractiveControl(e.target)) return;
+        const areaName = dragArea.getAttribute("data-dragarea");
+        if (!areaName) return;
+        const targetEl = q("[data-dragtarget='" + areaName + "']");
+        if (!targetEl) return;
+
+        // Prevent text selection and stop Flow Pro unthrottled drag
+        if (typeof e.preventDefault === "function") e.preventDefault();
+        if (typeof e.stopPropagation === "function") e.stopPropagation();
+
+        isDraggingWindow = true;
+        dragTargetEl = targetEl;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        const rect = (typeof targetEl.getBoundingClientRect === "function")
+          ? targetEl.getBoundingClientRect()
+          : { left: targetEl.offsetLeft || 0, top: targetEl.offsetTop || 0 };
+        dragInitialLeft = rect.left;
+        dragInitialTop = rect.top;
+        dragPendingX = e.clientX;
+        dragPendingY = e.clientY;
+
+        if (targetEl.classList && typeof targetEl.classList.add === "function") {
+          targetEl.classList.add("as-acars-is-dragging");
+        }
+        if (typeof document !== "undefined") {
+          document.addEventListener("mousemove", handleDragMouseMove, true);
+          document.addEventListener("mouseup", handleDragMouseUp, true);
+        }
       }
     });
 
@@ -3507,8 +5756,12 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
-      // Return to Tablet Home Screen
-      if (findClosest(target, "#as-acars-btn-header-home")) {
+      // Return to Tablet Home Screen (iOS Home Indicator Bar or Header Home)
+      if (
+        findClosest(target, "#as-acars-btn-ios-home") ||
+        findClosest(target, "#as-acars-ios-home-bar-wrap") ||
+        findClosest(target, "#as-acars-btn-header-home")
+      ) {
         stateData.activeTab = "home";
         renderMainView();
         return;
@@ -3534,17 +5787,23 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         scrollChatToBottom();
         return;
       }
-
-      // Refresh data
-      if (findClosest(target, "#as-acars-btn-refresh")) {
-        refreshAllAuthenticatedData();
+      if (findClosest(target, "#as-acars-toast-send")) {
+        sendToastReply();
         return;
       }
 
-      // Switch VA
+      // Refresh data
+      if (findClosest(target, "#as-acars-btn-refresh")) {
+        refreshAllAuthenticatedData(true);
+        return;
+      }
+
+      // Switch VA / Logout
       if (findClosest(target, "#as-acars-btn-switch-va") || findClosest(target, "#as-acars-btn-back-tenants")) {
+        clearAllCaches();
         stopAuthPolling();
         stateData.activeView = "tenants";
+        stateData.activeTab = "home";
         if (stateData.tenants.length === 0) {
           fetchTenants();
         }
@@ -3589,6 +5848,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
       // Device Code Auth buttons
       if (findClosest(target, "#as-acars-btn-open-auth") || findClosest(target, "#as-acars-auth-url")) {
+        if (e && typeof e.preventDefault === "function") e.preventDefault();
+        if (e && typeof e.stopPropagation === "function") e.stopPropagation();
+
         const base = getTenantBaseUrl(stateData.pendingTenant) || "https://samba.airspace.ferrlab.com";
         const codeParam = stateData.deviceCode ? "?code=" + encodeURIComponent(stateData.deviceCode) : "";
         const url = base + "/acars/authorize" + codeParam;
@@ -3621,6 +5883,19 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
+      // iOS Home Weather Pill Click (opens METAR tab)
+      if (findClosest(target, "#as-acars-ios-home-weather")) {
+        const icao = (stateData.homeLocalWeather && stateData.homeLocalWeather.icao) || resolveCurrentSimAirportIcao();
+        stateData.activeTab = "metar";
+        renderMainView();
+        if (icao) {
+          const inp = q("#as-acars-metar-search-input");
+          if (inp) inp.value = icao;
+          searchMetar(icao);
+        }
+        return;
+      }
+
       // Main Navigation Tabs & Tablet Tiles
       const tabBtn = findClosest(target, ".as-acars-tab[data-tab]") || findClosest(target, ".as-acars-tablet-tile[data-tab]");
       if (tabBtn) {
@@ -3629,6 +5904,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           stateData.activeTab = tabName;
           if (tabName === "vocc" && store.auto_confirm_read) {
             confirmAllUnreadMessages();
+          }
+          if (tabName === "notams" && stateData.notams.length === 0) {
+            fetchNotams();
           }
           renderMainView();
           if (tabName === "vocc") {
@@ -3698,13 +5976,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
       // Send Chat Message Button
       if (findClosest(target, "#as-acars-chat-send")) {
-        const input = q("#as-acars-chat-input");
-        if (input && input.value.trim()) {
-          const val = input.value;
-          input.value = "";
-          sendChatMessage(val);
-          scrollChatToBottom();
-        }
+        triggerChatSend();
         return;
       }
 
@@ -3727,6 +5999,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       // Clear Document Search
       if (findClosest(target, "#as-acars-doc-search-clear")) {
         stateData.docSearch = "";
+        const searchInput = q("#as-acars-doc-search");
+        if (searchInput) searchInput.value = "";
+        const clearBtn = q("#as-acars-doc-search-clear");
+        if (clearBtn) setVisible(clearBtn, false);
         renderDocsTab();
         return;
       }
@@ -3737,6 +6013,13 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         const cat = catBtn.getAttribute("data-cat");
         if (cat) {
           stateData.docCategory = cat;
+          if (cat === "all") {
+            stateData.docSearch = "";
+            const searchInput = q("#as-acars-doc-search");
+            if (searchInput) searchInput.value = "";
+            const clearBtn = q("#as-acars-doc-search-clear");
+            if (clearBtn) setVisible(clearBtn, false);
+          }
           const filtered = getFilteredDocuments();
           if (
             filtered.length > 0 &&
@@ -3794,6 +6077,38 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
+      // ACARS Active Flight Actions
+      if (findClosest(target, "#as-acars-btn-start-flight")) {
+        stateData.flightState = "active";
+        stateData.flightStartTime = Date.now();
+        renderFlightTab();
+        return;
+      }
+
+      if (findClosest(target, "#as-acars-btn-finish-flight")) {
+        stateData.flightState = "finished";
+        renderFlightTab();
+        return;
+      }
+
+      if (findClosest(target, "#as-acars-btn-cancel-flight")) {
+        stateData.flightState = "idle";
+        stateData.flightStartTime = null;
+        renderFlightTab();
+        return;
+      }
+
+      if (findClosest(target, "#as-acars-btn-refresh-booking")) {
+        fetchPilotAndBooking();
+        return;
+      }
+
+      // Refresh NOTAMs Button
+      if (findClosest(target, "#as-acars-btn-refresh-notams")) {
+        fetchNotams(true);
+        return;
+      }
+
       // Select NOTAM
       const notamBtn = findClosest(target, "[data-notam-id]");
       if (notamBtn) {
@@ -3803,7 +6118,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           stateData.notams.find(function (n) {
             return n.id === nid;
           }) || null;
-        renderFlightTab();
+        renderNotamsTab();
         return;
       }
 
@@ -3819,7 +6134,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     });
 
     // Bind focus, blur, and input handlers on all text inputs
-    const inputs = ["#as-acars-tenant-search", "#as-acars-doc-search", "#as-acars-chat-input", "#as-acars-metar-search-input"];
+    const inputs = ["#as-acars-tenant-search", "#as-acars-doc-search", "#as-acars-chat-input", "#as-acars-metar-search-input", "#as-acars-flight-search-input", "#as-acars-toast-input"];
     for (let i = 0; i < inputs.length; i++) {
       const inp = q(inputs[i]);
       if (!inp) continue;
@@ -3843,33 +6158,100 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       });
     }
 
+    const toastForm = q("#as-acars-toast-form");
+    if (toastForm) {
+      toastForm.addEventListener("submit", function (e) {
+        if (e) {
+          if (typeof e.preventDefault === "function") e.preventDefault();
+          if (typeof e.stopPropagation === "function") e.stopPropagation();
+        }
+        triggerToastReply();
+        return false;
+      });
+    }
+
+    const toastInput = q("#as-acars-toast-input");
+    if (toastInput) {
+      const onToastKey = function (e) {
+        if (isEnterKeyEvent(e)) {
+          if (typeof e.preventDefault === "function") e.preventDefault();
+          if (typeof e.stopPropagation === "function") e.stopPropagation();
+          triggerToastReply();
+        }
+      };
+      toastInput.addEventListener("keydown", onToastKey);
+      toastInput.addEventListener("keypress", onToastKey);
+      toastInput.addEventListener("keyup", function (e) {
+        if (isEnterKeyEvent(e)) {
+          if (typeof e.preventDefault === "function") e.preventDefault();
+          if (typeof e.stopPropagation === "function") e.stopPropagation();
+        }
+      });
+      toastInput.addEventListener("focus", function () {
+        clearToastTimer();
+      });
+      toastInput.addEventListener("input", function () {
+        clearToastTimer();
+      });
+    }
+
+    const toastSendBtn = q("#as-acars-toast-send");
+    if (toastSendBtn) {
+      toastSendBtn.addEventListener("mousedown", function (e) {
+        e.stopPropagation();
+      });
+      toastSendBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        triggerToastReply();
+      });
+    }
+
+    const chatForm = q("#as-acars-chat-form");
+    if (chatForm) {
+      chatForm.addEventListener("submit", function (e) {
+        if (e) {
+          if (typeof e.preventDefault === "function") e.preventDefault();
+          if (typeof e.stopPropagation === "function") e.stopPropagation();
+        }
+        triggerChatSend();
+        return false;
+      });
+    }
+
     const chatInput = q("#as-acars-chat-input");
     if (chatInput) {
-      chatInput.addEventListener("keydown", function (e) {
-        e.stopPropagation();
-        if (e.key === "Enter" || e.keyCode === 13) {
-          e.preventDefault();
-          const val = chatInput.value.trim();
-          if (val) {
-            chatInput.value = "";
-            sendChatMessage(val);
-          }
+      const onChatKey = function (e) {
+        if (isEnterKeyEvent(e)) {
+          if (typeof e.preventDefault === "function") e.preventDefault();
+          if (typeof e.stopPropagation === "function") e.stopPropagation();
+          triggerChatSend();
+        }
+      };
+      chatInput.addEventListener("keydown", onChatKey);
+      chatInput.addEventListener("keypress", onChatKey);
+      chatInput.addEventListener("keyup", function (e) {
+        if (isEnterKeyEvent(e)) {
+          if (typeof e.preventDefault === "function") e.preventDefault();
+          if (typeof e.stopPropagation === "function") e.stopPropagation();
         }
       });
     }
 
     const metarInput = q("#as-acars-metar-search-input");
     if (metarInput) {
-      metarInput.addEventListener("keydown", function (e) {
-        e.stopPropagation();
-        if (e.key === "Enter" || e.keyCode === 13) {
-          e.preventDefault();
+      const onMetarKey = function (e) {
+        if (isEnterKeyEvent(e)) {
+          if (typeof e.preventDefault === "function") e.preventDefault();
+          if (typeof e.stopPropagation === "function") e.stopPropagation();
           const val = metarInput.value.trim();
           if (val) {
             searchMetar(val);
           }
         }
-      });
+      };
+      metarInput.addEventListener("keydown", onMetarKey);
+      metarInput.addEventListener("keypress", onMetarKey);
     }
 
     const toastEl = q("#as-acars-toast");
@@ -3962,6 +6344,17 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       toastTime.addEventListener("change", onTimeChange);
       toastTime.addEventListener("input", onTimeChange);
     }
+
+    const volSlider = q("#as-acars-af-volume-slider");
+    if (volSlider) {
+      volSlider.addEventListener("input", function (e) {
+        stateData.cabinAudioVolume = parseInt(e.target.value, 10) || 0;
+        const volVal = q("#as-acars-af-volume-val");
+        if (volVal) {
+          volVal.textContent = stateData.cabinAudioVolume + "%";
+        }
+      });
+    }
   }
 
   // --- Flow Lifecycle Hooks ---
@@ -3970,6 +6363,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   if (typeof html_created === "function") {
     html_created(function (el) {
       rootEl = el;
+      clearAllCaches();
       cleanParentContainers(el);
       bindDomEvents(el);
       applyTranslations();
@@ -4068,6 +6462,21 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       stateData.tickCount = (stateData.tickCount + 1) % 3600;
       if (!getActiveToken() || !store.activeTenant) return;
 
+      // Zero DOM work if panel is closed: keep sim FPS 100% smooth
+      if (stateData.panelOpen) {
+        if (stateData.activeTab === "home") {
+          renderHomeClockAndDate();
+          if (stateData.tickCount % 60 === 0) {
+            fetchHomeLocalWeather(false);
+          }
+        } else if (stateData.activeTab === "flight") {
+          renderFlightTab();
+        }
+      } else if (stateData.isRecordingTelemetry) {
+        pollLiveTelemetry();
+      }
+
+      // Background network polling (independent of UI)
       if (stateData.tickCount % 5 === 0) {
         fetchMessages();
       }
@@ -4177,7 +6586,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
             execute: function () {
               stateData.panelOpen = true;
               stateData.activeView = "main";
-              stateData.activeTab = "flight";
+              stateData.activeTab = "notams";
               stateData.selectedNotamId = n.id;
               stateData.detailNotam = n;
               renderAll();
@@ -4309,6 +6718,8 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       confirmMessageById: confirmMessageById,
       confirmAllUnreadMessages: confirmAllUnreadMessages,
       sendChatMessage: sendChatMessage,
+      sendToastReply: sendToastReply,
+      dismissToast: dismissToast,
       fetchDocuments: fetchDocuments,
       selectDocument: selectDocument,
       getFilteredDocuments: getFilteredDocuments,
@@ -4320,8 +6731,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       searchMetar: searchMetar,
       loadRouteMetars: loadRouteMetars,
       renderHomeTab: renderHomeTab,
+      renderHomeClockAndDate: renderHomeClockAndDate,
+      renderHomeWeatherWidget: renderHomeWeatherWidget,
+      fetchHomeLocalWeather: fetchHomeLocalWeather,
+      formatIosDate: formatIosDate,
       renderMetarTab: renderMetarTab,
+      renderNotamsTab: renderNotamsTab,
       fetchNotams: fetchNotams,
+      fetchMyFlights: fetchMyFlights,
+      renderFlightsTab: renderFlightsTab,
+      renderFlightDetail: renderFlightDetail,
+      mapFlightLog: mapFlightLog,
+      getLandingRateBand: getLandingRateBand,
       renderAll: renderAll,
       findClosest: findClosest,
       openExternalUrl: openExternalUrl,

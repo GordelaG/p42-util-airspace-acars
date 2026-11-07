@@ -21,7 +21,7 @@
     <div class="as-acars-toast-body" id="as-acars-toast-text"></div>
     <div class="as-acars-toast-actions">
       <button type="button" class="as-acars-toast-btn" id="as-acars-toast-open" data-i18n="toast.open">
-        Abrir no vOCC / Responder
+        Abrir no vOCC
       </button>
       <button type="button" class="as-acars-toast-dismiss" id="as-acars-toast-dismiss" data-i18n="toast.dismiss">
         Marcar Lida
@@ -56,30 +56,6 @@
       </div>
 
       <div class="as-acars-header-actions">
-        <span class="as-acars-route-pill as-acars-hidden" id="as-acars-route-pill"></span>
-        <button
-          type="button"
-          class="as-acars-btn as-acars-btn-header-home as-acars-hidden"
-          id="as-acars-btn-header-home"
-          title="Inicio / Apps"
-          data-i18n-title="tablet.home"
-        >
-          <svg class="as-acars-home-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
-          <span class="as-acars-home-btn-label" data-i18n="tablet.home">Inicio</span>
-        </button>
-        <button
-          type="button"
-          class="as-acars-btn as-acars-btn-ghost as-acars-btn-xs as-acars-hidden"
-          id="as-acars-btn-switch-va"
-          title="Trocar Companhia Aerea (VA)"
-          data-i18n="common.switch_va"
-          data-i18n-title="header.switch_va_title"
-        >
-          Trocar VA
-        </button>
         <button
           type="button"
           class="as-acars-icon-btn"
@@ -92,22 +68,47 @@
       </div>
     </div>
 
-    <!-- Top Update Notification Banner -->
-    <div class="as-acars-update-banner as-acars-hidden" id="as-acars-update-banner">
+    <!-- Top Update Notification Banner (iOS Push Notification Style) -->
+    <div class="as-acars-update-banner as-acars-hidden" id="as-acars-update-banner" role="alert">
+      <!-- iOS App Squircle Icon -->
+      <div class="as-acars-update-ios-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </div>
+
+      <!-- Notification Content -->
       <div class="as-acars-update-banner-content">
-        <span class="as-acars-update-badge" data-i18n="update.badge_new">NOVO</span>
+        <div class="as-acars-update-ios-header">
+          <span class="as-acars-update-app-name">AIRSPACE ACARS</span>
+          <span class="as-acars-update-ios-dot">&bull;</span>
+          <span class="as-acars-update-ios-time" data-i18n="update.time_now">agora</span>
+          <span class="as-acars-update-badge" data-i18n="update.badge_new">NOVO</span>
+        </div>
         <div class="as-acars-update-text">
           <span class="as-acars-update-title" data-i18n="update.banner_title">Nova versao disponivel:</span>
           <strong id="as-acars-update-new-version">v1.0.12</strong>
-          <span class="as-acars-update-desc" data-i18n="update.banner_hint">Feche o simulador antes de executar o instalador.</span>
         </div>
+        <div class="as-acars-update-desc" data-i18n="update.banner_hint">Feche o simulador antes de executar o instalador.</div>
       </div>
+
+      <!-- Action Buttons -->
       <div class="as-acars-update-banner-actions">
-        <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-btn-primary" id="as-acars-btn-update-download" data-i18n="update.btn_download">
-          Baixar Atualizador
+        <button type="button" class="as-acars-update-btn-download as-acars-btn" id="as-acars-btn-update-download">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span data-i18n="update.btn_download">Baixar Atualizador</span>
         </button>
-        <button type="button" class="as-acars-update-dismiss" id="as-acars-btn-update-dismiss" title="Fechar aviso" data-i18n-title="update.btn_dismiss">
-          X
+        <button type="button" class="as-acars-update-dismiss" id="as-acars-btn-update-dismiss" title="Fechar aviso" data-i18n-title="update.btn_dismiss" aria-label="Fechar">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
         </button>
       </div>
     </div>
@@ -164,26 +165,24 @@
           <div class="as-acars-code-box">
             <span class="as-acars-code-label" data-i18n="auth.code_label">Digite este codigo em /acars/authorize</span>
             <div class="as-acars-code-value" id="as-acars-device-code">------</div>
-            <a
+            <span
               class="as-acars-auth-url"
               id="as-acars-auth-url"
-              href="https://samba.airspace.ferrlab.com/acars/authorize"
-              target="_blank"
-              onclick="if(typeof OpenBrowser==='function'){OpenBrowser(this.href);return false;}"
-            >https://samba.airspace.ferrlab.com/acars/authorize?code=------</a>
+              role="button"
+              tabindex="0"
+              title="Clique para abrir no navegador"
+            >https://samba.airspace.ferrlab.com/acars/authorize?code=------</span>
           </div>
 
           <div class="as-acars-auth-buttons">
-            <a
-              href="https://samba.airspace.ferrlab.com/acars/authorize"
+            <button
+              type="button"
               class="as-acars-btn as-acars-btn-primary"
               id="as-acars-btn-open-auth"
               data-i18n="auth.btn_open"
-              target="_blank"
-              onclick="if(typeof OpenBrowser==='function'){OpenBrowser(this.href);return false;}"
             >
               Abrir Pagina de Autorizacao
-            </a>
+            </button>
             <button type="button" class="as-acars-btn as-acars-btn-outline" id="as-acars-btn-copy-code" data-i18n="auth.btn_copy">
               Copiar Codigo
             </button>
@@ -210,12 +209,37 @@
       <!-- TAB 0: Tablet Home Screen -->
       <div class="as-acars-tab-panel" id="as-acars-tab-home">
         <div class="as-acars-tablet-home-container">
-          <div class="as-acars-tablet-status-card">
-            <div class="as-acars-tablet-pilot-info">
-              <span class="as-acars-tablet-greeting" id="as-acars-tablet-greeting">Airspace ACARS EFB</span>
-              <div class="as-acars-tablet-flight-summary" id="as-acars-tablet-flight-summary">Pronto para a operacao</div>
+          <!-- iOS Capsule Weather & Clock Widget (Image 2 mobile design) -->
+          <div class="as-acars-ios-capsule-widget as-acars-ios-widget-day" id="as-acars-ios-home-weather" role="button" tabindex="0" title="Ver meteorologia completa no app METAR">
+            <!-- Left Side: Weather Icon, Temperature & Location Pin -->
+            <div class="as-acars-ios-capsule-left">
+              <div class="as-acars-ios-capsule-icon" id="as-acars-ios-weather-icon">
+                <svg width="44" height="42" viewBox="0 0 52 48" fill="none">
+                  <circle cx="33" cy="20" r="10" fill="#FBBF24"/>
+                  <path d="M33 6V9M47 20H44M42.9 10.1L40.8 12.2M42.9 29.9L40.8 27.8" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M19 40H37C41.4 40 45 36.4 45 32C45 27.8 41.8 24.3 37.7 24.1C36.7 18.4 31.8 14 26 14C19.8 14 14.7 19 14.1 25.1C9.6 25.6 6 29.4 6 34C6 38.4 9.6 40 14 40H19Z" fill="#FFFFFF"/>
+                </svg>
+              </div>
+              <div class="as-acars-ios-capsule-weather-text">
+                <div class="as-acars-ios-capsule-temp" id="as-acars-ios-weather-temp">--<span class="as-acars-deg">o</span></div>
+                <div class="as-acars-ios-capsule-location">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="as-acars-ios-capsule-pin">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span id="as-acars-ios-weather-loc">Guarulhos (SBGR)</span>
+                </div>
+              </div>
             </div>
-            <div class="as-acars-tablet-clock" id="as-acars-tablet-clock">--:-- UTC</div>
+
+            <!-- Right Side: Date & Bold Clock UTC -->
+            <div class="as-acars-ios-capsule-right">
+              <div class="as-acars-ios-capsule-date" id="as-acars-ios-home-date">sex., 6 de nov.</div>
+              <div class="as-acars-ios-capsule-time-wrap">
+                <span class="as-acars-ios-capsule-time" id="as-acars-ios-home-time">--:--</span>
+                <span class="as-acars-ios-capsule-tz">UTC</span>
+              </div>
+            </div>
           </div>
 
           <div class="as-acars-tablet-grid">
@@ -232,6 +256,19 @@
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
               </div>
               <div class="as-acars-tile-title" data-i18n="tablet.docs">Documentos</div>
+            </div>
+
+            <div class="as-acars-tablet-tile" data-tab="notams">
+              <div class="as-acars-tile-icon as-acars-tile-notams">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="18.01"></line>
+                  <line x1="12" y1="11" x2="12" y2="15"></line>
+                </svg>
+                <span class="as-acars-tile-badge as-acars-hidden" id="as-acars-home-notams-badge">0</span>
+              </div>
+              <div class="as-acars-tile-title">NOTAMs</div>
             </div>
 
             <div class="as-acars-tablet-tile" data-tab="flight">
@@ -275,13 +312,17 @@
         <div class="as-acars-chat-compose">
           <input
             type="text"
-            class="as-acars-input"
             id="as-acars-chat-input"
-            placeholder="Enviar mensagem para o vOCC / Dispatch (ex: REQUESTING PUSHBACK)..."
-            data-i18n-placeholder="vocc.input_placeholder"
-            autocomplete="off"
+            class="as-acars-input"
+            placeholder="Mensagem para o despacho operacional..."
+            data-i18n-placeholder="vocc.placeholder"
           />
-          <button type="button" class="as-acars-btn as-acars-btn-primary" id="as-acars-chat-send" data-i18n="vocc.btn_send">
+          <button
+            type="button"
+            id="as-acars-btn-send-chat"
+            class="as-acars-btn as-acars-btn-primary"
+            data-i18n="vocc.send"
+          >
             Enviar
           </button>
         </div>
@@ -378,26 +419,159 @@
         </div>
       </div>
 
-      <!-- TAB 3: Active Flight Booking & Company NOTAMs -->
+      <!-- TAB 3: Active Flight / ACARS Dashboard ("Your flight") -->
       <div class="as-acars-tab-panel as-acars-hidden" id="as-acars-tab-flight">
-        <div class="as-acars-flight-grid">
-          <div class="as-acars-card">
-            <div class="as-acars-card-title" data-i18n="flight.booking_title">Reserva Ativa (Booking)</div>
-            <div id="as-acars-booking-content" class="as-acars-card-body">
-              <div class="as-acars-empty-state" data-i18n="flight.no_booking">Nenhuma reserva ativa encontrada.</div>
+        <div class="as-acars-af-container">
+          <!-- Header Bar: Page title, Subtitle, Connection badge & Refresh -->
+          <div class="as-acars-af-header">
+            <div class="as-acars-af-header-left">
+              <h2 class="as-acars-h2" data-i18n="flight.title">Meu Voo (ACARS)</h2>
+              <p class="as-acars-sub" data-i18n="flight.subtitle">Da preparacao ao toque, acompanhe seu voo em tempo real.</p>
+            </div>
+            <div class="as-acars-af-header-right">
+              <div class="as-acars-af-conn-badge" id="as-acars-af-conn-badge">
+                <span class="as-acars-af-conn-dot" id="as-acars-af-conn-dot"></span>
+                <span id="as-acars-af-conn-text">Simulador Conectado</span>
+              </div>
+              <button type="button" class="as-acars-btn as-acars-btn-outline as-acars-btn-xs" id="as-acars-btn-refresh-booking" title="Atualizar dados do voo" data-i18n="common.refresh">
+                Atualizar
+              </button>
             </div>
           </div>
 
-          <div class="as-acars-card">
-            <div class="as-acars-card-title" data-i18n="flight.pilot_title">Tripulante Conectado</div>
-            <div id="as-acars-pilot-content" class="as-acars-card-body">
-              <div class="as-acars-empty-state" data-i18n="flight.loading_pilot">Carregando dados do piloto...</div>
+          <!-- Route & Progress Card (Full Width) -->
+          <div class="as-acars-af-card as-acars-af-route-card">
+            <!-- Top Row: Status Phase Badge + Callsign Badge -->
+            <div class="as-acars-af-card-header">
+              <div class="as-acars-af-phase-badge" id="as-acars-af-phase-badge">
+                <span class="as-acars-af-phase-dot"></span>
+                <span id="as-acars-af-phase-name">Aguardando no Solo</span>
+              </div>
+              <span class="as-acars-badge as-acars-badge-primary font-mono font-bold" id="as-acars-af-callsign">SMB1542</span>
+            </div>
+
+            <!-- Route Stations & Progress Track Bar -->
+            <div class="as-acars-af-timeline-section">
+              <div class="as-acars-af-timeline-row">
+                <!-- Departure Station -->
+                <div class="as-acars-af-station as-acars-af-dep">
+                  <span class="as-acars-af-station-label" data-i18n="flight.departure">PARTIDA</span>
+                  <span class="as-acars-af-station-icao font-mono" id="as-acars-af-dep-icao">SBGR</span>
+                  <span class="as-acars-af-station-city" id="as-acars-af-dep-city">Guarulhos</span>
+                  <div class="as-acars-af-time-meta">
+                    <span class="as-acars-af-time-label" data-i18n="flight.elapsed">DECORRIDO</span>
+                    <span class="as-acars-af-time-val font-mono" id="as-acars-af-elapsed">0:00</span>
+                  </div>
+                </div>
+
+                <!-- Central Flight Progress Bar with Leading Airplane Icon -->
+                <div class="as-acars-af-track-wrap">
+                  <div class="as-acars-af-phase-title font-bold" id="as-acars-af-phase-title">Ground / Pre-flight</div>
+                  
+                  <div class="as-acars-af-track-line-container">
+                    <div class="as-acars-af-track-line-bg"></div>
+                    <div class="as-acars-af-track-line-fill" id="as-acars-af-track-fill" style="width: 0%;"></div>
+                    
+                    <!-- Leading Airplane Icon along track -->
+                    <div class="as-acars-af-track-plane" id="as-acars-af-track-plane" style="left: 0%;">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div class="as-acars-af-duration-meta">
+                    <span id="as-acars-af-est-duration">Duracao Est: ~1h 10m</span>
+                  </div>
+                </div>
+
+                <!-- Arrival Station -->
+                <div class="as-acars-af-station as-acars-af-arr">
+                  <span class="as-acars-af-station-label" data-i18n="flight.arrival">CHEGADA</span>
+                  <span class="as-acars-af-station-icao font-mono" id="as-acars-af-arr-icao">SBRJ</span>
+                  <span class="as-acars-af-station-city" id="as-acars-af-arr-city">Rio de Janeiro</span>
+                  <div class="as-acars-af-time-meta text-right">
+                    <span class="as-acars-af-time-label" data-i18n="flight.remaining">RESTANTE</span>
+                    <span class="as-acars-af-time-val font-mono" id="as-acars-af-remaining">--:--</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Aircraft Sub-strip -->
+              <div class="as-acars-af-aircraft-strip">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="as-acars-text-muted">
+                  <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                </svg>
+                <span class="font-mono font-medium" id="as-acars-af-aircraft-info">Aguardando dados da aeronave...</span>
+              </div>
             </div>
           </div>
+
+          <!-- Live Telemetry Row (5 Flight Instruments) -->
+          <div class="as-acars-flight-kpis-grid as-acars-af-telemetry-grid">
+            <div class="as-acars-flight-kpi-card">
+              <span class="as-acars-flight-kpi-label" data-i18n="flight.telemetry_alt">Altitude</span>
+              <p class="as-acars-flight-kpi-value font-mono as-acars-text-sky" id="as-acars-af-telemetry-alt">-- ft</p>
+            </div>
+            <div class="as-acars-flight-kpi-card">
+              <span class="as-acars-flight-kpi-label" data-i18n="flight.telemetry_gs">Velocidade Solo (GS)</span>
+              <p class="as-acars-flight-kpi-value font-mono" id="as-acars-af-telemetry-gs">-- kts</p>
+            </div>
+            <div class="as-acars-flight-kpi-card">
+              <span class="as-acars-flight-kpi-label" data-i18n="flight.telemetry_vs">Velocidade Vertical (VS)</span>
+              <p class="as-acars-flight-kpi-value font-mono as-acars-text-emerald" id="as-acars-af-telemetry-vs">-- fpm</p>
+            </div>
+            <div class="as-acars-flight-kpi-card">
+              <span class="as-acars-flight-kpi-label" data-i18n="flight.telemetry_hdg">Proa (Heading)</span>
+              <p class="as-acars-flight-kpi-value font-mono" id="as-acars-af-telemetry-hdg">--<span class="as-acars-deg">o</span></p>
+            </div>
+            <div class="as-acars-flight-kpi-card">
+              <span class="as-acars-flight-kpi-label" data-i18n="flight.telemetry_fuel">Combustivel Restante</span>
+              <p class="as-acars-flight-kpi-value font-mono as-acars-text-amber" id="as-acars-af-telemetry-fuel">-- kg</p>
+            </div>
+          </div>
+
+          <!-- Legacy Booking & Pilot Containers (hidden/compatible) -->
+          <div class="as-acars-hidden" id="as-acars-booking-content"></div>
+          <div class="as-acars-hidden" id="as-acars-pilot-content"></div>
         </div>
+      </div>
 
-        <div class="as-acars-card as-acars-notams-card">
-          <div class="as-acars-card-title" id="as-acars-notams-title" data-i18n="flight.notams_title">NOTAMs Ativos da Companhia</div>
+      <!-- TAB: Dedicated NOTAMs App -->
+      <div class="as-acars-tab-panel as-acars-hidden" id="as-acars-tab-notams">
+        <div class="as-acars-notams-container">
+          <!-- Top Header Bar -->
+          <div class="as-acars-notams-header-bar">
+            <div class="as-acars-notams-header-info">
+              <div class="as-acars-notams-header-title">
+                <svg class="as-acars-notams-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="18.01"></line>
+                  <line x1="12" y1="11" x2="12" y2="15"></line>
+                </svg>
+                <h3 class="as-acars-notams-app-title" data-i18n="notams.title">NOTAMs da Companhia</h3>
+                <span class="as-acars-notams-count-badge" id="as-acars-notams-count">0</span>
+              </div>
+              <p class="as-acars-notams-subtitle" id="as-acars-notams-company-name">Avisos e comunicados operacionais aos tripulantes</p>
+            </div>
+            <div class="as-acars-notams-header-actions">
+              <button
+                type="button"
+                class="as-acars-btn as-acars-btn-outline as-acars-btn-xs"
+                id="as-acars-btn-refresh-notams"
+                title="Recarregar NOTAMs"
+                data-i18n="notams.refresh"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+                </svg>
+                <span>Recarregar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Split Layout: List + Detail Reader -->
           <div class="as-acars-notams-split">
             <div class="as-acars-notams-list" id="as-acars-notams-list">
               <div class="as-acars-empty-state" data-i18n="flight.no_notams">Nenhum NOTAM ativo.</div>
@@ -560,8 +734,47 @@
                 </button>
               </div>
             </div>
+
+            <div class="as-acars-setting-divider"></div>
+
+            <!-- Virtual Airline & Logout Row -->
+            <div class="as-acars-setting-row as-acars-setting-account-row">
+              <div class="as-acars-setting-info">
+                <div class="as-acars-setting-label">
+                  <span data-i18n="settings.account_title">Sessao &amp; Companhia Aerea</span>
+                  <span class="as-acars-settings-va-badge font-mono" id="as-acars-settings-va-badge">VA</span>
+                </div>
+                <div class="as-acars-setting-desc" id="as-acars-settings-session-desc" data-i18n="settings.account_desc">Conectado como piloto. Clique para trocar de VA ou encerrar a sessao.</div>
+              </div>
+              <div class="as-acars-setting-control">
+                <button
+                  type="button"
+                  class="as-acars-btn as-acars-btn-sm as-acars-btn-danger-outline as-acars-btn-logout"
+                  id="as-acars-btn-switch-va"
+                  title="Trocar Companhia Aerea / Logout"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="as-acars-logout-icon">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span id="as-acars-switch-va-text" data-i18n="settings.btn_logout">Trocar VA / Logout</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- Bottom iOS Home Indicator Bar (Click to return to Home) -->
+      <div class="as-acars-ios-home-bar-wrap as-acars-hidden" id="as-acars-ios-home-bar-wrap">
+        <button
+          type="button"
+          class="as-acars-ios-home-bar"
+          id="as-acars-btn-ios-home"
+          title="Inicio (Home)"
+          aria-label="Voltar para a tela principal"
+        ></button>
       </div>
     </div>
   </div>

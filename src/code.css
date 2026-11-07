@@ -60,9 +60,11 @@
   left: 240px;
   width: 820px;
   height: 550px;
-  background-color: rgba(12, 14, 18, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 10px;
+  background-color: #121214;
+  border: 1px solid #28282b;
+  border-radius: 18px;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
   filter: none !important;
@@ -74,19 +76,22 @@
   overflow: hidden;
   z-index: 9990;
   pointer-events: all;
+  
 }
 
-/* Floating vOCC Toast Notification - Clean Solid Card Style (matching Simbrief HUD) */
+/* Floating vOCC Toast Notification - Modern Dark Card (Airspace ACARS iOS-inspired) */
 .as-acars-toast {
   position: absolute;
   top: 70px;
   left: 60%;
   width: 440px;
   max-width: 92vw;
-  background: #1c1e22 !important;
-  background-color: #1c1e22 !important;
-  border: 1px solid rgba(100, 105, 115, 0.6) !important;
-  border-radius: 6px;
+  background: #141416 !important;
+  background-color: #141416 !important;
+  border: 1px solid #27272a !important;
+  border-radius: 16px;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
   filter: none !important;
@@ -94,71 +99,119 @@
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   padding: 0;
+  overflow: hidden;
   z-index: 9999;
   pointer-events: all;
   box-sizing: border-box;
-  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", "Courier New", monospace;
-  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  
+}
+
+.as-acars-window.as-acars-is-dragging,
+.as-acars-toast.as-acars-is-dragging {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  cursor: move !important;
+}
+
+.as-acars-window.as-acars-is-dragging *,
+.as-acars-toast.as-acars-is-dragging * {
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 .as-acars-toast-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #2c3038 !important;
-  border-bottom: 1px solid rgba(100, 105, 115, 0.45) !important;
-  padding: 6px 12px;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  background-color: #18181b !important;
+  border-bottom: 1px solid #27272a !important;
+  padding: 10px 14px !important;
   pointer-events: all;
   box-sizing: border-box;
 }
 
 .as-acars-toast-title {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", monospace;
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: #e4e4e7;
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   cursor: move;
   user-select: none;
+  -webkit-user-select: none;
 }
 
-.as-acars-toast-title > * + * {
-  margin-left: 8px;
+.as-acars-toast-va-logo {
+  max-height: 22px;
+  max-width: 68px;
+  object-fit: contain;
+  vertical-align: middle;
+  border-radius: 4px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.as-acars-toast-default-logo {
+  width: 20px;
+  height: 16px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.as-acars-toast-title-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f4f4f5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .as-acars-toast-actions-header {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  margin-left: 10px !important;
 }
 
 .as-acars-toast-close {
-  background: transparent;
-  border: none;
-  color: #9ca3af;
-  font-size: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #a1a1aa;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
-  padding: 3px 8px;
+  width: 22px;
+  height: 22px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   line-height: 1;
-  border-radius: 4px;
+  border-radius: 6px;
   pointer-events: all;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .as-acars-toast-close:hover {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.15);
+  color: #f4f4f5;
+  background-color: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .as-acars-toast-body {
-  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", "Courier New", monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   font-size: 13.5px !important;
-  line-height: 1.6 !important;
-  color: #ffffff !important;
-  font-weight: 500;
+  line-height: 1.55 !important;
+  color: #e4e4e7 !important;
+  font-weight: 400;
   padding: 14px 16px;
   margin: 0;
   max-height: none !important;
@@ -166,42 +219,122 @@
   overflow-y: visible !important;
   white-space: pre-wrap;
   word-break: break-word;
-  background: #1c1e22 !important;
-  background-color: #1c1e22 !important;
+  background: #141416 !important;
+  background-color: #141416 !important;
   border: none;
   border-radius: 0;
 }
 
+.as-acars-toast-reply-box {
+  padding: 0 16px 10px 16px;
+  background: #141416 !important;
+  background-color: #141416 !important;
+}
+
+.as-acars-toast-reply-row {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 10px;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+  padding: 4px 6px 4px 12px;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.as-acars-toast-reply-row > * + * {
+  margin-left: 8px;
+}
+
+.as-acars-toast-reply-row:focus-within {
+  border-color: #3f3f46;
+  background: #1c1c20;
+}
+
+.as-acars-toast-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: #f4f4f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  padding: 6px 0;
+  box-sizing: border-box;
+  pointer-events: all;
+}
+
+.as-acars-toast-input::placeholder {
+  color: #71717a;
+}
+
+.as-acars-toast-send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: #27272a;
+  color: #f4f4f5;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  pointer-events: all;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.as-acars-toast-send-btn:hover {
+  background: #3f3f46;
+  color: #ffffff;
+}
+
+.as-acars-toast-send-btn:active {
+  transform: scale(0.95);
+}
+
+.as-acars-toast-send-icon {
+  width: 14px;
+  height: 14px;
+}
+
 .as-acars-toast-actions {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  padding: 0 14px 14px 14px;
-  gap: 8px;
-  background: #1c1e22 !important;
-  background-color: #1c1e22 !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 14px 16px;
+  gap: 12px;
+  background: #141416 !important;
+  background-color: #141416 !important;
 }
 
 .as-acars-toast-btn {
-  display: block;
-  width: 100%;
-  background-color: rgba(75, 80, 92, 0.75);
-  border: 1px solid rgba(135, 142, 155, 0.55);
-  border-radius: 5px;
-  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  padding: 6px 12px;
   text-align: center;
-  color: #ffffff;
-  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", monospace;
-  font-size: 13px;
-  font-weight: 600;
+  color: #a1a1aa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   box-sizing: border-box;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .as-acars-toast-btn:hover {
-  background-color: rgba(95, 102, 115, 0.95);
-  border-color: rgba(165, 172, 185, 0.8);
+  background-color: #27272a;
+  border-color: #3f3f46;
+  color: #f4f4f5;
 }
 
 .as-acars-toast-dismiss {
@@ -209,16 +342,17 @@
   text-align: center;
   background: transparent;
   border: none;
-  font-family: "Roboto Mono Regular", "Roboto Mono", "Consolas", monospace;
-  font-size: 11px;
-  color: #9ca3af;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #71717a;
   cursor: pointer;
   padding: 4px 6px;
   transition: color 0.15s ease;
 }
 
 .as-acars-toast-dismiss:hover {
-  color: #ffffff;
+  color: #f4f4f5;
   text-decoration: underline;
 }
 
@@ -228,7 +362,7 @@
   align-items: center;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
+  border-radius: 999px;
   padding: 1px;
   margin-right: 6px;
 }
@@ -236,7 +370,7 @@
 .as-acars-lang-btn {
   background: transparent;
   border: none;
-  border-radius: 3px;
+  border-radius: 999px;
   color: #a1a1aa;
   font-size: 9.5px;
   font-weight: 700;
@@ -262,8 +396,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: rgba(24, 27, 34, 0.98);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: #161618;
+  border-bottom: 1px solid #26262a;
   flex-shrink: 0;
   pointer-events: all;
 }
@@ -327,11 +461,11 @@
   font-family: "Consolas", "Courier New", monospace;
   font-size: 11px;
   font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: rgba(56, 189, 248, 0.14);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #38bdf8;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e4e4e7;
 }
 
 /* Header Home Button */
@@ -340,10 +474,10 @@
   align-items: center;
   gap: 6px;
   height: 28px;
-  padding: 0 10px;
+  padding: 0 12px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
   color: #f1f5f9;
   font-size: 11px;
   font-weight: 600;
@@ -360,15 +494,15 @@
 }
 
 #as-acars-btn-header-home:hover {
-  background: #2563eb !important;
-  border-color: #3b82f6 !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
   color: #ffffff !important;
 }
 
 #as-acars-btn-header-home.as-acars-btn-active {
-  background: rgba(37, 99, 235, 0.25);
-  border-color: #3b82f6;
-  color: #93c5fd;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: #ffffff;
 }
 
 /* Views */
@@ -397,7 +531,7 @@
   max-width: 500px;
   background: rgba(22, 25, 32, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
+  border-radius: 18px;
   padding: 16px 20px;
   display: block;
 }
@@ -463,9 +597,9 @@
   align-items: center;
   width: 100%;
   min-height: 46px;
-  padding: 7px 10px;
+  padding: 7px 12px;
   margin-bottom: 6px;
-  border-radius: 8px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.09);
   color: #f4f4f5;
@@ -483,7 +617,7 @@
 .as-acars-tenant-logo {
   width: 36px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.07);
   background-position: center center;
   background-repeat: no-repeat;
@@ -495,7 +629,7 @@
 .as-acars-tenant-fallback {
   width: 36px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
@@ -547,7 +681,7 @@
 .as-acars-code-box {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 10px;
+  border-radius: 14px;
   padding: 14px 20px;
   margin: 10px 0 12px 0;
   width: 100%;
@@ -577,6 +711,12 @@
   word-break: break-all;
   -webkit-user-select: text;
   user-select: text;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.as-acars-auth-url:hover {
+  text-decoration: underline;
 }
 
 .as-acars-auth-buttons {
@@ -594,8 +734,8 @@
 .as-acars-auth-status {
   font-size: 12px;
   color: #a1a1aa;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 6px 12px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.04);
   margin-bottom: 12px;
 }
@@ -614,7 +754,7 @@
   max-width: 68px;
   object-fit: contain;
   vertical-align: middle;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-right: 6px;
 }
 
@@ -664,7 +804,7 @@
   padding: 5px 10px;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 12px;
   color: #a1a1aa;
   cursor: pointer;
   pointer-events: all;
@@ -687,7 +827,7 @@
   position: relative;
   width: 28px;
   height: 28px;
-  border-radius: 7px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -742,10 +882,176 @@
 .as-acars-tablet-home-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 10px 4px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
   height: 100%;
-  overflow-y: auto;
+  padding: 14px 20px 20px 20px;
+  box-sizing: border-box;
+}
+
+/* iOS Capsule Weather & Clock Widget (Image 2 mobile design) */
+.as-acars-ios-capsule-widget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 480px;
+  height: 68px;
+  padding: 0 32px 0 22px;
+  border-radius: 9999px;
+  -webkit-backface-visibility: hidden;
+  outline: 1px solid transparent;
+  overflow: hidden;
+  margin: 0 auto 24px auto;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease, border-color 0.2s ease;
+}
+
+.as-acars-ios-capsule-widget:hover {
+  transform: translateY(-2px) scale(1.015);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.as-acars-ios-capsule-widget:active {
+  transform: scale(0.98);
+}
+
+/* Background Gradients for Day / Night / Weather Conditions */
+.as-acars-ios-widget-day {
+  background: linear-gradient(135deg, #1d68bd 0%, #2980b9 55%, #38bdf8 100%);
+}
+
+.as-acars-ios-widget-day-clear {
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 60%, #38bdf8 100%);
+}
+
+.as-acars-ios-widget-night {
+  background: linear-gradient(135deg, #090d16 0%, #151e32 60%, #1e293b 100%);
+}
+
+.as-acars-ios-widget-rain {
+  background: linear-gradient(135deg, #1e293b 0%, #283548 55%, #334155 100%);
+}
+
+.as-acars-ios-widget-storm {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 55%, #312e81 100%);
+}
+
+.as-acars-ios-widget-cloudy {
+  background: linear-gradient(135deg, #1e293b 0%, #2563eb 80%, #38bdf8 100%);
+}
+
+/* Left Section: Icon + Temp + Location */
+.as-acars-ios-capsule-left {
+  display: flex;
+  align-items: center;
+}
+
+.as-acars-ios-capsule-left > * + * {
+  margin-left: 12px;
+}
+
+.as-acars-ios-capsule-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.as-acars-ios-capsule-weather-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.as-acars-ios-capsule-temp {
+  font-size: 27px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.as-acars-ios-capsule-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  margin-top: 4px;
+  max-width: 175px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.as-acars-ios-capsule-pin {
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+/* Right Section: Date + Clock */
+.as-acars-ios-capsule-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: right;
+  gap: 2px;
+}
+
+.as-acars-ios-capsule-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+}
+
+.as-acars-ios-capsule-time-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  line-height: 1;
+}
+
+.as-acars-ios-capsule-time {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  font-feature-settings: "tnum";
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.as-acars-ios-capsule-tz {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 0 6px;
+  height: 17px;
+  line-height: 17px;
+  letter-spacing: 0.5px;
+  box-sizing: border-box;
 }
 
 .as-acars-tablet-status-card {
@@ -754,93 +1060,194 @@
   justify-content: space-between;
   padding: 14px 18px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.as-acars-tablet-pilot-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.as-acars-tablet-avatar {
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
-  margin-bottom: 18px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
 }
 
 .as-acars-tablet-pilot-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .as-acars-tablet-greeting {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #ffffff;
-  letter-spacing: 0.3px;
+  letter-spacing: -0.2px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
 }
 
 .as-acars-tablet-flight-summary {
-  font-size: 12px;
-  color: #a1a1aa;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.as-acars-route-pill {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #38bdf8;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.as-acars-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.as-acars-pulse-dot-green {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
 }
 
 .as-acars-tablet-clock {
-  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 6px 16px;
+  min-width: 90px;
+}
+
+.as-acars-clock-digits {
+  font-size: 22px;
   font-weight: 700;
-  font-family: monospace, ui-monospace, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", monospace, sans-serif;
   color: #ffffff;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 4px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 1.1;
+  letter-spacing: 0.5px;
+}
+
+.as-acars-clock-sub {
+  font-size: 9px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.8px;
+  margin-top: 2px;
+}
+
+.as-acars-deg {
+  font-size: 0.6em;
+  vertical-align: super;
+  line-height: 1;
+  display: inline-block;
+  margin-left: 1px;
 }
 
 .as-acars-tablet-grid {
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: flex-start;
-  margin: 0 -8px;
-  padding: 14px 0 16px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+  padding: 16px 10px;
+  max-width: 680px;
+  border-top: none;
 }
 
 .as-acars-tablet-tile {
-  flex: 1 1 110px;
-  min-width: 100px;
-  max-width: 150px;
-  margin: 8px 8px;
+  width: 140px;
+  height: 120px;
+  margin: 10px 11px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 18px 10px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
+  padding: 12px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  outline: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
+  -webkit-user-select: none;
   box-sizing: border-box;
 }
 
 .as-acars-tablet-tile:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.as-acars-tablet-tile:active {
+  transform: scale(0.96);
 }
 
 .as-acars-tile-icon {
   position: relative;
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  outline: 1px solid transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   color: #ffffff;
 }
 
-.as-acars-tile-vocc { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
-.as-acars-tile-docs { background: linear-gradient(135deg, #059669, #047857); }
-.as-acars-tile-flight { background: linear-gradient(135deg, #d97706, #b45309); }
-.as-acars-tile-metar { background: linear-gradient(135deg, #0284c7, #0369a1); }
-.as-acars-tile-settings { background: linear-gradient(135deg, #475569, #334155); }
+.as-acars-tile-vocc { background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%); }
+.as-acars-tile-docs { background: linear-gradient(180deg, #10b981 0%, #047857 100%); }
+.as-acars-tile-notams { background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%); }
+.as-acars-tile-flight { background: linear-gradient(180deg, #f97316 0%, #c2410c 100%); }
+.as-acars-tile-metar { background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%); }
+.as-acars-tile-settings { background: linear-gradient(180deg, #64748b 0%, #334155 100%); }
 
 .as-acars-tile-badge {
   position: absolute;
@@ -850,22 +1257,62 @@
   color: #ffffff;
   font-size: 11px;
   font-weight: 700;
-  padding: 1px 6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
   border-radius: 999px;
   border: 2px solid #09090b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .as-acars-tile-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+  letter-spacing: -0.2px;
 }
 
-.as-acars-tile-desc {
-  font-size: 10px;
-  color: #71717a;
-  line-height: 1.2;
+/* iOS Home Indicator Bar */
+.as-acars-ios-home-bar-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0 10px 0;
+  width: 100%;
+  flex-shrink: 0;
+  background: transparent;
+  pointer-events: all;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.as-acars-ios-home-bar {
+  width: 140px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+.as-acars-ios-home-bar-wrap:hover .as-acars-ios-home-bar,
+.as-acars-ios-home-bar:hover {
+  background: rgba(255, 255, 255, 0.95);
+  width: 160px;
+  height: 6px;
+}
+
+.as-acars-ios-home-bar-wrap:active .as-acars-ios-home-bar,
+.as-acars-ios-home-bar:active {
+  transform: scale(0.96);
+  background: #38bdf8;
 }
 
 /* METAR / Weather Page */
@@ -909,8 +1356,8 @@
 .as-acars-metar-pill {
   font-size: 11px;
   font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #e4e4e7;
@@ -934,19 +1381,24 @@
 }
 
 .as-acars-metar-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: -6px;
 }
 
 .as-acars-metar-card {
+  flex: 1 1 calc(50% - 12px);
+  min-width: 320px;
+  margin: 6px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 12px 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+  border-radius: 16px;
 }
 
 .as-acars-metar-card-header {
@@ -977,8 +1429,8 @@
 .as-acars-cat-badge {
   font-size: 10px;
   font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
@@ -996,7 +1448,7 @@
   padding: 8px 10px;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 .as-acars-metar-raw-text {
@@ -1009,18 +1461,23 @@
 }
 
 .as-acars-metar-params-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 8px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: -4px;
 }
 
 .as-acars-metar-param-item {
+  flex: 1 1 calc(25% - 8px);
+  min-width: 110px;
+  margin: 4px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 2px;
   padding: 6px 8px;
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 6px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -1037,6 +1494,13 @@
   color: #ffffff;
   font-weight: 600;
 }
+
+/* Colors helpers */
+.as-acars-text-emerald { color: #34d399 !important; }
+.as-acars-text-sky { color: #38bdf8 !important; }
+.as-acars-text-amber { color: #fbbf24 !important; }
+.as-acars-text-rose { color: #f87171 !important; }
+.as-acars-text-right { text-align: right !important; }
 
 /* Tab Panels */
 .as-acars-tab-panel {
@@ -1106,8 +1570,8 @@
 
 .as-acars-msg-bubble {
   max-width: 80%;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 9px 14px;
+  border-radius: 16px;
   font-size: 12.5px;
   line-height: 1.45;
   word-break: break-word;
@@ -1156,8 +1620,8 @@
   font-size: 10px;
   font-weight: 500;
   text-transform: lowercase;
-  padding: 1px 5px;
-  border-radius: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   color: #a1a1aa;
 }
@@ -1203,6 +1667,7 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  margin: 0;
 }
 
 .as-acars-chat-compose .as-acars-input {
@@ -1215,10 +1680,10 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 7px 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 7px 14px;
+  border-radius: 14px;
+  background: #18181b;
+  border: 1px solid #27272a;
   margin-bottom: 8px;
   flex-shrink: 0;
 }
@@ -1264,6 +1729,19 @@
   margin-right: 10px;
 }
 
+.as-acars-doc-search-wrap .as-acars-input {
+  border-radius: 999px;
+  padding-left: 14px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  color: #ffffff;
+}
+
+.as-acars-doc-search-wrap .as-acars-input:focus {
+  background: #1c1c20;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
 .as-acars-search-clear {
   position: absolute;
   right: 6px;
@@ -1283,25 +1761,27 @@
 }
 
 .as-acars-cat-pill {
-  padding: 5px 9px;
+  padding: 5px 12px;
   margin-left: 4px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: #18181b;
+  border: 1px solid #27272a;
   color: #a1a1aa;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .as-acars-cat-pill:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
+  background: #242427;
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .as-acars-cat-active {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: #27272a;
+  border-color: rgba(255, 255, 255, 0.28);
   color: #ffffff;
   font-weight: 600;
 }
@@ -1316,9 +1796,9 @@
   width: 255px;
   flex-shrink: 0;
   margin-right: 10px;
-  background: rgba(20, 23, 29, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 8px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1329,7 +1809,7 @@
   font-size: 11px;
   font-weight: 700;
   color: #a1a1aa;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid #27272a;
   flex-shrink: 0;
 }
 
@@ -1344,23 +1824,24 @@
 .as-acars-doc-item {
   display: block;
   width: 100%;
-  padding: 7px 9px;
+  padding: 7px 10px;
   margin-bottom: 4px;
-  border-radius: 6px;
+  border-radius: 10px;
   background: transparent;
   border: 1px solid transparent;
   color: #e4e4e7;
   text-align: left;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .as-acars-doc-item:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: #222225;
 }
 
 .as-acars-doc-item-active {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: #242428;
+  border-color: rgba(255, 255, 255, 0.18);
   color: #ffffff;
   font-weight: 600;
 }
@@ -1385,8 +1866,8 @@
 .as-acars-doc-badge {
   font-size: 9px;
   font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
   text-transform: uppercase;
   flex-shrink: 0;
 }
@@ -1427,9 +1908,9 @@
 .as-acars-docs-reader {
   flex: 1;
   min-width: 0;
-  background: rgba(20, 23, 29, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 8px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1440,7 +1921,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 9px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid #27272a;
   flex-shrink: 0;
 }
 
@@ -1455,15 +1936,41 @@
 
 .as-acars-doc-view-title {
   margin: 0;
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 700;
   color: #ffffff;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .as-acars-doc-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   font-size: 11px;
   color: #a1a1aa;
-  margin-top: 2px;
+  margin-top: 4px;
+}
+
+.as-acars-doc-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.as-acars-meta-icon {
+  width: 12px;
+  height: 12px;
+  color: #71717a;
+  flex-shrink: 0;
+}
+
+.as-acars-doc-meta-sep {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 8px;
 }
 
 .as-acars-docs-reader-body {
@@ -1555,8 +2062,363 @@
 .as-acars-doc-html pre {
   font-family: "Consolas", "Courier New", monospace;
   background: rgba(0, 0, 0, 0.4);
-  border-radius: 4px;
-  padding: 2px 5px;
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+/* --- Airport Briefing Formatted Layout (Airspace ACARS Reference Style) --- */
+.as-acars-briefing-doc {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 2px 0 16px 0;
+}
+
+/* 1. Airport Hero Card */
+.as-acars-briefing-hero {
+  background: #141416;
+  border: 1px solid #27272a;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.as-acars-briefing-hero-title {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.as-acars-briefing-hero-icao {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.as-acars-briefing-hero-iata {
+  font-size: 17px;
+  font-weight: 600;
+  color: #71717a;
+}
+
+.as-acars-briefing-hero-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-top: 2px;
+}
+
+.as-acars-briefing-hero-city {
+  font-size: 11.5px;
+  color: #8e8e93;
+}
+
+/* Section Headings */
+.as-acars-briefing-sec-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 16px 0 8px 0;
+}
+
+.as-acars-briefing-sec-title:first-child {
+  margin-top: 0;
+}
+
+/* 2. General Information Cards Grid */
+.as-acars-briefing-kpi-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: -5px;
+}
+
+.as-acars-briefing-kpi {
+  flex: 1 1 calc(25% - 10px);
+  min-width: 120px;
+  margin: 5px;
+  background: #141416;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.as-acars-briefing-kpi-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #71717a;
+  letter-spacing: 0.6px;
+}
+
+.as-acars-briefing-kpi-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 2px 0 1px 0;
+  line-height: 1.2;
+}
+
+.as-acars-briefing-kpi-val .as-acars-unit {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #8e8e93;
+  margin-left: 2px;
+}
+
+.as-acars-briefing-kpi-sub {
+  font-size: 10.5px;
+  color: #71717a;
+}
+
+/* 3. Tables (Runways & Services) */
+.as-acars-briefing-card-table {
+  background: #141416;
+  border: 1px solid #27272a;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.as-acars-briefing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.as-acars-briefing-table th {
+  padding: 9px 14px;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #71717a;
+  letter-spacing: 0.6px;
+  background: transparent;
+  border-bottom: 1px solid #27272a;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  text-align: left;
+}
+
+.as-acars-briefing-table td {
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #d4d4d8;
+  border-bottom: 1px solid #202023;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  vertical-align: middle;
+}
+
+.as-acars-briefing-table tr:last-child td {
+  border-bottom: none;
+}
+
+.as-acars-briefing-table td strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.as-acars-badge-ils {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  line-height: 1.1;
+}
+
+.as-acars-briefing-provider {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #f1f5f9;
+  font-weight: 500;
+}
+
+.as-acars-provider-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.as-acars-provider-dot.dot-green { background: #10b981; }
+.as-acars-provider-dot.dot-red { background: #ef4444; }
+.as-acars-provider-dot.dot-blue { background: #0284c7; }
+
+/* 4. Threats Pills */
+.as-acars-briefing-threats-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.as-acars-threat-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.as-acars-threat-amber {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.38);
+}
+
+.as-acars-threat-emerald {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.38);
+}
+
+.as-acars-threat-rose {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.38);
+}
+
+/* 5. Stands Cards */
+.as-acars-briefing-stands-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.as-acars-briefing-stand-card {
+  background: #141416;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 9px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.as-acars-briefing-stand-fleets {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #71717a;
+  letter-spacing: 0.5px;
+}
+
+.as-acars-briefing-stand-pos {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #f4f4f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace, sans-serif;
+}
+
+/* 6. Alternates */
+.as-acars-briefing-alternates-card {
+  background: #141416;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.as-acars-briefing-alternates-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.as-acars-alternate-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace, sans-serif;
+  color: #ffffff;
+  background: #242427;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.as-acars-alternate-pill:hover {
+  background: #2f2f33;
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.as-acars-alternate-pill:active {
+  transform: scale(0.97);
+}
+
+/* 7. Operational Information */
+.as-acars-briefing-op-context {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #71717a;
+  letter-spacing: 0.6px;
+  margin: 10px 0 6px 0;
+}
+
+.as-acars-briefing-op-card {
+  background: #141416;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 11px 14px;
+  margin-bottom: 7px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.as-acars-op-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #0284c7;
+  flex-shrink: 0;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.as-acars-briefing-op-text {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #d4d4d8;
+  flex: 1;
+  white-space: pre-line;
 }
 
 /* Folder Grid inside Document Reader */
@@ -1568,8 +2430,8 @@
 .as-acars-folder-card {
   width: 48%;
   margin: 0 1% 8px 1%;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #ffffff;
@@ -1582,6 +2444,447 @@
 
 .as-acars-folder-card:hover {
   background: rgba(255, 255, 255, 0.09);
+}
+
+/* Active Flight / ACARS Dashboard ("Your flight") */
+.as-acars-af-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+}
+
+.as-acars-af-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 4px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.as-acars-af-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.as-acars-af-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.as-acars-af-conn-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.as-acars-af-conn-badge.as-acars-disconnected {
+  color: #a1a1aa;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.as-acars-af-conn-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.as-acars-af-conn-badge.as-acars-disconnected .as-acars-af-conn-dot {
+  background: #71717a;
+}
+
+/* Active Flight (ACARS Dashboard) Cards */
+.as-acars-af-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.as-acars-af-route-card {
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.as-acars-af-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.as-acars-af-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.as-acars-af-card-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.3px;
+}
+
+.as-acars-af-phase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.as-acars-af-phase-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+}
+
+/* Timeline & Route Section */
+.as-acars-af-timeline-section {
+  padding: 16px 18px 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.as-acars-af-timeline-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.as-acars-af-station {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 90px;
+}
+
+.as-acars-af-arr {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.as-acars-af-station-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #71717a;
+  text-transform: uppercase;
+}
+
+.as-acars-af-station-icao {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.as-acars-af-station-city {
+  font-size: 11px;
+  color: #a1a1aa;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.as-acars-af-time-meta {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.as-acars-af-time-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: #71717a;
+  text-transform: uppercase;
+}
+
+.as-acars-af-time-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #e4e4e7;
+}
+
+/* Central Progress Track with Plane */
+.as-acars-af-track-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 0 8px;
+}
+
+.as-acars-af-phase-title {
+  font-size: 12px;
+  color: #facc15;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+.as-acars-af-track-line-container {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.as-acars-af-track-line-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.as-acars-af-track-line-fill {
+  position: absolute;
+  left: 0;
+  height: 4px;
+  background: #facc15;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.as-acars-af-track-plane {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  color: #facc15;
+  z-index: 2;
+  transition: left 0.4s ease;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.as-acars-af-duration-meta {
+  font-size: 10px;
+  color: #71717a;
+}
+
+.as-acars-af-aircraft-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+/* Card Footer Actions */
+.as-acars-af-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.as-acars-af-footer-hint {
+  font-size: 11px;
+  color: #a1a1aa;
+  margin: 0;
+}
+
+.as-acars-af-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Pre-Flight Checklist */
+.as-acars-af-checklist-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.as-acars-af-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.as-acars-af-check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #71717a;
+  font-weight: 500;
+}
+
+.as-acars-af-check-item.as-acars-check-done {
+  color: #f1f5f9;
+}
+
+.as-acars-check-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #71717a;
+  flex-shrink: 0;
+}
+
+.as-acars-af-check-item.as-acars-check-done .as-acars-check-icon {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+/* Telemetry Grid & Map */
+.as-acars-af-telemetry-grid {
+  grid-template-columns: repeat(5, 1fr);
+  flex-shrink: 0;
+}
+
+.as-acars-af-map-card {
+  padding: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.as-acars-af-map-box {
+  height: 250px;
+  border-radius: 0;
+  border: none;
+}
+
+/* Cabin Audio Card */
+.as-acars-af-audio-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.as-acars-af-audio-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.as-acars-af-audio-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.as-acars-af-audio-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.as-acars-af-audio-sub {
+  margin: 0;
+  font-size: 10px;
+  color: #71717a;
+}
+
+.as-acars-af-audio-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.as-acars-slider {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+}
+
+/* Flight Telemetry Recording Toolbar */
+.as-acars-af-record-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 2px 0;
+}
+
+.as-acars-af-rec-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.as-acars-af-rec-dot.as-acars-recording {
+  background: #ef4444;
 }
 
 /* Flight & NOTAMs Tab */
@@ -1597,10 +2900,77 @@
 
 .as-acars-card {
   flex: 1;
-  background: rgba(20, 23, 29, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 8px;
-  padding: 10px 12px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 10px 14px;
+}
+
+.as-acars-notams-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.as-acars-notams-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.as-acars-notams-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.as-acars-notams-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.as-acars-notams-icon {
+  color: #ef4444;
+}
+
+.as-acars-notams-app-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.as-acars-notams-count-badge {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.as-acars-notams-subtitle {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.as-acars-notams-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .as-acars-notams-card {
@@ -1656,7 +3026,7 @@
   margin-right: 10px;
   background: rgba(14, 16, 21, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  border-radius: 14px;
   overflow-y: auto;
   padding: 6px;
   display: block;
@@ -1666,7 +3036,7 @@
   flex: 1;
   background: rgba(14, 16, 21, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  border-radius: 14px;
   overflow-y: auto;
   padding: 12px 14px;
   white-space: pre-wrap;
@@ -1717,8 +3087,8 @@
 /* Shared Controls (Inputs, Buttons, Chips) */
 .as-acars-input {
   width: 100%;
-  padding: 8px 10px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: 12px;
   background: rgba(0, 0, 0, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
@@ -1736,8 +3106,8 @@
 }
 
 .as-acars-btn {
-  padding: 7px 13px;
-  border-radius: 6px;
+  padding: 7px 16px;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -1781,12 +3151,14 @@
 }
 
 .as-acars-btn-sm {
-  padding: 5px 10px;
+  padding: 5px 12px;
+  border-radius: 999px;
   font-size: 11px;
 }
 
 .as-acars-btn-xs {
-  padding: 3px 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
   font-size: 11px;
 }
 
@@ -1805,7 +3177,7 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  border-radius: 6px;
+  border-radius: 50%;
   pointer-events: all !important;
 }
 
@@ -1883,7 +3255,7 @@
 .as-acars-settings-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+  border-radius: 16px;
   padding: 10px 16px;
 }
 
@@ -1937,8 +3309,8 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #d4d4d8;
@@ -2038,9 +3410,9 @@
 }
 
 .as-acars-duration-preset {
-  padding: 4px 8px;
+  padding: 4px 10px;
   font-size: 11px;
-  border-radius: 4px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #d4d4d8;
@@ -2070,6 +3442,7 @@
   text-align: center;
   padding: 4px 6px;
   font-size: 12px;
+  border-radius: 8px;
 }
 
 .as-acars-duration-unit {
@@ -2077,47 +3450,150 @@
   color: #a1a1aa;
 }
 
-/* Update Notification Banner */
+/* Settings Account / Logout Row */
+.as-acars-settings-va-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.as-acars-btn-danger-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+
+.as-acars-btn-danger-outline:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.as-acars-btn-danger-outline:active {
+  transform: scale(0.97);
+}
+
+.as-acars-logout-icon {
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+/* Update Notification Banner (iOS Push Notification Style) */
 .as-acars-update-banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 8px 14px;
-  background: rgba(24, 24, 27, 0.96);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  gap: 12px;
+  margin: 10px 18px 6px 18px;
+  padding: 10px 14px;
+  background: #1c1c1f;
+  border: 1px solid #2e2e33;
+  border-radius: 16px;
+  box-sizing: border-box;
+  animation: as-acars-ios-notif-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+@keyframes as-acars-ios-notif-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.as-acars-update-ios-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+  flex-shrink: 0;
 }
 
 .as-acars-update-banner-content {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
   flex: 1;
   min-width: 0;
+}
+
+.as-acars-update-ios-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.as-acars-update-app-name {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+}
+
+.as-acars-update-ios-dot {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.as-acars-update-ios-time {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
 }
 
 .as-acars-update-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 6px;
-  font-size: 10px;
+  padding: 1px 6px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-radius: 3px;
-  background: #ffffff;
-  color: #09090b;
-  flex-shrink: 0;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #ffffff;
+  margin-left: 2px;
+  line-height: 1.2;
 }
 
 .as-acars-update-text {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
   gap: 6px;
-  font-size: 12px;
-  color: #e4e4e7;
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
   min-width: 0;
 }
 
@@ -2127,45 +3603,90 @@
 }
 
 .as-acars-update-text strong {
-  color: #22c55e;
+  color: #38bdf8;
   font-weight: 700;
 }
 
 .as-acars-update-desc {
   font-size: 11px;
-  color: #a1a1aa;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.3;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .as-acars-update-banner-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-.as-acars-update-dismiss {
-  background: transparent;
-  border: none;
-  color: #71717a;
-  font-size: 16px;
+.as-acars-update-btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
   cursor: pointer;
-  padding: 2px 6px;
+  user-select: none;
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+  line-height: 1.2;
+}
+
+.as-acars-update-btn-download:hover {
+  transform: translateY(-1px) scale(1.02);
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.as-acars-update-btn-download:active {
+  transform: scale(0.97);
+}
+
+.as-acars-update-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  padding: 0;
   line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .as-acars-update-dismiss:hover {
+  background: rgba(255, 255, 255, 0.24);
   color: #ffffff;
+  transform: scale(1.06);
+}
+
+.as-acars-update-dismiss:active {
+  transform: scale(0.92);
 }
 
 /* Version badge in Settings */
 .as-acars-version-badge {
   display: inline-block;
-  padding: 2px 6px;
+  padding: 2px 8px;
   font-size: 10px;
   font-weight: 700;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 4px;
+  border-radius: 999px;
   color: #e4e4e7;
   margin-left: 6px;
 }
@@ -2467,6 +3988,19 @@
   color: #0f172a !important;
 }
 
+.as-acars-white-mode .as-acars-notams-header-bar {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.as-acars-white-mode .as-acars-notams-app-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-notams-subtitle {
+  color: #64748b !important;
+}
+
 .as-acars-white-mode .as-acars-notams-card {
   background-color: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
@@ -2652,17 +4186,26 @@
 }
 
 .as-acars-white-mode .as-acars-update-banner {
-  background: #f1f5f9 !important;
-  border-bottom: 1px solid #cbd5e1 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+.as-acars-white-mode .as-acars-update-app-name {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-update-ios-dot,
+.as-acars-white-mode .as-acars-update-ios-time {
+  color: #94a3b8 !important;
 }
 
 .as-acars-white-mode .as-acars-update-badge {
-  background: #0f172a !important;
+  background: #ef4444 !important;
   color: #ffffff !important;
 }
 
 .as-acars-white-mode .as-acars-update-text {
-  color: #334155 !important;
+  color: #0f172a !important;
 }
 
 .as-acars-white-mode .as-acars-update-title {
@@ -2670,18 +4213,21 @@
 }
 
 .as-acars-white-mode .as-acars-update-text strong {
-  color: #16a34a !important;
+  color: #0284c7 !important;
 }
 
 .as-acars-white-mode .as-acars-update-desc {
-  color: #64748b !important;
+  color: #475569 !important;
 }
 
 .as-acars-white-mode .as-acars-update-dismiss {
-  color: #94a3b8 !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #475569 !important;
 }
 
 .as-acars-white-mode .as-acars-update-dismiss:hover {
+  background: rgba(0, 0, 0, 0.12) !important;
   color: #0f172a !important;
 }
 
@@ -2735,7 +4281,9 @@
 }
 
 .as-acars-white-mode .as-acars-toast-title,
-.as-acars-toast.as-acars-white-mode .as-acars-toast-title {
+.as-acars-toast.as-acars-white-mode .as-acars-toast-title,
+.as-acars-white-mode .as-acars-toast-title-text,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-title-text {
   color: #0f172a !important;
 }
 
@@ -2755,7 +4303,40 @@
   background: #ffffff !important;
   background-color: #ffffff !important;
   color: #0f172a !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
+}
+
+.as-acars-white-mode .as-acars-toast-reply-box,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-reply-box {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+.as-acars-white-mode .as-acars-toast-reply-row,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-reply-row {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.as-acars-white-mode .as-acars-toast-input,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-input {
+  color: #0f172a;
+}
+
+.as-acars-white-mode .as-acars-toast-input::placeholder,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-input::placeholder {
+  color: #94a3b8;
+}
+
+.as-acars-white-mode .as-acars-toast-send-btn,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-send-btn {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.as-acars-white-mode .as-acars-toast-send-btn:hover,
+.as-acars-toast.as-acars-white-mode .as-acars-toast-send-btn:hover {
+  background: #cbd5e1;
 }
 
 .as-acars-white-mode .as-acars-toast-actions,
@@ -2839,11 +4420,42 @@
 .as-acars-white-mode .as-acars-tablet-status-card {
   background-color: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
-  margin-bottom: 18px !important;
+  margin-bottom: 20px !important;
 }
 
 .as-acars-white-mode .as-acars-tablet-grid {
   border-top-color: #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-ios-home-bar {
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+
+.as-acars-white-mode .as-acars-ios-home-bar-wrap:hover .as-acars-ios-home-bar,
+.as-acars-white-mode .as-acars-ios-home-bar:hover {
+  background: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-ios-capsule-widget {
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+.as-acars-white-mode .as-acars-settings-va-badge {
+  background: #e0f2fe !important;
+  border-color: #bae6fd !important;
+  color: #0284c7 !important;
+}
+
+.as-acars-white-mode .as-acars-btn-danger-outline {
+  background: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+  color: #dc2626 !important;
+}
+
+.as-acars-white-mode .as-acars-btn-danger-outline:hover {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #b91c1c !important;
 }
 
 .as-acars-white-mode .as-acars-tablet-greeting {
@@ -2854,10 +4466,23 @@
   color: #64748b !important;
 }
 
+.as-acars-white-mode .as-acars-route-pill {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0369a1 !important;
+}
+
 .as-acars-white-mode .as-acars-tablet-clock {
   background-color: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
+}
+
+.as-acars-white-mode .as-acars-clock-digits {
   color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-clock-sub {
+  color: #0284c7 !important;
 }
 
 .as-acars-white-mode .as-acars-tablet-tile {
@@ -2873,6 +4498,7 @@
 
 .as-acars-white-mode .as-acars-tile-title {
   color: #0f172a !important;
+  text-shadow: none !important;
 }
 
 .as-acars-white-mode .as-acars-tile-desc {
@@ -2917,7 +4543,36 @@
   color: #0f172a !important;
 }
 
-/* 11. Scrollbars in White Mode */
+/* 11. Custom Scrollbars (dark mode default, zero horizontal scrollbar) */
+.as-acars-root *::-webkit-scrollbar,
+.as-acars-toast *::-webkit-scrollbar {
+  width: 6px;
+  height: 0px;
+}
+
+.as-acars-root *::-webkit-scrollbar-track,
+.as-acars-toast *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.as-acars-root *::-webkit-scrollbar-thumb,
+.as-acars-toast *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+.as-acars-root *::-webkit-scrollbar-thumb:hover,
+.as-acars-toast *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* Scrollbars in White Mode */
+.as-acars-white-mode *::-webkit-scrollbar,
+.as-acars-toast.as-acars-white-mode *::-webkit-scrollbar {
+  width: 6px;
+  height: 0px;
+}
+
 .as-acars-white-mode *::-webkit-scrollbar-track,
 .as-acars-toast.as-acars-white-mode *::-webkit-scrollbar-track {
   background: #f1f5f9 !important;
@@ -2931,4 +4586,82 @@
 .as-acars-white-mode *::-webkit-scrollbar-thumb:hover,
 .as-acars-toast.as-acars-white-mode *::-webkit-scrollbar-thumb:hover {
   background: #94a3b8 !important;
+}
+
+/* Active Flight / ACARS in White Mode */
+.as-acars-root.as-acars-theme-white .as-acars-af-card {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+.as-acars-root.as-acars-theme-white .as-acars-af-card-header,
+.as-acars-root.as-acars-theme-white .as-acars-af-card-footer {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+.as-acars-root.as-acars-theme-white .as-acars-af-card-title,
+.as-acars-root.as-acars-theme-white .as-acars-af-station-icao,
+.as-acars-root.as-acars-theme-white .as-acars-af-audio-title {
+  color: #0f172a !important;
+}
+
+.as-acars-root.as-acars-theme-white .as-acars-af-track-line-bg {
+  background: #e2e8f0 !important;
+}
+
+/* Airport Briefing in White Mode */
+.as-acars-white-mode .as-acars-briefing-hero,
+.as-acars-white-mode .as-acars-briefing-kpi,
+.as-acars-white-mode .as-acars-briefing-card-table,
+.as-acars-white-mode .as-acars-briefing-stand-card,
+.as-acars-white-mode .as-acars-briefing-alternates-card,
+.as-acars-white-mode .as-acars-briefing-op-card {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-briefing-hero-icao,
+.as-acars-white-mode .as-acars-briefing-kpi-val,
+.as-acars-white-mode .as-acars-briefing-sec-title,
+.as-acars-white-mode .as-acars-briefing-stand-pos,
+.as-acars-white-mode .as-acars-briefing-table td strong {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-briefing-hero-iata,
+.as-acars-white-mode .as-acars-briefing-hero-city,
+.as-acars-white-mode .as-acars-briefing-kpi-label,
+.as-acars-white-mode .as-acars-briefing-kpi-sub,
+.as-acars-white-mode .as-acars-briefing-table th,
+.as-acars-white-mode .as-acars-briefing-stand-fleets,
+.as-acars-white-mode .as-acars-briefing-op-context {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-briefing-hero-name,
+.as-acars-white-mode .as-acars-briefing-table td,
+.as-acars-white-mode .as-acars-briefing-op-text {
+  color: #334155 !important;
+}
+
+.as-acars-white-mode .as-acars-briefing-table th {
+  background: #f8fafc !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-briefing-table td {
+  border-bottom-color: #f1f5f9 !important;
+}
+
+.as-acars-white-mode .as-acars-alternate-pill {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-alternate-pill:hover {
+  background: #e0f2fe !important;
+  border-color: #0284c7 !important;
+  color: #0284c7 !important;
 }
