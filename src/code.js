@@ -1493,7 +1493,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (!/^https?:\/\//i.test(target)) return false;
 
     // Strict debounce: do not open the same URL multiple times within 2 seconds
-    
+    const now = Date.now();
+    if (target === lastOpenedUrl && (now - lastOpenUrlTime < 2000)) {
+      return true;
+    }
     lastOpenUrlTime = now;
     lastOpenedUrl = target;
 
@@ -5568,24 +5571,29 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       );
     };
 
-    // High-performance window and toast dragging
+    // High-performance smooth window and toast dragging with requestAnimationFrame
     let isDraggingWindow = false;
     let dragTargetEl = null;
     let dragStartX = 0;
     let dragStartY = 0;
     let dragInitialLeft = 0;
     let dragInitialTop = 0;
+    let dragPendingX = 0;
+    let dragPendingY = 0;
+    let dragRafId = null;
 
-    const handleDragMouseMove = function (e) {
+    const onDragRafTick = function () {
+      dragRafId = null;
       if (!isDraggingWindow || !dragTargetEl) return;
-      const dx = e.clientX - dragStartX;
-      const dy = e.clientY - dragStartY;
+      const dx = dragPendingX - dragStartX;
+      const dy = dragPendingY - dragStartY;
       let newLeft = dragInitialLeft + dx;
       let newTop = dragInitialTop + dy;
 
       const screenW = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1920;
       const screenH = (typeof window !== "undefined" && window.innerHeight) ? window.innerHeight : 1080;
 
+      // Keep window within visible screen bounds
       if (newLeft < 10) newLeft = 10;
       if (newTop < 10) newTop = 10;
       if (newLeft > screenW - 80) newLeft = screenW - 80;
@@ -5595,6 +5603,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       dragTargetEl.style.top = Math.round(newTop) + "px";
       dragTargetEl.style.right = "auto";
       dragTargetEl.style.bottom = "auto";
+    };
+
+    const handleDragMouseMove = function (e) {
+      if (!isDraggingWindow || !dragTargetEl) return;
+      dragPendingX = e.clientX;
+      dragPendingY = e.clientY;
+      if (!dragRafId) {
+        const scheduleRaf = (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function")
+          ? window.requestAnimationFrame
+          : function (cb) { return setTimeout(cb, 16); };
+        dragRafId = scheduleRaf(onDragRafTick);
+      }
     };
 
     const handleDragMouseUp = function () {
@@ -5616,6 +5636,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       window.addEventListener("blur", handleDragMouseUp);
     }
 
+    // Ensure mousedown on inputs or buttons focuses properly without triggering parent drag
     el.addEventListener("mousedown", function (e) {
       const inputTarget = findClosest(e.target, "input");
       if (inputTarget) {
