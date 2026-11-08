@@ -131,6 +131,13 @@
   -webkit-user-select: none !important;
 }
 
+.as-acars-window.as-acars-is-dragging #as-acars-btn-close,
+.as-acars-toast.as-acars-is-dragging #as-acars-toast-close,
+.as-acars-toast.as-acars-is-dragging .as-acars-toast-close {
+  pointer-events: all !important;
+  cursor: pointer !important;
+}
+
 .as-acars-toast-header {
   display: flex !important;
   flex-direction: row !important;
@@ -203,7 +210,8 @@
   justify-content: center !important;
   line-height: 1;
   border-radius: 6px;
-  pointer-events: all;
+  pointer-events: all !important;
+  z-index: 10005 !important;
   box-sizing: border-box;
   padding: 0;
   margin: 0;

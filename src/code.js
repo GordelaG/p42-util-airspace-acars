@@ -20,7 +20,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     null;
 
   // --- Version & Releases ---
-  const APP_VERSION = "1.1.0";
+  const APP_VERSION = "1.1.1";
   const GITHUB_REPO_OWNER = "GordelaG";
   const GITHUB_REPO_NAME = "p42-util-airspace-acars";
   const REPO_RELEASES_URL = "https://github.com/" + GITHUB_REPO_OWNER + "/" + GITHUB_REPO_NAME + "/releases/latest";
@@ -1277,6 +1277,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     messages: [],
     sendingMessage: false,
     toastMessage: null,
+    toastShownAt: 0,
 
     // Documents & Airport Briefings
     documents: [],
@@ -1346,6 +1347,82 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   let activeFlightPlaneMarker = null;
   let activeFlightRouteLine = null;
 
+  // Window and Toast dragging state
+  let isDraggingWindow = false;
+  let dragTargetEl = null;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragInitialLeft = 0;
+  let dragInitialTop = 0;
+  let dragPendingX = 0;
+  let dragPendingY = 0;
+  let dragRafId = null;
+
+  function onDragRafTick() {
+    dragRafId = null;
+    if (!isDraggingWindow || !dragTargetEl) return;
+    const dx = dragPendingX - dragStartX;
+    const dy = dragPendingY - dragStartY;
+    let newLeft = dragInitialLeft + dx;
+    let newTop = dragInitialTop + dy;
+
+    const screenW = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1920;
+    const screenH = (typeof window !== "undefined" && window.innerHeight) ? window.innerHeight : 1080;
+
+    if (newLeft < 10) newLeft = 10;
+    if (newTop < 10) newTop = 10;
+    if (newLeft > screenW - 80) newLeft = screenW - 80;
+    if (newTop > screenH - 60) newTop = screenH - 60;
+
+    dragTargetEl.style.left = Math.round(newLeft) + "px";
+    dragTargetEl.style.top = Math.round(newTop) + "px";
+    dragTargetEl.style.right = "auto";
+    dragTargetEl.style.bottom = "auto";
+  }
+
+  function handleDragMouseMove(e) {
+    if (!isDraggingWindow || !dragTargetEl) return;
+    dragPendingX = e.clientX;
+    dragPendingY = e.clientY;
+    if (!dragRafId) {
+      const scheduleRaf = (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function")
+        ? window.requestAnimationFrame
+        : function (cb) { return setTimeout(cb, 16); };
+      dragRafId = scheduleRaf(onDragRafTick);
+    }
+  }
+
+  function handleDragMouseUp() {
+    if (dragRafId) {
+      const cancelRaf = (typeof window !== "undefined" && typeof window.cancelAnimationFrame === "function")
+        ? window.cancelAnimationFrame
+        : function (id) { clearTimeout(id); };
+      cancelRaf(dragRafId);
+      dragRafId = null;
+    }
+    isDraggingWindow = false;
+    if (dragTargetEl) {
+      if (dragTargetEl.classList && typeof dragTargetEl.classList.remove === "function") {
+        dragTargetEl.classList.remove("as-acars-is-dragging");
+      }
+      dragTargetEl = null;
+    }
+    try {
+      if (rootEl && typeof rootEl.querySelectorAll === "function") {
+        const draggingEls = rootEl.querySelectorAll(".as-acars-is-dragging");
+        if (draggingEls && draggingEls.length) {
+          for (let i = 0; i < draggingEls.length; i++) {
+            draggingEls[i].classList.remove("as-acars-is-dragging");
+          }
+        }
+      }
+    } catch (_e) {}
+    if (typeof document !== "undefined" && typeof document.removeEventListener === "function") {
+      document.removeEventListener("mousemove", handleDragMouseMove, true);
+      document.removeEventListener("mouseup", handleDragMouseUp, true);
+    }
+  }
+
   function clearToastTimer() {
     if (toastTimerId) {
       clearTimeout(toastTimerId);
@@ -1353,10 +1430,15 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
   }
 
-  function startToastTimer() {
+  function startToastTimer(overrideSec) {
     clearToastTimer();
-    const rawSec = typeof store.toast_duration === "number" ? store.toast_duration : parseInt(store.toast_duration, 10);
-    const durSec = isNaN(rawSec) || rawSec < 0 ? 15 : rawSec;
+    let durSec = 15;
+    if (typeof overrideSec === "number" && !isNaN(overrideSec)) {
+      durSec = overrideSec;
+    } else {
+      const rawSec = typeof store.toast_duration === "number" ? store.toast_duration : parseInt(store.toast_duration, 10);
+      durSec = isNaN(rawSec) || rawSec < 0 ? 15 : rawSec;
+    }
     if (durSec > 0) {
       toastTimerId = setTimeout(function () {
         dismissToast();
@@ -1367,6 +1449,20 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   function dismissToast() {
     clearToastTimer();
     stateData.toastMessage = null;
+    stateData.toastShownAt = 0;
+
+    const toastInput = q("#as-acars-toast-input");
+    if (toastInput) {
+      toastInput.value = "";
+      try {
+        if (typeof toastInput.blur === "function") {
+          toastInput.blur();
+        }
+      } catch (_e) {}
+    }
+
+    handleDragMouseUp();
+    unfocusCoherentInput("as-acars-toast-input");
     renderToast();
   }
 
@@ -1382,7 +1478,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     if (input) {
       input.value = "";
     }
-    unfocusCoherentInput();
+    unfocusCoherentInput("as-acars-toast-input");
 
     dismissToast();
 
@@ -1456,10 +1552,17 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     } catch (_e) {}
   }
 
-  function unfocusCoherentInput() {
+  function unfocusCoherentInput(fieldId) {
+    const targetId = fieldId || (activeInputEl && activeInputEl.id) || "as_acars_input";
     activeInputEl = null;
     try {
+      if (typeof document !== "undefined" && document.activeElement && typeof document.activeElement.blur === "function") {
+        document.activeElement.blur();
+      }
+    } catch (_e) {}
+    try {
       if (typeof Coherent !== "undefined" && Coherent && typeof Coherent.trigger === "function") {
+        Coherent.trigger("UNFOCUS_INPUT_FIELD", targetId);
         Coherent.trigger("UNFOCUS_INPUT_FIELD");
       }
     } catch (_e) {}
@@ -2090,6 +2193,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           confirmAllUnreadMessages();
         } else if (newestUnseenVocc && store.vocc_toast_enabled) {
           stateData.toastMessage = newestUnseenVocc;
+          stateData.toastShownAt = Date.now();
           renderToast();
         }
 
@@ -2757,9 +2861,14 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       if (toastInput) {
         toastInput.value = "";
       }
+      if (!stateData.toastShownAt) {
+        stateData.toastShownAt = Date.now();
+      }
       startToastTimer();
     } else {
       clearToastTimer();
+      stateData.toastShownAt = 0;
+      unfocusCoherentInput("as-acars-toast-input");
     }
   }
 
@@ -5571,69 +5680,50 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       );
     };
 
-    // High-performance smooth window and toast dragging with requestAnimationFrame
-    let isDraggingWindow = false;
-    let dragTargetEl = null;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let dragInitialLeft = 0;
-    let dragInitialTop = 0;
-    let dragPendingX = 0;
-    let dragPendingY = 0;
-    let dragRafId = null;
-
-    const onDragRafTick = function () {
-      dragRafId = null;
-      if (!isDraggingWindow || !dragTargetEl) return;
-      const dx = dragPendingX - dragStartX;
-      const dy = dragPendingY - dragStartY;
-      let newLeft = dragInitialLeft + dx;
-      let newTop = dragInitialTop + dy;
-
-      const screenW = (typeof window !== "undefined" && window.innerWidth) ? window.innerWidth : 1920;
-      const screenH = (typeof window !== "undefined" && window.innerHeight) ? window.innerHeight : 1080;
-
-      // Keep window within visible screen bounds
-      if (newLeft < 10) newLeft = 10;
-      if (newTop < 10) newTop = 10;
-      if (newLeft > screenW - 80) newLeft = screenW - 80;
-      if (newTop > screenH - 60) newTop = screenH - 60;
-
-      dragTargetEl.style.left = Math.round(newLeft) + "px";
-      dragTargetEl.style.top = Math.round(newTop) + "px";
-      dragTargetEl.style.right = "auto";
-      dragTargetEl.style.bottom = "auto";
-    };
-
-    const handleDragMouseMove = function (e) {
-      if (!isDraggingWindow || !dragTargetEl) return;
-      dragPendingX = e.clientX;
-      dragPendingY = e.clientY;
-      if (!dragRafId) {
-        const scheduleRaf = (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function")
-          ? window.requestAnimationFrame
-          : function (cb) { return setTimeout(cb, 16); };
-        dragRafId = scheduleRaf(onDragRafTick);
-      }
-    };
-
-    const handleDragMouseUp = function () {
-      if (!isDraggingWindow) return;
-      isDraggingWindow = false;
-      if (dragTargetEl) {
-        if (dragTargetEl.classList && typeof dragTargetEl.classList.remove === "function") {
-          dragTargetEl.classList.remove("as-acars-is-dragging");
+    // Safety: clicking anywhere inside the document that is not an input drops input capture
+    if (typeof document !== "undefined" && typeof document.addEventListener === "function") {
+      document.addEventListener("mousedown", function (e) {
+        if (!e || !e.target) return;
+        const isInput = findClosest(e.target, "input, textarea, select");
+        if (!isInput && activeInputEl) {
+          unfocusCoherentInput();
         }
-        dragTargetEl = null;
-      }
-      if (typeof document !== "undefined") {
-        document.removeEventListener("mousemove", handleDragMouseMove, true);
-        document.removeEventListener("mouseup", handleDragMouseUp, true);
+      }, true);
+    }
+
+    // Safety: global Escape key handler across Coherent GT
+    const onGlobalKeyDown = function (e) {
+      if (!e) return;
+      if (e.key === "Escape" || e.keyCode === 27) {
+        let handled = false;
+        if (stateData.toastMessage) {
+          dismissToast();
+          handled = true;
+        } else if (stateData.panelOpen) {
+          stateData.panelOpen = false;
+          unfocusCoherentInput();
+          renderAll();
+          handled = true;
+        } else if (activeInputEl) {
+          unfocusCoherentInput();
+          handled = true;
+        }
+        if (handled && typeof e.stopPropagation === "function") {
+          e.stopPropagation();
+        }
       }
     };
 
     if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
-      window.addEventListener("blur", handleDragMouseUp);
+      window.addEventListener("keydown", onGlobalKeyDown, true);
+      window.addEventListener("blur", function () {
+        handleDragMouseUp();
+        unfocusCoherentInput();
+      });
+    }
+    if (typeof document !== "undefined" && typeof document.addEventListener === "function") {
+      document.addEventListener("keydown", onGlobalKeyDown, true);
+      document.addEventListener("mouseleave", handleDragMouseUp, true);
     }
 
     // Ensure mousedown on inputs or buttons focuses properly without triggering parent drag
@@ -5679,7 +5769,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         if (targetEl.classList && typeof targetEl.classList.add === "function") {
           targetEl.classList.add("as-acars-is-dragging");
         }
-        if (typeof document !== "undefined") {
+        if (typeof document !== "undefined" && typeof document.addEventListener === "function") {
           document.addEventListener("mousemove", handleDragMouseMove, true);
           document.addEventListener("mouseup", handleDragMouseUp, true);
         }
@@ -6166,7 +6256,13 @@ const __flowContext = typeof this !== "undefined" ? this : null;
 
       inp.addEventListener("blur", function () {
         if (activeInputEl === inp) {
-          unfocusCoherentInput();
+          unfocusCoherentInput(inp.id);
+        }
+      });
+
+      inp.addEventListener("keydown", function (e) {
+        if (e && (e.key === "Escape" || e.keyCode === 27)) {
+          unfocusCoherentInput(inp.id);
         }
       });
 
@@ -6198,21 +6294,31 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           if (typeof e.preventDefault === "function") e.preventDefault();
           if (typeof e.stopPropagation === "function") e.stopPropagation();
           triggerToastReply();
+        } else if (e && (e.key === "Escape" || e.keyCode === 27)) {
+          if (typeof e.preventDefault === "function") e.preventDefault();
+          if (typeof e.stopPropagation === "function") e.stopPropagation();
+          dismissToast();
         }
       };
       toastInput.addEventListener("keydown", onToastKey);
       toastInput.addEventListener("keypress", onToastKey);
       toastInput.addEventListener("keyup", function (e) {
-        if (isEnterKeyEvent(e)) {
+        if (isEnterKeyEvent(e) || (e && (e.key === "Escape" || e.keyCode === 27))) {
           if (typeof e.preventDefault === "function") e.preventDefault();
           if (typeof e.stopPropagation === "function") e.stopPropagation();
         }
       });
       toastInput.addEventListener("focus", function () {
-        clearToastTimer();
+        startToastTimer(30);
       });
       toastInput.addEventListener("input", function () {
-        clearToastTimer();
+        startToastTimer(20);
+      });
+      toastInput.addEventListener("blur", function () {
+        unfocusCoherentInput("as-acars-toast-input");
+        if (stateData.toastMessage && !stateData.panelOpen && store.vocc_toast_enabled) {
+          startToastTimer(6);
+        }
       });
     }
 
@@ -6278,7 +6384,9 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const toastEl = q("#as-acars-toast");
     if (toastEl) {
       toastEl.addEventListener("mouseenter", function () {
-        clearToastTimer();
+        // Refresh and extend timer by 8s rather than cancelling it forever,
+        // preventing stuck toasts when MSFS drops mouseleave
+        startToastTimer(8);
       });
       toastEl.addEventListener("mouseleave", function () {
         if (stateData.toastMessage && !stateData.panelOpen && store.vocc_toast_enabled) {
@@ -6481,6 +6589,25 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   if (typeof loop_1hz === "function") {
     loop_1hz(function () {
       stateData.tickCount = (stateData.tickCount + 1) % 3600;
+
+      // Fail-safe watchdog: auto-dismiss toast if elapsed duration exceeded
+      if (stateData.toastMessage && !stateData.panelOpen && store.vocc_toast_enabled) {
+        const rawSec = typeof store.toast_duration === "number" ? store.toast_duration : parseInt(store.toast_duration, 10);
+        const durSec = isNaN(rawSec) || rawSec < 0 ? 15 : rawSec;
+        if (durSec > 0) {
+          const now = Date.now();
+          const shownAt = stateData.toastShownAt || now;
+          const elapsedSec = (now - shownAt) / 1000;
+          const tInput = q("#as-acars-toast-input");
+          const isTyping = tInput && typeof document !== "undefined" && document.activeElement === tInput && tInput.value.length > 0;
+          if (!isTyping && elapsedSec >= durSec) {
+            dismissToast();
+          } else if (elapsedSec >= Math.max(durSec + 20, 45)) {
+            dismissToast();
+          }
+        }
+      }
+
       if (!getActiveToken() || !store.activeTenant) return;
 
       // Zero DOM work if panel is closed: keep sim FPS 100% smooth

@@ -1079,6 +1079,26 @@ test('Toast close button, dismiss link, and quick reply work properly', async ()
 
   assert.equal(instance.state.toastMessage, null, 'Toast message should be cleared after clicking X');
   assert.equal(toastEl.classList.contains('as-acars-hidden'), true, 'Toast element should be hidden after clicking X');
+
+  // Test Escape key dismissal
+  instance.state.toastMessage = { id: 890, text: 'ESCAPE TEST MESSAGE' };
+  instance.renderAll();
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), false);
+
+  toastInput.dispatchEvent({ type: 'keydown', key: 'Escape', keyCode: 27, target: toastInput, preventDefault() {}, stopPropagation() {} });
+  assert.equal(instance.state.toastMessage, null, 'Toast message should be cleared after pressing Escape');
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), true, 'Toast element should be hidden after pressing Escape');
+
+  // Test Watchdog in loop_1hz
+  instance.state.toastMessage = { id: 891, text: 'WATCHDOG TEST MESSAGE' };
+  instance.state.toastShownAt = Date.now() - 25000; // 25s ago
+  instance.store.toast_duration = 15;
+  instance.renderAll();
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), false);
+
+  hooks.loop_1hz();
+  assert.equal(instance.state.toastMessage, null, 'Watchdog in loop_1hz must auto-dismiss expired toast');
+  assert.equal(toastEl.classList.contains('as-acars-hidden'), true, 'Toast element should be hidden by watchdog');
 });
 
 test('CSS neutralizes colors, constrains service logos, and HTML excludes quick replies', () => {
