@@ -1,107 +1,178 @@
-# Airspace ACARS — Parallel 42 Flow Pro (MSFS 2024)
+# Airspace ACARS — Parallel 42 Flow Pro (MSFS 2024 / MSFS 2020)
 
-Plugin oficial de integração do **Airspace ACARS** para o **Parallel 42 Flow Pro** no **Microsoft Flight Simulator 2024**.
+<div align="center">
 
-Desenvolvido especificamente para o ambiente Coherent GT do MSFS 2024, este widget traz as funcionalidades essenciais do Airspace ACARS diretamente para dentro do cockpit por meio de uma janela flutuante arrastável, um botão dinâmico na roda do Flow e integração completa com a barra de pesquisa **Otto**.
+![Airspace ACARS](assets/Thumbnail.jpg)
+
+**Widget e Integração Oficial do Airspace ACARS para o Parallel 42 Flow Pro no Microsoft Flight Simulator**
+
+[![GitHub Release](https://img.shields.io/github/v/release/GordelaG/p42-util-airspace-acars?color=10b981&label=Release&logo=github)](https://github.com/GordelaG/p42-util-airspace-acars/releases/latest)
+[![Tests](https://img.shields.io/badge/tests-19%20passed-10b981.svg)](test/widget.test.mjs)
+[![MSFS Compatibility](https://img.shields.io/badge/MSFS-2024%20%7C%202020-0284c7.svg)](#compatibilidade)
+[![Flow Compatibility](https://img.shields.io/badge/Flow-Pro-f59e0b.svg)](https://parallel42.com/products/flow)
+[![License](https://img.shields.io/badge/license-Proprietary-64748b.svg)](installer/TERMOS-DE-USO.txt)
+
+</div>
 
 ---
 
-## Funcionalidades Principais
+## 📥 Download e Instalação
+
+### 🚀 Método 1: Instalador Automático Oficial (Recomendado)
+
+A forma mais simples, rápida e segura de instalar o **Airspace ACARS** no seu simulador é através do instalador oficial em formato executável.
+
+1. Acesse a página da [**Última Versão no GitHub Releases**](https://github.com/GordelaG/p42-util-airspace-acars/releases/latest).
+2. Na seção **Assets**, clique e faça o download do arquivo:
+   ```text
+   📦 AirspaceACARS-Setup.exe
+   ```
+3. Feche o Microsoft Flight Simulator caso ele esteja aberto.
+4. Execute o arquivo **`AirspaceACARS-Setup.exe`**.
+5. O assistente detectará automaticamente a sua pasta **`Community`** tanto para a versão **Microsoft Store (Xbox App)** quanto para a versão **Steam** do **MSFS 2024** e **MSFS 2020**.
+   - *Possui Addon Linker?* O instalador reconhece links simbólicos (junctions) e permite escolher se deseja instalar direto na pasta de addons ou na Community.
+6. Clique em **Avançar** e finalize a instalação.
+7. Abra o simulador, acione a roda do **Parallel 42 Flow Pro**, entre no modo de edição e adicione o widget **Airspace ACARS**.
+
+> [!TIP]
+> O instalador também adiciona o **Airspace ACARS Manager** ao seu Menu Iniciar do Windows para verificar atualizações futuras com apenas um clique!
+
+---
+
+### 📦 Método 2: Instalação Manual via Arquivo ZIP
+
+Caso você prefira instalar manualmente ou utilize gerenciadores externos:
+
+1. Acesse o [**GitHub Releases**](https://github.com/GordelaG/p42-util-airspace-acars/releases/latest) e baixe o arquivo **`p42-util-airspace-acars.zip`**.
+2. Extraia o conteúdo e coloque a pasta **`p42-util-airspace-acars`** diretamente dentro da pasta **`Community`** do seu simulador:
+   - **MSFS 2024 (MS Store)**: `%LOCALAPPDATA%\Packages\Microsoft.Limitless_8wekyb3d8bbwe\LocalCache\Packages\Community\`
+   - **MSFS 2024 (Steam)**: `%APPDATA%\Microsoft Flight Simulator 2024\Packages\Community\`
+   - **MSFS 2020 (MS Store)**: `%LOCALAPPDATA%\Packages\Microsoft.FlightSimulator_8wekyb3d8bbwe\LocalCache\Packages\Community\`
+   - **MSFS 2020 (Steam)**: `%APPDATA%\Microsoft Flight Simulator\Packages\Community\`
+3. Inicie o simulador e ative o widget no Flow Pro.
+
+---
+
+## ⚡ Airspace ACARS Manager (`Update.exe`) — Atualizações com 1 Clique
+
+Esqueça a necessidade de baixar e reinstalar arquivos manualmente a cada atualização. O pacote inclui um utilitário exclusivo de gerenciamento:
+
+- **Localização**: `%Community%\p42-util-airspace-acars\Update.exe` (ou pelo atalho *"Airspace ACARS Manager"* no Menu Iniciar).
+- **Design Moderno FluxUI**: Interface escura construída sob medida com o logotipo oficial da Airspace e padrão de cores corporativo.
+- **Detecção Automática**: Compara a versão instalada no seu simulador com a versão mais recente publicada no GitHub.
+- **Atualização Direta no Simulador**: Basta clicar no botão verde **`Update to vX.X.X`** — o utilitário baixa o pacote compactado em segundo plano, extrai os arquivos no local correto e atualiza o simulador em poucos segundos.
+- **Desinstalação Segura**: Inclui botão de desinstalação que remove os arquivos do addon caso deseje limpar o ambiente.
+
+---
+
+## ✈️ Funcionalidades em Destaque
 
 ### 1. Conexão Multi-VA (Device Code OAuth)
-- **Seletor de Companhias Aéreas (Tenants)**: Lista automaticamente todas as Virtual Airlines da rede Airspace (`GET /api/tenants`) com busca rápida por nome ou domínio.
-- **Autenticação por Código de Dispositivo**: Conecte-se à sua VA sem digitar senhas dentro do simulador (`/api/v2/acars/auth/request` e `/api/v2/acars/auth/token`). Basta abrir o painel da VA pelo botão rápido ou digitar o código exibido.
-- **Troca Rápida entre VAs**: Os tokens de acesso ficam salvos no armazenamento persistente do Flow (`this.$api.datastore`), permitindo alternar entre diferentes VAs com um clique.
-- **Tratamento Automático de Expiração**: Respostas `401 Unauthorized` limpam apenas o token expirado e retornam suavemente para a tela de reconexão.
+- **Seleção de Companhias Aéreas**: Conecte-se facilmente a qualquer Virtual Airline da rede Airspace.
+- **Autenticação Segura sem Digitação de Senha**: Use o fluxo de autenticação por código de dispositivo (Device Code). Basta acessar o link exibido no navegador do seu celular ou PC secundário e autorizar.
+- **Armazenamento de Sessão Persistente**: Salva os dados de acesso no datastore interno do Flow Pro, permitindo alternar entre companhias salvas sem precisar reconectar todas as vezes.
 
-### 2. vOCC & Mensagens ACARS
-- **Recebimento em Tempo Real**: Polling em segundo plano (`loop_1hz`) que monitora novas mensagens do vOCC / Despacho (`/api/v2/acars/messages`).
-- **Alerta Flutuante no Simulador (Toast)**: Quando uma mensagem do vOCC chega com o painel fechado, um card de alerta aparece no canto da tela com opções para **Responder / Abrir** ou **Confirmar Leitura (WILCO)**.
-- **Respostas Rápidas (Quick Replies)**: Botões de um clique (`WILCO`, `ROGER`, `STANDBY`, ` PRONTO PUSHBACK`, `NO PORTÃO`) além de campo de texto livre para conversar com o vOCC (`/api/v2/acars/message`).
-- **Confirmação de Leitura**: Marcação automática ou manual via `PUT /api/v2/acars/message/confirm`.
+### 2. vOCC & Mensagens ACARS em Tempo Real
+- **Comunicação Direta com o Despacho**: Envie e receba mensagens do Centro de Controle Operacional Virtual (vOCC) diretamente na cabine.
+- **Alertas Flutuantes no Cockpit (Toast)**: Notificações inteligentes que aparecem na tela quando uma mensagem chega enquanto o painel principal está fechado.
+- **Resposta Rápida & Confirmação de Leitura**: Responda diretamente do popup ou clique em **WILCO** para dar ciente imediato ao despacho.
+- **Watchdog Anti-Travamento**: Arquitetura imune a perdas de foco do simulador, garantindo que o fechamento do popup ou o uso da tecla `ESC` nunca trave os comandos ou joysticks de voo.
 
-### 3. Aeroportos & Documentos
-- **Pesquisa de Documentos e Briefings**: Busque por código ICAO (ex.: `SBGR`, `SBRJ`, `SBSP`) ou título em toda a biblioteca da companhia (`/api/v2/acars/documents`).
-- **Atalhos Automáticos da Rota Ativa**: Caso você tenha um voo reservado (`/api/v2/acars/booking`), o painel exibe botões diretos para filtrar documentos de **DEP**, **ARR** e **ALT**.
-- **Aeroporto Mais Próximo no MSFS 2024**: O botão **Próx. MSFS** consulta `this.$api.airports.find_airports_by_coords` usando a posição atual da aeronave no simulador e abre imediatamente os briefings daquele aeródromo.
-- **Categorias & Pastas**: Filtre entre `Todos`, `Aeroportos`, `Manuais / SOP`, `FDM` e `Load`, navegue por pastas e leia documentos HTML higienizados com segurança dentro do simulador (ou abra anexos PDF no navegador).
+### 3. Aeroportos, Briefings & Documentos
+- **Busca Rápida por ICAO**: Digite o código de qualquer aeroporto (ex: `SBGR`, `SBRJ`, `SBSP`, `KJFK`, `EGLL`) para carregar briefings operacionais, cartas e manuais.
+- **Atalhos Inteligentes da Rota**: Reconhece automaticamente o voo ativo e adiciona botões rápidos para os aeroportos de Origem (`DEP`), Destino (`ARR`) e Alternativa (`ALT`).
+- **Aeroporto Mais Próximo via GPS**: Botão dedicado que consulta a latitude e longitude da sua aeronave no MSFS e abre os briefings do aeroporto mais próximo de você.
+- **Leitor Integrado**: Visualizador seguro e limpo de documentos com navegação por categorias (`Manuais`, `FDM`, `Load`, `Briefings`).
 
-### 4. Voo Ativo, Perfil do Piloto & NOTAMs
-- Exibe resumo completo do **Booking Ativo** (`callsign`, número do voo, aeronave, registro, aeroportos e rota) e **Perfil do Piloto** (`/api/v2/acars/pilot`).
-- Lista e exibe o conteúdo completo dos **NOTAMs ativos** da companhia (`/api/v2/acars/notams`).
+### 4. Painel de Voo Ativo & Telemetria
+- Exibição em tempo real de dados da aeronave, callsign, rota, registro e progresso do voo.
+- Monitoramento contínuo de altitude, velocidade, proa, razão de subida/descida e toque na pista (landing rate).
+- Barra de progresso dinâmica que reflete cada fase operacional do voo.
 
-### 5. Barra de Pesquisa Otto (Flow Pro)
-Com `can_otto: true`, você pode pesquisar e executar ações diretamente na barra **Otto** do Flow Pro:
-| Comando na Barra Otto | Ação Executada |
+### 5. NOTAMs & Meteorologia (METAR)
+- **NOTAMs**: Consulta aos avisos oficiais aos aeronavegantes emitidos para a sua rota ou companhia aérea, com excelente contraste visual.
+- **METAR em Tempo Real**: Consulta meteorológica instantânea integrada às APIs do simulador e da Airspace.
+
+### 6. Suporte Multilíngue & Temas Visuais
+- Suporte nativo completo a 4 idiomas:
+  - 🇧🇷 Português (pt-BR)
+  - 🇺🇸 Inglês (en)
+  - 🇪🇸 Espanhol (es)
+  - 🇫🇷 Francês (fr)
+- Alternância instantânea entre **Dark Mode** e **White Mode** diretamente na aba de configurações.
+
+---
+
+## 🔍 Integração com a Barra Otto (Flow Pro)
+
+Com a propriedade `can_otto: true`, você pode realizar ações digitando diretamente na barra de comando **Otto** do Flow:
+
+| Comando | Descrição da Ação |
 | :--- | :--- |
-| `doc SBGR` ou `docs SBGR` | Pesquisa documentos e briefings contendo `SBGR` e abre o leitor |
-| `briefing SBRJ` ou `apt SBRJ` | Filtra especificamente briefings de aeroporto para `SBRJ` |
-| `vocc` | Lista as últimas mensagens do vOCC e permite abrir o chat |
-| `vocc WILCO PRONTO` | Envia imediatamente a mensagem `WILCO PRONTO` para o vOCC |
-| `notam` | Lista e abre os NOTAMs ativos da companhia aérea |
-| `airspace` ou `acars` | Abre o painel principal ou busca geral nos documentos |
+| `acars` ou `airspace` | Abre o painel principal do Airspace ACARS |
+| `doc SBGR` ou `docs SBGR` | Pesquisa e abre os documentos e briefings de `SBGR` |
+| `briefing SBRJ` | Filtra especificamente os briefings operacionais de `SBRJ` |
+| `vocc` | Exibe as mensagens recentes do vOCC e abre o chat |
+| `vocc WILCO` | Envia imediatamente a mensagem "WILCO" para o despacho |
+| `notam` | Abre a listagem de NOTAMs ativos |
+| `metar SBSP` | Exibe as condições meteorológicas de `SBSP` |
 
 ---
 
-## Instalação (Usuários Finais — MSFS 2024)
-
-1. Acesse a página de [**Releases**](../../releases) deste repositório e baixe o arquivo **`p42-util-airspace-acars.zip`** da versão mais recente.
-2. Extraia a pasta `p42-util-airspace-acars` diretamente dentro da sua pasta **`Community`** do Microsoft Flight Simulator 2024.
-3. Inicie o MSFS 2024, abra a roda do **Parallel 42 Flow Pro**, entre no modo de edição e adicione o widget **Airspace ACARS** à sua roda.
-
----
-
-## Estrutura do Projeto
+## 🛠️ Arquitetura e Estrutura Técnica
 
 ```text
 p42-util-airspace-acars/
 ├── .github/workflows/
-│   ├── ci.yml                # Testes e verificação de build em cada Push / PR
-│   └── release.yml           # Build automático e publicação de Release (.zip) via tags v*
+│   ├── ci.yml                # Validação contínua, linters e testes unitários
+│   └── release.yml           # Compilação do Inno Setup (.exe) e do .zip em cada release
 ├── assets/
+│   ├── app.ico               # Ícone oficial multi-resolução para o executável
 │   └── Thumbnail.jpg         # Miniatura oficial do pacote para o MSFS 2024
+├── installer/
+│   ├── TERMOS-DE-USO.txt     # Termos de uso em português
+│   └── TERMS-OF-USE.txt      # Termos de uso em inglês
 ├── scripts/
-│   └── build.mjs             # Empacotador MSFS 2024 (gera manifest.json, layout.json e template Flow)
+│   ├── build.mjs             # Empacotador do MSFS (gera manifest.json, layout.json e template JSON)
+│   ├── compile-updater.mjs   # Compilador C# (.NET Framework 4.8) para o Update.exe
+│   └── generate-ico.mjs      # Utilitário de geração de ícones multi-resolução
 ├── src/
-│   ├── code.js               # Lógica do widget Flow, cliente Airspace ACARS v2 e integração Otto
-│   ├── code.html             # Template HTML do painel flutuante e toast do vOCC
-│   └── code.css              # Estilos escopados (.as-acars-*) compatíveis com Coherent GT
+│   ├── code.js               # Código principal do widget (100% 7-bit ASCII para Coherent GT)
+│   ├── code.html             # Estrutura HTML do tablet, abas, briefings e popups
+│   └── code.css              # Estilos escopados (.as-acars-*) com suporte a temas
 ├── test/
-│   └── widget.test.mjs       # Suíte de testes automatizados (Node.js test runner)
+│   └── widget.test.mjs       # Suíte completa de testes automatizados (Node.js Test Runner)
+├── updater/
+│   └── Program.cs            # Código-fonte em C# do Airspace ACARS Manager (Update.exe)
+├── installer.iss             # Script de compilação do instalador oficial Inno Setup
 └── package.json
 ```
 
 ---
 
-## Desenvolvimento Local e Build
+## 🧪 Desenvolvimento e Testes
 
 ### Pré-requisitos
-- **Node.js 20+** (não requer dependências externas do npm).
+- **Node.js 20+**
+- Compilador C# nativo do Windows (`csc.exe` do .NET Framework 4.8 incluído no Windows 10 e 11).
 
-### Comandos Disponíveis
+### Comandos
 ```bash
-# Executar a suíte de testes unitários e de integração
+# Executa a suíte de testes unitários e de integração (19 testes)
 npm test
 
-# Gerar o pacote MSFS 2024 pronto para a pasta Community em dist/p42-util-airspace-acars/
+# Compila o Update.exe e gera o pacote completo em dist/p42-util-airspace-acars/
 npm run build
 ```
 
-### Editando ao Vivo no MSFS 2024 (Working Directory do Flow Pro)
-Para desenvolver com recarregamento rápido dentro do simulador:
-1. Nas configurações do **Flow Pro** no MSFS 2024, defina o **Working Directory** para uma pasta local.
-2. Copie ou crie um link simbólico dos arquivos de `src/` (`code.js`, `code.html`, `code.css`) dentro da subpasta do script no Working Directory e clique em **Import from Disk** no editor de scripts do Flow.
+---
+
+## 📄 Termos de Uso e Licença
+
+Este software é fornecido gratuitamente para uso pessoal em simuladores de voo por membros e pilotos de companhias aéreas virtuais parceiras da rede **Airspace / FerrLab**. Para maiores detalhes, consulte o arquivo [TERMOS-DE-USO.txt](installer/TERMOS-DE-USO.txt).
 
 ---
 
-## Publicando uma Nova Release (GitHub Actions)
-
-O repositório conta com automação completa em `.github/workflows/release.yml`. Para lançar uma nova versão com o `.zip` pronto para a pasta `Community`:
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-O GitHub Actions executará os testes, compilará o pacote `p42-util-airspace-acars` com `manifest.json` e `layout.json` atualizados e publicará automaticamente a **GitHub Release** com o arquivo `p42-util-airspace-acars.zip` anexado.
-
+<div align="center">
+Desenvolvido com excelência para a comunidade de simulação de voo. Bons voos! ✈️
+</div>
