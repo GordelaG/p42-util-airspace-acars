@@ -76,6 +76,13 @@ jobs:
           }
           Write-Host "Installer created successfully: installer_output/AirspaceACARS-Setup.exe"
 
+          Write-Host "Packaging Community ZIP for automatic updates..."
+          Compress-Archive -Path "dist/p42-util-airspace-acars" -DestinationPath "installer_output/p42-util-airspace-acars.zip" -Force
+          if (-not (Test-Path "installer_output/p42-util-airspace-acars.zip")) {
+            throw "p42-util-airspace-acars.zip was not created in installer_output!"
+          }
+          Write-Host "ZIP package created successfully: installer_output/p42-util-airspace-acars.zip"
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -85,6 +92,7 @@ jobs:
           generate_release_notes: true
           files: |
             installer_output/AirspaceACARS-Setup.exe
+            installer_output/p42-util-airspace-acars.zip
           body: |
             ## Airspace ACARS — Parallel 42 Flow Pro (MSFS 2024 / MSFS 2020)
 

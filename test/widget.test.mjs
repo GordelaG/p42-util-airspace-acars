@@ -439,7 +439,9 @@ test('buildPackage() generates valid MSFS 2024 Community package structure, mani
   assert.ok(scriptDef.params.code_css.includes('.as-acars-window'));
 
   const layoutJson = JSON.parse(fs.readFileSync(result.layoutFilePath, 'utf8'));
-  assert.equal(layoutJson.content.length, 3);
+  assert.equal(layoutJson.content.length, 4);
+  assert.ok(layoutJson.content.some((item) => item.path === 'Update.exe'), 'Update.exe must be listed in layout.json');
+  assert.ok(fs.existsSync(path.join(result.packageRoot, 'Update.exe')), 'Update.exe must exist in package root');
   for (const item of layoutJson.content) {
     const absFile = path.join(result.packageRoot, ...item.path.split('/'));
     assert.ok(fs.existsSync(absFile), `File listed in layout.json must exist: ${item.path}`);

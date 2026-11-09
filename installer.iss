@@ -4,7 +4,7 @@
 
 #define MyAppName "Airspace ACARS"
 #ifndef MyAppVersion
-#define MyAppVersion "1.1.1"
+#define MyAppVersion "1.2.0"
 #endif
 #define MyAppPublisher "Airspace Team (FerrLab)"
 #define MyAppURL "https://airspace.ferrlab.com"
@@ -51,6 +51,7 @@ brazilianportuguese.BtnChangeDir=Alterar Pasta...
 brazilianportuguese.LinkedPackageWarning=O Airspace ACARS ja esta instalado nesta pasta Community atraves de um link (junction/symlink), provavelmente criado pelo Addon Linker ou ferramenta similar:%n%n%1%n%nNesse caso, instale na pasta de addons que voce usa no Addon Linker, e nao na pasta Community do simulador. Pasta recomendada:%n%n%2%n%nSim = instalar na pasta recomendada%nNao = instalar na Community mesmo assim%nCancelar = voltar e escolher outra pasta
 brazilianportuguese.LinkedCommunityWarning=A pasta Community selecionada e um link (junction/symlink) para outro local:%n%n%1%n%nRecomendamos instalar diretamente no destino real do link.%n%nSim = instalar no destino real (recomendado)%nNao = continuar com a pasta selecionada
 brazilianportuguese.LinkedAddonsWarning=Detectamos que sua pasta Community contem addons instalados atraves de links (junction/symlink), o que indica uso do Addon Linker ou ferramenta similar.%n%nSe voce gerencia seus addons pelo Addon Linker, escolha a pasta de addons que voce usa nele (e nao a pasta Community do simulador) e depois ative o Airspace ACARS pelo Addon Linker.%n%nDeseja voltar e escolher outra pasta?%n%nSim = voltar e escolher outra pasta%nNao = instalar na Community mesmo assim
+brazilianportuguese.LaunchUpdater=Abrir o Airspace ACARS Manager para verificar atualizacoes
 
 english.ReadyDirLabel=Destination Folder (Community or Custom):
 english.ReadyPackageLabel=Airspace ACARS Package Location:
@@ -59,6 +60,7 @@ english.BtnChangeDir=Change Folder...
 english.LinkedPackageWarning=Airspace ACARS is already installed in this Community folder through a link (junction/symlink), most likely created by Addon Linker or a similar tool:%n%n%1%n%nIn this case, install into the addons folder you use in Addon Linker, not the simulator's Community folder. Recommended folder:%n%n%2%n%nYes = install into the recommended folder%nNo = install into Community anyway%nCancel = go back and choose another folder
 english.LinkedCommunityWarning=The selected Community folder is a link (junction/symlink) to another location:%n%n%1%n%nWe recommend installing directly into the link's real target.%n%nYes = install into the real target (recommended)%nNo = continue with the selected folder
 english.LinkedAddonsWarning=Your Community folder contains addons installed through links (junction/symlink), which indicates Addon Linker or a similar tool is being used.%n%nIf you manage your addons with Addon Linker, choose the addons folder you use there (not the simulator's Community folder) and then enable Airspace ACARS in Addon Linker.%n%nDo you want to go back and choose another folder?%n%nYes = go back and choose another folder%nNo = install into Community anyway
+english.LaunchUpdater=Open Airspace ACARS Manager to check for updates
 
 spanish.ReadyDirLabel=Carpeta de Destino (Community o Personalizada):
 spanish.ReadyPackageLabel=Ubicacion del Paquete Airspace ACARS:
@@ -67,6 +69,7 @@ spanish.BtnChangeDir=Cambiar Carpeta...
 spanish.LinkedPackageWarning=Airspace ACARS ya esta instalado en esta carpeta Community a traves de un enlace (junction/symlink), probablemente creado por Addon Linker o una herramienta similar:%n%n%1%n%nEn este caso, instale en la carpeta de addons que usa en Addon Linker, no en la carpeta Community del simulador. Carpeta recomendada:%n%n%2%n%nSi = instalar en la carpeta recomendada%nNo = instalar en Community de todos modos%nCancelar = volver y elegir otra carpeta
 spanish.LinkedCommunityWarning=La carpeta Community seleccionada es un enlace (junction/symlink) a otra ubicacion:%n%n%1%n%nRecomendamos instalar directamente en el destino real del enlace.%n%nSi = instalar en el destino real (recomendado)%nNo = continuar con la carpeta seleccionada
 spanish.LinkedAddonsWarning=Su carpeta Community contiene addons instalados mediante enlaces (junction/symlink), lo que indica el uso de Addon Linker o una herramienta similar.%n%nSi administra sus addons con Addon Linker, elija la carpeta de addons que usa alli (no la carpeta Community del simulador) y luego active Airspace ACARS en Addon Linker.%n%nDesea volver y elegir otra carpeta?%n%nSi = volver y elegir otra carpeta%nNo = instalar en Community de todos modos
+spanish.LaunchUpdater=Abrir Airspace ACARS Manager para verificar actualizaciones
 
 french.ReadyDirLabel=Dossier de Destination (Community ou Personnalise):
 french.ReadyPackageLabel=Emplacement du Paquet Airspace ACARS:
@@ -75,6 +78,7 @@ french.BtnChangeDir=Changer de Dossier...
 french.LinkedPackageWarning=Airspace ACARS est deja installe dans ce dossier Community via un lien (junction/symlink), probablement cree par Addon Linker ou un outil similaire :%n%n%1%n%nDans ce cas, installez-le dans le dossier d'addons que vous utilisez dans Addon Linker, et non dans le dossier Community du simulateur. Dossier recommande :%n%n%2%n%nOui = installer dans le dossier recommande%nNon = installer dans Community quand meme%nAnnuler = revenir et choisir un autre dossier
 french.LinkedCommunityWarning=Le dossier Community selectionne est un lien (junction/symlink) vers un autre emplacement :%n%n%1%n%nNous recommandons d'installer directement dans la cible reelle du lien.%n%nOui = installer dans la cible reelle (recommande)%nNon = continuer avec le dossier selectionne
 french.LinkedAddonsWarning=Votre dossier Community contient des addons installes via des liens (junction/symlink), ce qui indique l'utilisation d'Addon Linker ou d'un outil similaire.%n%nSi vous gerez vos addons avec Addon Linker, choisissez le dossier d'addons que vous y utilisez (et non le dossier Community du simulateur), puis activez Airspace ACARS dans Addon Linker.%n%nVoulez-vous revenir et choisir un autre dossier ?%n%nOui = revenir et choisir un autre dossier%nNon = installer dans Community quand meme
+french.LaunchUpdater=Ouvrir Airspace ACARS Manager pour verifier les mises a jour
 
 [Messages]
 brazilianportuguese.SelectDirLabel3=Confirme ou selecione a pasta onde deseja instalar o Airspace ACARS (recomendado: pasta Community do seu simulador). O pacote '{#MyPackageName}' sera instalado dentro dela.%n%nCaso deseje instalar em outro disco ou pasta personalizada, clique em 'Procurar...'.
@@ -83,6 +87,12 @@ english.SelectDirLabel3=Confirm or select the folder where you want to install A
 [Files]
 Source: "dist\p42-util-airspace-acars\*"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "installer\TERMOS-DE-USO.txt"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion
+
+[Icons]
+Name: "{autoprograms}\Airspace ACARS Manager"; Filename: "{app}\{#MyPackageName}\Update.exe"; IconFilename: "{app}\{#MyPackageName}\Update.exe"
+
+[Run]
+Filename: "{app}\{#MyPackageName}\Update.exe"; Description: "{cm:LaunchUpdater}"; Flags: nowait postinstall skipifsilent unchecked
 
 [Code]
 var

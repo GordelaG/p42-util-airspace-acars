@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { compileUpdater } from './compile-updater.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -182,11 +183,16 @@ export function buildPackage(options = {}) {
   const readMePath = path.join(packageRoot, 'ReadMe.txt');
   fs.writeFileSync(readMePath, buildReadMeContent(version), 'utf8');
 
+  // 3.5. Compile Update.exe into package root
+  const updaterDestPath = path.join(packageRoot, 'Update.exe');
+  compileUpdater(updaterDestPath);
+
   // 4. Collect all content files for layout.json
   const relativeFiles = [
     `ContentInfo/${PACKAGE_NAME}/Thumbnail.jpg`,
     `Flow/templates/${PACKAGE_NAME}.json`,
-    'ReadMe.txt'
+    'ReadMe.txt',
+    'Update.exe'
   ];
 
   let totalSize = 0;
