@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -81,23 +82,21 @@ namespace AirspaceACARS.Updater
         private bool _pressedClose = false;
         private bool _hoverReleaseNotes = false;
 
-        // Layout rects
-        private readonly Rectangle _greenBtnRect = new Rectangle(24, 348, 232, 54);
-        private readonly Rectangle _redBtnRect = new Rectangle(264, 348, 132, 54);
-        private readonly Rectangle _notesLinkRect = new Rectangle(24, 416, 372, 22);
-        private readonly Rectangle _closeBtnRect = new Rectangle(32, 400, 356, 52);
-        private readonly Rectangle _channelCardRect = new Rectangle(24, 184, 372, 68);
-        private readonly Rectangle _statusCardRect = new Rectangle(24, 262, 372, 72);
+        // Layout rects (FluxUI clean layout)
+        private readonly Rectangle _statusCardRect = new Rectangle(24, 172, 372, 92);
+        private readonly Rectangle _greenBtnRect = new Rectangle(24, 282, 236, 54);
+        private readonly Rectangle _redBtnRect = new Rectangle(268, 282, 128, 54);
+        private readonly Rectangle _notesLinkRect = new Rectangle(24, 355, 372, 22);
+        private readonly Rectangle _closeBtnRect = new Rectangle(32, 375, 356, 50);
 
         private System.Windows.Forms.Timer _animTimer;
-        private Image _bannerImage;
         private Icon _formIcon;
 
         public MainForm()
         {
             InitializeComponent();
             ApplyDarkTitleBar();
-            LoadEmbeddedAssets();
+            LoadWindowIcon();
             LocatePackageDirectory();
             ReadInstalledVersion();
             CheckSimulatorProcess();
@@ -114,13 +113,14 @@ namespace AirspaceACARS.Updater
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.ClientSize = new Size(420, 520);
+            this.ClientSize = new Size(420, 480);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Airspace ACARS Manager";
-            this.BackColor = Color.FromArgb(12, 16, 24);
+            this.BackColor = Color.FromArgb(9, 9, 11); // FluxUI Zinc 950
             this.ForeColor = Color.White;
+            this.ShowIcon = true;
 
             // Enable double buffering for flicker-free custom rendering
             this.SetStyle(ControlStyles.AllPaintingInWmPaint |
@@ -149,7 +149,7 @@ namespace AirspaceACARS.Updater
             catch { }
         }
 
-        private void LoadEmbeddedAssets()
+        private void LoadWindowIcon()
         {
             try
             {
@@ -157,41 +157,38 @@ namespace AirspaceACARS.Updater
                 string[] names = asm.GetManifestResourceNames();
                 foreach (string name in names)
                 {
-                    if (name.EndsWith("Thumbnail.jpg", StringComparison.OrdinalIgnoreCase) ||
-                        name.EndsWith("banner.jpg", StringComparison.OrdinalIgnoreCase))
+                    if (name.EndsWith("app.ico", StringComparison.OrdinalIgnoreCase) ||
+                        name.EndsWith(".ico", StringComparison.OrdinalIgnoreCase))
                     {
                         using (var stream = asm.GetManifestResourceStream(name))
                         {
-                            if (stream != null) _bannerImage = Image.FromStream(stream);
-                        }
-                    }
-                    else if (name.EndsWith(".ico", StringComparison.OrdinalIgnoreCase))
-                    {
-                        using (var stream = asm.GetManifestResourceStream(name))
-                        {
-                            if (stream != null) _formIcon = new Icon(stream);
+                            if (stream != null)
+                            {
+                                _formIcon = new Icon(stream);
+                                break;
+                            }
                         }
                     }
                 }
             }
             catch { }
 
-            // Fallback load from disk if running in development
-            if (_bannerImage == null)
+            // Fallback load from disk or exe
+            if (_formIcon == null)
             {
-                string localThumb = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ContentInfo", "p42-util-airspace-acars", "Thumbnail.jpg");
-                if (File.Exists(localThumb))
+                string assetIco = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "app.ico");
+                if (File.Exists(assetIco))
                 {
-                    try { _bannerImage = Image.FromFile(localThumb); } catch { }
+                    try { _formIcon = new Icon(assetIco); } catch { }
                 }
             }
-            if (_bannerImage == null)
+            if (_formIcon == null)
             {
-                string assetThumb = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "Thumbnail.jpg");
-                if (File.Exists(assetThumb))
+                try
                 {
-                    try { _bannerImage = Image.FromFile(assetThumb); } catch { }
+                    _formIcon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
                 }
+                catch { }
             }
 
             if (_formIcon != null)
@@ -352,8 +349,8 @@ namespace AirspaceACARS.Updater
                             _releaseUrl = data["html_url"].ToString();
                         }
 
-                        // Inspect assets
-                        object[] assets = data.ContainsKey("assets") ? (data["assets"] as object[]) : null;
+                        // Inspect assets (handle ArrayList / IEnumerable returned by JavaScriptSerializer)
+                        IEnumerable assets = data.ContainsKey("assets") ? (data["assets"] as IEnumerable) : null;
                         if (assets != null)
                         {
                             string zipUrl = "";
@@ -361,11 +358,11 @@ namespace AirspaceACARS.Updater
 
                             foreach (object a in assets)
                             {
-                                Dictionary<string, object> assetDict = a as Dictionary<string, object>;
+                                IDictionary assetDict = a as IDictionary;
                                 if (assetDict != null)
                                 {
-                                    string name = assetDict.ContainsKey("name") ? assetDict["name"].ToString() : "";
-                                    string downloadUrl = assetDict.ContainsKey("browser_download_url") ? assetDict["browser_download_url"].ToString() : "";
+                                    string name = assetDict.Contains("name") ? assetDict["name"].ToString() : "";
+                                    string downloadUrl = assetDict.Contains("browser_download_url") ? assetDict["browser_download_url"].ToString() : "";
 
                                     if (name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                                     {
@@ -469,15 +466,15 @@ namespace AirspaceACARS.Updater
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-            // 1. Vertical background gradient
+            // 1. Sleek neutral dark background (FluxUI Zinc 950)
             using (var bgBrush = new LinearGradientBrush(new Point(0, 0), new Point(0, this.ClientSize.Height),
-                Color.FromArgb(10, 14, 22), Color.FromArgb(17, 24, 38)))
+                Color.FromArgb(9, 9, 11), Color.FromArgb(15, 16, 20)))
             {
                 g.FillRectangle(bgBrush, this.ClientRectangle);
             }
 
-            // 2. Top Banner (Thumbnail.jpg or Airspace vector)
-            DrawTopBanner(g);
+            // 2. Custom FluxUI Header with Airspace Emblem
+            DrawFluxHeader(g);
 
             if (_viewMode == ViewMode.Main)
             {
@@ -489,164 +486,254 @@ namespace AirspaceACARS.Updater
             }
         }
 
-        private void DrawTopBanner(Graphics g)
+        private void DrawFluxHeader(Graphics g)
         {
-            int bannerHeight = 160;
-            if (_bannerImage != null)
+            // Header container background
+            using (var hBrush = new SolidBrush(Color.FromArgb(13, 14, 18)))
             {
-                // Draw banner smoothly
-                g.DrawImage(_bannerImage, new Rectangle(0, 0, this.ClientSize.Width, bannerHeight));
+                g.FillRectangle(hBrush, new Rectangle(0, 0, this.ClientSize.Width, 126));
+            }
 
-                // Smooth bottom fade into dark form background
-                using (var fadeBrush = new LinearGradientBrush(new Point(0, bannerHeight - 45), new Point(0, bannerHeight + 1),
-                    Color.FromArgb(0, 10, 14, 22), Color.FromArgb(255, 10, 14, 22)))
+            // Bottom border line (FluxUI Zinc 800)
+            using (var borderPen = new Pen(Color.FromArgb(39, 39, 42), 1f))
+            {
+                g.DrawLine(borderPen, 0, 126, this.ClientSize.Width, 126);
+            }
+
+            // Draw Airspace Wing Emblem
+            DrawAirspaceLogo(g, 24, 28, 54, 54);
+
+            // Title "Airspace ACARS"
+            using (var titleFont = new Font("Segoe UI", 16f, FontStyle.Bold))
+            using (var titleBrush = new SolidBrush(Color.FromArgb(250, 250, 250)))
+            {
+                g.DrawString("Airspace ACARS", titleFont, titleBrush, new PointF(90, 26));
+            }
+
+            // Pill: FLOW PRO (FluxUI Badge)
+            Rectangle flowPill = new Rectangle(270, 31, 74, 20);
+            using (var pillPath = GetRoundedPath(flowPill, 10))
+            using (var pillBrush = new SolidBrush(Color.FromArgb(24, 24, 27)))
+            using (var pillPen = new Pen(Color.FromArgb(39, 39, 42), 1f))
+            {
+                g.FillPath(pillBrush, pillPath);
+                g.DrawPath(pillPen, pillPath);
+            }
+            using (var badgeFont = new Font("Segoe UI", 7.5f, FontStyle.Bold))
+            using (var badgeBrush = new SolidBrush(Color.FromArgb(161, 161, 170)))
+            {
+                g.DrawString("FLOW PRO", badgeFont, badgeBrush, new PointF(flowPill.X + 8, flowPill.Y + 3));
+            }
+
+            // Subtitle
+            using (var subFont = new Font("Segoe UI", 9f, FontStyle.Regular))
+            using (var subBrush = new SolidBrush(Color.FromArgb(113, 113, 122))) // Zinc 500
+            {
+                g.DrawString("Manager & Automatic Updater", subFont, subBrush, new PointF(91, 56));
+            }
+
+            // Target Simulator
+            using (var simFont = new Font("Segoe UI", 8.5f, FontStyle.Regular))
+            using (var simBrush = new SolidBrush(Color.FromArgb(161, 161, 170))) // Zinc 400
+            {
+                g.DrawString("Microsoft Flight Simulator 2024 / 2020", simFont, simBrush, new PointF(91, 76));
+            }
+
+            // Installed version pill below header (FluxUI Chip)
+            Rectangle verChip = new Rectangle(24, 138, 142, 24);
+            using (var chipPath = GetRoundedPath(verChip, 12))
+            using (var chipBrush = new SolidBrush(Color.FromArgb(24, 24, 27)))
+            using (var chipPen = new Pen(Color.FromArgb(39, 39, 42), 1f))
+            {
+                g.FillPath(chipBrush, chipPath);
+                g.DrawPath(chipPen, chipPath);
+            }
+            using (var verFont = new Font("Segoe UI", 8f, FontStyle.Bold))
+            using (var verBrush = new SolidBrush(Color.FromArgb(212, 212, 216)))
+            {
+                g.DrawString("Installed: v" + _installedVersion, verFont, verBrush, new PointF(verChip.X + 12, verChip.Y + 4));
+            }
+
+            // Sim status tag on the right
+            if (_isSimRunning)
+            {
+                using (var warnFont = new Font("Segoe UI", 8f, FontStyle.Bold))
+                using (var warnBrush = new SolidBrush(Color.FromArgb(245, 158, 11))) // Amber 500
                 {
-                    g.FillRectangle(fadeBrush, new Rectangle(0, bannerHeight - 45, this.ClientSize.Width, 47));
+                    string txt = "● MSFS is running";
+                    SizeF sz = g.MeasureString(txt, warnFont);
+                    g.DrawString(txt, warnFont, warnBrush, new PointF(this.ClientSize.Width - 24 - sz.Width, 142));
                 }
             }
             else
             {
-                // Elegant vector fallback
-                using (var brush = new LinearGradientBrush(new Point(0, 0), new Point(0, bannerHeight),
-                    Color.FromArgb(15, 23, 42), Color.FromArgb(10, 14, 22)))
+                using (var idleFont = new Font("Segoe UI", 8f, FontStyle.Regular))
+                using (var idleBrush = new SolidBrush(Color.FromArgb(113, 113, 122)))
                 {
-                    g.FillRectangle(brush, new Rectangle(0, 0, this.ClientSize.Width, bannerHeight));
-                }
-
-                // Title & Subtitle
-                using (var titleFont = new Font("Segoe UI", 20f, FontStyle.Bold))
-                using (var brush = new SolidBrush(Color.White))
-                {
-                    g.DrawString("Airspace ACARS", titleFont, brush, new PointF(24, 45));
+                    string txt = "MSFS is closed";
+                    SizeF sz = g.MeasureString(txt, idleFont);
+                    g.DrawString(txt, idleFont, idleBrush, new PointF(this.ClientSize.Width - 24 - sz.Width, 142));
                 }
             }
+        }
 
-            // Subtitle text below banner
-            using (var subFont = new Font("Segoe UI", 9.5f, FontStyle.Bold))
-            using (var subBrush = new SolidBrush(Color.FromArgb(148, 163, 184)))
+        private void DrawAirspaceLogo(Graphics g, float x, float y, float w, float h)
+        {
+            GraphicsState state = g.Save();
+
+            // Rounded badge behind logo
+            RectangleF badge = new RectangleF(x, y, w, h);
+            using (GraphicsPath bp = GetRoundedPath(Rectangle.Round(badge), 12))
+            using (SolidBrush bb = new SolidBrush(Color.FromArgb(20, 20, 25)))
+            using (Pen bpen = new Pen(Color.FromArgb(39, 39, 42), 1f))
             {
-                string text = "For MSFS 2024 & MSFS 2020";
-                g.DrawString(text, subFont, subBrush, new PointF(24, 156));
+                g.FillPath(bb, bp);
+                g.DrawPath(bpen, bp);
             }
 
-            // Version tag on the right
-            string verText = "v" + _installedVersion;
-            using (var verFont = new Font("Segoe UI", 9f, FontStyle.Regular))
-            using (var verBrush = new SolidBrush(Color.FromArgb(100, 116, 139)))
+            float scale = (w * 0.76f) / 377f;
+            Matrix m = new Matrix();
+            m.Translate(x + (w * 0.12f), y + (h * 0.13f));
+            m.Scale(scale, scale);
+            g.Transform = m;
+
+            // Official Airspace Logo Paths
+            // Red Wing Parts (#FC1A02)
+            using (SolidBrush redBrush = new SolidBrush(Color.FromArgb(252, 26, 2)))
             {
-                SizeF size = g.MeasureString(verText, verFont);
-                g.DrawString(verText, verFont, verBrush, new PointF(this.ClientSize.Width - 24 - size.Width, 156));
+                PointF[] r1 = new PointF[] {
+                    new PointF(300.95f, 154.574f),
+                    new PointF(300.95f, 215.038f),
+                    new PointF(183.849f, 215.038f),
+                    new PointF(183.849f, 198.265f),
+                    new PointF(227.643f, 154.574f)
+                };
+                g.FillPolygon(redBrush, r1);
+
+                PointF[] r2 = new PointF[] {
+                    new PointF(98.8591f, 283.051f),
+                    new PointF(160.586f, 221.46f),
+                    new PointF(160.586f, 303f),
+                    new PointF(98.8591f, 303f)
+                };
+                g.FillPolygon(redBrush, r2);
+
+                PointF[] r3 = new PointF[] {
+                    new PointF(321.207f, 54.1096f),
+                    new PointF(238.847f, 114.607f),
+                    new PointF(199.939f, 114.607f),
+                    new PointF(160.621f, 149.348f),
+                    new PointF(160.621f, 172.064f),
+                    new PointF(98.8591f, 217.395f),
+                    new PointF(98.8591f, 152.73f),
+                    new PointF(128.408f, 82.9748f),
+                    new PointF(161.03f, 61.3515f),
+                    new PointF(199.871f, 54.1437f),
+                    new PointF(321.173f, 54.1437f)
+                };
+                g.FillPolygon(redBrush, r3);
             }
+
+            // White Chevron
+            using (SolidBrush whiteBrush = new SolidBrush(Color.White))
+            {
+                PointF[] w1 = new PointF[] {
+                    new PointF(91.6174f, 282.846f),
+                    new PointF(0f, 282.846f),
+                    new PointF(98.8593f, 210.255f),
+                    new PointF(160.587f, 164.959f),
+                    new PointF(229.146f, 114.607f),
+                    new PointF(311.54f, 54.1096f),
+                    new PointF(346.93f, 28.1479f),
+                    new PointF(320.9f, 54.1096f)
+                };
+                g.FillPolygon(whiteBrush, w1);
+            }
+
+            g.Restore(state);
         }
 
         private void DrawMainView(Graphics g)
         {
-            // 1. Channel Card (Image 1 style)
-            DrawRoundedCard(g, _channelCardRect, Color.FromArgb(20, 28, 44), Color.FromArgb(35, 50, 75));
-
-            using (var lblFont = new Font("Segoe UI", 8f, FontStyle.Bold))
-            using (var titleFont = new Font("Segoe UI", 11f, FontStyle.Bold))
-            using (var descFont = new Font("Segoe UI", 8.5f, FontStyle.Regular))
-            {
-                using (var b = new SolidBrush(Color.FromArgb(148, 163, 184)))
-                    g.DrawString("BRANCH / CHANNEL", lblFont, b, new PointF(_channelCardRect.X + 16, _channelCardRect.Y + 12));
-
-                using (var b = new SolidBrush(Color.FromArgb(248, 250, 252)))
-                    g.DrawString("Official", titleFont, b, new PointF(_channelCardRect.X + 16, _channelCardRect.Y + 28));
-
-                using (var b = new SolidBrush(Color.FromArgb(100, 116, 139)))
-                    g.DrawString("The most stable build of Airspace ACARS.", descFont, b, new PointF(_channelCardRect.X + 16, _channelCardRect.Y + 48));
-
-                // Little dropdown indicator on the right
-                using (var b = new SolidBrush(Color.FromArgb(100, 116, 139)))
-                    g.DrawString("▼", lblFont, b, new PointF(_channelCardRect.Right - 28, _channelCardRect.Y + 30));
-            }
-
-            // 2. Status Card
-            DrawRoundedCard(g, _statusCardRect, Color.FromArgb(20, 28, 44), Color.FromArgb(35, 50, 75));
+            // Status Card (FluxUI Card style)
+            DrawRoundedCard(g, _statusCardRect, Color.FromArgb(18, 19, 24), Color.FromArgb(39, 39, 42));
 
             if (_isChecking)
             {
-                using (var f = new Font("Segoe UI", 10.5f, FontStyle.Regular))
-                using (var b = new SolidBrush(Color.FromArgb(203, 213, 225)))
+                using (var f = new Font("Segoe UI", 11f, FontStyle.Bold))
+                using (var b = new SolidBrush(Color.FromArgb(250, 250, 250)))
                 {
-                    g.DrawString("Checking GitHub for updates...", f, b, new PointF(_statusCardRect.X + 16, _statusCardRect.Y + 16));
+                    g.DrawString("Checking for updates...", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 20));
                 }
-                using (var f = new Font("Segoe UI", 8.5f, FontStyle.Regular))
-                using (var b = new SolidBrush(Color.FromArgb(100, 116, 139)))
+                using (var f = new Font("Segoe UI", 9f, FontStyle.Regular))
+                using (var b = new SolidBrush(Color.FromArgb(161, 161, 170)))
                 {
-                    g.DrawString("Please wait a moment", f, b, new PointF(_statusCardRect.X + 16, _statusCardRect.Y + 40));
+                    g.DrawString("Querying releases from GitHub...", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 48));
                 }
             }
             else if (_checkFailed)
             {
-                using (var f = new Font("Segoe UI", 10f, FontStyle.Bold))
-                using (var b = new SolidBrush(Color.FromArgb(248, 113, 113)))
+                using (var f = new Font("Segoe UI", 11f, FontStyle.Bold))
+                using (var b = new SolidBrush(Color.FromArgb(239, 68, 68)))
                 {
-                    g.DrawString("Could not check for updates", f, b, new PointF(_statusCardRect.X + 16, _statusCardRect.Y + 14));
+                    g.DrawString("Could not check updates", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 18));
                 }
                 using (var f = new Font("Segoe UI", 8.5f, FontStyle.Regular))
-                using (var b = new SolidBrush(Color.FromArgb(148, 163, 184)))
+                using (var b = new SolidBrush(Color.FromArgb(161, 161, 170)))
                 {
                     string err = string.IsNullOrEmpty(_checkErrorMsg) ? "Network error" : _checkErrorMsg;
-                    if (err.Length > 42) err = err.Substring(0, 40) + "...";
-                    g.DrawString(err + " (Click Reinstall/Update to retry)", f, b, new PointF(_statusCardRect.X + 16, _statusCardRect.Y + 38));
+                    if (err.Length > 44) err = err.Substring(0, 42) + "...";
+                    g.DrawString(err + " (Click Reinstall/Update to retry)", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 46));
                 }
             }
             else if (_hasUpdate)
             {
-                // Amber/Cyan update alert
-                using (var f = new Font("Segoe UI", 11f, FontStyle.Bold))
-                using (var b = new SolidBrush(Color.FromArgb(56, 189, 248)))
+                // Emerald update alert (FluxUI Badge)
+                using (var f = new Font("Segoe UI", 12f, FontStyle.Bold))
+                using (var b = new SolidBrush(Color.FromArgb(16, 185, 129))) // Emerald 500
                 {
-                    g.DrawString("⚡ New version available: v" + _latestVersion, f, b, new PointF(_statusCardRect.X + 16, _statusCardRect.Y + 14));
+                    g.DrawString("● New version available: v" + _latestVersion, f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 18));
                 }
-                using (var f = new Font("Segoe UI", 8.5f, FontStyle.Regular))
-                using (var b = new SolidBrush(Color.FromArgb(148, 163, 184)))
+                using (var f = new Font("Segoe UI", 9f, FontStyle.Regular))
+                using (var b = new SolidBrush(Color.FromArgb(212, 212, 216)))
                 {
-                    g.DrawString("Installed: v" + _installedVersion + " • Ready to download from GitHub", f, b, new PointF(_statusCardRect.X + 16, _statusCardRect.Y + 40));
+                    g.DrawString("A newer version is ready to download and install from GitHub.", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 44));
+                }
+                using (var f = new Font("Segoe UI", 8f, FontStyle.Regular))
+                using (var b = new SolidBrush(Color.FromArgb(113, 113, 122)))
+                {
+                    g.DrawString("Direct Community in-place update with 1 click.", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 66));
                 }
             }
             else
             {
                 // Up to date
-                using (var f = new Font("Segoe UI", 11f, FontStyle.Bold))
+                using (var f = new Font("Segoe UI", 12f, FontStyle.Bold))
                 using (var b = new SolidBrush(Color.FromArgb(16, 185, 129)))
                 {
-                    g.DrawString("✔ Up to date (v" + _installedVersion + ")", f, b, new PointF(_statusCardRect.X + 16, _statusCardRect.Y + 14));
+                    g.DrawString("✔ Up to date (v" + _installedVersion + ")", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 20));
                 }
-                using (var f = new Font("Segoe UI", 8.5f, FontStyle.Regular))
-                using (var b = new SolidBrush(Color.FromArgb(148, 163, 184)))
+                using (var f = new Font("Segoe UI", 9f, FontStyle.Regular))
+                using (var b = new SolidBrush(Color.FromArgb(161, 161, 170)))
                 {
-                    g.DrawString("You have the latest stable version installed.", f, b, new PointF(_statusCardRect.X + 16, _statusCardRect.Y + 40));
+                    g.DrawString("You are running the latest stable release of Airspace ACARS.", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 48));
                 }
             }
 
-            // MSFS Running notice
-            if (_isSimRunning)
-            {
-                using (var warnFont = new Font("Segoe UI", 8f, FontStyle.Bold))
-                using (var warnBrush = new SolidBrush(Color.FromArgb(251, 191, 36)))
-                {
-                    g.DrawString("⚠️ MSFS is running (restart simulator after updating)", warnFont, warnBrush,
-                        new PointF(24, 332));
-                }
-            }
-
-            // 3. Green Button: Reinstall/Update or Update Now
-            string greenBtnText = _hasUpdate ? ("Update to v" + _latestVersion) : "Reinstall/Update";
+            // Green Button: Update to vX.X.X or Reinstall/Update
+            string greenBtnText = _hasUpdate ? ("Update to v" + _latestVersion) : "Reinstall / Update";
             Color greenBg = _pressedGreen ? Color.FromArgb(4, 120, 87) :
                             (_hoverGreen ? Color.FromArgb(5, 150, 105) : Color.FromArgb(16, 185, 129));
             DrawRoundedButton(g, _greenBtnRect, greenBg, greenBtnText, true);
 
-            // 4. Red Button: Uninstall
-            Color redBg = _pressedRed ? Color.FromArgb(105, 19, 19) :
-                          (_hoverRed ? Color.FromArgb(153, 27, 27) : Color.FromArgb(127, 29, 29));
+            // Red Button: Uninstall
+            Color redBg = _pressedRed ? Color.FromArgb(127, 29, 29) :
+                          (_hoverRed ? Color.FromArgb(185, 28, 28) : Color.FromArgb(153, 27, 27));
             DrawRoundedButton(g, _redBtnRect, redBg, "Uninstall", false);
 
-            // 5. Release notes link
+            // Release notes link
             using (var linkFont = new Font("Segoe UI", 9.5f, FontStyle.Regular))
-            using (var linkBrush = new SolidBrush(_hoverReleaseNotes ? Color.FromArgb(125, 211, 252) : Color.FromArgb(56, 189, 248)))
+            using (var linkBrush = new SolidBrush(_hoverReleaseNotes ? Color.FromArgb(147, 197, 253) : Color.FromArgb(96, 165, 250)))
             {
                 string text = "View Release Notes on GitHub »";
                 SizeF s = g.MeasureString(text, linkFont);
@@ -654,12 +741,12 @@ namespace AirspaceACARS.Updater
                 g.DrawString(text, linkFont, linkBrush, new PointF(x, _notesLinkRect.Y));
             }
 
-            // 6. Community folder indicator
-            using (var pathFont = new Font("Segoe UI", 7.5f, FontStyle.Regular))
-            using (var pathBrush = new SolidBrush(Color.FromArgb(71, 85, 105)))
+            // Community folder indicator
+            using (var pathFont = new Font("Segoe UI", 8f, FontStyle.Regular))
+            using (var pathBrush = new SolidBrush(Color.FromArgb(82, 82, 91))) // Zinc 600
             {
                 string p = _packageDir;
-                if (p.Length > 55) p = "..." + p.Substring(p.Length - 52);
+                if (p.Length > 56) p = "..." + p.Substring(p.Length - 52);
                 string text = "Target: " + p;
                 SizeF s = g.MeasureString(text, pathFont);
                 float x = (this.ClientSize.Width - s.Width) / 2f;
@@ -669,25 +756,24 @@ namespace AirspaceACARS.Updater
 
         private void DrawProgressView(Graphics g)
         {
-            // Center spinner or status icon
             int centerX = this.ClientSize.Width / 2;
-            int centerY = 230;
+            int centerY = 210;
 
             if (_updateFinished)
             {
                 // Green checkmark
                 using (var brush = new SolidBrush(Color.FromArgb(16, 185, 129)))
                 {
-                    g.FillEllipse(brush, centerX - 24, centerY - 24, 48, 48);
+                    g.FillEllipse(brush, centerX - 26, centerY - 26, 52, 52);
                 }
-                using (var pen = new Pen(Color.White, 3.5f))
+                using (var pen = new Pen(Color.White, 3.8f))
                 {
                     pen.StartCap = LineCap.Round;
                     pen.EndCap = LineCap.Round;
                     g.DrawLines(pen, new Point[] {
-                        new Point(centerX - 12, centerY),
-                        new Point(centerX - 3, centerY + 9),
-                        new Point(centerX + 13, centerY - 7)
+                        new Point(centerX - 13, centerY),
+                        new Point(centerX - 3, centerY + 10),
+                        new Point(centerX + 14, centerY - 8)
                     });
                 }
             }
@@ -696,59 +782,59 @@ namespace AirspaceACARS.Updater
                 // Red cross
                 using (var brush = new SolidBrush(Color.FromArgb(239, 68, 68)))
                 {
-                    g.FillEllipse(brush, centerX - 24, centerY - 24, 48, 48);
+                    g.FillEllipse(brush, centerX - 26, centerY - 26, 52, 52);
                 }
-                using (var pen = new Pen(Color.White, 3.5f))
+                using (var pen = new Pen(Color.White, 3.8f))
                 {
                     pen.StartCap = LineCap.Round;
                     pen.EndCap = LineCap.Round;
-                    g.DrawLine(pen, centerX - 10, centerY - 10, centerX + 10, centerY + 10);
-                    g.DrawLine(pen, centerX + 10, centerY - 10, centerX - 10, centerY + 10);
+                    g.DrawLine(pen, centerX - 11, centerY - 11, centerX + 11, centerY + 11);
+                    g.DrawLine(pen, centerX + 11, centerY - 11, centerX - 11, centerY + 11);
                 }
             }
             else
             {
-                // Rotating spinner ring (Image 2 style)
-                using (var trackPen = new Pen(Color.FromArgb(35, 48, 70), 4f))
+                // Rotating spinner ring (FluxUI Emerald)
+                using (var trackPen = new Pen(Color.FromArgb(39, 39, 42), 4f))
                 {
-                    g.DrawEllipse(trackPen, centerX - 24, centerY - 24, 48, 48);
+                    g.DrawEllipse(trackPen, centerX - 26, centerY - 26, 52, 52);
                 }
-                using (var arcPen = new Pen(Color.FromArgb(245, 158, 11), 4f))
+                using (var arcPen = new Pen(Color.FromArgb(16, 185, 129), 4f))
                 {
                     arcPen.StartCap = LineCap.Round;
                     arcPen.EndCap = LineCap.Round;
-                    g.DrawArc(arcPen, centerX - 24, centerY - 24, 48, 48, _spinnerAngle, 110f);
+                    g.DrawArc(arcPen, centerX - 26, centerY - 26, 52, 52, _spinnerAngle, 115f);
                 }
             }
 
             // Headline
-            using (var headFont = new Font("Segoe UI", 13f, FontStyle.Bold))
-            using (var headBrush = new SolidBrush(Color.FromArgb(248, 250, 252)))
+            using (var headFont = new Font("Segoe UI", 13.5f, FontStyle.Bold))
+            using (var headBrush = new SolidBrush(Color.FromArgb(250, 250, 250)))
             {
                 SizeF s = g.MeasureString(_statusHeadline, headFont);
-                g.DrawString(_statusHeadline, headFont, headBrush, new PointF((this.ClientSize.Width - s.Width) / 2f, 275));
+                g.DrawString(_statusHeadline, headFont, headBrush, new PointF((this.ClientSize.Width - s.Width) / 2f, 256));
             }
 
-            // Custom Smooth Progress Bar (Image 2 style)
+            // Custom Smooth Progress Bar
             int barX = _closeBtnRect.X;
-            int barY = 320;
+            int barY = 295;
             int barW = _closeBtnRect.Width;
             int barH = 12;
 
-            // Track
+            // Track (FluxUI Zinc 800)
             using (var trackPath = GetRoundedPath(new Rectangle(barX, barY, barW, barH), 6))
-            using (var trackBrush = new SolidBrush(Color.FromArgb(30, 41, 59)))
+            using (var trackBrush = new SolidBrush(Color.FromArgb(39, 39, 42)))
             {
                 g.FillPath(trackBrush, trackPath);
             }
 
-            // Fill
+            // Fill (Emerald gradient)
             float pct = Math.Max(0f, Math.Min(100f, _displayProgress));
             int fillW = (int)((barW * pct) / 100f);
             if (fillW > 6)
             {
-                Color cStart = _updateFinished ? Color.FromArgb(16, 185, 129) : Color.FromArgb(245, 158, 11);
-                Color cEnd = _updateFinished ? Color.FromArgb(5, 150, 105) : Color.FromArgb(234, 179, 8);
+                Color cStart = Color.FromArgb(16, 185, 129);
+                Color cEnd = Color.FromArgb(5, 150, 105);
 
                 using (var fillPath = GetRoundedPath(new Rectangle(barX, barY, fillW, barH), 6))
                 using (var fillBrush = new LinearGradientBrush(new Point(barX, barY), new Point(barX + fillW, barY), cStart, cEnd))
@@ -759,10 +845,10 @@ namespace AirspaceACARS.Updater
 
             // Detail text below progress bar
             using (var detFont = new Font("Segoe UI", 9f, FontStyle.Regular))
-            using (var detBrush = new SolidBrush(Color.FromArgb(148, 163, 184)))
+            using (var detBrush = new SolidBrush(Color.FromArgb(161, 161, 170)))
             {
                 SizeF s = g.MeasureString(_detailText, detFont);
-                g.DrawString(_detailText, detFont, detBrush, new PointF((this.ClientSize.Width - s.Width) / 2f, 344));
+                g.DrawString(_detailText, detFont, detBrush, new PointF((this.ClientSize.Width - s.Width) / 2f, 320));
             }
 
             // Close button at bottom
@@ -770,8 +856,8 @@ namespace AirspaceACARS.Updater
             Color closeFg;
             if (_isUpdating)
             {
-                closeBg = Color.FromArgb(25, 33, 48);
-                closeFg = Color.FromArgb(71, 85, 105);
+                closeBg = Color.FromArgb(24, 24, 27);
+                closeFg = Color.FromArgb(82, 82, 91);
             }
             else
             {
@@ -836,7 +922,6 @@ namespace AirspaceACARS.Updater
                         pen.StartCap = LineCap.Round;
                         pen.EndCap = LineCap.Round;
                         g.DrawArc(pen, iconRight - 10, iconCenterY - 10, 20, 20, 45, 270);
-                        // Arrowhead
                         PointF[] arrow = new PointF[] {
                             new PointF(iconRight + 3, iconCenterY - 9),
                             new PointF(iconRight + 7, iconCenterY - 2),
@@ -959,7 +1044,6 @@ namespace AirspaceACARS.Updater
                 {
                     if (_updateFinished)
                     {
-                        // Refresh state and switch back to main
                         ReadInstalledVersion();
                         _hasUpdate = false;
                         _viewMode = ViewMode.Main;
@@ -1007,7 +1091,7 @@ namespace AirspaceACARS.Updater
             {
                 CheckSimulatorProcess();
 
-                // If download URL is empty or need refresh, query GitHub
+                // If download URL is empty, query GitHub
                 if (string.IsNullOrEmpty(_downloadUrl))
                 {
                     UpdateProgress(10, "Connecting to GitHub...", "Fetching download links...");
@@ -1035,7 +1119,6 @@ namespace AirspaceACARS.Updater
                         if ((DateTime.UtcNow - lastReport).TotalMilliseconds > 80 || ev.ProgressPercentage == 100)
                         {
                             lastReport = DateTime.UtcNow;
-                            // Scale download progress into 15% -> 70%
                             int mapped = 15 + (int)(ev.ProgressPercentage * 0.55f);
                             double mbReceived = ev.BytesReceived / 1048576.0;
                             double mbTotal = ev.TotalBytesToReceive / 1048576.0;
@@ -1059,10 +1142,8 @@ namespace AirspaceACARS.Updater
                     InstallExeInstaller(tempFile);
                 }
 
-                // Cleanup download
                 try { if (File.Exists(tempFile)) File.Delete(tempFile); } catch { }
 
-                // Finish
                 ReadInstalledVersion();
                 UpdateProgress(100, "Update completed successfully!", "All files are up to date.");
                 _isUpdating = false;
@@ -1089,7 +1170,6 @@ namespace AirspaceACARS.Updater
             {
                 ZipFile.ExtractToDirectory(zipPath, tempExtract);
 
-                // Locate the root folder containing manifest.json or Flow
                 string sourceRoot = tempExtract;
                 string subDir = Path.Combine(tempExtract, "p42-util-airspace-acars");
                 if (Directory.Exists(subDir))
@@ -1195,7 +1275,6 @@ namespace AirspaceACARS.Updater
                     return;
                 }
 
-                // If running inside the directory being deleted, schedule delete on exit
                 if (Directory.Exists(_packageDir))
                 {
                     string flowDir = Path.Combine(_packageDir, "Flow");

@@ -67,6 +67,7 @@ export function compileUpdater(outputPath) {
 
   if (fs.existsSync(iconPath)) {
     args.push(`/win32icon:"${iconPath}"`);
+    args.push(`/resource:"${iconPath}",app.ico`);
   }
 
   if (fs.existsSync(thumbPath)) {
