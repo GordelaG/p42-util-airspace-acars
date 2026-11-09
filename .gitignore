@@ -3,5 +3,6 @@ dist/
 installer_output/
 *.zip
 *.exe
+!assets/Update.exe
 .DS_Store
 Thumbs.db

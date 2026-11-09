@@ -11,7 +11,7 @@ on:
 jobs:
   test-and-build:
     name: Test & Build MSFS 2024 Package
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
