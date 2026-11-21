@@ -7,7 +7,7 @@
 **Widget e Integração Oficial do Airspace ACARS para o Parallel 42 Flow Pro no Microsoft Flight Simulator**
 
 [![GitHub Release](https://img.shields.io/github/v/release/GordelaG/p42-util-airspace-acars?color=10b981&label=Release&logo=github)](https://github.com/GordelaG/p42-util-airspace-acars/releases/latest)
-[![Tests](https://img.shields.io/badge/tests-19%20passed-10b981.svg)](test/widget.test.mjs)
+[![Tests](https://img.shields.io/badge/tests-21%20passed-10b981.svg)](test/widget.test.mjs)
 [![MSFS Compatibility](https://img.shields.io/badge/MSFS-2024%20%7C%202020-0284c7.svg)](#compatibilidade)
 [![Flow Compatibility](https://img.shields.io/badge/Flow-Pro-f59e0b.svg)](https://parallel42.com/products/flow)
 [![License](https://img.shields.io/badge/license-Proprietary-64748b.svg)](installer/TERMOS-DE-USO.txt)
@@ -53,11 +53,11 @@ Caso você prefira instalar manualmente ou utilize gerenciadores externos:
 
 ---
 
-## ⚡ Airspace ACARS Manager (`Update.exe`) — Atualizações com 1 Clique
+## ⚡ Airspace ACARS Manager (`AirspaceACARS-Manager.exe`) — Atualizações com 1 Clique
 
 Esqueça a necessidade de baixar e reinstalar arquivos manualmente a cada atualização. O pacote inclui um utilitário exclusivo de gerenciamento:
 
-- **Localização**: `%Community%\p42-util-airspace-acars\Update.exe` (ou pelo atalho *"Airspace ACARS Manager"* no Menu Iniciar).
+- **Localização**: `%Community%\p42-util-airspace-acars\AirspaceACARS-Manager.exe` (ou pelo atalho *"Airspace ACARS Manager"* no Menu Iniciar).
 - **Design Moderno FluxUI**: Interface escura construída sob medida com o logotipo oficial da Airspace e padrão de cores corporativo.
 - **Detecção Automática**: Compara a versão instalada no seu simulador com a versão mais recente publicada no GitHub.
 - **Atualização Direta no Simulador**: Basta clicar no botão verde **`Update to vX.X.X`** — o utilitário baixa o pacote compactado em segundo plano, extrai os arquivos no local correto e atualiza o simulador em poucos segundos.
@@ -134,7 +134,7 @@ p42-util-airspace-acars/
 │   └── TERMS-OF-USE.txt      # Termos de uso em inglês
 ├── scripts/
 │   ├── build.mjs             # Empacotador do MSFS (gera manifest.json, layout.json e template JSON)
-│   ├── compile-updater.mjs   # Compilador C# (.NET Framework 4.8) para o Update.exe
+│   ├── compile-updater.mjs   # Compilador C# (Roslyn / .NET Framework 4.8) para o AirspaceACARS-Manager.exe
 │   └── generate-ico.mjs      # Utilitário de geração de ícones multi-resolução
 ├── src/
 │   ├── code.js               # Código principal do widget (100% 7-bit ASCII para Coherent GT)
@@ -143,7 +143,8 @@ p42-util-airspace-acars/
 ├── test/
 │   └── widget.test.mjs       # Suíte completa de testes automatizados (Node.js Test Runner)
 ├── updater/
-│   └── Program.cs            # Código-fonte em C# do Airspace ACARS Manager (Update.exe)
+│   ├── app.manifest          # Manifesto Win32 (asInvoker, compatibilidade Windows 10/11)
+│   └── Program.cs            # Código-fonte em C# do Airspace ACARS Manager (AirspaceACARS-Manager.exe)
 ├── installer.iss             # Script de compilação do instalador oficial Inno Setup
 └── package.json
 ```
@@ -154,14 +155,14 @@ p42-util-airspace-acars/
 
 ### Pré-requisitos
 - **Node.js 20+**
-- Compilador C# nativo do Windows (`csc.exe` do .NET Framework 4.8 incluído no Windows 10 e 11).
+- Compilador C# do Windows (Roslyn via .NET SDK ou `csc.exe` do .NET Framework 4.8 incluído no Windows 10 e 11).
 
 ### Comandos
 ```bash
-# Executa a suíte de testes unitários e de integração (19 testes)
+# Executa a suíte de testes unitários e de integração
 npm test
 
-# Compila o Update.exe e gera o pacote completo em dist/p42-util-airspace-acars/
+# Compila o AirspaceACARS-Manager.exe e gera o pacote completo em dist/p42-util-airspace-acars/
 npm run build
 ```
 
