@@ -66,6 +66,65 @@
     </div>
   </div>
 
+  <!-- Floating Flight Attendant Landing Toast Notification -->
+  <div
+    class="as-acars-toast as-acars-landing-toast as-acars-hidden"
+    id="as-acars-landing-toast"
+    data-dragtarget="airspace_acars_landing_toast"
+    data-defaultx="65"
+    data-defaulty="14"
+    data-defaultoffsetx="0"
+    data-defaultoffsety="0"
+  >
+    <div class="as-acars-toast-header" id="as-acars-landing-toast-header">
+      <div class="as-acars-toast-title" data-dragarea="airspace_acars_landing_toast">
+        <img class="as-acars-toast-va-logo as-acars-hidden" id="as-acars-landing-toast-va-logo" alt="VA Logo" />
+        <svg class="as-acars-toast-default-logo" id="as-acars-landing-toast-default-logo" viewBox="0 0 377 303" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M300.95 154.574V215.038H183.849V198.265L227.643 154.574H300.95Z" fill="#FC1A02"/>
+          <path d="M98.8591 283.051L160.586 221.46V303H98.8591V283.051Z" fill="#FC1A02"/>
+          <path d="M321.207 54.1096L320.046 54.9636L319.977 55.0319L293.093 74.7764L238.847 114.607H199.939C194.234 114.607 189.213 115.564 184.669 117.408C180.092 119.253 175.993 122.02 172.167 125.812L172.098 125.914L171.996 125.982C168.409 129.398 165.779 132.985 163.9 136.845C162.089 140.671 160.962 144.77 160.621 149.348V172.064L98.8591 217.395V152.73C98.8591 139.237 101.319 126.563 106.272 114.846C111.225 103.129 118.672 92.5055 128.408 82.9748C138.109 73.4783 149.074 66.2022 161.03 61.3515C173.021 56.5349 186.036 54.1437 199.871 54.1437H321.173L321.207 54.1096Z" fill="#FC1A02"/>
+          <path d="M91.6174 282.846H0L98.8593 210.255L160.587 164.959L229.146 114.607L311.54 54.1096L320.08 47.8242L346.93 28.1479L320.9 54.1096L320.012 54.9636L319.978 54.9978" fill="white"/>
+          <path d="M376.718 0.0341187L350.414 25.0051L352.771 68.081C354.035 74.8789 353.796 80.0712 353.694 81.6084C361.38 54.3828 369.032 27.2256 376.683 0.0341187H376.718Z" fill="white"/>
+          <path d="M376.717 0L294.528 20.906C295.929 20.8377 300.062 20.8035 305.63 21.7258L350.414 25.0393L376.717 0.0341601Z" fill="white"/>
+        </svg>
+        <span class="as-acars-toast-title-text" id="as-acars-landing-toast-title">Flight Attendant</span>
+      </div>
+      <div class="as-acars-toast-actions-header">
+        <button type="button" class="as-acars-toast-close" id="as-acars-landing-toast-close" title="Fechar" data-i18n-title="landing.close_title">X</button>
+      </div>
+    </div>
+    <div class="as-acars-landing-card-body">
+      <div class="as-acars-landing-stat-row">
+        <div class="as-acars-landing-metric">
+          <div class="as-acars-landing-label" data-i18n="landing.touchdown_rate">Taxa de Toque</div>
+          <div class="as-acars-landing-fpm" id="as-acars-landing-fpm-val">-185 <span class="as-acars-landing-unit">ft/min</span></div>
+        </div>
+        <div class="as-acars-landing-badge-wrap">
+          <span class="as-acars-landing-pill as-acars-landing-butter" id="as-acars-landing-pill">Butter Landing</span>
+        </div>
+      </div>
+      <div class="as-acars-landing-meta-row">
+        <span class="as-acars-landing-meta-item" id="as-acars-landing-dest-wrap">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="as-acars-landing-icon"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <span id="as-acars-landing-dest">SBGR</span>
+        </span>
+        <span class="as-acars-landing-meta-dot">&bull;</span>
+        <span class="as-acars-landing-meta-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="as-acars-landing-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span id="as-acars-landing-time">14:32Z</span>
+        </span>
+      </div>
+    </div>
+    <div class="as-acars-toast-actions">
+      <button type="button" class="as-acars-toast-btn" id="as-acars-landing-btn-view" data-i18n="landing.view_flight">
+        Ver no Painel
+      </button>
+      <button type="button" class="as-acars-toast-dismiss" id="as-acars-landing-btn-dismiss" data-i18n="landing.dismiss">
+        Fechar
+      </button>
+    </div>
+  </div>
+
   <!-- Main Floating Draggable Window -->
   <div
     class="as-acars-window as-acars-hidden"
@@ -671,133 +730,260 @@
             <p class="as-acars-settings-subtitle" data-i18n="settings.subtitle">Personalize idioma, aparencia e alertas do Airspace ACARS</p>
           </div>
 
+          <!-- Card 1: Aparencia & Idioma -->
           <div class="as-acars-settings-card">
-            <!-- Language Setting Row -->
-            <div class="as-acars-setting-row">
-              <div class="as-acars-setting-info">
-                <div class="as-acars-setting-label" data-i18n="settings.language_title">Idioma da Interface</div>
-                <div class="as-acars-setting-desc" data-i18n="settings.language_sub">Selecione o idioma de exibicao</div>
-              </div>
-              <div class="as-acars-setting-control as-acars-lang-group" id="as-acars-settings-lang-grid">
-                <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-lang-choice" data-lang="en">
-                  <span class="as-acars-lang-code">EN</span>
-                  <span class="as-acars-lang-name">English</span>
-                </button>
-                <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-lang-choice" data-lang="pt-br">
-                  <span class="as-acars-lang-code">PT-BR</span>
-                  <span class="as-acars-lang-name">Portugues</span>
-                </button>
-                <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-lang-choice" data-lang="es">
-                  <span class="as-acars-lang-code">ES</span>
-                  <span class="as-acars-lang-name">Espanol</span>
-                </button>
-                <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-lang-choice" data-lang="fr">
-                  <span class="as-acars-lang-code">FR</span>
-                  <span class="as-acars-lang-name">Francais</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="as-acars-setting-divider"></div>
-
-            <!-- Appearance / White Mode Setting Row -->
-            <div class="as-acars-setting-row">
-              <div class="as-acars-setting-info">
-                <div class="as-acars-setting-label" data-i18n="settings.theme_title">Modo Claro (White Mode)</div>
-                <div class="as-acars-setting-desc" data-i18n="settings.theme_sub">Alterne entre o tema escuro padrao e o modo claro</div>
-              </div>
-              <div class="as-acars-setting-control as-acars-switch-control">
-                <button type="button" role="switch" class="as-acars-switch as-acars-theme-choice" id="as-acars-switch-white" data-theme="white" aria-checked="false" title="Alternar Modo Claro">
-                  <span class="as-acars-switch-thumb"></span>
-                </button>
-                <span class="as-acars-switch-status" id="as-acars-switch-white-status">Desativado</span>
-              </div>
-            </div>
-
-            <div class="as-acars-setting-divider"></div>
-
-            <!-- Toast / Popup Enable Row -->
-            <div class="as-acars-setting-row">
-              <div class="as-acars-setting-info">
-                <div class="as-acars-setting-label" data-i18n="settings.toast_title">Alertas Flutuantes do vOCC</div>
-                <div class="as-acars-setting-desc" data-i18n="settings.toast_sub">Exibir popup na cabine ao receber mensagens do vOCC</div>
-              </div>
-              <div class="as-acars-setting-control as-acars-switch-control">
-                <button type="button" role="switch" class="as-acars-switch" id="as-acars-switch-toast" aria-checked="true" title="Ativar/Desativar Alertas na Cabine">
-                  <span class="as-acars-switch-thumb"></span>
-                </button>
-                <span class="as-acars-switch-status" id="as-acars-switch-toast-status">Ativado</span>
-              </div>
-            </div>
-
-            <div class="as-acars-setting-divider"></div>
-
-            <!-- Toast Duration Row -->
-            <div class="as-acars-setting-row">
-              <div class="as-acars-setting-info">
-                <div class="as-acars-setting-label" data-i18n="settings.toast_duration">Tempo de Exibicao dos Alertas</div>
-                <div class="as-acars-setting-desc" data-i18n="settings.toast_duration_desc">Duracao em segundos ate o popup fechar automaticamente (0 = fixo)</div>
-              </div>
-              <div class="as-acars-setting-control as-acars-duration-control">
-                <div class="as-acars-duration-presets">
-                  <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-duration-preset" data-sec="15">15s</button>
-                  <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-duration-preset" data-sec="30">30s</button>
-                  <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-duration-preset" data-sec="60">60s</button>
-                  <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-duration-preset" data-sec="0">Fixo</button>
-                </div>
-                <div class="as-acars-duration-input-wrap">
-                  <input type="number" min="0" max="300" step="5" id="as-acars-settings-toast-time" class="as-acars-input as-acars-input-sm as-acars-duration-input" />
-                  <span class="as-acars-duration-unit">s</span>
+            <div class="as-acars-settings-card-header">
+              <div class="as-acars-settings-card-header-left">
+                <svg class="as-acars-settings-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <div>
+                  <h3 class="as-acars-settings-card-title" data-i18n="settings.cat_appearance">Aparencia &amp; Idioma</h3>
+                  <p class="as-acars-settings-card-desc" data-i18n="settings.cat_appearance_desc">Preferencias visuais e idioma da interface</p>
                 </div>
               </div>
             </div>
-
-            <div class="as-acars-setting-divider"></div>
-
-            <!-- Version & Updates Row -->
-            <div class="as-acars-setting-row">
-              <div class="as-acars-setting-info">
-                <div class="as-acars-setting-label">
-                  <span data-i18n="settings.update_title">Versao &amp; Atualizacoes</span>
-                  <span class="as-acars-version-badge" id="as-acars-current-version-badge">v1.0.11</span>
+            <div class="as-acars-settings-card-body">
+              <!-- Language Setting Row -->
+              <div class="as-acars-setting-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label" data-i18n="settings.language_title">Idioma da Interface</div>
+                  <div class="as-acars-setting-desc" data-i18n="settings.language_sub">Selecione o idioma de exibicao</div>
                 </div>
-                <div class="as-acars-setting-desc" id="as-acars-update-status-text" data-i18n="settings.update_status_current">Voce esta utilizando a versao mais recente.</div>
+                <div class="as-acars-setting-control as-acars-lang-group" id="as-acars-settings-lang-grid">
+                  <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-lang-choice" data-lang="en">
+                    <span class="as-acars-lang-code">EN</span>
+                    <span class="as-acars-lang-name">English</span>
+                  </button>
+                  <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-lang-choice" data-lang="pt-br">
+                    <span class="as-acars-lang-code">PT-BR</span>
+                    <span class="as-acars-lang-name">Portugues</span>
+                  </button>
+                  <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-lang-choice" data-lang="es">
+                    <span class="as-acars-lang-code">ES</span>
+                    <span class="as-acars-lang-name">Espanol</span>
+                  </button>
+                  <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-lang-choice" data-lang="fr">
+                    <span class="as-acars-lang-code">FR</span>
+                    <span class="as-acars-lang-name">Francais</span>
+                  </button>
+                </div>
               </div>
-              <div class="as-acars-setting-control as-acars-update-control">
-                <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-btn-outline" id="as-acars-btn-check-updates" data-i18n="settings.btn_check_updates">
-                  Verificar Atualizacoes
-                </button>
-                <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-btn-primary as-acars-hidden" id="as-acars-btn-download-installer" data-i18n="settings.btn_download_installer">
-                  Baixar Instalador
-                </button>
+
+              <div class="as-acars-setting-divider"></div>
+
+              <!-- Appearance / White Mode Setting Row -->
+              <div class="as-acars-setting-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label" data-i18n="settings.theme_title">Modo Claro (White Mode)</div>
+                  <div class="as-acars-setting-desc" data-i18n="settings.theme_sub">Alterne entre o tema escuro padrao e o modo claro</div>
+                </div>
+                <div class="as-acars-setting-control as-acars-switch-control">
+                  <button type="button" role="switch" class="as-acars-switch as-acars-theme-choice" id="as-acars-switch-white" data-theme="white" aria-checked="false" title="Alternar Modo Claro">
+                    <span class="as-acars-switch-thumb"></span>
+                  </button>
+                  <span class="as-acars-switch-status" id="as-acars-switch-white-status">Desativado</span>
+                </div>
               </div>
             </div>
+          </div>
 
-            <div class="as-acars-setting-divider"></div>
-
-            <!-- Virtual Airline & Logout Row -->
-            <div class="as-acars-setting-row as-acars-setting-account-row">
-              <div class="as-acars-setting-info">
-                <div class="as-acars-setting-label">
-                  <span data-i18n="settings.account_title">Sessao &amp; Companhia Aerea</span>
-                  <span class="as-acars-settings-va-badge font-mono" id="as-acars-settings-va-badge">VA</span>
+          <!-- Card 2: Alertas do vOCC -->
+          <div class="as-acars-settings-card">
+            <div class="as-acars-settings-card-header">
+              <div class="as-acars-settings-card-header-left">
+                <svg class="as-acars-settings-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <div>
+                  <h3 class="as-acars-settings-card-title" data-i18n="settings.cat_vocc">Alertas do vOCC</h3>
+                  <p class="as-acars-settings-card-desc" data-i18n="settings.cat_vocc_desc">Notificacoes em tempo real da central de despacho</p>
                 </div>
-                <div class="as-acars-setting-desc" id="as-acars-settings-session-desc" data-i18n="settings.account_desc">Conectado como piloto. Clique para trocar de VA ou encerrar a sessao.</div>
               </div>
-              <div class="as-acars-setting-control">
-                <button
-                  type="button"
-                  class="as-acars-btn as-acars-btn-sm as-acars-btn-danger-outline as-acars-btn-logout"
-                  id="as-acars-btn-switch-va"
-                  title="Trocar Companhia Aerea / Logout"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="as-acars-logout-icon">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                  </svg>
-                  <span id="as-acars-switch-va-text" data-i18n="settings.btn_logout">Trocar VA / Logout</span>
-                </button>
+            </div>
+            <div class="as-acars-settings-card-body">
+              <!-- Toast / Popup Enable Row -->
+              <div class="as-acars-setting-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label" data-i18n="settings.toast_title">Alertas Flutuantes do vOCC</div>
+                  <div class="as-acars-setting-desc" data-i18n="settings.toast_sub">Exibir popup na cabine ao receber mensagens do vOCC</div>
+                </div>
+                <div class="as-acars-setting-control as-acars-switch-control">
+                  <button type="button" role="switch" class="as-acars-switch" id="as-acars-switch-toast" aria-checked="true" title="Ativar/Desativar Alertas na Cabine">
+                    <span class="as-acars-switch-thumb"></span>
+                  </button>
+                  <span class="as-acars-switch-status" id="as-acars-switch-toast-status">Ativado</span>
+                </div>
+              </div>
+
+              <div class="as-acars-setting-divider"></div>
+
+              <!-- Toast Duration Row -->
+              <div class="as-acars-setting-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label" data-i18n="settings.toast_duration">Tempo de Exibicao dos Alertas</div>
+                  <div class="as-acars-setting-desc" data-i18n="settings.toast_duration_desc">Duracao em segundos ate o popup fechar automaticamente (0 = fixo)</div>
+                </div>
+                <div class="as-acars-setting-control as-acars-duration-control">
+                  <div class="as-acars-duration-presets">
+                    <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-duration-preset" data-sec="15">15s</button>
+                    <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-duration-preset" data-sec="30">30s</button>
+                    <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-duration-preset" data-sec="60">60s</button>
+                    <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-duration-preset" data-sec="0">Fixo</button>
+                  </div>
+                  <div class="as-acars-duration-input-wrap">
+                    <input type="number" min="0" max="300" step="5" id="as-acars-settings-toast-time" class="as-acars-input as-acars-input-sm as-acars-duration-input" />
+                    <span class="as-acars-duration-unit">s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Flight Attendant & Pouso -->
+          <div class="as-acars-settings-card">
+            <div class="as-acars-settings-card-header">
+              <div class="as-acars-settings-card-header-left">
+                <svg class="as-acars-settings-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 22h20"></path>
+                  <path d="M12 18V6a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v6"></path>
+                  <path d="M6 12l6 6 6-6"></path>
+                </svg>
+                <div>
+                  <h3 class="as-acars-settings-card-title" data-i18n="settings.cat_landing">Flight Attendant &amp; Pouso</h3>
+                  <p class="as-acars-settings-card-desc" data-i18n="settings.cat_landing_desc">Notificacao e estatisticas de toque na pista (fpm)</p>
+                </div>
+              </div>
+            </div>
+            <div class="as-acars-settings-card-body">
+              <!-- Flight Attendant Landing Toast Setting Row -->
+              <div class="as-acars-setting-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label" data-i18n="settings.landing_toast_title">Popup de Pouso (Flight Attendant)</div>
+                  <div class="as-acars-setting-desc" data-i18n="settings.landing_toast_sub">Exibir notificacao na cabine com a taxa de toque (fpm) ao pousar</div>
+                </div>
+                <div class="as-acars-setting-control as-acars-switch-control">
+                  <button type="button" role="switch" class="as-acars-switch" id="as-acars-switch-landing-toast" aria-checked="true" title="Ativar/Desativar Alerta de Pouso">
+                    <span class="as-acars-switch-thumb"></span>
+                  </button>
+                  <span class="as-acars-switch-status" id="as-acars-switch-landing-status">Ativado</span>
+                </div>
+              </div>
+
+              <div class="as-acars-setting-divider"></div>
+
+              <!-- Landing Toast Auto-close Switch Row -->
+              <div class="as-acars-setting-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label" data-i18n="settings.landing_toast_autoclose_title">Fechar Automaticamente</div>
+                  <div class="as-acars-setting-desc" data-i18n="settings.landing_toast_autoclose_sub">Fechar o popup apos o tempo definido (desative para manter na tela)</div>
+                </div>
+                <div class="as-acars-setting-control as-acars-switch-control">
+                  <button type="button" role="switch" class="as-acars-switch" id="as-acars-switch-landing-autoclose" aria-checked="true" title="Ativar/Desativar Fechamento Automatico">
+                    <span class="as-acars-switch-thumb"></span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Landing Toast Duration Row -->
+              <div class="as-acars-setting-row" id="as-acars-landing-duration-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label" data-i18n="settings.landing_toast_duration">Tempo de Exibicao do Pouso</div>
+                  <div class="as-acars-setting-desc" data-i18n="settings.landing_toast_duration_desc">Duracao em segundos ate o popup sumir automaticamente</div>
+                </div>
+                <div class="as-acars-setting-control as-acars-duration-control">
+                  <div class="as-acars-duration-presets" id="as-acars-landing-duration-presets">
+                    <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-landing-duration-preset" data-sec="10">10s</button>
+                    <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-landing-duration-preset" data-sec="15">15s</button>
+                    <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-landing-duration-preset" data-sec="30">30s</button>
+                    <button type="button" class="as-acars-btn as-acars-btn-xs as-acars-landing-duration-preset" data-sec="60">60s</button>
+                  </div>
+                  <div class="as-acars-duration-input-wrap">
+                    <input type="number" min="5" max="300" step="5" id="as-acars-settings-landing-time" class="as-acars-input as-acars-input-sm as-acars-duration-input" />
+                    <span class="as-acars-duration-unit">s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Versao & Atualizacoes -->
+          <div class="as-acars-settings-card">
+            <div class="as-acars-settings-card-header">
+              <div class="as-acars-settings-card-header-left">
+                <svg class="as-acars-settings-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                  <path d="M16 2v4h4"></path>
+                  <path d="M7 11l5 5 5-5"></path>
+                  <line x1="12" y1="4" x2="12" y2="16"></line>
+                </svg>
+                <div>
+                  <h3 class="as-acars-settings-card-title" data-i18n="settings.cat_updates">Versao &amp; Atualizacoes</h3>
+                  <p class="as-acars-settings-card-desc" data-i18n="settings.cat_updates_desc">Gerenciamento de versao e atualizacoes</p>
+                </div>
+              </div>
+            </div>
+            <div class="as-acars-settings-card-body">
+              <div class="as-acars-setting-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label">
+                    <span data-i18n="settings.update_title">Versao &amp; Atualizacoes</span>
+                    <span class="as-acars-version-badge" id="as-acars-current-version-badge">v1.2.1</span>
+                  </div>
+                  <div class="as-acars-setting-desc" id="as-acars-update-status-text" data-i18n="settings.update_status_current">Voce esta utilizando a versao mais recente.</div>
+                </div>
+                <div class="as-acars-setting-control as-acars-update-control">
+                  <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-btn-outline" id="as-acars-btn-check-updates" data-i18n="settings.btn_check_updates">
+                    Verificar Atualizacoes
+                  </button>
+                  <button type="button" class="as-acars-btn as-acars-btn-sm as-acars-btn-primary as-acars-hidden" id="as-acars-btn-download-installer" data-i18n="settings.btn_download_installer">
+                    Baixar Instalador
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Sessao & Companhia Aerea -->
+          <div class="as-acars-settings-card">
+            <div class="as-acars-settings-card-header">
+              <div class="as-acars-settings-card-header-left">
+                <svg class="as-acars-settings-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <div>
+                  <h3 class="as-acars-settings-card-title" data-i18n="settings.cat_account">Sessao &amp; Companhia Aerea</h3>
+                  <p class="as-acars-settings-card-desc" data-i18n="settings.cat_account_desc">Status de conexao e troca de companhia aerea</p>
+                </div>
+              </div>
+            </div>
+            <div class="as-acars-settings-card-body">
+              <div class="as-acars-setting-row as-acars-setting-account-row">
+                <div class="as-acars-setting-info">
+                  <div class="as-acars-setting-label">
+                    <span data-i18n="settings.account_title">Sessao &amp; Companhia Aerea</span>
+                    <span class="as-acars-settings-va-badge font-mono" id="as-acars-settings-va-badge">VA</span>
+                  </div>
+                  <div class="as-acars-setting-desc" id="as-acars-settings-session-desc" data-i18n="settings.account_desc">Conectado como piloto. Clique para trocar de VA ou encerrar a sessao.</div>
+                </div>
+                <div class="as-acars-setting-control">
+                  <button
+                    type="button"
+                    class="as-acars-btn as-acars-btn-sm as-acars-btn-danger-outline as-acars-btn-logout"
+                    id="as-acars-btn-switch-va"
+                    title="Trocar Companhia Aerea / Logout"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="as-acars-logout-icon">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                      <polyline points="16 17 21 12 16 7"></polyline>
+                      <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span id="as-acars-switch-va-text" data-i18n="settings.btn_logout">Trocar VA / Logout</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

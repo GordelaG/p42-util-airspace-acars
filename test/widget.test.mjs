@@ -1498,11 +1498,107 @@ test('Active Flight / ACARS Dashboard: live telemetry, progress track, auto-trac
   assert.equal(mockRoot.querySelector('#as-acars-btn-toggle-rec'), null, 'Recording toggle button should be removed');
 });
 
+test('Flight Attendant landing popup: touchdown rate capture, softness category badge, auto-dismiss duration setting, and in-sim popup actions', async () => {
+  const { hooks, instance: flow, mockRoot } = createFlowTestHarness();
 
+  // 1. Landing rate band classifications
+  const butter = flow.getLandingRateBand(-120);
+  assert.equal(butter.band, 'butter');
+  assert.equal(butter.className, 'as-acars-landing-butter');
 
+  const good = flow.getLandingRateBand(-210);
+  assert.equal(good.band, 'good');
+  assert.equal(good.className, 'as-acars-landing-good');
 
+  const firm = flow.getLandingRateBand(-350);
+  assert.equal(firm.band, 'firm');
+  assert.equal(firm.className, 'as-acars-landing-firm');
 
+  const hard = flow.getLandingRateBand(-520);
+  assert.equal(hard.band, 'hard');
+  assert.equal(hard.className, 'as-acars-landing-hard');
 
+  // 2. Initialize UI
+  flow.store.activeTenant = { id: 'samba', name: 'Samba Virtual', domain: 'samba.airspace.ferrlab.com' };
+  flow.store.storedTokens = { samba: { token: 'mock-samba-token' } };
+  flow.state.panelOpen = false;
+  flow.store.landing_toast_enabled = true;
+  flow.store.landing_toast_duration = 1; // 1s auto-dismiss for test
+  flow.state.booking = {
+    callsign: 'SMB102',
+    arrival_airport: { icao: 'SBGR' }
+  };
 
+  hooks.html_created(mockRoot);
 
+  // 3. Trigger touchdown event (-175 fpm)
+  flow.triggerLandingToast(-175);
 
+  assert.ok(flow.state.landingToastData, 'Landing toast data must be populated');
+  assert.equal(flow.state.landingToastData.fpm, -175);
+  assert.equal(flow.state.landingToastData.quality.key, 'good');
+  assert.equal(flow.state.landingToastData.destination, 'SBGR');
+
+  const landingToastEl = mockRoot.querySelector('#as-acars-landing-toast');
+  assert.ok(landingToastEl, 'Landing toast element must exist');
+  assert.equal(landingToastEl.classList.contains('as-acars-hidden'), false, 'Landing toast must be visible');
+
+  const fpmValEl = mockRoot.querySelector('#as-acars-landing-fpm-val');
+  assert.ok(fpmValEl && fpmValEl.textContent.includes('-175'), 'FPM element must display -175');
+
+  const pillEl = mockRoot.querySelector('#as-acars-landing-pill');
+  assert.ok(pillEl && pillEl.classList.contains('as-acars-landing-good'), 'Pill must have good landing class');
+
+  // 4. Test View on Panel button action
+  const viewBtn = mockRoot.querySelector('#as-acars-landing-btn-view');
+  assert.ok(viewBtn, 'View on Panel button must exist');
+  mockRoot.dispatchEvent({ type: 'click', target: viewBtn, preventDefault() {}, stopPropagation() {} });
+
+  assert.equal(flow.state.activeTab, 'flight', 'Active tab must switch to flight');
+  assert.equal(flow.state.panelOpen, true, 'Main panel must be opened');
+  assert.equal(flow.state.landingToastData, null, 'Landing toast data must be dismissed after clicking view');
+  assert.equal(landingToastEl.classList.contains('as-acars-hidden'), true, 'Landing toast must be hidden when panel is open');
+
+  // 5. Test Close / Dismiss button action
+  flow.state.panelOpen = false;
+  flow.triggerLandingToast(-110); // Butter landing
+  assert.equal(landingToastEl.classList.contains('as-acars-hidden'), false);
+  const closeBtn = mockRoot.querySelector('#as-acars-landing-toast-close');
+  assert.ok(closeBtn, 'Close button must exist');
+  mockRoot.dispatchEvent({ type: 'click', target: closeBtn, preventDefault() {}, stopPropagation() {} });
+  assert.equal(flow.state.landingToastData, null, 'Landing toast data must be cleared on close');
+  assert.equal(landingToastEl.classList.contains('as-acars-hidden'), true, 'Landing toast must be hidden on close');
+
+  // 6. Test Settings: disabled switch suppresses popup
+  flow.store.landing_toast_enabled = false;
+  flow.triggerLandingToast(-140);
+  assert.equal(flow.state.landingToastData, null, 'Popup should not be shown when landing_toast_enabled is false');
+  assert.equal(landingToastEl.classList.contains('as-acars-hidden'), true);
+  assert.ok(flow.state.lastLanding, 'Last landing stats should still be recorded');
+
+  // 7. Test Auto-dismiss switch ON vs OFF
+  // When autoclose switch is OFF, popup stays on screen indefinitely (does not auto-dismiss)
+  flow.store.landing_toast_enabled = true;
+  flow.store.landing_toast_autoclose = false;
+  flow.store.landing_toast_duration = 1; // 1 second
+  flow.triggerLandingToast(-220);
+  assert.ok(flow.state.landingToastData, 'Landing toast should show with autoclose OFF');
+  await new Promise((r) => setTimeout(r, 1100));
+  assert.ok(flow.state.landingToastData, 'Landing toast MUST NOT auto-dismiss when autoclose is OFF');
+
+  // Toggle autoclose switch ON via UI
+  const autocloseSwitch = mockRoot.querySelector('#as-acars-switch-landing-autoclose');
+  assert.ok(autocloseSwitch, 'Autoclose switch element must exist');
+  mockRoot.dispatchEvent({ type: 'click', target: autocloseSwitch, preventDefault() {}, stopPropagation() {} });
+  assert.equal(flow.store.landing_toast_autoclose, true, 'Autoclose should be toggled to true');
+
+  // Now with autoclose ON, auto-dismiss timer will fire
+  flow.triggerLandingToast(-220);
+  await new Promise((r) => setTimeout(r, 1100));
+  assert.equal(flow.state.landingToastData, null, 'Landing toast should auto-dismiss when autoclose is ON');
+
+  // 8. Deduplication & unauthenticated suppression
+  flow.store.activeTenant = null;
+  flow.triggerLandingToast(-250);
+  assert.equal(flow.state.landingToastData, null, 'Unauthenticated or inactive tenant instance must never trigger landing toast');
+});

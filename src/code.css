@@ -374,6 +374,121 @@
   text-decoration: underline;
 }
 
+/* Floating Flight Attendant Landing Toast Notification */
+.as-acars-landing-toast {
+  width: 400px;
+}
+
+.as-acars-landing-card-body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  padding: 16px;
+  background: #141416 !important;
+  background-color: #141416 !important;
+  border-bottom: 1px solid #27272a;
+}
+
+.as-acars-landing-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.as-acars-landing-metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.as-acars-landing-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #71717a;
+  margin-bottom: 4px;
+}
+
+.as-acars-landing-fpm {
+  font-size: 28px;
+  font-weight: 800;
+  color: #f4f4f5;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace, sans-serif;
+}
+
+.as-acars-landing-unit {
+  font-size: 13px;
+  font-weight: 500;
+  color: #a1a1aa;
+  margin-left: 2px;
+}
+
+.as-acars-landing-badge-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.as-acars-landing-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.as-acars-landing-butter {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.as-acars-landing-good {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.as-acars-landing-firm {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.as-acars-landing-hard {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.as-acars-landing-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #a1a1aa;
+}
+
+.as-acars-landing-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.as-acars-landing-meta-dot {
+  color: #52525b;
+}
+
+.as-acars-landing-icon {
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
 /* Language Picker in Header */
 .as-acars-lang-picker {
   display: inline-flex;
@@ -3278,8 +3393,55 @@
 .as-acars-settings-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 10px 16px;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.as-acars-settings-card:last-child {
+  margin-bottom: 0;
+}
+
+.as-acars-settings-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.as-acars-settings-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.as-acars-settings-card-icon {
+  width: 17px;
+  height: 17px;
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.as-acars-settings-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f4f4f5;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.as-acars-settings-card-desc {
+  font-size: 10.5px;
+  color: #71717a;
+  margin: 2px 0 0 0;
+  line-height: 1.25;
+}
+
+.as-acars-settings-card-body {
+  display: flex;
+  flex-direction: column;
 }
 
 .as-acars-setting-row {
@@ -4144,6 +4306,22 @@
   border: 1px solid #e2e8f0 !important;
 }
 
+.as-acars-white-mode .as-acars-settings-card-header {
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.as-acars-white-mode .as-acars-settings-card-icon {
+  color: #0284c7 !important;
+}
+
+.as-acars-white-mode .as-acars-settings-card-title {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-settings-card-desc {
+  color: #64748b !important;
+}
+
 .as-acars-white-mode .as-acars-setting-label {
   color: #0f172a !important;
 }
@@ -4389,6 +4567,28 @@
 .as-acars-white-mode .as-acars-toast-dismiss:hover,
 .as-acars-toast.as-acars-white-mode .as-acars-toast-dismiss:hover {
   color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-landing-card-body,
+.as-acars-toast.as-acars-white-mode .as-acars-landing-card-body {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.as-acars-white-mode .as-acars-landing-fpm,
+.as-acars-toast.as-acars-white-mode .as-acars-landing-fpm {
+  color: #0f172a !important;
+}
+
+.as-acars-white-mode .as-acars-landing-label,
+.as-acars-toast.as-acars-white-mode .as-acars-landing-label {
+  color: #64748b !important;
+}
+
+.as-acars-white-mode .as-acars-landing-meta-row,
+.as-acars-toast.as-acars-white-mode .as-acars-landing-meta-row {
+  color: #64748b !important;
 }
 
 /* 10. Tablet & METAR Overrides in White Mode */

@@ -50,11 +50,14 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     myUserId: null,
     seenMessageIds: [],
     vocc_toast_enabled: true,
+    landing_toast_enabled: true,
+    landing_toast_autoclose: true,
     auto_confirm_read: true,
     api_base_url: "https://airspace.ferrlab.com",
     language: "en",     // "en" | "pt-br" | "es" | "fr" (Default: English)
     white_mode: false,  // false = Dark Mode (default), true = White Mode / Light Theme
     toast_duration: 15, // seconds (0 to keep visible until clicked)
+    landing_toast_duration: 15, // seconds (0 to keep visible until clicked)
   };
 
   let store = Object.assign({}, defaultStore);
@@ -242,6 +245,16 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       settings: {
         title: "Configuracoes",
         subtitle: "Personalize idioma, aparencia e alertas do Airspace ACARS",
+        cat_appearance: "Aparencia & Idioma",
+        cat_appearance_desc: "Preferencias visuais e idioma da interface",
+        cat_vocc: "Alertas do vOCC",
+        cat_vocc_desc: "Notificacoes em tempo real da central de despacho",
+        cat_landing: "Flight Attendant & Pouso",
+        cat_landing_desc: "Notificacao e estatisticas de toque na pista (fpm)",
+        cat_updates: "Versao & Atualizacoes",
+        cat_updates_desc: "Gerenciamento de versao e atualizacoes",
+        cat_account: "Sessao & Companhia Aerea",
+        cat_account_desc: "Status de conexao e troca de companhia aerea",
         language_title: "Idioma da Interface",
         language_sub: "Selecione o idioma de exibicao",
         theme_title: "Modo Claro (White Mode)",
@@ -252,6 +265,12 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         toast_sub: "Exibir popup na cabine ao receber mensagens do vOCC",
         toast_duration: "Tempo de Exibicao dos Alertas",
         toast_duration_desc: "Duracao em segundos ate o popup fechar automaticamente (0 = fixo)",
+        landing_toast_title: "Popup de Pouso (Flight Attendant)",
+        landing_toast_sub: "Exibir notificacao na cabine com a taxa de toque (fpm) ao pousar",
+        landing_toast_autoclose_title: "Fechar Automaticamente",
+        landing_toast_autoclose_sub: "Fechar o popup apos o tempo definido (desative para manter na tela)",
+        landing_toast_duration: "Tempo de Exibicao do Pouso",
+        landing_toast_duration_desc: "Duracao em segundos ate o popup sumir automaticamente",
         update_title: "Versao & Atualizacoes",
         update_status_current: "Voce esta utilizando a versao mais recente.",
         btn_check_updates: "Verificar Atualizacoes",
@@ -334,6 +353,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         close_title: "Dispensar",
         reply_placeholder: "Responder ao despacho...",
         send_title: "Enviar resposta",
+      },
+      landing: {
+        title: "Flight Attendant",
+        touchdown_rate: "Taxa de Toque",
+        view_flight: "Ver no Painel",
+        dismiss: "Fechar",
+        close_title: "Fechar",
+        welcome: "Pouso realizado com sucesso!",
+        butter: "Butter Landing",
+        good: "Bom Pouso",
+        firm: "Pouso Firme",
+        hard: "Pouso Duro",
       },
       update: {
         time_now: "agora",
@@ -500,6 +531,16 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       settings: {
         title: "Settings",
         subtitle: "Customize language, appearance, and alerts for Airspace ACARS",
+        cat_appearance: "Appearance & Language",
+        cat_appearance_desc: "Visual preferences and interface language",
+        cat_vocc: "vOCC Dispatch Alerts",
+        cat_vocc_desc: "Real-time notifications from flight dispatch",
+        cat_landing: "Flight Attendant & Landing",
+        cat_landing_desc: "Touchdown notification and landing rate stats",
+        cat_updates: "Version & Updates",
+        cat_updates_desc: "Version management and update checks",
+        cat_account: "Session & Virtual Airline",
+        cat_account_desc: "Connection status and airline management",
         language_title: "Interface Language",
         language_sub: "Select your preferred display language",
         theme_title: "Light Theme (White Mode)",
@@ -510,6 +551,12 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         toast_sub: "Show in-cockpit popup alerts when receiving vOCC messages",
         toast_duration: "Alert Display Duration",
         toast_duration_desc: "Duration in seconds before popup auto-closes (0 = fixed)",
+        landing_toast_title: "Flight Attendant Landing Popup",
+        landing_toast_sub: "Show in-cockpit popup alert with touchdown rate (fpm) upon landing",
+        landing_toast_autoclose_title: "Auto-close Landing Popup",
+        landing_toast_autoclose_sub: "Automatically close popup after duration (turn off to keep on screen)",
+        landing_toast_duration: "Landing Display Duration",
+        landing_toast_duration_desc: "Duration in seconds before popup auto-closes",
         update_title: "Version & Updates",
         update_status_current: "You are running the latest version.",
         btn_check_updates: "Check for Updates",
@@ -592,6 +639,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         close_title: "Dismiss",
         reply_placeholder: "Reply to dispatch...",
         send_title: "Send reply",
+      },
+      landing: {
+        title: "Flight Attendant",
+        touchdown_rate: "Touchdown Rate",
+        view_flight: "View on Panel",
+        dismiss: "Close",
+        close_title: "Close",
+        welcome: "Touchdown recorded successfully!",
+        butter: "Butter Landing",
+        good: "Good Landing",
+        firm: "Firm Landing",
+        hard: "Hard Landing",
       },
       update: {
         time_now: "now",
@@ -744,6 +803,16 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       settings: {
         title: "Configuracion",
         subtitle: "Personalice idioma, apariencia y alertas de Airspace ACARS",
+        cat_appearance: "Apariencia e Idioma",
+        cat_appearance_desc: "Preferencias visuales e idioma de la interfaz",
+        cat_vocc: "Alertas de vOCC",
+        cat_vocc_desc: "Notificaciones en tiempo real del despacho de vuelo",
+        cat_landing: "Flight Attendant y Aterrizaje",
+        cat_landing_desc: "Notificacion y estadisticas de toma de contacto (fpm)",
+        cat_updates: "Version y Actualizaciones",
+        cat_updates_desc: "Gestion de version y comprobacion de actualizaciones",
+        cat_account: "Sesion y Aerolinea Virtual",
+        cat_account_desc: "Estado de conexion y cambio de aerolinea virtual",
         language_title: "Idioma de la Interfaz",
         language_sub: "Seleccione el idioma de visualizacion",
         theme_title: "Modo Claro (White Mode)",
@@ -754,6 +823,12 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         toast_sub: "Mostrar avisos en cabina al recibir mensajes de vOCC",
         toast_duration: "Tiempo de Visualizacion",
         toast_duration_desc: "Duracion en segundos hasta cerrar automaticamente (0 = fijo)",
+        landing_toast_title: "Popup de Aterrizaje (Flight Attendant)",
+        landing_toast_sub: "Mostrar aviso en cabina con la tasa de toque (fpm) al aterrizar",
+        landing_toast_autoclose_title: "Cerrar Automaticamente",
+        landing_toast_autoclose_sub: "Cerrar el aviso tras el tiempo configurado (desactivar para mantener fijo)",
+        landing_toast_duration: "Tiempo de Visualizacion del Aterrizaje",
+        landing_toast_duration_desc: "Duracion en segundos hasta cerrar automaticamente",
         update_title: "Version & Actualizaciones",
         update_status_current: "Esta utilizando la version mas reciente.",
         btn_check_updates: "Buscar Actualizaciones",
@@ -836,6 +911,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         close_title: "Descartar",
         reply_placeholder: "Responder al despacho...",
         send_title: "Enviar respuesta",
+      },
+      landing: {
+        title: "Flight Attendant",
+        touchdown_rate: "Tasa de Toque",
+        view_flight: "Ver en Panel",
+        dismiss: "Cerrar",
+        close_title: "Cerrar",
+        welcome: "Aterrizaje completado con exito!",
+        butter: "Butter Landing",
+        good: "Buen Aterrizaje",
+        firm: "Aterrizaje Firme",
+        hard: "Aterrizaje Duro",
       },
       update: {
         time_now: "ahora",
@@ -988,6 +1075,16 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       settings: {
         title: "Parametres",
         subtitle: "Personnalisez la langue, l'apparence et les alertes d'Airspace ACARS",
+        cat_appearance: "Apparence & Langue",
+        cat_appearance_desc: "Preferences visuelles et langue de l'interface",
+        cat_vocc: "Alertes vOCC",
+        cat_vocc_desc: "Notifications en temps reel du dispatch operationnel",
+        cat_landing: "Flight Attendant & Atterrissage",
+        cat_landing_desc: "Notification et statistiques du taux de toucher des roues",
+        cat_updates: "Version & Mises a jour",
+        cat_updates_desc: "Gestion de la version et recherche de mises a jour",
+        cat_account: "Session & Compagnie Aerienne",
+        cat_account_desc: "Statut de connexion et changement de compagnie",
         language_title: "Langue de l'Interface",
         language_sub: "Selectionnez la langue d'affichage",
         theme_title: "Mode Clair (White Mode)",
@@ -998,6 +1095,12 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         toast_sub: "Afficher des popups dans le cockpit lors de messages vOCC",
         toast_duration: "Duree d'Affichage des Alertes",
         toast_duration_desc: "Duree en secondes avant fermeture automatique (0 = fixe)",
+        landing_toast_title: "Popup d'Atterrissage (Flight Attendant)",
+        landing_toast_sub: "Afficher un popup dans le cockpit avec le taux de toucher (fpm) a l'atterrissage",
+        landing_toast_autoclose_title: "Fermeture Automatique",
+        landing_toast_autoclose_sub: "Fermer le popup apres la duree definie (desactiver pour maintenir fixe)",
+        landing_toast_duration: "Duree d'Affichage de l'Atterrissage",
+        landing_toast_duration_desc: "Duree en secondes avant fermeture automatique",
         update_title: "Version & Mises a jour",
         update_status_current: "Vous utilisez la version la plus recente.",
         btn_check_updates: "Verifier les Mises a jour",
@@ -1080,6 +1183,18 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         close_title: "Ignorer",
         reply_placeholder: "Repondre a la regulation...",
         send_title: "Envoyer reponse",
+      },
+      landing: {
+        title: "Flight Attendant",
+        touchdown_rate: "Taux de Toucher",
+        view_flight: "Voir sur le Panneau",
+        dismiss: "Fermer",
+        close_title: "Fermer",
+        welcome: "Atterrissage effectue avec succes !",
+        butter: "Butter Landing",
+        good: "Bon Atterrissage",
+        firm: "Atterrissage Ferme",
+        hard: "Atterrissage Dur",
       },
       update: {
         time_now: "maintenant",
@@ -1279,6 +1394,16 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     toastMessage: null,
     toastShownAt: 0,
 
+    // Flight Attendant Landing Alert State
+    landingToastData: null,
+    landingToastShownAt: 0,
+    landingDetection: {
+      wasAirborne: false,
+      airborneSeconds: 0,
+      lastTouchdownTime: 0,
+    },
+    lastLanding: null,
+
     // Documents & Airport Briefings
     documents: [],
     docsLoading: false,
@@ -1466,6 +1591,61 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     renderToast();
   }
 
+  let landingToastTimerId = null;
+
+  function clearLandingToastTimer() {
+    if (landingToastTimerId) {
+      clearTimeout(landingToastTimerId);
+      landingToastTimerId = null;
+    }
+  }
+
+  function startLandingToastTimer(overrideSec) {
+    clearLandingToastTimer();
+    const isAutoclose = store.landing_toast_autoclose !== undefined ? !!store.landing_toast_autoclose : true;
+    if (!isAutoclose) {
+      return;
+    }
+    let durSec = 15;
+    if (typeof overrideSec === "number" && !isNaN(overrideSec)) {
+      durSec = overrideSec;
+    } else {
+      const rawSec = typeof store.landing_toast_duration === "number"
+        ? store.landing_toast_duration
+        : parseInt(store.landing_toast_duration, 10);
+      durSec = isNaN(rawSec) || rawSec <= 0 ? 15 : rawSec;
+    }
+    if (durSec > 0) {
+      landingToastTimerId = setTimeout(function () {
+        dismissLandingToast();
+      }, durSec * 1000);
+    }
+  }
+
+  function dismissLandingToast() {
+    clearLandingToastTimer();
+    stateData.landingToastData = null;
+    stateData.landingToastShownAt = 0;
+    handleDragMouseUp();
+    renderLandingToast();
+    if (typeof document !== "undefined" && document.querySelectorAll) {
+      try {
+        const all = document.querySelectorAll("#as-acars-landing-toast");
+        for (let i = 0; i < all.length; i++) {
+          setVisible(all[i], false);
+        }
+      } catch (_e) {}
+    }
+  }
+
+  function viewLandingOnPanel() {
+    dismissLandingToast();
+    stateData.activeView = "main";
+    stateData.activeTab = "flight";
+    stateData.panelOpen = true;
+    renderAll();
+  }
+
   async function sendToastReply() {
     const input = q("#as-acars-toast-input");
     const text = input ? input.value.trim() : "";
@@ -1508,6 +1688,28 @@ const __flowContext = typeof this !== "undefined" ? this : null;
           store.vocc_toast_enabled = !!val;
           saveStore();
           renderToast();
+        },
+      },
+      landing_toast_enabled: {
+        type: "checkbox",
+        label: "Popup de Pouso (Flight Attendant)",
+        description: "Exibe uma notificacao na cabine com a taxa de toque (fpm) ao tocar na pista.",
+        value: store.landing_toast_enabled !== undefined ? !!store.landing_toast_enabled : true,
+        changed: (val) => {
+          store.landing_toast_enabled = !!val;
+          saveStore();
+          renderLandingToast();
+        },
+      },
+      landing_toast_autoclose: {
+        type: "checkbox",
+        label: "Fechar Popup de Pouso Automaticamente",
+        description: "Fecha o popup de pouso automaticamente apos o tempo configurado (desative para manter na tela).",
+        value: store.landing_toast_autoclose !== undefined ? !!store.landing_toast_autoclose : true,
+        changed: (val) => {
+          store.landing_toast_autoclose = !!val;
+          saveStore();
+          renderSettingsTab();
         },
       },
       auto_confirm_read: {
@@ -2763,6 +2965,7 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     }
 
     renderToast();
+    renderLandingToast();
     renderHeader();
     renderUpdateBanner();
 
@@ -2869,6 +3072,112 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       clearToastTimer();
       stateData.toastShownAt = 0;
       unfocusCoherentInput("as-acars-toast-input");
+    }
+  }
+
+  function renderLandingToast() {
+    if (!rootEl) return;
+    const toastEl = q("#as-acars-landing-toast");
+    const data = stateData.landingToastData;
+    const isEnabled = store.landing_toast_enabled !== undefined ? !!store.landing_toast_enabled : true;
+    const isAuthed = Boolean(getActiveToken() && store.activeTenant);
+    const shouldShow = Boolean(data && !stateData.panelOpen && isEnabled && isAuthed);
+
+    // Suppress any duplicate toast DOM nodes that may exist from other Flow Pro widget instances
+    if (typeof document !== "undefined" && document.querySelectorAll) {
+      try {
+        const allToasts = document.querySelectorAll("#as-acars-landing-toast");
+        if (allToasts && allToasts.length > 1) {
+          for (let i = 0; i < allToasts.length; i++) {
+            if (allToasts[i] !== toastEl) {
+              setVisible(allToasts[i], false);
+            }
+          }
+        }
+      } catch (_e) {}
+    }
+
+    setVisible(toastEl, shouldShow);
+    if (shouldShow && data) {
+      cleanParentContainers(toastEl);
+      const titleEl = q("#as-acars-landing-toast-title");
+      const fpmValEl = q("#as-acars-landing-fpm-val");
+      const pillEl = q("#as-acars-landing-pill");
+      const destEl = q("#as-acars-landing-dest");
+      const destWrap = q("#as-acars-landing-dest-wrap");
+      const timeEl = q("#as-acars-landing-time");
+      const vaLogo = q("#as-acars-landing-toast-va-logo");
+      const defaultLogo = q("#as-acars-landing-toast-default-logo");
+
+      const companyName = (store.activeTenant && store.activeTenant.name)
+        ? String(store.activeTenant.name).trim()
+        : (stateData.pilot && stateData.pilot.airline && stateData.pilot.airline.name)
+          ? String(stateData.pilot.airline.name).trim()
+          : "";
+      const baseTitle = t("landing.title", "Flight Attendant");
+      if (titleEl) {
+        titleEl.textContent = companyName ? (baseTitle + " - " + companyName) : baseTitle;
+      }
+
+      const isAuthed = Boolean(getActiveToken() && store.activeTenant);
+      const vaLogoUrl =
+        (store.activeTenant && store.activeTenant.logo_url) ||
+        (stateData.pilot && (stateData.pilot.airline_logo || (stateData.pilot.airline && stateData.pilot.airline.logo_url))) ||
+        null;
+
+      if (vaLogo && defaultLogo) {
+        if (isAuthed && vaLogoUrl) {
+          let fullLogo = String(vaLogoUrl).trim();
+          if (!/^https?:\/\//i.test(fullLogo)) {
+            const base = getTenantBaseUrl();
+            fullLogo = (base ? base.replace(/\/+$/, "") : "https://airspace.ferrlab.com") + (fullLogo.startsWith("/") ? "" : "/") + fullLogo;
+          }
+          if (vaLogo.getAttribute("data-src") !== fullLogo) {
+            vaLogo.setAttribute("data-src", fullLogo);
+            vaLogo.setAttribute("src", fullLogo);
+            vaLogo.src = fullLogo;
+            vaLogo.onerror = function () {
+              setVisible(vaLogo, false);
+              setVisible(defaultLogo, true);
+            };
+          }
+          setVisible(vaLogo, true);
+          setVisible(defaultLogo, false);
+        } else {
+          setVisible(vaLogo, false);
+          setVisible(defaultLogo, true);
+        }
+      }
+
+      if (fpmValEl) {
+        fpmValEl.innerHTML = escapeHtml(String(data.fpm)) + ' <span class="as-acars-landing-unit">ft/min</span>';
+      }
+
+      if (pillEl && data.quality) {
+        pillEl.className = "as-acars-landing-pill as-acars-landing-" + data.quality.key;
+        pillEl.textContent = t("landing." + data.quality.key, data.quality.label);
+      }
+
+      if (destEl && destWrap) {
+        if (data.destination) {
+          destEl.textContent = data.destination;
+          setVisible(destWrap, true);
+        } else {
+          setVisible(destWrap, false);
+        }
+      }
+
+      if (timeEl) {
+        timeEl.textContent = data.utcTime || "";
+      }
+
+      if (!stateData.landingToastShownAt) {
+        stateData.landingToastShownAt = Date.now();
+      }
+      startLandingToastTimer();
+    } else {
+      clearLandingToastTimer();
+      stateData.landingToastShownAt = 0;
     }
   }
 
@@ -3900,6 +4209,46 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       const p = presets[i];
       const sec = parseInt(p.getAttribute("data-sec"), 10);
       if (sec === duration) {
+        p.classList.add("as-acars-choice-active");
+      } else {
+        p.classList.remove("as-acars-choice-active");
+      }
+    }
+
+    // Landing Toast Switch
+    const landingSwitch = q("#as-acars-switch-landing-toast");
+    const landingStatus = q("#as-acars-switch-landing-status");
+    const isLandingEnabled = store.landing_toast_enabled !== undefined ? !!store.landing_toast_enabled : true;
+    if (landingSwitch) {
+      landingSwitch.setAttribute("aria-checked", isLandingEnabled ? "true" : "false");
+    }
+    if (landingStatus) {
+      landingStatus.textContent = isLandingEnabled ? t("settings.switch_enabled", "Ativado") : t("settings.switch_disabled", "Desativado");
+    }
+
+    // Landing Toast Auto-close Switch
+    const landingAutocloseSwitch = q("#as-acars-switch-landing-autoclose");
+    const isLandingAutoclose = store.landing_toast_autoclose !== undefined ? !!store.landing_toast_autoclose : true;
+    if (landingAutocloseSwitch) {
+      landingAutocloseSwitch.setAttribute("aria-checked", isLandingAutoclose ? "true" : "false");
+    }
+
+    const landingDurationRow = q("#as-acars-landing-duration-row");
+    if (landingDurationRow) {
+      setVisible(landingDurationRow, isLandingAutoclose);
+    }
+
+    // Landing Toast Duration Presets & Input
+    const landingDuration = store.landing_toast_duration !== undefined ? store.landing_toast_duration : 15;
+    const landingTime = q("#as-acars-settings-landing-time");
+    if (landingTime && document.activeElement !== landingTime) {
+      landingTime.value = String(landingDuration);
+    }
+    const landingPresets = rootEl.querySelectorAll(".as-acars-landing-duration-preset");
+    for (let i = 0; i < landingPresets.length; i++) {
+      const p = landingPresets[i];
+      const sec = parseInt(p.getAttribute("data-sec"), 10);
+      if (sec === landingDuration) {
         p.classList.add("as-acars-choice-active");
       } else {
         p.classList.remove("as-acars-choice-active");
@@ -5218,6 +5567,63 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         fuelKg: Math.round(stateData.telemetry.fuelKg)
       });
     }
+
+    // Airborne tracking & touchdown detection (only active when pilot is authenticated to a VA)
+    if (!getActiveToken() || !store.activeTenant) {
+      stateData.landingDetection.wasAirborne = false;
+      stateData.landingDetection.airborneSeconds = 0;
+      return;
+    }
+
+    const onGround = Boolean(stateData.telemetry.onGround);
+    const gs = Number(stateData.telemetry.groundSpeed || 0);
+
+    if (!onGround && gs >= 25) {
+      stateData.landingDetection.airborneSeconds++;
+      if (stateData.landingDetection.airborneSeconds >= 3) {
+        stateData.landingDetection.wasAirborne = true;
+      }
+    } else if (onGround && stateData.landingDetection.wasAirborne) {
+      const now = Date.now();
+      if (now - stateData.landingDetection.lastTouchdownTime > 25000) {
+        // Global cross-instance lock to prevent duplicate popups from multiple Flow wheel instances
+        const globalScope = typeof window !== "undefined" ? window : (typeof globalThis !== "undefined" ? globalThis : null);
+        if (globalScope) {
+          const lastGlobal = globalScope.__AIRSPACE_ACARS_TOUCHDOWN_LOCK__ || 0;
+          if (now - lastGlobal < 25000) {
+            stateData.landingDetection.wasAirborne = false;
+            stateData.landingDetection.airborneSeconds = 0;
+            return;
+          }
+          globalScope.__AIRSPACE_ACARS_TOUCHDOWN_LOCK__ = now;
+        }
+
+        stateData.landingDetection.lastTouchdownTime = now;
+
+        let rawFpm = null;
+        if (custom && custom.touchdownFpm !== undefined) {
+          rawFpm = Number(custom.touchdownFpm);
+        } else {
+          const normVel = readSimVar("PLANE TOUCHDOWN NORMAL VELOCITY", "feet per minute");
+          if (normVel !== null && !isNaN(normVel) && Math.abs(Number(normVel)) > 1) {
+            rawFpm = Number(normVel);
+          } else {
+            const vsVal = readSimVar("VERTICAL SPEED", "feet per minute");
+            if (vsVal !== null && !isNaN(vsVal)) {
+              rawFpm = Number(vsVal);
+            } else if (stateData.telemetry.verticalSpeed !== undefined) {
+              rawFpm = Number(stateData.telemetry.verticalSpeed);
+            }
+          }
+        }
+
+        handleTouchdownDetected(rawFpm !== null ? rawFpm : -180);
+      }
+      stateData.landingDetection.wasAirborne = false;
+      stateData.landingDetection.airborneSeconds = 0;
+    } else if (onGround) {
+      stateData.landingDetection.airborneSeconds = 0;
+    }
   }
 
   function calculateDistanceNm(lat1, lon1, lat2, lon2) {
@@ -5239,6 +5645,20 @@ const __flowContext = typeof this !== "undefined" ? this : null;
     const minutes = Math.floor(totalMinutes % 60);
     return hours + ":" + (minutes < 10 ? "0" : "") + minutes;
   }
+
+  const AIRPORT_COORDS = {
+    SBGR: [-23.4356, -46.4731],
+    SBEG: [-3.0358, -60.0497],
+    SBRJ: [-22.9105, -43.1631],
+    SBGL: [-22.8099, -43.2505],
+    SBKP: [-23.0074, -47.1345],
+    SBBR: [-15.8692, -47.9181],
+    SBSP: [-23.6261, -46.6564],
+    KJFK: [40.6413, -73.7781],
+    EGLL: [51.4700, -0.4543],
+    LFPG: [49.0097, 2.5479],
+    LEMD: [40.4839, -3.5679],
+  };
 
   function renderFlightTab() {
     if (!rootEl) return;
@@ -5486,8 +5906,64 @@ const __flowContext = typeof this !== "undefined" ? this : null;
   // --- My Flights / Logbook Rendering (Removed per user request) ---
   function renderFlightsTab() {}
   function renderFlightDetail() {}
-  function getLandingRateBand() {
-    return { band: "good", className: "as-acars-rate-good", label: "Good" };
+  function getLandingRateBand(fpm) {
+    const abs = Math.abs(Number(fpm) || 0);
+    if (abs <= 150) {
+      return { band: "butter", className: "as-acars-landing-butter", label: "Butter Landing" };
+    } else if (abs <= 250) {
+      return { band: "good", className: "as-acars-landing-good", label: "Good Landing" };
+    } else if (abs <= 450) {
+      return { band: "firm", className: "as-acars-landing-firm", label: "Firm Landing" };
+    } else {
+      return { band: "hard", className: "as-acars-landing-hard", label: "Hard Landing" };
+    }
+  }
+
+  function handleTouchdownDetected(rawFpm) {
+    if (!store.activeTenant) return;
+
+    let fpm = -180;
+    if (typeof rawFpm === "number" && !isNaN(rawFpm)) {
+      fpm = -Math.abs(Math.round(rawFpm));
+    }
+    const band = getLandingRateBand(fpm);
+    const destIcao =
+      (stateData.booking && stateData.booking.arrival_airport && stateData.booking.arrival_airport.icao) ||
+      stateData.nearestAirportIcao ||
+      "";
+
+    const d = new Date();
+    const hh = String(d.getUTCHours()).padStart(2, "0");
+    const mm = String(d.getUTCMinutes()).padStart(2, "0");
+    const utcTime = hh + ":" + mm + "Z";
+
+    const landingData = {
+      fpm: fpm,
+      quality: {
+        key: band.band,
+        label: band.label,
+      },
+      destination: destIcao,
+      utcTime: utcTime,
+      timestamp: Date.now(),
+    };
+
+    stateData.lastLanding = landingData;
+
+    const isEnabled = store.landing_toast_enabled !== undefined ? !!store.landing_toast_enabled : true;
+    if (isEnabled) {
+      stateData.landingToastData = landingData;
+      stateData.landingToastShownAt = Date.now();
+      renderLandingToast();
+      startLandingToastTimer();
+    }
+  }
+
+  if (typeof window !== "undefined") {
+    window.__TRIGGER_LANDING_POPUP__ = function (customFpm) {
+      const fpm = typeof customFpm === "number" ? customFpm : -185;
+      handleTouchdownDetected(fpm);
+    };
   }
 
   // --- Coherent GT Safe DOM Selector Matching (Chrome 49 / WebKit 604) ---
@@ -5696,7 +6172,10 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       if (!e) return;
       if (e.key === "Escape" || e.keyCode === 27) {
         let handled = false;
-        if (stateData.toastMessage) {
+        if (stateData.landingToastData) {
+          dismissLandingToast();
+          handled = true;
+        } else if (stateData.toastMessage) {
           dismissToast();
           handled = true;
         } else if (stateData.panelOpen) {
@@ -5841,6 +6320,40 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         return;
       }
 
+      // Switch Landing Toast Toggle
+      if (findClosest(target, "#as-acars-switch-landing-toast")) {
+        const currentEnabled = store.landing_toast_enabled !== undefined ? !!store.landing_toast_enabled : true;
+        store.landing_toast_enabled = !currentEnabled;
+        saveStore();
+        renderSettingsTab();
+        renderLandingToast();
+        return;
+      }
+
+      // Switch Landing Toast Auto-close Toggle
+      if (findClosest(target, "#as-acars-switch-landing-autoclose")) {
+        const currentAutoclose = store.landing_toast_autoclose !== undefined ? !!store.landing_toast_autoclose : true;
+        store.landing_toast_autoclose = !currentAutoclose;
+        saveStore();
+        renderSettingsTab();
+        if (!store.landing_toast_autoclose) {
+          clearLandingToastTimer();
+        } else if (stateData.landingToastData) {
+          startLandingToastTimer();
+        }
+        return;
+      }
+
+      // Landing Toast Duration Preset Buttons
+      const landingPresetBtn = findClosest(target, ".as-acars-landing-duration-preset");
+      if (landingPresetBtn) {
+        const sec = parseInt(landingPresetBtn.getAttribute("data-sec"), 10);
+        store.landing_toast_duration = isNaN(sec) ? 15 : sec;
+        saveStore();
+        renderSettingsTab();
+        return;
+      }
+
       // Update Actions
       if (findClosest(target, "#as-acars-btn-update-download") || findClosest(target, "#as-acars-btn-download-installer")) {
         const url = (stateData.updateInfo && stateData.updateInfo.html_url) || REPO_RELEASES_URL;
@@ -5900,6 +6413,16 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       }
       if (findClosest(target, "#as-acars-toast-send")) {
         sendToastReply();
+        return;
+      }
+
+      // Flight Attendant Landing Toast actions
+      if (findClosest(target, "#as-acars-landing-toast-close") || findClosest(target, "#as-acars-landing-btn-dismiss")) {
+        dismissLandingToast();
+        return;
+      }
+      if (findClosest(target, "#as-acars-landing-btn-view")) {
+        viewLandingOnPanel();
         return;
       }
 
@@ -6442,6 +6965,54 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       });
     }
 
+    const landingToastEl = q("#as-acars-landing-toast");
+    if (landingToastEl) {
+      landingToastEl.addEventListener("mouseenter", function () {
+        startLandingToastTimer(8);
+      });
+      landingToastEl.addEventListener("mouseleave", function () {
+        if (stateData.landingToastData && !stateData.panelOpen && (store.landing_toast_enabled !== false)) {
+          startLandingToastTimer();
+        }
+      });
+    }
+
+    const landingToastCloseBtn = q("#as-acars-landing-toast-close");
+    if (landingToastCloseBtn) {
+      landingToastCloseBtn.addEventListener("mousedown", function (e) {
+        e.stopPropagation();
+      });
+      landingToastCloseBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        dismissLandingToast();
+      });
+    }
+
+    const landingToastDismissBtn = q("#as-acars-landing-btn-dismiss");
+    if (landingToastDismissBtn) {
+      landingToastDismissBtn.addEventListener("mousedown", function (e) {
+        e.stopPropagation();
+      });
+      landingToastDismissBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        dismissLandingToast();
+      });
+    }
+
+    const landingToastViewBtn = q("#as-acars-landing-btn-view");
+    if (landingToastViewBtn) {
+      landingToastViewBtn.addEventListener("mousedown", function (e) {
+        e.stopPropagation();
+      });
+      landingToastViewBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        viewLandingOnPanel();
+      });
+    }
+
     const toastCheck = q("#as-acars-settings-toast-enable");
     if (toastCheck) {
       toastCheck.addEventListener("change", function () {
@@ -6472,6 +7043,29 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       };
       toastTime.addEventListener("change", onTimeChange);
       toastTime.addEventListener("input", onTimeChange);
+    }
+
+    const landingTime = q("#as-acars-settings-landing-time");
+    if (landingTime) {
+      const onLandingTimeChange = function () {
+        const val = parseInt(landingTime.value, 10);
+        store.landing_toast_duration = isNaN(val) || val < 0 ? 15 : val;
+        saveStore();
+        if (rootEl) {
+          const presets = rootEl.querySelectorAll(".as-acars-landing-duration-preset");
+          for (let i = 0; i < presets.length; i++) {
+            const p = presets[i];
+            const sec = parseInt(p.getAttribute("data-sec"), 10);
+            if (sec === store.landing_toast_duration) {
+              p.classList.add("as-acars-choice-active");
+            } else {
+              p.classList.remove("as-acars-choice-active");
+            }
+          }
+        }
+      };
+      landingTime.addEventListener("change", onLandingTimeChange);
+      landingTime.addEventListener("input", onLandingTimeChange);
     }
 
     const volSlider = q("#as-acars-af-volume-slider");
@@ -6608,6 +7202,26 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         }
       }
 
+      // Fail-safe watchdog: auto-dismiss landing toast if elapsed duration exceeded
+      const landingAutoclose = store.landing_toast_autoclose !== undefined ? !!store.landing_toast_autoclose : true;
+      if (stateData.landingToastData && !stateData.panelOpen && (store.landing_toast_enabled !== false) && landingAutoclose) {
+        const rawSec = typeof store.landing_toast_duration === "number"
+          ? store.landing_toast_duration
+          : parseInt(store.landing_toast_duration, 10);
+        const durSec = isNaN(rawSec) || rawSec <= 0 ? 15 : rawSec;
+        if (durSec > 0) {
+          const now = Date.now();
+          const shownAt = stateData.landingToastShownAt || now;
+          const elapsedSec = (now - shownAt) / 1000;
+          if (elapsedSec >= durSec) {
+            dismissLandingToast();
+          }
+        }
+      }
+
+      // Always poll live telemetry for touchdown detection & flight tracking
+      pollLiveTelemetry();
+
       if (!getActiveToken() || !store.activeTenant) return;
 
       // Zero DOM work if panel is closed: keep sim FPS 100% smooth
@@ -6620,8 +7234,6 @@ const __flowContext = typeof this !== "undefined" ? this : null;
         } else if (stateData.activeTab === "flight") {
           renderFlightTab();
         }
-      } else if (stateData.isRecordingTelemetry) {
-        pollLiveTelemetry();
       }
 
       // Background network polling (independent of UI)
@@ -6891,6 +7503,11 @@ const __flowContext = typeof this !== "undefined" ? this : null;
       renderFlightDetail: renderFlightDetail,
       mapFlightLog: mapFlightLog,
       getLandingRateBand: getLandingRateBand,
+      handleTouchdownDetected: handleTouchdownDetected,
+      triggerLandingToast: handleTouchdownDetected,
+      dismissLandingToast: dismissLandingToast,
+      renderLandingToast: renderLandingToast,
+      viewLandingOnPanel: viewLandingOnPanel,
       renderAll: renderAll,
       findClosest: findClosest,
       openExternalUrl: openExternalUrl,
