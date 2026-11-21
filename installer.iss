@@ -84,15 +84,19 @@ french.LaunchUpdater=Ouvrir Airspace ACARS Manager pour verifier les mises a jou
 brazilianportuguese.SelectDirLabel3=Confirme ou selecione a pasta onde deseja instalar o Airspace ACARS (recomendado: pasta Community do seu simulador). O pacote '{#MyPackageName}' sera instalado dentro dela.%n%nCaso deseje instalar em outro disco ou pasta personalizada, clique em 'Procurar...'.
 english.SelectDirLabel3=Confirm or select the folder where you want to install Airspace ACARS (recommended: simulator Community folder). The '{#MyPackageName}' package will be installed inside it.%n%nIf you want to install on another drive or custom folder, click 'Browse...'.
 
+[InstallDelete]
+Type: files; Name: "{app}\{#MyPackageName}\Update.exe"
+Type: files; Name: "{app}\{#MyPackageName}\Update.exe.old"
+
 [Files]
 Source: "dist\p42-util-airspace-acars\*"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "installer\TERMOS-DE-USO.txt"; DestDir: "{app}\{#MyPackageName}"; Flags: ignoreversion
 
 [Icons]
-Name: "{autoprograms}\Airspace ACARS Manager"; Filename: "{app}\{#MyPackageName}\Update.exe"; IconFilename: "{app}\{#MyPackageName}\Update.exe"
+Name: "{autoprograms}\Airspace ACARS Manager"; Filename: "{app}\{#MyPackageName}\AirspaceACARS-Manager.exe"; IconFilename: "{app}\{#MyPackageName}\AirspaceACARS-Manager.exe"
 
 [Run]
-Filename: "{app}\{#MyPackageName}\Update.exe"; Description: "{cm:LaunchUpdater}"; Flags: nowait postinstall skipifsilent unchecked
+Filename: "{app}\{#MyPackageName}\AirspaceACARS-Manager.exe"; Description: "{cm:LaunchUpdater}"; Flags: nowait postinstall skipifsilent unchecked
 
 [Code]
 var

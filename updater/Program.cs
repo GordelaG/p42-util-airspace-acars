@@ -8,14 +8,16 @@ using System.Drawing.Text;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
-namespace AirspaceACARS.Updater
+namespace AirspaceACARS.Manager
 {
     static class Program
     {
@@ -24,13 +26,14 @@ namespace AirspaceACARS.Updater
         {
             try
             {
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072; // TLS 1.2
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm());
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error starting Airspace ACARS Updater:\n\n" + ex.Message,
+                MessageBox.Show("Error starting Airspace ACARS Manager:\n\n" + ex.Message,
                     "Airspace ACARS", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -43,6 +46,9 @@ namespace AirspaceACARS.Updater
 
         private const int DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1 = 19;
         private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+        private const string GitHubReleasesApiUrl = "https://api.github.com/repos/GordelaG/p42-util-airspace-acars/releases/latest";
+
+        private static readonly HttpClient SharedHttpClient = CreateHttpClient();
 
         private enum ViewMode { Main, Progress }
         private ViewMode _viewMode = ViewMode.Main;
@@ -53,8 +59,7 @@ namespace AirspaceACARS.Updater
         private string _latestVersion = "";
         private string _latestTag = "";
         private string _releaseUrl = "https://github.com/GordelaG/p42-util-airspace-acars/releases";
-        private string _downloadUrl = "";
-        private bool _isZipAsset = true;
+        private string _zipDownloadUrl = "";
 
         // State
         private bool _isChecking = true;
@@ -91,6 +96,39 @@ namespace AirspaceACARS.Updater
 
         private System.Windows.Forms.Timer _animTimer;
         private Icon _formIcon;
+
+        private static HttpClient CreateHttpClient()
+        {
+            var handler = new HttpClientHandler();
+            handler.AllowAutoRedirect = true;
+            var client = new HttpClient(handler);
+            client.Timeout = TimeSpan.FromMinutes(5);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("Airspace-ACARS-Manager/1.2");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
+            return client;
+        }
+
+        private static bool IsTrustedGitHubUrl(string url)
+        {
+            Uri uri;
+            if (string.IsNullOrEmpty(url) || !Uri.TryCreate(url, UriKind.Absolute, out uri))
+            {
+                return false;
+            }
+            if (!string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            string host = uri.Host.ToLowerInvariant();
+            if (host == "github.com" || host == "api.github.com")
+            {
+                return uri.AbsolutePath.IndexOf("/GordelaG/p42-util-airspace-acars/", StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+            return host == "objects.githubusercontent.com" ||
+                   host == "release-assets.githubusercontent.com" ||
+                   host.EndsWith(".githubusercontent.com");
+        }
 
         public MainForm()
         {
@@ -153,27 +191,10 @@ namespace AirspaceACARS.Updater
         {
             try
             {
-                var asm = Assembly.GetExecutingAssembly();
-                string[] names = asm.GetManifestResourceNames();
-                foreach (string name in names)
-                {
-                    if (name.EndsWith("app.ico", StringComparison.OrdinalIgnoreCase) ||
-                        name.EndsWith(".ico", StringComparison.OrdinalIgnoreCase))
-                    {
-                        using (var stream = asm.GetManifestResourceStream(name))
-                        {
-                            if (stream != null)
-                            {
-                                _formIcon = new Icon(stream);
-                                break;
-                            }
-                        }
-                    }
-                }
+                _formIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             }
             catch { }
 
-            // Fallback load from disk or exe
             if (_formIcon == null)
             {
                 string assetIco = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "app.ico");
@@ -182,19 +203,23 @@ namespace AirspaceACARS.Updater
                     try { _formIcon = new Icon(assetIco); } catch { }
                 }
             }
-            if (_formIcon == null)
-            {
-                try
-                {
-                    _formIcon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
-                }
-                catch { }
-            }
 
             if (_formIcon != null)
             {
                 this.Icon = _formIcon;
             }
+        }
+
+        private void SafeInvalidate()
+        {
+            try
+            {
+                if (this.IsHandleCreated && !this.IsDisposed)
+                {
+                    this.BeginInvoke(new Action(this.Invalidate));
+                }
+            }
+            catch { }
         }
 
         private void LocatePackageDirectory()
@@ -328,67 +353,50 @@ namespace AirspaceACARS.Updater
 
             try
             {
-                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072; // TLS 1.2
-                using (var wc = new WebClient())
+                string json = SharedHttpClient.GetStringAsync(GitHubReleasesApiUrl).GetAwaiter().GetResult();
+                var serializer = new JavaScriptSerializer();
+                var data = serializer.Deserialize<Dictionary<string, object>>(json);
+
+                if (data != null)
                 {
-                    wc.Headers.Add("User-Agent", "Airspace-ACARS-Updater");
-                    string json = wc.DownloadString("https://api.github.com/repos/GordelaG/p42-util-airspace-acars/releases/latest");
-                    var serializer = new JavaScriptSerializer();
-                    var data = serializer.Deserialize<Dictionary<string, object>>(json);
-
-                    if (data != null)
+                    if (data.ContainsKey("tag_name") && data["tag_name"] != null)
                     {
-                        if (data.ContainsKey("tag_name") && data["tag_name"] != null)
+                        _latestTag = data["tag_name"].ToString().Trim();
+                        _latestVersion = _latestTag.TrimStart('v', 'V');
+                    }
+
+                    if (data.ContainsKey("html_url") && data["html_url"] != null)
+                    {
+                        string candidateReleaseUrl = data["html_url"].ToString();
+                        if (IsTrustedGitHubUrl(candidateReleaseUrl))
                         {
-                            _latestTag = data["tag_name"].ToString().Trim();
-                            _latestVersion = _latestTag.TrimStart('v', 'V');
+                            _releaseUrl = candidateReleaseUrl;
                         }
+                    }
 
-                        if (data.ContainsKey("html_url") && data["html_url"] != null)
+                    // Locate the ZIP package asset published on GitHub Releases
+                    _zipDownloadUrl = "";
+                    IEnumerable assets = data.ContainsKey("assets") ? (data["assets"] as IEnumerable) : null;
+                    if (assets != null)
+                    {
+                        foreach (object a in assets)
                         {
-                            _releaseUrl = data["html_url"].ToString();
-                        }
-
-                        // Inspect assets (handle ArrayList / IEnumerable returned by JavaScriptSerializer)
-                        IEnumerable assets = data.ContainsKey("assets") ? (data["assets"] as IEnumerable) : null;
-                        if (assets != null)
-                        {
-                            string zipUrl = "";
-                            string exeUrl = "";
-
-                            foreach (object a in assets)
+                            IDictionary assetDict = a as IDictionary;
+                            if (assetDict != null)
                             {
-                                IDictionary assetDict = a as IDictionary;
-                                if (assetDict != null)
-                                {
-                                    string name = assetDict.Contains("name") ? assetDict["name"].ToString() : "";
-                                    string downloadUrl = assetDict.Contains("browser_download_url") ? assetDict["browser_download_url"].ToString() : "";
+                                string name = assetDict.Contains("name") ? assetDict["name"].ToString() : "";
+                                string downloadUrl = assetDict.Contains("browser_download_url") ? assetDict["browser_download_url"].ToString() : "";
 
-                                    if (name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        zipUrl = downloadUrl;
-                                    }
-                                    else if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        exeUrl = downloadUrl;
-                                    }
+                                if (name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) && IsTrustedGitHubUrl(downloadUrl))
+                                {
+                                    _zipDownloadUrl = downloadUrl;
+                                    break;
                                 }
                             }
-
-                            if (!string.IsNullOrEmpty(zipUrl))
-                            {
-                                _downloadUrl = zipUrl;
-                                _isZipAsset = true;
-                            }
-                            else if (!string.IsNullOrEmpty(exeUrl))
-                            {
-                                _downloadUrl = exeUrl;
-                                _isZipAsset = false;
-                            }
                         }
-
-                        _hasUpdate = CompareVersions(_latestVersion, _installedVersion) > 0;
                     }
+
+                    _hasUpdate = CompareVersions(_latestVersion, _installedVersion) > 0;
                 }
             }
             catch (Exception ex)
@@ -399,7 +407,7 @@ namespace AirspaceACARS.Updater
             finally
             {
                 _isChecking = false;
-                this.BeginInvoke(new Action(this.Invalidate));
+                SafeInvalidate();
             }
         }
 
@@ -560,7 +568,7 @@ namespace AirspaceACARS.Updater
                 using (var warnFont = new Font("Segoe UI", 8f, FontStyle.Bold))
                 using (var warnBrush = new SolidBrush(Color.FromArgb(245, 158, 11))) // Amber 500
                 {
-                    string txt = "● MSFS is running";
+                    string txt = "\u25CF MSFS is running";
                     SizeF sz = g.MeasureString(txt, warnFont);
                     g.DrawString(txt, warnFont, warnBrush, new PointF(this.ClientSize.Width - 24 - sz.Width, 142));
                 }
@@ -692,7 +700,7 @@ namespace AirspaceACARS.Updater
                 using (var f = new Font("Segoe UI", 12f, FontStyle.Bold))
                 using (var b = new SolidBrush(Color.FromArgb(16, 185, 129))) // Emerald 500
                 {
-                    g.DrawString("● New version available: v" + _latestVersion, f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 18));
+                    g.DrawString("\u25CF New version available: v" + _latestVersion, f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 18));
                 }
                 using (var f = new Font("Segoe UI", 9f, FontStyle.Regular))
                 using (var b = new SolidBrush(Color.FromArgb(212, 212, 216)))
@@ -711,7 +719,7 @@ namespace AirspaceACARS.Updater
                 using (var f = new Font("Segoe UI", 12f, FontStyle.Bold))
                 using (var b = new SolidBrush(Color.FromArgb(16, 185, 129)))
                 {
-                    g.DrawString("✔ Up to date (v" + _installedVersion + ")", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 20));
+                    g.DrawString("\u2714 Up to date (v" + _installedVersion + ")", f, b, new PointF(_statusCardRect.X + 18, _statusCardRect.Y + 20));
                 }
                 using (var f = new Font("Segoe UI", 9f, FontStyle.Regular))
                 using (var b = new SolidBrush(Color.FromArgb(161, 161, 170)))
@@ -735,7 +743,7 @@ namespace AirspaceACARS.Updater
             using (var linkFont = new Font("Segoe UI", 9.5f, FontStyle.Regular))
             using (var linkBrush = new SolidBrush(_hoverReleaseNotes ? Color.FromArgb(147, 197, 253) : Color.FromArgb(96, 165, 250)))
             {
-                string text = "View Release Notes on GitHub »";
+                string text = "View Release Notes on GitHub \u00BB";
                 SizeF s = g.MeasureString(text, linkFont);
                 float x = (this.ClientSize.Width - s.Width) / 2f;
                 g.DrawString(text, linkFont, linkBrush, new PointF(x, _notesLinkRect.Y));
@@ -1087,62 +1095,40 @@ namespace AirspaceACARS.Updater
 
         private void PerformUpdateWork()
         {
+            string cachedZipPath = "";
             try
             {
                 CheckSimulatorProcess();
 
                 // If download URL is empty, query GitHub
-                if (string.IsNullOrEmpty(_downloadUrl))
+                if (string.IsNullOrEmpty(_zipDownloadUrl))
                 {
-                    UpdateProgress(10, "Connecting to GitHub...", "Fetching download links...");
+                    UpdateProgress(10, "Connecting to GitHub...", "Fetching package links...");
                     CheckGitHubReleases();
                 }
 
-                if (string.IsNullOrEmpty(_downloadUrl))
+                if (string.IsNullOrEmpty(_zipDownloadUrl) || !IsTrustedGitHubUrl(_zipDownloadUrl))
                 {
-                    throw new Exception("No download asset found in the latest release.");
+                    OpenUrl(_releaseUrl);
+                    throw new Exception("ZIP package not found. Opened GitHub Releases in browser.");
                 }
 
-                string ext = _isZipAsset ? ".zip" : ".exe";
-                string tempFile = Path.Combine(Path.GetTempPath(), "airspace_update_" + Guid.NewGuid().ToString("N") + ext);
+                string cacheDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "AirspaceACARS",
+                    "cache");
+                if (!Directory.Exists(cacheDir))
+                {
+                    Directory.CreateDirectory(cacheDir);
+                }
 
+                cachedZipPath = Path.Combine(cacheDir, "p42-util-airspace-acars-update.zip");
                 UpdateProgress(15, "Downloading update...", "Starting download from GitHub...");
 
-                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-                using (var wc = new WebClient())
-                {
-                    wc.Headers.Add("User-Agent", "Airspace-ACARS-Updater");
+                DownloadZipWithProgress(_zipDownloadUrl, cachedZipPath);
 
-                    DateTime lastReport = DateTime.MinValue;
-                    wc.DownloadProgressChanged += (s, ev) =>
-                    {
-                        if ((DateTime.UtcNow - lastReport).TotalMilliseconds > 80 || ev.ProgressPercentage == 100)
-                        {
-                            lastReport = DateTime.UtcNow;
-                            int mapped = 15 + (int)(ev.ProgressPercentage * 0.55f);
-                            double mbReceived = ev.BytesReceived / 1048576.0;
-                            double mbTotal = ev.TotalBytesToReceive / 1048576.0;
-                            string detail = string.Format("Downloading: {0:F1} MB / {1:F1} MB ({2}%)",
-                                mbReceived, mbTotal, ev.ProgressPercentage);
-                            UpdateProgress(mapped, "Downloading update...", detail);
-                        }
-                    };
-
-                    wc.DownloadFile(new Uri(_downloadUrl), tempFile);
-                }
-
-                UpdateProgress(72, "Verifying files...", "Download complete. Extracting packages...");
-
-                if (_isZipAsset)
-                {
-                    InstallZipPackage(tempFile);
-                }
-                else
-                {
-                    InstallExeInstaller(tempFile);
-                }
-
-                try { if (File.Exists(tempFile)) File.Delete(tempFile); } catch { }
+                UpdateProgress(72, "Verifying package...", "Download complete. Extracting files...");
+                InstallZipPackage(cachedZipPath);
 
                 ReadInstalledVersion();
                 UpdateProgress(100, "Update completed successfully!", "All files are up to date.");
@@ -1159,41 +1145,140 @@ namespace AirspaceACARS.Updater
             }
             finally
             {
-                this.BeginInvoke(new Action(this.Invalidate));
+                try
+                {
+                    if (!string.IsNullOrEmpty(cachedZipPath) && File.Exists(cachedZipPath))
+                    {
+                        File.Delete(cachedZipPath);
+                    }
+                }
+                catch { }
+                SafeInvalidate();
+            }
+        }
+
+        private void DownloadZipWithProgress(string url, string destinationPath)
+        {
+            using (HttpResponseMessage response = SharedHttpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult())
+            {
+                response.EnsureSuccessStatusCode();
+
+                long totalBytes = response.Content.Headers.ContentLength.HasValue
+                    ? response.Content.Headers.ContentLength.Value
+                    : -1L;
+
+                using (Stream input = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult())
+                using (FileStream output = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, 81920, false))
+                {
+                    byte[] buffer = new byte[81920];
+                    long totalRead = 0L;
+                    DateTime lastReport = DateTime.MinValue;
+                    int bytesRead;
+
+                    while ((bytesRead = input.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        output.Write(buffer, 0, bytesRead);
+                        totalRead += bytesRead;
+
+                        if ((DateTime.UtcNow - lastReport).TotalMilliseconds > 80)
+                        {
+                            lastReport = DateTime.UtcNow;
+                            if (totalBytes > 0)
+                            {
+                                int pct = (int)Math.Min(100L, (totalRead * 100L) / totalBytes);
+                                int mapped = 15 + (int)(pct * 0.55f);
+                                double mbReceived = totalRead / 1048576.0;
+                                double mbTotal = totalBytes / 1048576.0;
+                                string detail = string.Format("Downloading: {0:F1} MB / {1:F1} MB ({2}%)",
+                                    mbReceived, mbTotal, pct);
+                                UpdateProgress(mapped, "Downloading update...", detail);
+                            }
+                            else
+                            {
+                                double mbReceived = totalRead / 1048576.0;
+                                UpdateProgress(40, "Downloading update...", string.Format("Downloading: {0:F1} MB...", mbReceived));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static bool FilesHaveSameSha256(string filePath, Stream entryStream)
+        {
+            if (!File.Exists(filePath)) return false;
+            try
+            {
+                using (SHA256 sha = SHA256.Create())
+                {
+                    byte[] existingHash;
+                    using (FileStream fs = File.OpenRead(filePath))
+                    {
+                        existingHash = sha.ComputeHash(fs);
+                    }
+                    byte[] incomingHash = sha.ComputeHash(entryStream);
+                    if (existingHash.Length != incomingHash.Length) return false;
+                    for (int i = 0; i < existingHash.Length; i++)
+                    {
+                        if (existingHash[i] != incomingHash[i]) return false;
+                    }
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 
         private void InstallZipPackage(string zipPath)
         {
-            string tempExtract = Path.Combine(Path.GetTempPath(), "airspace_extracted_" + Guid.NewGuid().ToString("N"));
-            try
+            if (!Directory.Exists(_packageDir))
             {
-                ZipFile.ExtractToDirectory(zipPath, tempExtract);
+                Directory.CreateDirectory(_packageDir);
+            }
 
-                string sourceRoot = tempExtract;
-                string subDir = Path.Combine(tempExtract, "p42-util-airspace-acars");
-                if (Directory.Exists(subDir))
+            string fullPackageRoot = Path.GetFullPath(_packageDir).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            string currentExeFullPath = Path.GetFullPath(Application.ExecutablePath);
+
+            using (ZipArchive archive = ZipFile.OpenRead(zipPath))
+            {
+                int totalEntries = 0;
+                foreach (ZipArchiveEntry e in archive.Entries)
                 {
-                    sourceRoot = subDir;
+                    if (!string.IsNullOrEmpty(e.Name)) totalEntries++;
                 }
 
-                if (!Directory.Exists(_packageDir))
+                if (totalEntries == 0)
                 {
-                    Directory.CreateDirectory(_packageDir);
+                    throw new Exception("Downloaded archive is empty.");
                 }
 
-                string currentExePath = Assembly.GetExecutingAssembly().Location;
-                string[] files = Directory.GetFiles(sourceRoot, "*.*", SearchOption.AllDirectories);
                 int count = 0;
-
-                foreach (string file in files)
+                foreach (ZipArchiveEntry entry in archive.Entries)
                 {
-                    count++;
-                    int progress = 72 + (int)((count / (float)files.Length) * 26f);
-                    string relPath = file.Substring(sourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                    string targetFile = Path.Combine(_packageDir, relPath);
+                    if (string.IsNullOrEmpty(entry.Name)) continue; // Directory entry
 
-                    UpdateProgress(progress, "Extracting files...", relPath);
+                    count++;
+                    int progress = 72 + (int)((count / (float)totalEntries) * 26f);
+
+                    string entryRelPath = entry.FullName.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
+                    string packagePrefix = "p42-util-airspace-acars" + Path.DirectorySeparatorChar;
+                    if (entryRelPath.StartsWith(packagePrefix, StringComparison.OrdinalIgnoreCase))
+                    {
+                        entryRelPath = entryRelPath.Substring(packagePrefix.Length);
+                    }
+
+                    if (string.IsNullOrEmpty(entryRelPath)) continue;
+
+                    string targetFile = Path.GetFullPath(Path.Combine(_packageDir, entryRelPath));
+                    if (!targetFile.StartsWith(fullPackageRoot, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Ignore unsafe relative paths (Zip Slip protection)
+                        continue;
+                    }
+
+                    UpdateProgress(progress, "Extracting files...", entryRelPath);
 
                     string parentDir = Path.GetDirectoryName(targetFile);
                     if (!Directory.Exists(parentDir))
@@ -1201,43 +1286,44 @@ namespace AirspaceACARS.Updater
                         Directory.CreateDirectory(parentDir);
                     }
 
-                    // Handle self-updating executable
-                    if (string.Equals(Path.GetFullPath(targetFile), Path.GetFullPath(currentExePath), StringComparison.OrdinalIgnoreCase))
+                    // Skip replacing the running manager executable when identical
+                    if (string.Equals(targetFile, currentExeFullPath, StringComparison.OrdinalIgnoreCase))
                     {
-                        string oldPath = targetFile + ".old";
-                        try { if (File.Exists(oldPath)) File.Delete(oldPath); } catch { }
-                        try { File.Move(targetFile, oldPath); } catch { }
+                        bool isSame = false;
+                        using (Stream hashCheckStream = entry.Open())
+                        {
+                            isSame = FilesHaveSameSha256(targetFile, hashCheckStream);
+                        }
+                        if (isSame)
+                        {
+                            continue;
+                        }
+
+                        string backupPath = targetFile + ".old";
+                        try { if (File.Exists(backupPath)) File.Delete(backupPath); } catch { }
+                        try { File.Move(targetFile, backupPath); } catch { }
                     }
 
-                    File.Copy(file, targetFile, true);
+                    using (Stream entryStream = entry.Open())
+                    using (FileStream destStream = new FileStream(targetFile, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        entryStream.CopyTo(destStream);
+                    }
                 }
             }
-            finally
-            {
-                try { if (Directory.Exists(tempExtract)) Directory.Delete(tempExtract, true); } catch { }
-            }
-        }
 
-        private void InstallExeInstaller(string exePath)
-        {
-            UpdateProgress(80, "Running installer...", "Applying update silently...");
-            string communityParent = Path.GetDirectoryName(_packageDir);
-            if (string.IsNullOrEmpty(communityParent)) communityParent = _packageDir;
-
-            var psi = new ProcessStartInfo
+            // Clean up legacy Update.exe left over from older package releases
+            string[] legacyFiles = new string[]
             {
-                FileName = exePath,
-                Arguments = "/VERYSILENT /SUPPRESSMSGBOXES /DIR=\"" + communityParent + "\"",
-                UseShellExecute = false,
-                CreateNoWindow = true
+                Path.Combine(_packageDir, "Update.exe"),
+                Path.Combine(_packageDir, "Update.exe.old")
             };
-
-            using (var proc = Process.Start(psi))
+            foreach (string legacyFile in legacyFiles)
             {
-                proc.WaitForExit();
-                if (proc.ExitCode != 0)
+                if (!string.Equals(Path.GetFullPath(legacyFile), currentExeFullPath, StringComparison.OrdinalIgnoreCase) &&
+                    File.Exists(legacyFile))
                 {
-                    throw new Exception("Installer exited with code " + proc.ExitCode);
+                    try { File.Delete(legacyFile); } catch { }
                 }
             }
         }
@@ -1247,7 +1333,7 @@ namespace AirspaceACARS.Updater
             _targetProgress = pct;
             _statusHeadline = headline;
             _detailText = detail;
-            this.BeginInvoke(new Action(this.Invalidate));
+            SafeInvalidate();
         }
 
         private void ConfirmAndUninstall()
@@ -1268,7 +1354,6 @@ namespace AirspaceACARS.Updater
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = uninstaller,
-                        Arguments = "/SILENT",
                         UseShellExecute = true
                     });
                     this.Close();
@@ -1277,13 +1362,14 @@ namespace AirspaceACARS.Updater
 
                 if (Directory.Exists(_packageDir))
                 {
+                    string currentExeFullPath = Path.GetFullPath(Application.ExecutablePath);
                     string flowDir = Path.Combine(_packageDir, "Flow");
                     string contentInfoDir = Path.Combine(_packageDir, "ContentInfo");
                     if (Directory.Exists(flowDir)) Directory.Delete(flowDir, true);
                     if (Directory.Exists(contentInfoDir)) Directory.Delete(contentInfoDir, true);
                     foreach (string f in Directory.GetFiles(_packageDir, "*.*"))
                     {
-                        if (!f.EndsWith("Update.exe", StringComparison.OrdinalIgnoreCase))
+                        if (!string.Equals(Path.GetFullPath(f), currentExeFullPath, StringComparison.OrdinalIgnoreCase))
                         {
                             try { File.Delete(f); } catch { }
                         }
@@ -1303,6 +1389,7 @@ namespace AirspaceACARS.Updater
 
         private static void OpenUrl(string url)
         {
+            if (!IsTrustedGitHubUrl(url)) return;
             try
             {
                 Process.Start(new ProcessStartInfo

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -440,8 +441,9 @@ test('buildPackage() generates valid MSFS 2024 Community package structure, mani
 
   const layoutJson = JSON.parse(fs.readFileSync(result.layoutFilePath, 'utf8'));
   assert.equal(layoutJson.content.length, 4);
-  assert.ok(layoutJson.content.some((item) => item.path === 'Update.exe'), 'Update.exe must be listed in layout.json');
-  assert.ok(fs.existsSync(path.join(result.packageRoot, 'Update.exe')), 'Update.exe must exist in package root');
+  assert.ok(layoutJson.content.some((item) => item.path === 'AirspaceACARS-Manager.exe'), 'AirspaceACARS-Manager.exe must be listed in layout.json');
+  assert.ok(fs.existsSync(path.join(result.packageRoot, 'AirspaceACARS-Manager.exe')), 'AirspaceACARS-Manager.exe must exist in package root');
+  assert.ok(!fs.existsSync(path.join(result.packageRoot, 'Update.exe')), 'Legacy Update.exe must not be emitted');
   for (const item of layoutJson.content) {
     const absFile = path.join(result.packageRoot, ...item.path.split('/'));
     assert.ok(fs.existsSync(absFile), `File listed in layout.json must exist: ${item.path}`);
@@ -1602,3 +1604,55 @@ test('Flight Attendant landing popup: touchdown rate capture, softness category 
   flow.triggerLandingToast(-250);
   assert.equal(flow.state.landingToastData, null, 'Unauthenticated or inactive tenant instance must never trigger landing toast');
 });
+
+test('AirspaceACARS-Manager.exe is hardened with Win32 manifest, PE VersionInfo metadata, and zero dropper heuristics', () => {
+  const manifestPath = path.join(ROOT_DIR, 'updater', 'app.manifest');
+  assert.ok(fs.existsSync(manifestPath), 'updater/app.manifest must exist');
+  const manifestXml = fs.readFileSync(manifestPath, 'utf8');
+  assert.ok(manifestXml.includes('level="asInvoker"'), 'app.manifest must declare asInvoker execution level');
+  assert.ok(manifestXml.includes('8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a'), 'app.manifest must declare Windows 10/11 compatibility');
+
+  const programCs = fs.readFileSync(path.join(ROOT_DIR, 'updater', 'Program.cs'), 'utf8');
+  assert.ok(programCs.includes('HttpClient'), 'Program.cs must use modern HttpClient instead of legacy WebClient');
+  assert.ok(programCs.includes('IsTrustedGitHubUrl'), 'Program.cs must validate trusted GitHub HTTPS origins');
+  assert.ok(!programCs.includes('WebClient'), 'Program.cs must not reference legacy WebClient');
+  assert.ok(!programCs.includes('/VERYSILENT'), 'Program.cs must not silently execute downloaded installers');
+  assert.ok(!programCs.includes('/SUPPRESSMSGBOXES'), 'Program.cs must not contain hidden installer flags');
+  assert.ok(!programCs.includes('CreateNoWindow'), 'Program.cs must not spawn hidden no-window processes');
+  assert.ok(!programCs.includes('InstallExeInstaller'), 'Program.cs must not download and run .exe installers');
+
+  const exePath = path.join(ROOT_DIR, 'dist', 'p42-util-airspace-acars', 'AirspaceACARS-Manager.exe');
+  assert.ok(fs.existsSync(exePath), 'AirspaceACARS-Manager.exe must exist after build');
+
+  if (process.platform === 'win32') {
+    const psScript = `
+      $v = (Get-Item -LiteralPath '${exePath.replace(/'/g, "''")}').VersionInfo
+      [PSCustomObject]@{
+        CompanyName = $v.CompanyName
+        ProductName = $v.ProductName
+        FileDescription = $v.FileDescription
+        FileVersion = $v.FileVersion
+        LegalCopyright = $v.LegalCopyright
+      } | ConvertTo-Json -Compress
+    `;
+    const rawJson = execFileSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', psScript], {
+      encoding: 'utf8'
+    }).trim();
+    const versionInfo = JSON.parse(rawJson);
+    assert.equal(versionInfo.CompanyName, 'Airspace Team (FerrLab)');
+    assert.equal(versionInfo.ProductName, 'Airspace ACARS for Microsoft Flight Simulator');
+    assert.ok(versionInfo.FileDescription.includes('Airspace ACARS Manager'));
+    assert.notEqual(versionInfo.FileVersion, '0.0.0.0', 'FileVersion must not be 0.0.0.0');
+    assert.ok(versionInfo.LegalCopyright.includes('Airspace Team'));
+  }
+});
+
+
+
+
+
+
+
+
+
+
